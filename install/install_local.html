@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Installation on a local computer &mdash; FBPIC 0.1.0 documentation</title>
+  <title>Installation on a local computer &mdash; FBPIC 0.1.1 documentation</title>
   
 
   
@@ -30,7 +30,7 @@
   
 
   
-    <link rel="top" title="FBPIC 0.1.0 documentation" href="../index.html"/>
+    <link rel="top" title="FBPIC 0.1.1 documentation" href="../index.html"/>
         <link rel="up" title="Installation" href="installation.html"/>
         <link rel="next" title="Installation on Titan (OLCF)" href="install_titan.html"/>
         <link rel="prev" title="Installation" href="installation.html"/> 
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.1.0
+                0.1.1
               </div>
             
           
@@ -151,13 +151,20 @@
 <p>The installation requires the
 <a class="reference external" href="https://www.continuum.io/why-anaconda">Anaconda</a> distribution of
 Python. If Anaconda is not your default Python distribution, download and install it from <a class="reference external" href="https://www.continuum.io/downloads">here</a>.</p>
+<p><strong>Installation steps</strong>:</p>
 <ul>
-<li><p class="first">Clone the <code class="docutils literal"><span class="pre">fbpic</span></code> repository using git.</p>
-</li>
-<li><p class="first"><code class="docutils literal"><span class="pre">cd</span></code> into the top folder of <code class="docutils literal"><span class="pre">fbpic</span></code> and install the dependencies:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="o">--</span><span class="n">file</span> <span class="n">requirements</span><span class="o">.</span><span class="n">txt</span>
+<li><p class="first">Install the dependencies of FBPIC. This can be done with a single line:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">numba</span> <span class="n">matplotlib</span> <span class="n">scipy</span> <span class="n">h5py</span> <span class="n">mpi4py</span> <span class="n">pyfftw</span>
 </pre></div>
 </div>
+</li>
+<li><p class="first">Install <code class="docutils literal"><span class="pre">fbpic</span></code></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">fbpic</span>
+</pre></div>
+</div>
+<p>Alternatively, instead of using <code class="docutils literal"><span class="pre">pip</span></code>, you can also install FBPIC
+from the souces, by cloning the <a class="reference external" href="https://github.com/fbpic/fbpic">code from Github</a>, and typing <code class="docutils literal"><span class="pre">python</span> <span class="pre">setup.py</span>
+<span class="pre">install</span></code>.</p>
 </li>
 <li><p class="first"><strong>Optional:</strong> In order to be able to run the code on a GPU:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">accelerate</span>
@@ -168,13 +175,6 @@ trial period, which starts when the above command is entered. For
 further use beyond 30 days, one option is to obtain an academic
 license, which is also free. To do so, please visit <a class="reference external" href="https://www.continuum.io/anaconda-academic-subscriptions-available">this
 link</a>.)</p>
-</li>
-<li><p class="first">Install <code class="docutils literal"><span class="pre">fbpic</span></code></p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">fbpic</span>
-</pre></div>
-</div>
-<p>Alternatively, instead of using <code class="docutils literal"><span class="pre">pip</span></code>, you can also install FBPIC
-from the souces, by cloning the <a class="reference external" href="https://github.com/fbpic/fbpic">code from Github</a>, and typing <code class="docutils literal"><span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">install</span></code>.</p>
 </li>
 </ul>
 </div>
@@ -238,7 +238,7 @@ MPI-related error, try installing <code class="docutils literal"><span class="pr
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.1.0',
+            VERSION:'0.1.1',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true
