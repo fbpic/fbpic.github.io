@@ -1,0 +1,345 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>The Simulation class &mdash; FBPIC 0.1.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="FBPIC 0.1.0 documentation" href="../index.html"/>
+        <link rel="up" title="API reference" href="api_reference.html"/>
+        <link rel="next" title="The openPMD diagnostics" href="diagnostics.html"/>
+        <link rel="prev" title="API reference" href="api_reference.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> FBPIC
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview of the code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how_to_run.html">How to run the code</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="api_reference.html">API reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">The Simulation class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="diagnostics.html">The openPMD diagnostics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="checkpoint_restart.html">Checkpoints and restarts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lpa_utilities.html">Laser-plasma utilities</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">FBPIC</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="api_reference.html">API reference</a> &raquo;</li>
+      
+    <li>The Simulation class</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/api_reference/simulation.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="the-simulation-class">
+<h1>The Simulation class<a class="headerlink" href="#the-simulation-class" title="Permalink to this headline">¶</a></h1>
+<p>The <cite>Simulation</cite> class is top-level class in FBPIC. It contains all
+the simulation data, and has the high-level methods to perform the PIC cycle.</p>
+<blockquote>
+<div><p>The <cite>Simulation</cite> class has several important attributes:</p>
+<ul class="simple">
+<li><cite>fld</cite>, a <cite>Fields</cite> object which contains the field information</li>
+<li><cite>ptcl</cite>, a list of <cite>Particles</cite> objects (one per species)</li>
+<li><cite>diags</cite>, a list of diagnostics to be run during the simulation</li>
+<li><cite>comm</cite>, a <cite>BoundaryCommunicator</cite>, which contains the MPI decomposition</li>
+</ul>
+</div></blockquote>
+<dl class="class">
+<dt id="fbpic.main.Simulation">
+<em class="property">class </em><code class="descclassname">fbpic.main.</code><code class="descname">Simulation</code><span class="sig-paren">(</span><em>Nz</em>, <em>zmax</em>, <em>Nr</em>, <em>rmax</em>, <em>Nm</em>, <em>dt</em>, <em>p_zmin</em>, <em>p_zmax</em>, <em>p_rmin</em>, <em>p_rmax</em>, <em>p_nz</em>, <em>p_nr</em>, <em>p_nt</em>, <em>n_e</em>, <em>zmin=0.0</em>, <em>n_order=-1</em>, <em>dens_func=None</em>, <em>filter_currents=True</em>, <em>initialize_ions=False</em>, <em>use_cuda=False</em>, <em>n_guard=50</em>, <em>exchange_period=None</em>, <em>boundaries='periodic'</em>, <em>gamma_boost=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fbpic.main.Simulation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes a simulation, by creating the following structures:</p>
+<ul class="simple">
+<li>the <cite>Fields</cite> object, which contains the field data on the grids</li>
+<li>a set of electrons</li>
+<li>a set of ions (if initialize_ions is True)</li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>Nz</strong> (<em>int</em>) &#8211; The number of gridpoints along z</li>
+<li><strong>Nr</strong> (<em>int</em>) &#8211; The number of gridpoints along r</li>
+<li><strong>zmax</strong> (<em>float</em>) &#8211; The position of the edge of the simulation in z
+(More precisely, the position of the edge of the last cell)</li>
+<li><strong>rmax</strong> (<em>float</em>) &#8211; The position of the edge of the simulation in r
+(More precisely, the position of the edge of the last
+cell)</li>
+<li><strong>Nm</strong> (<em>int</em>) &#8211; The number of azimuthal modes taken into account</li>
+<li><strong>dt</strong> (<em>float</em>) &#8211; The timestep of the simulation</li>
+<li><strong>p_zmin</strong> (<em>float</em>) &#8211; The minimal z position above which the particles are initialized</li>
+<li><strong>p_zmax</strong> (<em>float</em>) &#8211; The maximal z position below which the particles are initialized</li>
+<li><strong>p_rmin</strong> (<em>float</em>) &#8211; The minimal r position above which the particles are initialized</li>
+<li><strong>p_rmax</strong> (<em>float</em>) &#8211; The maximal r position below which the particles are initialized</li>
+<li><strong>p_nz</strong> (<em>int</em>) &#8211; The number of macroparticles per cell along the z direction</li>
+<li><strong>p_nr</strong> (<em>int</em>) &#8211; The number of macroparticles per cell along the r direction</li>
+<li><strong>p_nt</strong> (<em>int</em>) &#8211; The number of macroparticles along the theta direction</li>
+<li><strong>n_e</strong> (<em>float (in particles per m^3)</em>) &#8211; Peak density of the electrons</li>
+<li><strong>n_order</strong> (<em>int, optional</em>) &#8211; The order of the stencil for the z derivatives.
+Use -1 for infinite order, otherwise use a positive, even
+number. In this case, the stencil extends up to n_order/2
+cells on each side.</li>
+<li><strong>zmin</strong> (<em>float, optional</em>) &#8211; The position of the edge of the simulation box.
+(More precisely, the position of the edge of the first cell)</li>
+<li><strong>dens_func</strong> (<em>callable, optional</em>) &#8211; A function of the form:
+def dens_func( z, r ) ...
+where z and r are 1d arrays, and which returns
+a 1d array containing the density <em>relative to n</em>
+(i.e. a number between 0 and 1) at the given positions</li>
+<li><strong>initialize_ions</strong> (<em>bool, optional</em>) &#8211; Whether to initialize the neutralizing ions</li>
+<li><strong>filter_currents</strong> (<em>bool, optional</em>) &#8211; Whether to filter the currents and charge in k space</li>
+<li><strong>use_cuda</strong> (<em>bool, optional</em>) &#8211; Wether to use CUDA (GPU) acceleration</li>
+<li><strong>n_guard</strong> (<em>int, optional</em>) &#8211; Number of guard cells to use at the left and right of
+a domain, when using MPI.</li>
+<li><strong>exchange_period</strong> (<em>int, optional</em>) &#8211; Number of iteration before which the particles are exchanged
+and the window is moved (the two operations are simultaneous)
+If set to None, the particles are exchanged every n_guard/2</li>
+<li><strong>boundaries</strong> (<em>string, optional</em>) &#8211; Indicates how to exchange the fields at the left and right
+boundaries of the global simulation box.
+Either &#8216;periodic&#8217; or &#8216;open&#8217;</li>
+<li><strong>gamma_boost</strong> (<em>float, optional</em>) &#8211; When initializing the laser in a boosted frame, set the
+value of <cite>gamma_boost</cite> to the corresponding Lorentz factor.
+All the other quantities (zmin, zmax, n_e, etc.) are to be given
+in the lab frame.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="fbpic.main.Simulation.set_moving_window">
+<code class="descname">set_moving_window</code><span class="sig-paren">(</span><em>v=299792458.0</em>, <em>ux_m=0.0</em>, <em>uy_m=0.0</em>, <em>uz_m=0.0</em>, <em>ux_th=0.0</em>, <em>uy_th=0.0</em>, <em>uz_th=0.0</em>, <em>gamma_boost=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fbpic.main.Simulation.set_moving_window" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes a moving window for the simulation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>v</strong> (<em>float (in meters per seconds), optional</em>) &#8211; The speed of the moving window</li>
+<li><strong>ux_m</strong> (<em>float (dimensionless), optional</em>) &#8211; Normalized mean momenta of the injected particles along x</li>
+<li><strong>uy_m</strong> (<em>float (dimensionless), optional</em>) &#8211; Normalized mean momenta of the injected particles along y</li>
+<li><strong>uz_m</strong> (<em>float (dimensionless), optional</em>) &#8211; Normalized mean momenta of the injected particles along z</li>
+<li><strong>ux_th</strong> (<em>float (dimensionless), optional</em>) &#8211; Normalized thermal momenta of the injected particles along x</li>
+<li><strong>uy_th</strong> (<em>float (dimensionless), optional</em>) &#8211; Normalized thermal momenta of the injected particles along y</li>
+<li><strong>uz_th</strong> (<em>float (dimensionless), optional</em>) &#8211; Normalized thermal momenta of the injected particles along z</li>
+<li><strong>gamma_boost</strong> (<em>float, optional</em>) &#8211; When initializing a moving window in a boosted frame, set the
+value of <cite>gamma_boost</cite> to the corresponding Lorentz factor.
+Quantities like uz_m of the injected particles will be
+automatically Lorentz-transformed.
+(uz_m is to be given in the lab frame ; for the moment, this
+will not work if any of ux_th, uy_th, uz_th, ux_m, uy_m is nonzero)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="fbpic.main.Simulation.step">
+<code class="descname">step</code><span class="sig-paren">(</span><em>N=1</em>, <em>ptcl_feedback=True</em>, <em>correct_currents=True</em>, <em>use_true_rho=False</em>, <em>move_positions=True</em>, <em>move_momenta=True</em>, <em>show_progress=True</em><span class="sig-paren">)</span><a class="headerlink" href="#fbpic.main.Simulation.step" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform N PIC cycles.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>N</strong> (<em>int, optional</em>) &#8211; The number of timesteps to take
+Default: N=1</li>
+<li><strong>ptcl_feedback</strong> (<em>bool, optional</em>) &#8211; Whether to take into account the particle density and
+currents when pushing the fields</li>
+<li><strong>correct_currents</strong> (<em>bool, optional</em>) &#8211; Whether to correct the currents in spectral space</li>
+<li><strong>move_positions</strong> (<em>bool, optional</em>) &#8211; Whether to move or freeze the particles&#8217; positions</li>
+<li><strong>move_momenta</strong> (<em>bool, optional</em>) &#8211; Whether to move or freeze the particles&#8217; momenta</li>
+<li><strong>use_true_rho</strong> (<em>bool, optional</em>) &#8211; Wether to use the true rho deposited on the grid for the
+field push or not. (requires initialize_ions = True)</li>
+<li><strong>show_progress</strong> (<em>bool, optional</em>) &#8211; Whether to show a progression bar</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="diagnostics.html" class="btn btn-neutral float-right" title="The openPMD diagnostics" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="api_reference.html" class="btn btn-neutral" title="API reference" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, FBPIC contributors.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

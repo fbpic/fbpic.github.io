@@ -1,0 +1,343 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Installation on Titan (OLCF) &mdash; FBPIC 0.1.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="FBPIC 0.1.0 documentation" href="../index.html"/>
+        <link rel="up" title="Installation" href="installation.html"/>
+        <link rel="next" title="Installation on JURECA (JSC)" href="install_jureca.html"/>
+        <link rel="prev" title="Installation on a local computer" href="install_local.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> FBPIC
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview of the code</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="installation.html">Installation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="install_local.html">Installation on a local computer</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Installation on Titan (OLCF)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#installing-fbpic">Installing FBPIC</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#installation-of-anaconda">Installation of Anaconda</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#installation-of-fbpic-and-its-dependencies">Installation of FBPIC and its dependencies</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#running-simulations">Running simulations</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#interactive-jobs">Interactive jobs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#batch-jobs">Batch jobs</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="install_jureca.html">Installation on JURECA (JSC)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install_lawrencium.html">Installation on Lawrencium (LBNL)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../how_to_run.html">How to run the code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api_reference/api_reference.html">API reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">FBPIC</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="installation.html">Installation</a> &raquo;</li>
+      
+    <li>Installation on Titan (OLCF)</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/install/install_titan.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="installation-on-titan-olcf">
+<h1>Installation on Titan (OLCF)<a class="headerlink" href="#installation-on-titan-olcf" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://www.olcf.ornl.gov/titan/">Titan</a> is a GPU supercomputer at the
+<a class="reference external" href="https://www.olcf.ornl.gov/">Oakridge Leadership Computing Facility</a> (OLCF).</p>
+<p>Each node consists of 1 Nvidia K20 device.</p>
+<div class="section" id="installing-fbpic">
+<h2>Installing FBPIC<a class="headerlink" href="#installing-fbpic" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="installation-of-anaconda">
+<h3>Installation of Anaconda<a class="headerlink" href="#installation-of-anaconda" title="Permalink to this headline">¶</a></h3>
+<p>In order to install FBPIC, you need to first install <a class="reference external" href="https://www.continuum.io/why-anaconda">Anaconda</a>:</p>
+<ul>
+<li><p class="first">Download Miniconda:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">wget</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">repo</span><span class="o">.</span><span class="n">continuum</span><span class="o">.</span><span class="n">io</span><span class="o">/</span><span class="n">miniconda</span><span class="o">/</span><span class="n">Miniconda</span><span class="o">-</span><span class="n">latest</span><span class="o">-</span><span class="n">Linux</span><span class="o">-</span><span class="n">x86_64</span><span class="o">.</span><span class="n">sh</span> <span class="o">-</span><span class="n">O</span> <span class="n">miniconda</span><span class="o">.</span><span class="n">sh</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Execute the installation script, and use <code class="docutils literal"><span class="pre">/ccs/proj/&lt;project_id&gt;</span></code>
+as an install directory, so that the installation is accessible to
+the compute nodes.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">bash</span> <span class="n">miniconda</span><span class="o">.</span><span class="n">sh</span> <span class="o">-</span><span class="n">b</span> <span class="o">-</span><span class="n">p</span> <span class="o">/</span><span class="n">ccs</span><span class="o">/</span><span class="n">proj</span><span class="o">/&lt;</span><span class="n">project_id</span><span class="o">&gt;/</span><span class="n">miniconda2</span>
+</pre></div>
+</div>
+<p>where the bracketed text should be replaced by the values for your
+account.</p>
+</li>
+<li><p class="first">Add the following lines at the end of your .bashrc</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>module load python_anaconda
+export PATH=/ccs/proj/&lt;project_id&gt;/miniconda2/bin:$PATH
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/ccs/proj/&lt;project_id&gt;/miniconda2/lib
+export PYTHONPATH=$PYTHONPATH:/ccs/proj/&lt;project_id&gt;/miniconda2/lib/python2.7/site-packages/
+export PYTHONPATH=$PYTHONPATH:/sw/xk6/python_anaconda/2.3.0/sles11.3_gnu4.8.2/lib/python2.7/site-packages/
+</pre></div>
+</div>
+<p>where again the bracketed text should be replaced by the values for
+your account. The first line gives access to the <code class="docutils literal"><span class="pre">mpi4py</span></code>
+installation of Titan (which is contained in the module
+<code class="docutils literal"><span class="pre">python_anaconda</span></code>) while the other lines allow you to use packages
+that you install locally.</p>
+</li>
+</ul>
+<p>Then execute the modified .bashrc file: <code class="docutils literal"><span class="pre">source</span> <span class="pre">.bashrc</span></code>.</p>
+</div>
+<div class="section" id="installation-of-fbpic-and-its-dependencies">
+<h3>Installation of FBPIC and its dependencies<a class="headerlink" href="#installation-of-fbpic-and-its-dependencies" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><p class="first">Clone the <code class="docutils literal"><span class="pre">fbpic</span></code> repository using git.</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">cd</span></code> into the top folder of <code class="docutils literal"><span class="pre">fbpic</span></code> and install the dependencies:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="o">--</span><span class="n">file</span> <span class="n">requirements</span><span class="o">.</span><span class="n">txt</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Uninstall mpi4py (in order to use the <code class="docutils literal"><span class="pre">mpi4py</span></code> from Titan instead):</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">uninstall</span> <span class="n">mpi4py</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Install the <code class="docutils literal"><span class="pre">accelerate</span></code> package in order to be able to run on GPUs</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">cudatoolkit</span><span class="o">=</span><span class="mf">7.0</span>
+<span class="n">conda</span> <span class="n">install</span> <span class="n">accelerate</span>
+</pre></div>
+</div>
+<p>(The <code class="docutils literal"><span class="pre">accelerate</span></code> package is not free, but there is a 30-day free
+trial period, which starts when the above command is entered. For
+further use beyond 30 days, one option is to obtain an academic
+license, which is also free. To do so, please visit <a class="reference external" href="https://www.continuum.io/anaconda-academic-subscriptions-available">this
+page</a>.)</p>
+</li>
+<li><p class="first">Install <code class="docutils literal"><span class="pre">fbpic</span></code> into your local set of packages</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="running-simulations">
+<h2>Running simulations<a class="headerlink" href="#running-simulations" title="Permalink to this headline">¶</a></h2>
+<p>In order to create a new simulation, create a new directory in
+<code class="docutils literal"><span class="pre">$MEMBERWORK/</span></code> and copy your input script there:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>mkdir $MEMBERWORK/&lt;project_id&gt;/&lt;simulation name&gt;
+cp fbpic_script.py $MEMBERWORK/&lt;project_id&gt;/&lt;simulation name&gt;
+</pre></div>
+</div>
+<div class="section" id="interactive-jobs">
+<h3>Interactive jobs<a class="headerlink" href="#interactive-jobs" title="Permalink to this headline">¶</a></h3>
+<p>In order to request an interactive job:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">qsub</span> <span class="o">-</span><span class="n">I</span> <span class="o">-</span><span class="n">A</span> <span class="o">&lt;</span><span class="n">project_id</span><span class="o">&gt;</span> <span class="o">-</span><span class="n">l</span> <span class="n">nodes</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">walltime</span><span class="o">=</span><span class="mi">00</span><span class="p">:</span><span class="mi">30</span><span class="p">:</span><span class="mi">00</span> <span class="o">-</span><span class="n">q</span> <span class="n">debug</span>
+</pre></div>
+</div>
+<p>Once the job has started, switch to your simulation directory</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>cd $MEMBERWORK/&lt;project_id&gt;/&lt;simulation name&gt;
+</pre></div>
+</div>
+<p>Then use <code class="docutils literal"><span class="pre">aprun</span></code> to launch the job on a GPU (even for single-node job)</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">aprun</span> <span class="o">-</span><span class="n">n</span> <span class="mi">1</span> <span class="o">-</span><span class="n">N</span> <span class="mi">1</span> <span class="n">python</span> <span class="o">&lt;</span><span class="n">fbpic_script</span><span class="o">.</span><span class="n">py</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="batch-jobs">
+<h3>Batch jobs<a class="headerlink" href="#batch-jobs" title="Permalink to this headline">¶</a></h3>
+<p>Create a file <code class="docutils literal"><span class="pre">submission_script</span></code> with contains the following text:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>#!/bin/bash
+#PBS -A &lt;project_id&gt;
+#PBS -l walltime=&lt;your walltime&gt;
+#PBS -l nodes=&lt;number of nodes&gt;
+
+cd  $MEMBERWORK/&lt;project_id&gt;/&lt;simulation name&gt;
+
+aprun -n &lt;number of nodes&gt; -N 1 python fbpic_script.py
+</pre></div>
+</div>
+<p>Then submit it with:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">qsub</span> <span class="n">submission_script</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="install_jureca.html" class="btn btn-neutral float-right" title="Installation on JURECA (JSC)" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="install_local.html" class="btn btn-neutral" title="Installation on a local computer" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, FBPIC contributors.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

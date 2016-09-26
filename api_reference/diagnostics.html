@@ -1,0 +1,383 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>The openPMD diagnostics &mdash; FBPIC 0.1.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="FBPIC 0.1.0 documentation" href="../index.html"/>
+        <link rel="up" title="API reference" href="api_reference.html"/>
+        <link rel="next" title="Checkpoints and restarts" href="checkpoint_restart.html"/>
+        <link rel="prev" title="The Simulation class" href="simulation.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> FBPIC
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview of the code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how_to_run.html">How to run the code</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="api_reference.html">API reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="simulation.html">The Simulation class</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">The openPMD diagnostics</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#regular-diagnostics">Regular diagnostics</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#field-diagnostic">Field diagnostic</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#particle-diagnostic">Particle diagnostic</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#back-transformed-diagnostics-boosted-frame-simulations">Back-transformed diagnostics (boosted-frame simulations)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">Field diagnostic</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id2">Particle diagnostic</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="checkpoint_restart.html">Checkpoints and restarts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lpa_utilities.html">Laser-plasma utilities</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">FBPIC</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="api_reference.html">API reference</a> &raquo;</li>
+      
+    <li>The openPMD diagnostics</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/api_reference/diagnostics.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="the-openpmd-diagnostics">
+<h1>The openPMD diagnostics<a class="headerlink" href="#the-openpmd-diagnostics" title="Permalink to this headline">¶</a></h1>
+<p>During a simulation, FBPIC outputs diagnostics of fields and
+particles in the form of <a class="reference external" href="https://github.com/openPMD">openPMD files</a>.</p>
+<p>A diagnostic can be directly added to simulation (or removed) by
+adding or removing a corresponding diagnostic object in the list of diagnostics <cite>diags</cite>, which is an attribute of the <cite>Simulation</cite> class.</p>
+<p>Below are the different available diagnostics objects:</p>
+<div class="toctree-wrapper compound">
+</div>
+<div class="section" id="regular-diagnostics">
+<h2>Regular diagnostics<a class="headerlink" href="#regular-diagnostics" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="field-diagnostic">
+<h3>Field diagnostic<a class="headerlink" href="#field-diagnostic" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="fbpic.openpmd_diag.FieldDiagnostic">
+<em class="property">class </em><code class="descclassname">fbpic.openpmd_diag.</code><code class="descname">FieldDiagnostic</code><span class="sig-paren">(</span><em>period, fldobject, comm=None, fieldtypes=['rho', 'E', 'B', 'J'], write_dir=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fbpic.openpmd_diag.FieldDiagnostic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the field diagnostic.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>period</strong> (<em>int</em>) &#8211; The period of the diagnostics, in number of timesteps.
+(i.e. the diagnostics are written whenever the number
+of iterations is divisible by <cite>period</cite>)</li>
+<li><strong>fldobject</strong> (<em>a Fields object</em>) &#8211; Points to the data that has to be written at each output</li>
+<li><strong>comm</strong> (<em>an fbpic BoundaryCommunicator object or None</em>) &#8211; If this is not None, the data is gathered on the first proc,
+and the guard cells are removed from the output.
+Otherwise, each proc writes its own data, including guard cells.
+(Make sure to use different write_dir in this case.)</li>
+<li><strong>fieldtypes</strong> (<em>a list of strings, optional</em>) &#8211; The strings are either &#8220;rho&#8221;, &#8220;E&#8221;, &#8220;B&#8221; or &#8220;J&#8221;
+and indicate which field should be written.
+Default : all fields are written</li>
+<li><strong>write_dir</strong> (<em>string, optional</em>) &#8211; The POSIX path to the directory where the results are
+to be written. If none is provided, this will be the path
+of the current working directory.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="particle-diagnostic">
+<h3>Particle diagnostic<a class="headerlink" href="#particle-diagnostic" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="fbpic.openpmd_diag.ParticleDiagnostic">
+<em class="property">class </em><code class="descclassname">fbpic.openpmd_diag.</code><code class="descname">ParticleDiagnostic</code><span class="sig-paren">(</span><em>period, species={'electrons': None}, comm=None, particle_data=['position', 'momentum', 'weighting'], select=None, write_dir=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fbpic.openpmd_diag.ParticleDiagnostic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the particle diagnostics.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>period</strong> (<em>int</em>) &#8211; The period of the diagnostics, in number of timesteps.
+(i.e. the diagnostics are written whenever the number
+of iterations is divisible by <cite>period</cite>)</li>
+<li><strong>species</strong> (<em>a dictionary of Particle objects</em>) &#8211; The object that is written (e.g. elec)
+is assigned to the particleName of this species.
+(e.g. {&#8220;electrons&#8221; : elec })</li>
+<li><strong>comm</strong> (<em>an fbpic BoundaryCommunicator object or None</em>) &#8211; If this is not None, the data is gathered on the first proc
+Otherwise, each proc writes its own data.
+(Make sure to use different write_dir in this case.)</li>
+<li><strong>particle_data</strong> (<em>a list of strings, optional</em>) &#8211; The particle properties are given by:
+[&#8220;position&#8221;, &#8220;momentum&#8221;, &#8220;weighting&#8221;]
+for the coordinates x,y,z.
+Default : electron particle data is written</li>
+<li><strong>select</strong> (<em>dict, optional</em>) &#8211; Either None or a dictionary of rules
+to select the particles, of the form
+&#8216;x&#8217; : [-4., 10.]   (Particles having x between -4 and 10 microns)
+&#8216;ux&#8217; : [-0.1, 0.1] (Particles having ux between -0.1 and 0.1 mc)
+&#8216;uz&#8217; : [5., None]  (Particles with uz above 5 mc)</li>
+<li><strong>write_dir</strong> (<em>a list of strings, optional</em>) &#8211; The POSIX path to the directory where the results are
+to be written. If none is provided, this will be the path
+of the current working directory.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="back-transformed-diagnostics-boosted-frame-simulations">
+<h2>Back-transformed diagnostics (boosted-frame simulations)<a class="headerlink" href="#back-transformed-diagnostics-boosted-frame-simulations" title="Permalink to this headline">¶</a></h2>
+<p>These diagnostics recontruct and output the lab-frame quantities on the fly,
+during a boosted-frame simulation.</p>
+<div class="section" id="id1">
+<h3>Field diagnostic<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="fbpic.openpmd_diag.BoostedFieldDiagnostic">
+<em class="property">class </em><code class="descclassname">fbpic.openpmd_diag.</code><code class="descname">BoostedFieldDiagnostic</code><span class="sig-paren">(</span><em>zmin_lab, zmax_lab, v_lab, dt_snapshots_lab, Ntot_snapshots_lab, gamma_boost, period, fldobject, comm=None, fieldtypes=['rho', 'E', 'B', 'J'], write_dir=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fbpic.openpmd_diag.BoostedFieldDiagnostic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize diagnostics that retrieve the data in the lab frame,
+as a series of snapshot (one file per snapshot),
+within a virtual moving window defined by zmin_lab, zmax_lab, v_lab.</p>
+<p>The parameters defined below are specific to the back-transformed
+diagnostics. See the documentation of <cite>FieldDiagnostic</cite> for
+the other parameters.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>zmin_lab</strong> (<em>float (in meters)</em>) &#8211; The position of the left edge of the virtual moving window,
+<em>in the lab frame</em>, at t=0</li>
+<li><strong>zmax_lab</strong> (<em>float (in meters)</em>) &#8211; The position of the right edge of the virtual moving window,
+<em>in the lab frame</em>, at t=0</li>
+<li><strong>v_lab</strong> (<em>float (in m.s^-1)</em>) &#8211; Speed of the moving window <em>in the lab frame</em></li>
+<li><strong>dt_snapshots_lab</strong> (<em>float (in seconds)</em>) &#8211; Time interval <em>in the lab frame</em> between two successive snapshots</li>
+<li><strong>Ntot_snapshots_lab</strong> (<em>int</em>) &#8211; Total number of snapshots that this diagnostic will produce</li>
+<li><strong>period</strong> (<em>int</em>) &#8211; Number of iterations for which the data is accumulated in memory,
+before finally writing it to the disk.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="id2">
+<h3>Particle diagnostic<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="fbpic.openpmd_diag.BoostedParticleDiagnostic">
+<em class="property">class </em><code class="descclassname">fbpic.openpmd_diag.</code><code class="descname">BoostedParticleDiagnostic</code><span class="sig-paren">(</span><em>zmin_lab, zmax_lab, v_lab, dt_snapshots_lab, Ntot_snapshots_lab, gamma_boost, period, fldobject, particle_data=['position', 'momentum', 'weighting'], select=None, write_dir=None, species={'electrons': None}, comm=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fbpic.openpmd_diag.BoostedParticleDiagnostic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize diagnostics that retrieve the data in the lab frame,
+as a series of snapshot (one file per snapshot),
+within a virtual moving window defined by zmin_lab, zmax_lab, v_lab.</p>
+<p>The parameters defined below are specific to the back-transformed
+diagnostics. See the documentation of <cite>FieldDiagnostic</cite> for
+the other parameters.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>zmin_lab</strong> (<em>float (in meters)</em>) &#8211; The position of the left edge of the virtual moving window,
+<em>in the lab frame</em>, at t=0</li>
+<li><strong>zmax_lab</strong> (<em>float (in meters)</em>) &#8211; The position of the right edge of the virtual moving window,
+<em>in the lab frame</em>, at t=0</li>
+<li><strong>v_lab</strong> (<em>float (m.s^-1)</em>) &#8211; Speed of the moving window <em>in the lab frame</em></li>
+<li><strong>dt_snapshots_lab</strong> (<em>float (seconds)</em>) &#8211; Time interval <em>in the lab frame</em> between two successive snapshots</li>
+<li><strong>Ntot_snapshots_lab</strong> (<em>int</em>) &#8211; Total number of snapshots that this diagnostic will produce</li>
+<li><strong>period</strong> (<em>int</em>) &#8211; Number of iterations for which the data is accumulated in memory,
+before finally writing it to the disk.</li>
+<li><strong>fldobject</strong> (<em>a Fields object,</em>) &#8211; The Fields object of the simulation, that is needed to
+extract some information about the grid</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="checkpoint_restart.html" class="btn btn-neutral float-right" title="Checkpoints and restarts" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="simulation.html" class="btn btn-neutral" title="The Simulation class" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, FBPIC contributors.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

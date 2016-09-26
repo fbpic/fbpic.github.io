@@ -1,0 +1,371 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Installation on Lawrencium (LBNL) &mdash; FBPIC 0.1.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="FBPIC 0.1.0 documentation" href="../index.html"/>
+        <link rel="up" title="Installation" href="installation.html"/>
+        <link rel="next" title="How to run the code" href="../how_to_run.html"/>
+        <link rel="prev" title="Installation on JURECA (JSC)" href="install_jureca.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> FBPIC
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview of the code</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="installation.html">Installation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="install_local.html">Installation on a local computer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install_titan.html">Installation on Titan (OLCF)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install_jureca.html">Installation on JURECA (JSC)</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Installation on Lawrencium (LBNL)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#connecting-to-lawrencium">Connecting to Lawrencium</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#installation-of-fbpic">Installation of FBPIC</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#installation-of-anaconda">Installation of Anaconda</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#installation-of-fbpic-and-its-dependencies">Installation of FBPIC and its dependencies</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#running-simulations">Running simulations</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#preparing-a-new-simulation">Preparing a new simulation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#interactive-jobs">Interactive jobs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#batch-job">Batch job</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#transfering-data-to-your-local-computer">Transfering data to your local computer</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../how_to_run.html">How to run the code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api_reference/api_reference.html">API reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">FBPIC</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="installation.html">Installation</a> &raquo;</li>
+      
+    <li>Installation on Lawrencium (LBNL)</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/install/install_lawrencium.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="installation-on-lawrencium-lbnl">
+<h1>Installation on Lawrencium (LBNL)<a class="headerlink" href="#installation-on-lawrencium-lbnl" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://sites.google.com/a/lbl.gov/high-performance-computing-services-group/lbnl-supercluster/lawrencium">Lawrencium</a>
+is a local cluster at the <a class="reference external" href="http://www.lbl.gov/">Lawrence Berkeley National Lab</a>
+(LBNL).</p>
+<p>It has a few nodes with K20 and K80 Nvidia GPUs.</p>
+<div class="section" id="connecting-to-lawrencium">
+<h2>Connecting to Lawrencium<a class="headerlink" href="#connecting-to-lawrencium" title="Permalink to this headline">¶</a></h2>
+<p>Lawrencium uses a one-time password (OTP) system. Before being able to
+connect to Lawrencium via ssh, you need to configure an OTP Token, using
+<a class="reference external" href="https://commons.lbl.gov/display/itfaq/Installing+and+Configuring+the+OTP+Token">these
+instructions</a>.</p>
+<p>Once your OTP token is configured, you can connect by using</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ssh</span> <span class="o">&lt;</span><span class="n">username</span><span class="o">&gt;</span><span class="nd">@lrc</span><span class="o">-</span><span class="n">login</span><span class="o">.</span><span class="n">lbl</span><span class="o">.</span><span class="n">gov</span>
+</pre></div>
+</div>
+<p>When prompted for the password, generate a new one-time password with
+the Pledge application, and enter it at the prompt.</p>
+</div>
+<div class="section" id="installation-of-fbpic">
+<h2>Installation of FBPIC<a class="headerlink" href="#installation-of-fbpic" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="installation-of-anaconda">
+<h3>Installation of Anaconda<a class="headerlink" href="#installation-of-anaconda" title="Permalink to this headline">¶</a></h3>
+<p>In order to download and install Anaconda and FBPIC, follow the steps
+below:</p>
+<ul>
+<li><p class="first">Download Miniconda:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">wget</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">repo</span><span class="o">.</span><span class="n">continuum</span><span class="o">.</span><span class="n">io</span><span class="o">/</span><span class="n">miniconda</span><span class="o">/</span><span class="n">Miniconda</span><span class="o">-</span><span class="n">latest</span><span class="o">-</span><span class="n">Linux</span><span class="o">-</span><span class="n">x86_64</span><span class="o">.</span><span class="n">sh</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Execute the Miniconda installation script</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">bash</span> <span class="n">Miniconda</span><span class="o">-</span><span class="n">latest</span><span class="o">-</span><span class="n">Linux</span><span class="o">-</span><span class="n">x86_64</span><span class="o">.</span><span class="n">sh</span>
+</pre></div>
+</div>
+<p>Accept the default location of the installation, and answer yes
+when the installer proposes to modify your <code class="docutils literal"><span class="pre">PATH</span></code> inside your <code class="docutils literal"><span class="pre">.bashrc</span></code>.</p>
+</li>
+<li><p class="first">Add the following lines at the end of your <code class="docutils literal"><span class="pre">.bashrc</span></code></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">module</span> <span class="n">load</span> <span class="n">glib</span><span class="o">/</span><span class="mf">2.32</span><span class="o">.</span><span class="mi">4</span>
+<span class="n">module</span> <span class="n">load</span> <span class="n">cuda</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<blockquote>
+<div><p>and type</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">source</span> <span class="o">.</span><span class="n">bashrc</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="installation-of-fbpic-and-its-dependencies">
+<h3>Installation of FBPIC and its dependencies<a class="headerlink" href="#installation-of-fbpic-and-its-dependencies" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><p class="first">Install the dependencies of <code class="docutils literal"><span class="pre">fbpic</span></code></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">numba</span> <span class="n">scipy</span> <span class="n">h5py</span> <span class="n">pyfftw</span> <span class="n">mpi4py</span>
+<span class="n">conda</span> <span class="n">install</span> <span class="n">accelerate</span>
+</pre></div>
+</div>
+<p>(NB: The <code class="docutils literal"><span class="pre">accelerate</span></code> package is not free, but there is a 30-day free
+trial period, which starts when the above command is entered. For
+further use beyond 30 days, one option is to obtain an academic
+license, which is also free. To do so, please visit <a class="reference external" href="https://www.continuum.io/anaconda-academic-subscriptions-available">this
+link</a>.)</p>
+</li>
+<li><p class="first">Clone <code class="docutils literal"><span class="pre">fbpic</span></code> using <code class="docutils literal"><span class="pre">git</span></code>, then and <code class="docutils literal"><span class="pre">cd</span></code> into the directory
+<code class="docutils literal"><span class="pre">fbpic</span></code> and type</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="running-simulations">
+<h2>Running simulations<a class="headerlink" href="#running-simulations" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="preparing-a-new-simulation">
+<h3>Preparing a new simulation<a class="headerlink" href="#preparing-a-new-simulation" title="Permalink to this headline">¶</a></h3>
+<p>It is adviced to use the directory <code class="docutils literal"><span class="pre">/global/scratch/&lt;yourUsername&gt;</span></code>
+for faster I/O access, where <code class="docutils literal"><span class="pre">&lt;yourUsername&gt;</span></code> should be replaced by
+your username.</p>
+<p>In order to prepare a new simulation, create a new subdirectory within
+the above-mentioned directory, and copy your input script there.</p>
+</div>
+<div class="section" id="interactive-jobs">
+<h3>Interactive jobs<a class="headerlink" href="#interactive-jobs" title="Permalink to this headline">¶</a></h3>
+<p>In order to request a node with a GPU:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">salloc</span> <span class="o">--</span><span class="n">time</span><span class="o">=</span><span class="mi">00</span><span class="p">:</span><span class="mi">30</span><span class="p">:</span><span class="mi">00</span> <span class="o">--</span><span class="n">nodes</span><span class="o">=</span><span class="mi">1</span> <span class="o">--</span><span class="n">partition</span> <span class="n">lr_manycore</span>  <span class="o">--</span><span class="n">constraint</span><span class="o">=</span><span class="n">lr_kepler</span> <span class="o">--</span><span class="n">account</span><span class="o">=&lt;</span><span class="n">yourAccountName</span><span class="o">&gt;</span> <span class="o">--</span><span class="n">qos</span><span class="o">=</span><span class="n">lr_normal</span>
+</pre></div>
+</div>
+<p>where <code class="docutils literal"><span class="pre">&lt;yourAccountName&gt;</span></code> should be replace by the account that will
+be charged for the simulation.</p>
+<p>Once the job has started, type</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">srun</span> <span class="o">--</span><span class="n">pty</span> <span class="o">-</span><span class="n">u</span> <span class="n">bash</span> <span class="o">-</span><span class="n">i</span>
+</pre></div>
+</div>
+<p>in order to connect to the node that has been allocated. Then <code class="docutils literal"><span class="pre">cd</span></code> to
+the directory where you prepared your input script and type</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">&lt;</span><span class="n">fbpic_script</span><span class="o">.</span><span class="n">py</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="batch-job">
+<h3>Batch job<a class="headerlink" href="#batch-job" title="Permalink to this headline">¶</a></h3>
+<p>Create a new file named <code class="docutils literal"><span class="pre">submission_file</span></code> in the same directory as
+your input script (typically this directory is a subdirectory of
+<code class="docutils literal"><span class="pre">/global/scratch/&lt;yourUsername&gt;</span></code>). Within this new file, copy the
+following text (and replace the bracketed text by the proper values).</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1">#SBATCH -J my_job</span>
+<span class="c1">#SBATCH --partition=lr_manycore</span>
+<span class="c1">#SBATCH --constraint lr_kepler</span>
+<span class="c1">#SBATCH --time &lt;requestedTime&gt;</span>
+<span class="c1">#SBATCH --nodes 1</span>
+<span class="c1">#SBATCH --account &lt;yourAccountName&gt;</span>
+<span class="c1">#SBATCH --qos lr_normal</span>
+<span class="c1">#SBATCH -e my_job.%j.err</span>
+<span class="c1">#SBATCH -o my_job.%j.out</span>
+
+<span class="n">python</span> <span class="o">&lt;</span><span class="n">fbpic_script</span><span class="o">.</span><span class="n">py</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>Then run:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">sbatch</span> <span class="n">submission_file</span>
+</pre></div>
+</div>
+<p>In order to see the queue:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">squeue</span> <span class="o">-</span><span class="n">p</span> <span class="n">lr_manycore</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="transfering-data-to-your-local-computer">
+<h3>Transfering data to your local computer<a class="headerlink" href="#transfering-data-to-your-local-computer" title="Permalink to this headline">¶</a></h3>
+<p>In order to transfer your data to your local machine, you need to
+connect to the transfer node. From a Lawrencium login node, type:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ssh</span> <span class="n">lrc</span><span class="o">-</span><span class="n">xfer</span><span class="o">.</span><span class="n">scs00</span>
+</pre></div>
+</div>
+<p>You can then use for instance <code class="docutils literal"><span class="pre">rsync</span></code> to transfer data to your local
+computer.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../how_to_run.html" class="btn btn-neutral float-right" title="How to run the code" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="install_jureca.html" class="btn btn-neutral" title="Installation on JURECA (JSC)" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, FBPIC contributors.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
