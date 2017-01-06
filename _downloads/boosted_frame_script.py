@@ -34,9 +34,9 @@ from fbpic.openpmd_diag import FieldDiagnostic, ParticleDiagnostic, \
 use_cuda = True
 
 # The simulation box
-Nz = 1600        # Number of gridpoints along z
+Nz = 400         # Number of gridpoints along z
 zmax = 0.e-6     # Length of the box along z (meters)
-zmin = -80.e-6
+zmin = -20.e-6
 Nr = 75          # Number of gridpoints along r
 rmax = 150.e-6   # Length of the box along r (meters)
 Nm = 2           # Number of modes used
@@ -44,7 +44,7 @@ n_guard = 40     # Number of guard cells
 exchange_period = 10
 # The simulation timestep
 dt = (zmax-zmin)/Nz/c   # Timestep (seconds)
-N_step = 101     # Number of iterations to perform
+N_step = 201     # Number of iterations to perform
                  # (increase this number for a real simulation)
 
 # Boosted frame
@@ -54,8 +54,8 @@ boost = BoostConverter(gamma_boost)
 # The laser (conversion to boosted frame is done inside 'add_laser')
 a0 = 2.          # Laser amplitude
 w0 = 50.e-6      # Laser waist
-ctau = 9.e-6     # Laser duration
-z0 = -20.e-6     # Laser centroid
+ctau = 5.e-6     # Laser duration
+z0 = -10.e-6     # Laser centroid
 zfoc = 0.e-6     # Focal position
 lambda0 = 0.8e-6 # Laser wavelength
 
@@ -109,12 +109,13 @@ def dens_func( z, r ):
     inv_ramp_down = 1./ramp_down
     n = np.where( (z >= ramp_up+plateau) & (z < ramp_up+plateau+ramp_down),
               - (z - (ramp_up+plateau+ramp_down) )*inv_ramp_down, n )
+    n = np.where( z >= ramp_up+plateau+ramp_down, 0, n)
     # Add transverse guiding parabolic profile
     n = n * ( 1. + rel_delta_n_over_w2 * r**2 )
     return(n)
 
 # The bunch
-bunch_zmin = z0 - 27.e-6
+bunch_zmin = z0 - 10.e-6
 bunch_zmax = bunch_zmin + 4.e-6
 bunch_rmax = 10.e-6
 bunch_gamma = 400.
@@ -134,7 +135,7 @@ v_window, = boost.velocity( [ v_window ] )
 # The diagnostics
 diag_period = 50        # Period of the diagnostics in number of timesteps
 # Whether to write the fields in the lab frame
-Ntot_snapshot_lab = 25
+Ntot_snapshot_lab = 20
 dt_snapshot_lab = (zmax-zmin)/c
 
 # ---------------------------
@@ -148,7 +149,7 @@ if __name__ == '__main__':
     sim = Simulation( Nz, zmax, Nr, rmax, Nm, dt,
         p_zmin, p_zmax, p_rmin, p_rmax, p_nz, p_nr, p_nt, n_e,
         dens_func=dens_func, zmin=zmin, initialize_ions=True,
-        # v_comoving=-0.9999*c, use_galilean=False,
+        v_comoving=-0.9999*c, use_galilean=False,
         n_guard=n_guard, exchange_period=exchange_period,
         gamma_boost=gamma_boost, boundaries='open', use_cuda=use_cuda )
     
@@ -165,14 +166,15 @@ if __name__ == '__main__':
 
     # Add a field diagnostic
     sim.diags = [ FieldDiagnostic(diag_period, sim.fld, sim.comm ),
-                ParticleDiagnostic(diag_period,
-                    {"electrons":sim.ptcl[0], "bunch":sim.ptcl[2]}, sim.comm),
-                BoostedFieldDiagnostic( zmin, zmax, c,
+                 ParticleDiagnostic(diag_period,
+                     {"electrons":sim.ptcl[0], "bunch":sim.ptcl[2]}, sim.comm),
+                 BoostedFieldDiagnostic( zmin, zmax, c,
                     dt_snapshot_lab, Ntot_snapshot_lab, gamma_boost,
                     period=diag_period, fldobject=sim.fld, comm=sim.comm),
                 BoostedParticleDiagnostic( zmin, zmax, c, dt_snapshot_lab,
                     Ntot_snapshot_lab, gamma_boost, diag_period, sim.fld, 
-                    select={'uz':[0.,None]}, species={'electrons':sim.ptcl[0]})
+                    select={'uz':[0.,None]}, species={'electrons':sim.ptcl[2]},
+                    comm=sim.comm )
                     ]
 
     ### Run the simulation

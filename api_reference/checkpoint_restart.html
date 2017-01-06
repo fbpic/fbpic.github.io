@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Checkpoints and restarts &mdash; FBPIC 0.1.1 documentation</title>
+  <title>Checkpoints and restarts &mdash; FBPIC 0.2.0 documentation</title>
   
 
   
@@ -30,7 +30,7 @@
   
 
   
-    <link rel="top" title="FBPIC 0.1.1 documentation" href="../index.html"/>
+    <link rel="top" title="FBPIC 0.2.0 documentation" href="../index.html"/>
         <link rel="up" title="API reference" href="api_reference.html"/>
         <link rel="next" title="Laser-plasma utilities" href="lpa_utilities.html"/>
         <link rel="prev" title="The openPMD diagnostics" href="diagnostics.html"/> 
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.1.1
+                0.2.0
               </div>
             
           
@@ -157,7 +157,7 @@ without having to run it again from the beginning.</p>
 <h2>Setting checkpoints<a class="headerlink" href="#setting-checkpoints" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="fbpic.openpmd_diag.set_periodic_checkpoint">
-<code class="descclassname">fbpic.openpmd_diag.</code><code class="descname">set_periodic_checkpoint</code><span class="sig-paren">(</span><em>sim</em>, <em>period</em><span class="sig-paren">)</span><a class="headerlink" href="#fbpic.openpmd_diag.set_periodic_checkpoint" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">fbpic.openpmd_diag.</code><code class="descname">set_periodic_checkpoint</code><span class="sig-paren">(</span><em>sim</em>, <em>period</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/openpmd_diag/checkpoint_restart.html#set_periodic_checkpoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.openpmd_diag.set_periodic_checkpoint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set up periodic checkpoints of the simulation</p>
 <p>The checkpoints are saved in openPMD format, in the directory
 <cite>./checkpoints</cite>, with one subdirectory per process.
@@ -183,7 +183,7 @@ All the field and particle information of each processor is saved.</p>
 <h2>Restarting a simulation<a class="headerlink" href="#restarting-a-simulation" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="fbpic.openpmd_diag.restart_from_checkpoint">
-<code class="descclassname">fbpic.openpmd_diag.</code><code class="descname">restart_from_checkpoint</code><span class="sig-paren">(</span><em>sim</em>, <em>iteration=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fbpic.openpmd_diag.restart_from_checkpoint" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">fbpic.openpmd_diag.</code><code class="descname">restart_from_checkpoint</code><span class="sig-paren">(</span><em>sim</em>, <em>iteration=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/openpmd_diag/checkpoint_restart.html#restart_from_checkpoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.openpmd_diag.restart_from_checkpoint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fills the Simulation object <cite>sim</cite> with data saved in a checkpoint.</p>
 <p>More precisely, the following data from <cite>sim</cite> is overwritten:</p>
 <ul class="simple">
@@ -259,7 +259,7 @@ If None, the latest checkpoint available will be used.</li>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.1.1',
+            VERSION:'0.2.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

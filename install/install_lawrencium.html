@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Installation on Lawrencium (LBNL) &mdash; FBPIC 0.1.1 documentation</title>
+  <title>Installation on Lawrencium (LBNL) &mdash; FBPIC 0.2.0 documentation</title>
   
 
   
@@ -30,7 +30,7 @@
   
 
   
-    <link rel="top" title="FBPIC 0.1.1 documentation" href="../index.html"/>
+    <link rel="top" title="FBPIC 0.2.0 documentation" href="../index.html"/>
         <link rel="up" title="Installation" href="installation.html"/>
         <link rel="next" title="How to run the code" href="../how_to_run.html"/>
         <link rel="prev" title="Installation on JURECA (JSC)" href="install_jureca.html"/> 
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.1.1
+                0.2.0
               </div>
             
           
@@ -220,9 +220,10 @@ further use beyond 30 days, one option is to obtain an academic
 license, which is also free. To do so, please visit <a class="reference external" href="https://www.continuum.io/anaconda-academic-subscriptions-available">this
 link</a>.)</p>
 </li>
-<li><p class="first">Clone <code class="docutils literal"><span class="pre">fbpic</span></code> using <code class="docutils literal"><span class="pre">git</span></code>, then and <code class="docutils literal"><span class="pre">cd</span></code> into the directory
-<code class="docutils literal"><span class="pre">fbpic</span></code> and type</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
+<li><p class="first">Install <code class="docutils literal"><span class="pre">fbpic</span></code></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">git</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">fbpic</span><span class="o">/</span><span class="n">fbpic</span><span class="o">.</span><span class="n">git</span>
+<span class="n">cd</span> <span class="n">fbpic</span>
+<span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
 </pre></div>
 </div>
 </li>
@@ -242,11 +243,9 @@ the above-mentioned directory, and copy your input script there.</p>
 <div class="section" id="interactive-jobs">
 <h3>Interactive jobs<a class="headerlink" href="#interactive-jobs" title="Permalink to this headline">¶</a></h3>
 <p>In order to request a node with a GPU:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">salloc</span> <span class="o">--</span><span class="n">time</span><span class="o">=</span><span class="mi">00</span><span class="p">:</span><span class="mi">30</span><span class="p">:</span><span class="mi">00</span> <span class="o">--</span><span class="n">nodes</span><span class="o">=</span><span class="mi">1</span> <span class="o">--</span><span class="n">partition</span> <span class="n">lr_manycore</span>  <span class="o">--</span><span class="n">constraint</span><span class="o">=</span><span class="n">lr_kepler</span> <span class="o">--</span><span class="n">account</span><span class="o">=&lt;</span><span class="n">yourAccountName</span><span class="o">&gt;</span> <span class="o">--</span><span class="n">qos</span><span class="o">=</span><span class="n">lr_normal</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">salloc</span> <span class="o">--</span><span class="n">time</span><span class="o">=</span><span class="mi">00</span><span class="p">:</span><span class="mi">30</span><span class="p">:</span><span class="mi">00</span> <span class="o">--</span><span class="n">nodes</span><span class="o">=</span><span class="mi">1</span> <span class="o">--</span><span class="n">partition</span> <span class="n">lr_manycore</span>  <span class="o">--</span><span class="n">constraint</span><span class="o">=</span><span class="n">lr_kepler</span> <span class="o">--</span><span class="n">qos</span><span class="o">=</span><span class="n">lr_normal</span>
 </pre></div>
 </div>
-<p>where <code class="docutils literal"><span class="pre">&lt;yourAccountName&gt;</span></code> should be replace by the account that will
-be charged for the simulation.</p>
 <p>Once the job has started, type</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">srun</span> <span class="o">--</span><span class="n">pty</span> <span class="o">-</span><span class="n">u</span> <span class="n">bash</span> <span class="o">-</span><span class="n">i</span>
 </pre></div>
@@ -269,7 +268,6 @@ following text (and replace the bracketed text by the proper values).</p>
 <span class="c1">#SBATCH --constraint lr_kepler</span>
 <span class="c1">#SBATCH --time &lt;requestedTime&gt;</span>
 <span class="c1">#SBATCH --nodes 1</span>
-<span class="c1">#SBATCH --account &lt;yourAccountName&gt;</span>
 <span class="c1">#SBATCH --qos lr_normal</span>
 <span class="c1">#SBATCH -e my_job.%j.err</span>
 <span class="c1">#SBATCH -o my_job.%j.out</span>
@@ -340,7 +338,7 @@ computer.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.1.1',
+            VERSION:'0.2.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

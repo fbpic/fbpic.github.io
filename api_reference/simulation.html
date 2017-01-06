@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>The Simulation class &mdash; FBPIC 0.1.1 documentation</title>
+  <title>The Simulation class &mdash; FBPIC 0.2.0 documentation</title>
   
 
   
@@ -30,7 +30,7 @@
   
 
   
-    <link rel="top" title="FBPIC 0.1.1 documentation" href="../index.html"/>
+    <link rel="top" title="FBPIC 0.2.0 documentation" href="../index.html"/>
         <link rel="up" title="API reference" href="api_reference.html"/>
         <link rel="next" title="The openPMD diagnostics" href="diagnostics.html"/>
         <link rel="prev" title="API reference" href="api_reference.html"/> 
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.1.1
+                0.2.0
               </div>
             
           
@@ -154,7 +154,7 @@ the simulation data, and has the high-level methods to perform the PIC cycle.</p
 </div></blockquote>
 <dl class="class">
 <dt id="fbpic.main.Simulation">
-<em class="property">class </em><code class="descclassname">fbpic.main.</code><code class="descname">Simulation</code><span class="sig-paren">(</span><em>Nz</em>, <em>zmax</em>, <em>Nr</em>, <em>rmax</em>, <em>Nm</em>, <em>dt</em>, <em>p_zmin</em>, <em>p_zmax</em>, <em>p_rmin</em>, <em>p_rmax</em>, <em>p_nz</em>, <em>p_nr</em>, <em>p_nt</em>, <em>n_e</em>, <em>zmin=0.0</em>, <em>n_order=-1</em>, <em>dens_func=None</em>, <em>filter_currents=True</em>, <em>initialize_ions=False</em>, <em>use_cuda=False</em>, <em>n_guard=50</em>, <em>exchange_period=None</em>, <em>boundaries='periodic'</em>, <em>gamma_boost=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fbpic.main.Simulation" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">fbpic.main.</code><code class="descname">Simulation</code><span class="sig-paren">(</span><em>Nz</em>, <em>zmax</em>, <em>Nr</em>, <em>rmax</em>, <em>Nm</em>, <em>dt</em>, <em>p_zmin</em>, <em>p_zmax</em>, <em>p_rmin</em>, <em>p_rmax</em>, <em>p_nz</em>, <em>p_nr</em>, <em>p_nt</em>, <em>n_e</em>, <em>zmin=0.0</em>, <em>n_order=-1</em>, <em>dens_func=None</em>, <em>filter_currents=True</em>, <em>v_comoving=None</em>, <em>use_galilean=False</em>, <em>initialize_ions=False</em>, <em>use_cuda=False</em>, <em>n_guard=50</em>, <em>exchange_period=None</em>, <em>boundaries='periodic'</em>, <em>gamma_boost=None</em>, <em>use_all_mpi_ranks=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/main.html#Simulation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.main.Simulation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initializes a simulation, by creating the following structures:</p>
 <ul class="simple">
 <li>the <cite>Fields</cite> object, which contains the field data on the grids</li>
@@ -196,6 +196,15 @@ a 1d array containing the density <em>relative to n</em>
 (i.e. a number between 0 and 1) at the given positions</li>
 <li><strong>initialize_ions</strong> (<em>bool, optional</em>) &#8211; Whether to initialize the neutralizing ions</li>
 <li><strong>filter_currents</strong> (<em>bool, optional</em>) &#8211; Whether to filter the currents and charge in k space</li>
+<li><strong>v_comoving</strong> (<em>float or None, optional</em>) &#8211; If this variable is None, the standard PSATD is used (default).
+Otherwise, the current is assumed to be &#8220;comoving&#8221;,
+i.e. constant with respect to (z - v_comoving * t).
+This can be done in two ways: either by
+- Using a PSATD scheme that takes this hypothesis into account
+- Solving the PSATD scheme in a Galilean frame</li>
+<li><strong>use_galilean</strong> (<em>bool, optional</em>) &#8211; Determines which one of the two above schemes is used
+When use_galilean is true, the whole grid moves
+with a speed v_comoving</li>
 <li><strong>use_cuda</strong> (<em>bool, optional</em>) &#8211; Wether to use CUDA (GPU) acceleration</li>
 <li><strong>n_guard</strong> (<em>int, optional</em>) &#8211; Number of guard cells to use at the left and right of
 a domain, when using MPI.</li>
@@ -209,6 +218,18 @@ Either &#8216;periodic&#8217; or &#8216;open&#8217;</li>
 value of <cite>gamma_boost</cite> to the corresponding Lorentz factor.
 All the other quantities (zmin, zmax, n_e, etc.) are to be given
 in the lab frame.</li>
+<li><strong>use_all_mpi_ranks</strong> (<em>bool, optional</em>) &#8211; <p>When launching the simulation with mpirun:</p>
+<ul>
+<li>if <cite>use_all_mpi_ranks</cite> is True (default):
+All the MPI ranks will contribute to the same simulation,
+using domain-decomposition to share the work.</li>
+<li>if <cite>use_all_mpi_ranks</cite> is False:
+Each MPI rank will run an independent simulation.
+This can be useful when running parameter scans. In this case,
+make sure that your input script is written so that the input
+parameters and output folder depend on the MPI rank.</li>
+</ul>
+</li>
 </ul>
 </td>
 </tr>
@@ -216,7 +237,7 @@ in the lab frame.</li>
 </table>
 <dl class="method">
 <dt id="fbpic.main.Simulation.set_moving_window">
-<code class="descname">set_moving_window</code><span class="sig-paren">(</span><em>v=299792458.0</em>, <em>ux_m=0.0</em>, <em>uy_m=0.0</em>, <em>uz_m=0.0</em>, <em>ux_th=0.0</em>, <em>uy_th=0.0</em>, <em>uz_th=0.0</em>, <em>gamma_boost=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fbpic.main.Simulation.set_moving_window" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_moving_window</code><span class="sig-paren">(</span><em>v=299792458.0</em>, <em>ux_m=0.0</em>, <em>uy_m=0.0</em>, <em>uz_m=0.0</em>, <em>ux_th=0.0</em>, <em>uy_th=0.0</em>, <em>uz_th=0.0</em>, <em>gamma_boost=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/main.html#Simulation.set_moving_window"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.main.Simulation.set_moving_window" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initializes a moving window for the simulation.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -245,7 +266,7 @@ will not work if any of ux_th, uy_th, uz_th, ux_m, uy_m is nonzero)</li>
 
 <dl class="method">
 <dt id="fbpic.main.Simulation.step">
-<code class="descname">step</code><span class="sig-paren">(</span><em>N=1</em>, <em>ptcl_feedback=True</em>, <em>correct_currents=True</em>, <em>use_true_rho=False</em>, <em>move_positions=True</em>, <em>move_momenta=True</em>, <em>show_progress=True</em><span class="sig-paren">)</span><a class="headerlink" href="#fbpic.main.Simulation.step" title="Permalink to this definition">¶</a></dt>
+<code class="descname">step</code><span class="sig-paren">(</span><em>N=1</em>, <em>correct_currents=True</em>, <em>correct_divE=False</em>, <em>use_true_rho=False</em>, <em>move_positions=True</em>, <em>move_momenta=True</em>, <em>show_progress=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/main.html#Simulation.step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.main.Simulation.step" title="Permalink to this definition">¶</a></dt>
 <dd><p>Perform N PIC cycles.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -254,13 +275,12 @@ will not work if any of ux_th, uy_th, uz_th, ux_m, uy_m is nonzero)</li>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>N</strong> (<em>int, optional</em>) &#8211; The number of timesteps to take
 Default: N=1</li>
-<li><strong>ptcl_feedback</strong> (<em>bool, optional</em>) &#8211; Whether to take into account the particle density and
-currents when pushing the fields</li>
 <li><strong>correct_currents</strong> (<em>bool, optional</em>) &#8211; Whether to correct the currents in spectral space</li>
-<li><strong>move_positions</strong> (<em>bool, optional</em>) &#8211; Whether to move or freeze the particles&#8217; positions</li>
-<li><strong>move_momenta</strong> (<em>bool, optional</em>) &#8211; Whether to move or freeze the particles&#8217; momenta</li>
+<li><strong>correct_divE</strong> (<em>bool, optional</em>) &#8211; Whether to correct the divergence of E in spectral space</li>
 <li><strong>use_true_rho</strong> (<em>bool, optional</em>) &#8211; Wether to use the true rho deposited on the grid for the
 field push or not. (requires initialize_ions = True)</li>
+<li><strong>move_positions</strong> (<em>bool, optional</em>) &#8211; Whether to move or freeze the particles&#8217; positions</li>
+<li><strong>move_momenta</strong> (<em>bool, optional</em>) &#8211; Whether to move or freeze the particles&#8217; momenta</li>
 <li><strong>show_progress</strong> (<em>bool, optional</em>) &#8211; Whether to show a progression bar</li>
 </ul>
 </td>
@@ -314,7 +334,7 @@ field push or not. (requires initialize_ions = True)</li>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.1.1',
+            VERSION:'0.2.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true
