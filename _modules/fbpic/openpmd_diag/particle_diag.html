@@ -1,0 +1,592 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>fbpic.openpmd_diag.particle_diag &mdash; FBPIC 0.2.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="FBPIC 0.2.0 documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> FBPIC
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../overview.html">Overview of the code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../install/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../how_to_run.html">How to run the code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api_reference/api_reference.html">API reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../index.html">FBPIC</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      
+    <li>fbpic.openpmd_diag.particle_diag</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for fbpic.openpmd_diag.particle_diag</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2016, FBPIC contributors</span>
+<span class="c1"># Authors: Remi Lehe, Manuel Kirchen</span>
+<span class="c1"># License: 3-Clause-BSD-LBNL</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This file defines the class ParticleDiagnostic</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">h5py</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="k">import</span> <span class="n">constants</span>
+<span class="kn">from</span> <span class="nn">.generic_diag</span> <span class="k">import</span> <span class="n">OpenPMDDiagnostic</span>
+<span class="kn">from</span> <span class="nn">.data_dict</span> <span class="k">import</span> <span class="n">macro_weighted_dict</span><span class="p">,</span> <span class="n">weighting_power_dict</span>
+
+<div class="viewcode-block" id="ParticleDiagnostic"><a class="viewcode-back" href="../../../api_reference/diagnostics.html#fbpic.openpmd_diag.ParticleDiagnostic">[docs]</a><span class="k">class</span> <span class="nc">ParticleDiagnostic</span><span class="p">(</span><span class="n">OpenPMDDiagnostic</span><span class="p">)</span> <span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class that defines the particle diagnostics to be performed.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">period</span><span class="p">,</span> <span class="n">species</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;electrons&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">},</span> <span class="n">comm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">particle_data</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;position&quot;</span><span class="p">,</span> <span class="s2">&quot;momentum&quot;</span><span class="p">,</span> <span class="s2">&quot;weighting&quot;</span><span class="p">],</span>
+                 <span class="n">select</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">write_dir</span><span class="o">=</span><span class="kc">None</span> <span class="p">)</span> <span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the particle diagnostics.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        period : int</span>
+<span class="sd">            The period of the diagnostics, in number of timesteps.</span>
+<span class="sd">            (i.e. the diagnostics are written whenever the number</span>
+<span class="sd">            of iterations is divisible by `period`)</span>
+<span class="sd">        </span>
+<span class="sd">        species : a dictionary of Particle objects</span>
+<span class="sd">            The object that is written (e.g. elec)</span>
+<span class="sd">            is assigned to the particleName of this species.</span>
+<span class="sd">            (e.g. {&quot;electrons&quot; : elec })</span>
+
+<span class="sd">        comm : an fbpic BoundaryCommunicator object or None</span>
+<span class="sd">            If this is not None, the data is gathered by the communicator, and</span>
+<span class="sd">            guard cells are removed.</span>
+<span class="sd">            Otherwise, each rank writes its own data, including guard cells.</span>
+<span class="sd">            (Make sure to use different write_dir in this case.)</span>
+<span class="sd">            </span>
+<span class="sd">        particle_data : a list of strings, optional </span>
+<span class="sd">            The particle properties are given by:</span>
+<span class="sd">            [&quot;position&quot;, &quot;momentum&quot;, &quot;weighting&quot;]</span>
+<span class="sd">            for the coordinates x,y,z.</span>
+<span class="sd">            Default : electron particle data is written</span>
+
+<span class="sd">        select : dict, optional</span>
+<span class="sd">            Either None or a dictionary of rules</span>
+<span class="sd">            to select the particles, of the form</span>
+<span class="sd">            &#39;x&#39; : [-4., 10.]   (Particles having x between -4 and 10 microns)</span>
+<span class="sd">            &#39;ux&#39; : [-0.1, 0.1] (Particles having ux between -0.1 and 0.1 mc)</span>
+<span class="sd">            &#39;uz&#39; : [5., None]  (Particles with uz above 5 mc)</span>
+<span class="sd">            </span>
+<span class="sd">        write_dir : a list of strings, optional</span>
+<span class="sd">            The POSIX path to the directory where the results are</span>
+<span class="sd">            to be written. If none is provided, this will be the path</span>
+<span class="sd">            of the current working directory.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># General setup</span>
+        <span class="n">OpenPMDDiagnostic</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">period</span><span class="p">,</span> <span class="n">comm</span><span class="p">,</span> <span class="n">write_dir</span><span class="p">)</span>
+        
+        <span class="c1"># Register the arguments</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">particle_data</span> <span class="o">=</span> <span class="n">particle_data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">species_dict</span> <span class="o">=</span> <span class="n">species</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">select</span> <span class="o">=</span> <span class="n">select</span>
+
+        <span class="c1"># Extract the timestep from a given species</span>
+        <span class="n">random_species</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">species_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">species_dict</span><span class="p">[</span><span class="n">random_species</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span>
+        
+    <span class="k">def</span> <span class="nf">setup_openpmd_species_group</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">grp</span><span class="p">,</span> <span class="n">species</span> <span class="p">)</span> <span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the attributes that are specific to the particle group</span>
+<span class="sd">        </span>
+<span class="sd">        Parameter</span>
+<span class="sd">        ---------</span>
+<span class="sd">        grp : an h5py.Group object</span>
+<span class="sd">            Contains all the species</span>
+<span class="sd">    </span>
+<span class="sd">        species : a fbpic Particle object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Generic attributes</span>
+        <span class="n">grp</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;particleShape&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.</span>
+        <span class="n">grp</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;currentDeposition&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">string_</span><span class="p">(</span><span class="s2">&quot;directMorseNielson&quot;</span><span class="p">)</span>
+        <span class="n">grp</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;particleSmoothing&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">string_</span><span class="p">(</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
+        <span class="n">grp</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;particlePush&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">string_</span><span class="p">(</span><span class="s2">&quot;Vay&quot;</span><span class="p">)</span>
+        <span class="n">grp</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;particleInterpolation&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">string_</span><span class="p">(</span><span class="s2">&quot;uniform&quot;</span><span class="p">)</span>
+        
+        <span class="c1"># Setup constant datasets</span>
+        <span class="k">for</span> <span class="n">quantity</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;charge&quot;</span><span class="p">,</span> <span class="s2">&quot;mass&quot;</span><span class="p">,</span> <span class="s2">&quot;positionOffset&quot;</span><span class="p">]</span> <span class="p">:</span>
+            <span class="n">grp</span><span class="o">.</span><span class="n">require_group</span><span class="p">(</span><span class="n">quantity</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">setup_openpmd_species_record</span><span class="p">(</span> <span class="n">grp</span><span class="p">[</span><span class="n">quantity</span><span class="p">],</span> <span class="n">quantity</span> <span class="p">)</span>
+        <span class="k">for</span> <span class="n">quantity</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;charge&quot;</span><span class="p">,</span> <span class="s2">&quot;mass&quot;</span><span class="p">,</span> <span class="s2">&quot;positionOffset/x&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;positionOffset/y&quot;</span><span class="p">,</span> <span class="s2">&quot;positionOffset/z&quot;</span><span class="p">]</span> <span class="p">:</span>
+            <span class="n">grp</span><span class="o">.</span><span class="n">require_group</span><span class="p">(</span><span class="n">quantity</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">setup_openpmd_species_component</span><span class="p">(</span> <span class="n">grp</span><span class="p">[</span><span class="n">quantity</span><span class="p">],</span> <span class="n">quantity</span> <span class="p">)</span>
+            <span class="n">grp</span><span class="p">[</span><span class="n">quantity</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;shape&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">)</span>
+            <span class="c1"># Required. Since it is not really used, the shape is 1 here.</span>
+        <span class="c1"># Set the corresponding values</span>
+        <span class="n">grp</span><span class="p">[</span><span class="s2">&quot;charge&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">species</span><span class="o">.</span><span class="n">q</span>
+        <span class="n">grp</span><span class="p">[</span><span class="s2">&quot;mass&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">species</span><span class="o">.</span><span class="n">m</span>
+        <span class="n">grp</span><span class="p">[</span><span class="s2">&quot;positionOffset/x&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span>
+        <span class="n">grp</span><span class="p">[</span><span class="s2">&quot;positionOffset/y&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span>
+        <span class="n">grp</span><span class="p">[</span><span class="s2">&quot;positionOffset/z&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span>
+
+    <span class="k">def</span> <span class="nf">setup_openpmd_species_record</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">grp</span><span class="p">,</span> <span class="n">quantity</span> <span class="p">)</span> <span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the attributes that are specific to a species record</span>
+<span class="sd">        </span>
+<span class="sd">        Parameter</span>
+<span class="sd">        ---------</span>
+<span class="sd">        grp : an h5py.Group object or h5py.Dataset</span>
+<span class="sd">            The group that correspond to `quantity`</span>
+<span class="sd">            (in particular, its path must end with &quot;/&lt;quantity&gt;&quot;)</span>
+<span class="sd">    </span>
+<span class="sd">        quantity : string</span>
+<span class="sd">            The name of the record being setup</span>
+<span class="sd">            e.g. &quot;position&quot;, &quot;momentum&quot;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Generic setup</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setup_openpmd_record</span><span class="p">(</span> <span class="n">grp</span><span class="p">,</span> <span class="n">quantity</span> <span class="p">)</span>
+
+        <span class="c1"># Weighting information</span>
+        <span class="n">grp</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;macroWeighted&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">macro_weighted_dict</span><span class="p">[</span><span class="n">quantity</span><span class="p">]</span>
+        <span class="n">grp</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;weightingPower&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">weighting_power_dict</span><span class="p">[</span><span class="n">quantity</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">setup_openpmd_species_component</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">grp</span><span class="p">,</span> <span class="n">quantity</span> <span class="p">)</span> <span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the attributes that are specific to a species component</span>
+
+<span class="sd">        Parameter</span>
+<span class="sd">        ---------</span>
+<span class="sd">        grp : an h5py.Group object or h5py.Dataset</span>
+<span class="sd">        </span>
+<span class="sd">        quantity : string</span>
+<span class="sd">            The name of the component</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setup_openpmd_component</span><span class="p">(</span> <span class="n">grp</span> <span class="p">)</span>
+        
+    <span class="k">def</span> <span class="nf">write_hdf5</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">iteration</span> <span class="p">)</span> <span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Write an HDF5 file that complies with the OpenPMD standard</span>
+
+<span class="sd">        Parameter</span>
+<span class="sd">        ---------</span>
+<span class="sd">        iteration : int</span>
+<span class="sd">             The current iteration number of the simulation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Receive data from the GPU if needed</span>
+        <span class="k">for</span> <span class="n">species</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">species_dict</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="p">:</span>
+            <span class="k">if</span> <span class="n">species</span><span class="o">.</span><span class="n">use_cuda</span> <span class="p">:</span>
+                <span class="n">species</span><span class="o">.</span><span class="n">receive_particles_from_gpu</span><span class="p">()</span>
+
+        <span class="c1"># Create the file and setup the openPMD structure (only first proc)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rank</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;data</span><span class="si">%08d</span><span class="s2">.h5&quot;</span> <span class="o">%</span><span class="n">iteration</span>
+            <span class="n">fullpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_dir</span><span class="p">,</span> <span class="s2">&quot;hdf5&quot;</span><span class="p">,</span> <span class="n">filename</span> <span class="p">)</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span> <span class="n">fullpath</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;a&quot;</span> <span class="p">)</span>
+
+            <span class="c1"># Setup its attributes</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">setup_openpmd_file</span><span class="p">(</span> <span class="n">f</span><span class="p">,</span> <span class="n">iteration</span><span class="p">,</span> <span class="n">iteration</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">)</span>
+
+        <span class="c1"># Loop over the different species and </span>
+        <span class="c1"># particle quantities that should be written</span>
+        <span class="k">for</span> <span class="n">species_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">species_dict</span> <span class="p">:</span>
+
+            <span class="c1"># Check if the species exists</span>
+            <span class="n">species</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">species_dict</span><span class="p">[</span><span class="n">species_name</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">species</span> <span class="ow">is</span> <span class="kc">None</span> <span class="p">:</span>
+                <span class="c1"># If not, immediately go to the next species_name</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># Setup the species group (only first proc)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rank</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+                <span class="n">species_path</span> <span class="o">=</span> <span class="s2">&quot;/data/</span><span class="si">%d</span><span class="s2">/particles/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span><span class="p">(</span>
+                    <span class="n">iteration</span><span class="p">,</span> <span class="n">species_name</span><span class="p">)</span>
+                <span class="c1"># Create and setup the h5py.Group species_grp</span>
+                <span class="n">species_grp</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">require_group</span><span class="p">(</span> <span class="n">species_path</span> <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">setup_openpmd_species_group</span><span class="p">(</span> <span class="n">species_grp</span><span class="p">,</span> <span class="n">species</span> <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">species_grp</span> <span class="o">=</span> <span class="kc">None</span>
+
+            <span class="c1"># Select the particles that will be written</span>
+            <span class="n">select_array</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">apply_selection</span><span class="p">(</span> <span class="n">species</span> <span class="p">)</span>
+            <span class="c1"># Get their total number</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="n">select_array</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1"># Multi-proc output</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">n_rank</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">mpi_comm</span><span class="o">.</span><span class="n">allgather</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">n_rank</span> <span class="o">=</span> <span class="p">[</span><span class="n">n</span><span class="p">]</span>
+                <span class="n">Ntot</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">n_rank</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Single-proc output</span>
+                <span class="n">n_rank</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="n">Ntot</span> <span class="o">=</span> <span class="n">n</span>
+                
+            <span class="c1"># Write the datasets for each particle datatype</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">write_particles</span><span class="p">(</span> <span class="n">species_grp</span><span class="p">,</span> <span class="n">species</span><span class="p">,</span> <span class="n">n_rank</span><span class="p">,</span>
+                                  <span class="n">Ntot</span><span class="p">,</span> <span class="n">select_array</span> <span class="p">)</span>
+        
+        <span class="c1"># Close the file</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rank</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="c1"># Send data to the GPU if needed</span>
+        <span class="k">for</span> <span class="n">species</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">species_dict</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="p">:</span>
+            <span class="k">if</span> <span class="n">species</span><span class="o">.</span><span class="n">use_cuda</span> <span class="p">:</span>
+                <span class="n">species</span><span class="o">.</span><span class="n">send_particles_to_gpu</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">write_particles</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">species_grp</span><span class="p">,</span> <span class="n">species</span><span class="p">,</span> <span class="n">n_rank</span><span class="p">,</span>
+                         <span class="n">Ntot</span><span class="p">,</span> <span class="n">select_array</span> <span class="p">)</span> <span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Write all the particle data sets for one given species</span>
+<span class="sd">    </span>
+<span class="sd">        species_grp : an h5py.Group</span>
+<span class="sd">            The group where to write the species considered</span>
+
+<span class="sd">        species : a warp Species object</span>
+<span class="sd">        	The species object to get the particle data from </span>
+
+<span class="sd">        n_rank : list of ints</span>
+<span class="sd">            A list containing the number of particles to send on each proc</span>
+<span class="sd">            </span>
+<span class="sd">        Ntot : int</span>
+<span class="sd">        	Contains the global number of particles</span>
+
+<span class="sd">        select_array : 1darray of bool</span>
+<span class="sd">            An array of the same shape as that particle array</span>
+<span class="sd">            containing True for the particles that satify all</span>
+<span class="sd">            the rules of self.select</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">particle_var</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">particle_data</span> <span class="p">:</span>
+
+            <span class="k">if</span> <span class="n">particle_var</span> <span class="o">==</span> <span class="s2">&quot;position&quot;</span> <span class="p">:</span>
+                <span class="k">for</span> <span class="n">coord</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;z&quot;</span><span class="p">]</span> <span class="p">:</span>
+                    <span class="n">quantity</span> <span class="o">=</span> <span class="n">coord</span>
+                    <span class="n">quantity_path</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">particle_var</span><span class="p">,</span> <span class="n">coord</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">write_dataset</span><span class="p">(</span> <span class="n">species_grp</span><span class="p">,</span> <span class="n">species</span><span class="p">,</span> <span class="n">quantity_path</span><span class="p">,</span>
+                        <span class="n">quantity</span><span class="p">,</span> <span class="n">n_rank</span><span class="p">,</span> <span class="n">Ntot</span><span class="p">,</span> <span class="n">select_array</span> <span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rank</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">setup_openpmd_species_record</span><span class="p">(</span>
+                        <span class="n">species_grp</span><span class="p">[</span><span class="n">particle_var</span><span class="p">],</span> <span class="n">particle_var</span> <span class="p">)</span>
+                        
+            <span class="k">elif</span> <span class="n">particle_var</span> <span class="o">==</span> <span class="s2">&quot;momentum&quot;</span> <span class="p">:</span>
+                <span class="k">for</span> <span class="n">coord</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;z&quot;</span><span class="p">]</span> <span class="p">:</span>
+                    <span class="n">quantity</span> <span class="o">=</span> <span class="s2">&quot;u</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">coord</span><span class="p">)</span>
+                    <span class="n">quantity_path</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">particle_var</span><span class="p">,</span> <span class="n">coord</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">write_dataset</span><span class="p">(</span> <span class="n">species_grp</span><span class="p">,</span> <span class="n">species</span><span class="p">,</span> <span class="n">quantity_path</span><span class="p">,</span>
+                        <span class="n">quantity</span><span class="p">,</span> <span class="n">n_rank</span><span class="p">,</span> <span class="n">Ntot</span><span class="p">,</span> <span class="n">select_array</span> <span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rank</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">setup_openpmd_species_record</span><span class="p">(</span> 
+                        <span class="n">species_grp</span><span class="p">[</span><span class="n">particle_var</span><span class="p">],</span> <span class="n">particle_var</span> <span class="p">)</span>
+                        
+            <span class="k">elif</span> <span class="n">particle_var</span> <span class="o">==</span> <span class="s2">&quot;weighting&quot;</span> <span class="p">:</span>
+                <span class="n">quantity</span> <span class="o">=</span> <span class="s2">&quot;w&quot;</span>
+                <span class="n">quantity_path</span> <span class="o">=</span> <span class="s2">&quot;weighting&quot;</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">write_dataset</span><span class="p">(</span> <span class="n">species_grp</span><span class="p">,</span> <span class="n">species</span><span class="p">,</span> <span class="n">quantity_path</span><span class="p">,</span>
+                                    <span class="n">quantity</span><span class="p">,</span> <span class="n">n_rank</span><span class="p">,</span> <span class="n">Ntot</span><span class="p">,</span> <span class="n">select_array</span> <span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rank</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">setup_openpmd_species_record</span><span class="p">(</span> 
+                        <span class="n">species_grp</span><span class="p">[</span><span class="n">particle_var</span><span class="p">],</span> <span class="n">particle_var</span> <span class="p">)</span>
+                
+            <span class="k">else</span> <span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid string in </span><span class="si">%s</span><span class="s2"> of species&quot;</span> 
+                    				 <span class="o">%</span><span class="p">(</span><span class="n">particle_var</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">apply_selection</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">species</span> <span class="p">)</span> <span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Apply the rules of self.select to determine which</span>
+<span class="sd">        particles should be written</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        species : a Species object</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        A 1d array of the same shape as that particle array</span>
+<span class="sd">        containing True for the particles that satify all</span>
+<span class="sd">        the rules of self.select</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Initialize an array filled with True</span>
+        <span class="n">select_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span> <span class="n">species</span><span class="o">.</span><span class="n">Ntot</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;bool&#39;</span> <span class="p">)</span>
+
+        <span class="c1"># Apply the rules successively</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">select</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="p">:</span>
+            <span class="c1"># Go through the quantities on which a rule applies</span>
+            <span class="k">for</span> <span class="n">quantity</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">select</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="p">:</span>
+                
+                <span class="n">quantity_array</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span> <span class="n">species</span><span class="p">,</span> <span class="n">quantity</span> <span class="p">)</span>
+                <span class="c1"># Lower bound</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">select</span><span class="p">[</span><span class="n">quantity</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="p">:</span>
+                    <span class="n">select_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span>
+                        <span class="n">quantity_array</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">select</span><span class="p">[</span><span class="n">quantity</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                        <span class="n">select_array</span> <span class="p">)</span>
+                <span class="c1"># Upper bound</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">select</span><span class="p">[</span><span class="n">quantity</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="p">:</span>
+                    <span class="n">select_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span>
+                        <span class="n">quantity_array</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">select</span><span class="p">[</span><span class="n">quantity</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
+                        <span class="n">select_array</span> <span class="p">)</span>
+
+        <span class="k">return</span><span class="p">(</span> <span class="n">select_array</span> <span class="p">)</span>
+
+        
+    <span class="k">def</span> <span class="nf">write_dataset</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">species_grp</span><span class="p">,</span> <span class="n">species</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">quantity</span><span class="p">,</span>
+                       <span class="n">n_rank</span><span class="p">,</span> <span class="n">Ntot</span><span class="p">,</span> <span class="n">select_array</span> <span class="p">)</span> <span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Write a given dataset</span>
+<span class="sd">    </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        species_grp : an h5py.Group</span>
+<span class="sd">            The group where to write the species considered</span>
+<span class="sd">        </span>
+<span class="sd">        species : a warp Species object</span>
+<span class="sd">        	The species object to get the particle data from</span>
+
+<span class="sd">        path : string</span>
+<span class="sd">            The relative path where to write the dataset,</span>
+<span class="sd">            inside the species_grp</span>
+
+<span class="sd">        quantity : string</span>
+<span class="sd">            Describes which quantity is written</span>
+<span class="sd">            x, y, z, ux, uy, uz, w</span>
+
+<span class="sd">        n_rank : list of ints</span>
+<span class="sd">            A list containing the number of particles to send on each proc</span>
+<span class="sd">            </span>
+<span class="sd">        Ntot : int</span>
+<span class="sd">        	Contains the global number of particles</span>
+
+<span class="sd">        select_array : 1darray of bool</span>
+<span class="sd">            An array of the same shape as that particle array</span>
+<span class="sd">            containing True for the particles that satify all</span>
+<span class="sd">            the rules of self.select</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Create the dataset and setup its attributes</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rank</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+            <span class="n">datashape</span> <span class="o">=</span> <span class="p">(</span><span class="n">Ntot</span><span class="p">,</span> <span class="p">)</span>
+            <span class="n">dset</span> <span class="o">=</span> <span class="n">species_grp</span><span class="o">.</span><span class="n">require_dataset</span><span class="p">(</span> <span class="n">path</span><span class="p">,</span> <span class="n">datashape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;f8&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">setup_openpmd_species_component</span><span class="p">(</span> <span class="n">dset</span><span class="p">,</span> <span class="n">quantity</span> <span class="p">)</span>
+            
+        <span class="c1"># Fill the dataset with the quantity</span>
+        <span class="n">quantity_array</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_dataset</span><span class="p">(</span> <span class="n">species</span><span class="p">,</span> <span class="n">quantity</span><span class="p">,</span> <span class="n">select_array</span><span class="p">,</span>
+                                           <span class="n">n_rank</span><span class="p">,</span> <span class="n">Ntot</span> <span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rank</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+            <span class="n">dset</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">quantity_array</span>
+            
+    <span class="k">def</span> <span class="nf">get_dataset</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">species</span><span class="p">,</span> <span class="n">quantity</span><span class="p">,</span> <span class="n">select_array</span><span class="p">,</span> <span class="n">n_rank</span><span class="p">,</span> <span class="n">Ntot</span> <span class="p">)</span> <span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Extract the array that satisfies select_array</span>
+<span class="sd">        </span>
+<span class="sd">        species : a Particles object</span>
+<span class="sd">        	The species object to get the particle data from </span>
+
+<span class="sd">        quantity : string</span>
+<span class="sd">            The quantity to be extracted (e.g. &#39;x&#39;, &#39;uz&#39;, &#39;w&#39;)</span>
+
+<span class="sd">        select_array : 1darray of bool</span>
+<span class="sd">            An array of the same shape as that particle array</span>
+<span class="sd">            containing True for the particles that satify all</span>
+<span class="sd">            the rules of self.select</span>
+
+<span class="sd">        n_rank: list of ints</span>
+<span class="sd">        	A list containing the number of particles to send on each proc</span>
+<span class="sd">            </span>
+<span class="sd">        Ntot : int</span>
+<span class="sd">            Length of the final array (selected + gathered from all proc)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Extract the quantity</span>
+        <span class="n">quantity_one_proc</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span> <span class="n">species</span><span class="p">,</span> <span class="n">quantity</span> <span class="p">)</span>
+        
+        <span class="c1"># Apply the selection</span>
+        <span class="n">quantity_one_proc</span> <span class="o">=</span> <span class="n">quantity_one_proc</span><span class="p">[</span> <span class="n">select_array</span> <span class="p">]</span>
+
+        <span class="c1"># If this is the momentum, multiply by the proper factor</span>
+        <span class="k">if</span> <span class="n">quantity</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;ux&#39;</span><span class="p">,</span> <span class="s1">&#39;uy&#39;</span><span class="p">,</span> <span class="s1">&#39;uz&#39;</span><span class="p">]</span> <span class="p">:</span>
+            <span class="n">scale_factor</span> <span class="o">=</span> <span class="n">species</span><span class="o">.</span><span class="n">m</span> <span class="o">*</span> <span class="n">constants</span><span class="o">.</span><span class="n">c</span>
+            <span class="n">quantity_one_proc</span> <span class="o">*=</span> <span class="n">scale_factor</span>
+        
+        <span class="c1"># If this is the weight, divide it by the charge</span>
+        <span class="c1"># so as to obtain an actual number of particles</span>
+        <span class="k">if</span> <span class="n">quantity</span> <span class="ow">is</span> <span class="s1">&#39;w&#39;</span><span class="p">:</span>
+            <span class="n">quantity_one_proc</span> <span class="o">*=</span> <span class="mf">1.</span><span class="o">/</span><span class="n">species</span><span class="o">.</span><span class="n">q</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">quantity_all_proc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">gather_ptcl_array</span><span class="p">(</span>
+                <span class="n">quantity_one_proc</span><span class="p">,</span> <span class="n">n_rank</span><span class="p">,</span> <span class="n">Ntot</span> <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">quantity_all_proc</span> <span class="o">=</span> <span class="n">quantity_one_proc</span>
+            
+        <span class="c1"># Return the results</span>
+        <span class="k">return</span><span class="p">(</span> <span class="n">quantity_all_proc</span> <span class="p">)</span></div>
+        
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, FBPIC contributors.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'0.2.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

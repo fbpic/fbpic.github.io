@@ -1,0 +1,348 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>fbpic.lpa_utils.laser.laser &mdash; FBPIC 0.2.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="FBPIC 0.2.0 documentation" href="../../../../index.html"/>
+        <link rel="up" title="Module code" href="../../../index.html"/> 
+
+  
+  <script src="../../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> FBPIC
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../overview.html">Overview of the code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../install/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../how_to_run.html">How to run the code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api_reference/api_reference.html">API reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../../index.html">FBPIC</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+      
+    <li>fbpic.lpa_utils.laser.laser</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for fbpic.lpa_utils.laser.laser</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2016, FBPIC contributors</span>
+<span class="c1"># Authors: Remi Lehe, Manuel Kirchen</span>
+<span class="c1"># License: 3-Clause-BSD-LBNL</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This file is part of the Fourier-Bessel Particle-In-Cell code (FB-PIC)</span>
+<span class="sd">It defines a set of utilities for laser initialization</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy.constants</span> <span class="k">import</span> <span class="n">m_e</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">e</span>
+<span class="kn">from</span> <span class="nn">fbpic.lpa_utils.boosted_frame</span> <span class="k">import</span> <span class="n">BoostConverter</span>
+<span class="kn">from</span> <span class="nn">.profiles</span> <span class="k">import</span> <span class="n">gaussian_profile</span>
+<span class="kn">from</span> <span class="nn">.antenna</span> <span class="k">import</span> <span class="n">LaserAntenna</span>
+
+<div class="viewcode-block" id="add_laser"><a class="viewcode-back" href="../../../../api_reference/lpa_utilities.html#fbpic.lpa_utils.laser.add_laser">[docs]</a><span class="k">def</span> <span class="nf">add_laser</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">a0</span><span class="p">,</span> <span class="n">w0</span><span class="p">,</span> <span class="n">ctau</span><span class="p">,</span> <span class="n">z0</span><span class="p">,</span> <span class="n">zf</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lambda0</span><span class="o">=</span><span class="mf">0.8e-6</span><span class="p">,</span>
+               <span class="n">theta_pol</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">gamma_boost</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;direct&#39;</span><span class="p">,</span>
+               <span class="n">fw_propagating</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">update_spectral</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">z0_antenna</span><span class="o">=</span><span class="kc">None</span> <span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Introduce a linearly-polarized, Gaussian laser in the simulation</span>
+<span class="sd">    </span>
+<span class="sd">    The laser is either added directly to the interpolation grid initially</span>
+<span class="sd">    (method=`direct`) or it is progressively emitted by an antenna</span>
+<span class="sd">    (method=`antenna`)</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    sim: a Simulation object</span>
+<span class="sd">       The structure that contains the simulation.</span>
+<span class="sd">    </span>
+<span class="sd">    a0: float (unitless)</span>
+<span class="sd">       The a0 of the pulse at focus (in the lab-frame).</span>
+<span class="sd">    </span>
+<span class="sd">    w0: float (in meters)</span>
+<span class="sd">       The waist of the pulse at focus.</span>
+
+<span class="sd">    ctau: float (in meters)</span>
+<span class="sd">       The pulse length (in the lab-frame), defined as: </span>
+<span class="sd">       E_laser ~ exp( - (z-ct)**2 / ctau**2 )</span>
+
+<span class="sd">    z0: float (in meters)</span>
+<span class="sd">       The position of the laser centroid relative to z=0 (in the lab-frame).</span>
+
+<span class="sd">    zf: float (in meters), optional</span>
+<span class="sd">       The position of the laser focus relative to z=0 (in the lab-frame).</span>
+<span class="sd">       Default: the laser focus is at z0.</span>
+<span class="sd">    </span>
+<span class="sd">    lambda0: float (in meters), optional</span>
+<span class="sd">       The central wavelength of the laser (in the lab-frame).</span>
+<span class="sd">       Default: 0.8 microns (Ti:Sapph laser).</span>
+
+<span class="sd">    theta_pol: float (in radians), optional</span>
+<span class="sd">       The angle of polarization with respect to the x axis.</span>
+<span class="sd">       Default: 0 rad.</span>
+
+<span class="sd">    gamma_boost: float, optional</span>
+<span class="sd">        When initializing the laser in a boosted frame, set the value of</span>
+<span class="sd">        `gamma_boost` to the corresponding Lorentz factor. All the other</span>
+<span class="sd">        quantities (ctau, zf, etc.) are to be given in the lab frame.</span>
+
+<span class="sd">    method: string, optional</span>
+<span class="sd">        Whether to initialize the laser directly in the box (method=`direct`)</span>
+<span class="sd">        or through a laser antenna (method=`antenna`)</span>
+<span class="sd">       </span>
+<span class="sd">    fw_propagating: bool, optional</span>
+<span class="sd">       Only for the `direct` method: Wether the laser is propagating in the</span>
+<span class="sd">       forward or backward direction.</span>
+
+<span class="sd">    update_spectral: bool, optional</span>
+<span class="sd">       Only for the `direct` method: Wether to update the fields in spectral</span>
+<span class="sd">       space after modifying the fields on the interpolation grid.</span>
+
+<span class="sd">    z0_antenna: float, optional (meters)</span>
+<span class="sd">       Only for the `antenna` method: initial position (in the lab frame)</span>
+<span class="sd">       of the antenna. If not provided, then the z0_antenna is set to zf.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Set a number of parameters for the laser</span>
+    <span class="n">k0</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">lambda0</span>
+    <span class="n">E0</span> <span class="o">=</span> <span class="n">a0</span><span class="o">*</span><span class="n">m_e</span><span class="o">*</span><span class="n">c</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="n">k0</span><span class="o">/</span><span class="n">e</span>      <span class="c1"># Amplitude at focus</span>
+
+    <span class="c1"># Set default focusing position and laser antenna position</span>
+    <span class="k">if</span> <span class="n">zf</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">zf</span> <span class="o">=</span> <span class="n">z0</span>
+    <span class="k">if</span> <span class="n">z0_antenna</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">z0_antenna</span> <span class="o">=</span> <span class="n">z0</span>
+
+    <span class="c1"># Prepare the boosted frame converter</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">gamma_boost</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">fw_propagating</span><span class="o">==</span><span class="kc">True</span><span class="p">):</span>
+        <span class="n">boost</span> <span class="o">=</span> <span class="n">BoostConverter</span><span class="p">(</span> <span class="n">gamma_boost</span> <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">boost</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># Handle the introduction method of the laser</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;direct&#39;</span><span class="p">:</span>
+        <span class="c1"># Directly add the laser to the interpolation object</span>
+        <span class="n">add_laser_direct</span><span class="p">(</span> <span class="n">sim</span><span class="o">.</span><span class="n">fld</span><span class="p">,</span> <span class="n">E0</span><span class="p">,</span> <span class="n">w0</span><span class="p">,</span> <span class="n">ctau</span><span class="p">,</span> <span class="n">z0</span><span class="p">,</span> <span class="n">zf</span><span class="p">,</span> <span class="n">k0</span><span class="p">,</span> <span class="n">theta_pol</span><span class="p">,</span>
+                          <span class="n">fw_propagating</span><span class="p">,</span> <span class="n">update_spectral</span><span class="p">,</span> <span class="n">boost</span><span class="o">=</span><span class="n">boost</span> <span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;antenna&#39;</span><span class="p">:</span>
+        <span class="n">dr</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">dr</span>
+        <span class="n">Nr</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">Nr</span>
+        <span class="n">Nm</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">Nm</span>
+        <span class="c1"># Add a laser antenna to the simulation object</span>
+        <span class="n">sim</span><span class="o">.</span><span class="n">laser_antennas</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">LaserAntenna</span><span class="p">(</span> <span class="n">E0</span><span class="p">,</span> <span class="n">w0</span><span class="p">,</span> <span class="n">ctau</span><span class="p">,</span> <span class="n">z0</span><span class="p">,</span> <span class="n">zf</span><span class="p">,</span>
+                        <span class="n">k0</span><span class="p">,</span> <span class="n">theta_pol</span><span class="p">,</span> <span class="n">z0_antenna</span><span class="p">,</span> <span class="n">dr</span><span class="p">,</span> <span class="n">Nr</span><span class="p">,</span> <span class="n">Nm</span><span class="p">,</span> <span class="n">boost</span><span class="o">=</span><span class="n">boost</span> <span class="p">)</span> <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Unknown laser method: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span><span class="n">method</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">add_laser_direct</span><span class="p">(</span> <span class="n">fld</span><span class="p">,</span> <span class="n">E0</span><span class="p">,</span> <span class="n">w0</span><span class="p">,</span> <span class="n">ctau</span><span class="p">,</span> <span class="n">z0</span><span class="p">,</span> <span class="n">zf</span><span class="p">,</span> <span class="n">k0</span><span class="p">,</span> <span class="n">theta_pol</span><span class="p">,</span>
+                          <span class="n">fw_propagating</span><span class="p">,</span> <span class="n">update_spectral</span><span class="p">,</span> <span class="n">boost</span> <span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Add a linearly-polarized, Gaussian laser pulse to the Fields object</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">    -----------</span>
+<span class="sd">    See the parameters of add_laser</span>
+<span class="sd">    NB: all laser quantities are still given in the lab-frame at this point.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Get the polarization component</span>
+    <span class="c1"># (Due to the Fourier transform along theta, the</span>
+    <span class="c1"># polarization angle becomes a complex phase in the fields)</span>
+    <span class="n">exptheta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mf">1.</span><span class="n">j</span><span class="o">*</span><span class="n">theta_pol</span><span class="p">)</span>
+    <span class="c1"># Sign for the propagation (1 for forward propagation, and -1 otherwise)</span>
+    <span class="n">prop</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="nb">int</span><span class="p">(</span><span class="n">fw_propagating</span><span class="p">)</span> <span class="o">-</span> <span class="mf">1.</span>
+
+    <span class="c1"># When running in the boosted frame, convert the value of the electric</span>
+    <span class="c1"># field (the other laser quantities are converted in &#39;gaussian_profile&#39;)</span>
+    <span class="k">if</span> <span class="n">boost</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">E0</span><span class="p">,</span> <span class="o">=</span> <span class="n">boost</span><span class="o">.</span><span class="n">wavenumber</span><span class="p">([</span> <span class="n">E0</span> <span class="p">])</span>
+
+    <span class="c1"># Get the 2D mesh for z and r</span>
+    <span class="c1"># (When running a simulation in boosted frame, then z is the coordinate</span>
+    <span class="c1"># in the boosted frame -- if the Fields object was correctly initialized.)</span>
+    <span class="n">r</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span> <span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">r</span><span class="p">,</span> <span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">z</span> <span class="p">)</span>
+    <span class="c1"># Calculate the laser profile on the mesh</span>
+    <span class="n">profile_Eperp</span><span class="p">,</span> <span class="n">profile_Ez</span> <span class="o">=</span> <span class="n">gaussian_profile</span><span class="p">(</span> <span class="n">z</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+                        <span class="n">w0</span><span class="p">,</span> <span class="n">ctau</span><span class="p">,</span> <span class="n">z0</span><span class="p">,</span> <span class="n">zf</span><span class="p">,</span> <span class="n">k0</span><span class="p">,</span> <span class="n">prop</span><span class="o">=</span><span class="n">prop</span><span class="p">,</span>
+                        <span class="n">boost</span><span class="o">=</span><span class="n">boost</span><span class="p">,</span> <span class="n">output_Ez_profile</span><span class="o">=</span><span class="kc">True</span> <span class="p">)</span>
+    
+    <span class="c1"># Add the Er and Et fields to the mode m=1 (linearly polarized laser)</span>
+    <span class="c1"># (The factor 0.5 is related to the fact that there is a factor 2</span>
+    <span class="c1"># in the gathering function, for the particles)</span>
+    <span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">Er</span> <span class="o">+=</span>  <span class="mf">0.5</span>  <span class="o">*</span> <span class="n">E0</span> <span class="o">*</span> <span class="n">exptheta</span> <span class="o">*</span> <span class="n">profile_Eperp</span>
+    <span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">Et</span> <span class="o">+=</span> <span class="o">-</span><span class="mf">0.5</span><span class="n">j</span> <span class="o">*</span> <span class="n">E0</span> <span class="o">*</span> <span class="n">exptheta</span> <span class="o">*</span> <span class="n">profile_Eperp</span>
+    <span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">Br</span> <span class="o">+=</span>  <span class="mf">0.5</span><span class="n">j</span> <span class="o">*</span> <span class="n">prop</span> <span class="o">*</span> <span class="n">E0</span><span class="o">/</span><span class="n">c</span> <span class="o">*</span> <span class="n">exptheta</span> <span class="o">*</span> <span class="n">profile_Eperp</span>
+    <span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">Bt</span> <span class="o">+=</span>  <span class="mf">0.5</span>  <span class="o">*</span> <span class="n">prop</span> <span class="o">*</span> <span class="n">E0</span><span class="o">/</span><span class="n">c</span> <span class="o">*</span> <span class="n">exptheta</span> <span class="o">*</span> <span class="n">profile_Eperp</span>
+
+    <span class="c1"># Add the Ez fields to the mode m=1 (linearly polarized laser)</span>
+    <span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">Ez</span> <span class="o">+=</span>  <span class="mf">0.5</span>  <span class="o">*</span> <span class="n">E0</span> <span class="o">*</span> <span class="n">exptheta</span> <span class="o">*</span> <span class="n">profile_Ez</span>
+    <span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">Bz</span> <span class="o">+=</span>  <span class="mf">0.5</span><span class="n">j</span> <span class="o">*</span> <span class="n">prop</span> <span class="o">*</span> <span class="n">E0</span><span class="o">/</span><span class="n">c</span> <span class="o">*</span> <span class="n">exptheta</span> <span class="o">*</span> <span class="n">profile_Ez</span>
+        
+    <span class="c1"># Up to now, only the interpolation grid was modified.</span>
+    <span class="c1"># Now convert the fields to spectral space.</span>
+    <span class="k">if</span> <span class="n">update_spectral</span><span class="p">:</span>
+        <span class="n">fld</span><span class="o">.</span><span class="n">interp2spect</span><span class="p">(</span><span class="s1">&#39;E&#39;</span><span class="p">)</span>
+        <span class="n">fld</span><span class="o">.</span><span class="n">interp2spect</span><span class="p">(</span><span class="s1">&#39;B&#39;</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, FBPIC contributors.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../../',
+            VERSION:'0.2.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

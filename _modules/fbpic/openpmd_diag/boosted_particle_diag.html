@@ -1,0 +1,1126 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>fbpic.openpmd_diag.boosted_particle_diag &mdash; FBPIC 0.2.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="FBPIC 0.2.0 documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> FBPIC
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../overview.html">Overview of the code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../install/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../how_to_run.html">How to run the code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api_reference/api_reference.html">API reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../index.html">FBPIC</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      
+    <li>fbpic.openpmd_diag.boosted_particle_diag</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for fbpic.openpmd_diag.boosted_particle_diag</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2016, FBPIC contributors</span>
+<span class="c1"># Authors: Remi Lehe, Manuel Kirchen</span>
+<span class="c1"># License: 3-Clause-BSD-LBNL</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This file defines the class BoostedParticleDiagnostic</span>
+
+<span class="sd">Major features:</span>
+<span class="sd">- The class reuses the existing methods of ParticleDiagnostic</span>
+<span class="sd">  as much as possible, through class inheritance</span>
+<span class="sd">- The class implements memory buffering of the slices, so as</span>
+<span class="sd">  not to write to disk at every timestep</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy.constants</span> <span class="k">import</span> <span class="n">c</span>
+<span class="kn">from</span> <span class="nn">mpi4py.MPI</span> <span class="k">import</span> <span class="n">REAL8</span>
+<span class="kn">from</span> <span class="nn">.particle_diag</span> <span class="k">import</span> <span class="n">ParticleDiagnostic</span>
+
+<span class="c1"># If numbapro is installed, it potentially allows to use a GPU</span>
+<span class="k">try</span> <span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">fbpic.cuda_utils</span> <span class="k">import</span> <span class="n">cuda</span><span class="p">,</span> <span class="n">cuda_tpb_bpg_1d</span>
+    <span class="n">cuda_installed</span> <span class="o">=</span> <span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">cuda_installed</span> <span class="o">=</span> <span class="kc">False</span>
+
+<div class="viewcode-block" id="BoostedParticleDiagnostic"><a class="viewcode-back" href="../../../api_reference/diagnostics.html#fbpic.openpmd_diag.BoostedParticleDiagnostic">[docs]</a><span class="k">class</span> <span class="nc">BoostedParticleDiagnostic</span><span class="p">(</span><span class="n">ParticleDiagnostic</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class that writes the particles *in the lab frame*,</span>
+<span class="sd">    from a simulation in the boosted frame</span>
+
+<span class="sd">    Particles are extracted from the simulation in slices each time step</span>
+<span class="sd">    and buffered in memory before writing to disk. On the CPU, slices of</span>
+<span class="sd">    particles are directly selected from the particle arrays of the species.</span>
+<span class="sd">    On the GPU, first particles within an area of cells surrounding the</span>
+<span class="sd">    output planes are extracted from the GPU particle arrays and stored in</span>
+<span class="sd">    a smaller GPU array, which is then copied to the CPU for selection.</span>
+<span class="sd">    The mechanism of extracting the particles within the outputplane-area</span>
+<span class="sd">    on the GPU relies on particle arrays being sorted on the GPU. For the</span>
+<span class="sd">    back-transformation to the Lab frame, interpolation in space is applied,</span>
+<span class="sd">    but no interpolation for the particle velocities is applied.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">zmin_lab</span><span class="p">,</span> <span class="n">zmax_lab</span><span class="p">,</span> <span class="n">v_lab</span><span class="p">,</span> <span class="n">dt_snapshots_lab</span><span class="p">,</span>
+                 <span class="n">Ntot_snapshots_lab</span><span class="p">,</span> <span class="n">gamma_boost</span><span class="p">,</span> <span class="n">period</span><span class="p">,</span> <span class="n">fldobject</span><span class="p">,</span>
+                 <span class="n">particle_data</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;position&quot;</span><span class="p">,</span> <span class="s2">&quot;momentum&quot;</span><span class="p">,</span> <span class="s2">&quot;weighting&quot;</span><span class="p">],</span>
+                 <span class="n">select</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">write_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">species</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;electrons&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">},</span>
+                 <span class="n">comm</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize diagnostics that retrieve the data in the lab frame,</span>
+<span class="sd">        as a series of snapshot (one file per snapshot),</span>
+<span class="sd">        within a virtual moving window defined by zmin_lab, zmax_lab, v_lab.</span>
+
+<span class="sd">        The parameters defined below are specific to the back-transformed</span>
+<span class="sd">        diagnostics. See the documentation of `FieldDiagnostic` for</span>
+<span class="sd">        the other parameters.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        zmin_lab: float (in meters)</span>
+<span class="sd">            The position of the left edge of the virtual moving window,</span>
+<span class="sd">            *in the lab frame*, at t=0</span>
+<span class="sd">        zmax_lab: float (in meters)</span>
+<span class="sd">            The position of the right edge of the virtual moving window,</span>
+<span class="sd">            *in the lab frame*, at t=0</span>
+
+<span class="sd">        v_lab: float (m.s^-1)</span>
+<span class="sd">            Speed of the moving window *in the lab frame*</span>
+
+<span class="sd">        dt_snapshots_lab: float (seconds)</span>
+<span class="sd">            Time interval *in the lab frame* between two successive snapshots</span>
+
+<span class="sd">        Ntot_snapshots_lab: int</span>
+<span class="sd">            Total number of snapshots that this diagnostic will produce</span>
+
+<span class="sd">        period: int</span>
+<span class="sd">            Number of iterations for which the data is accumulated in memory,</span>
+<span class="sd">            before finally writing it to the disk.</span>
+
+<span class="sd">        fldobject : a Fields object,</span>
+<span class="sd">            The Fields object of the simulation, that is needed to</span>
+<span class="sd">            extract some information about the grid</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Do not leave write_dir as None, as this may conflict with</span>
+        <span class="c1"># the default directory (&#39;./diags&#39;) in which diagnostics in the</span>
+        <span class="c1"># boosted frame are written</span>
+        <span class="k">if</span> <span class="n">write_dir</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">write_dir</span> <span class="o">=</span> <span class="s1">&#39;lab_diags&#39;</span>
+
+        <span class="c1"># Initialize Particle diagnostic normal attributes</span>
+        <span class="n">ParticleDiagnostic</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">period</span><span class="p">,</span> <span class="n">species</span><span class="p">,</span>
+            <span class="n">comm</span><span class="p">,</span> <span class="n">particle_data</span><span class="p">,</span> <span class="n">select</span><span class="p">,</span> <span class="n">write_dir</span><span class="p">)</span>
+
+        <span class="c1"># Register the Field object</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fld</span> <span class="o">=</span> <span class="n">fldobject</span>
+
+        <span class="c1"># Register the boost quantities</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gamma_boost</span> <span class="o">=</span> <span class="n">gamma_boost</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inv_gamma_boost</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="n">gamma_boost</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">beta_boost</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">1.</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">inv_gamma_boost</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inv_beta_boost</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">beta_boost</span>
+
+        <span class="c1"># Create the list of LabSnapshot objects</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">snapshots</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span> <span class="n">Ntot_snapshots_lab</span> <span class="p">):</span>
+            <span class="n">t_lab</span> <span class="o">=</span> <span class="n">i</span><span class="o">*</span><span class="n">dt_snapshots_lab</span>
+            <span class="n">snapshot</span> <span class="o">=</span> <span class="n">LabSnapshot</span><span class="p">(</span> <span class="n">t_lab</span><span class="p">,</span>
+                                    <span class="n">zmin_lab</span> <span class="o">+</span> <span class="n">v_lab</span><span class="o">*</span><span class="n">t_lab</span><span class="p">,</span>
+                                    <span class="n">zmax_lab</span> <span class="o">+</span> <span class="n">v_lab</span><span class="o">*</span><span class="n">t_lab</span><span class="p">,</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">,</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">write_dir</span><span class="p">,</span> <span class="n">i</span> <span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">species_dict</span> <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">snapshots</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">snapshot</span><span class="p">)</span>
+            <span class="c1"># Initialize a corresponding empty file to store particles</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">create_file_empty_slice</span><span class="p">(</span>
+                    <span class="n">snapshot</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">snapshot</span><span class="o">.</span><span class="n">t_lab</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">)</span>
+
+        <span class="c1"># Create the ParticleCatcher object</span>
+        <span class="c1"># (This object will extract the particles (slices) that crossed the</span>
+        <span class="c1"># output plane at each iteration.)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">particle_catcher</span> <span class="o">=</span> <span class="n">ParticleCatcher</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gamma_boost</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">beta_boost</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fld</span> <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">iteration</span> <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Redefines the method write of the parent class ParticleDiagnostic</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        iteration : int</span>
+<span class="sd">            Current iteration of the boosted frame simulation</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># At each timestep, store a slice of the particles in memory buffers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">store_snapshot_slices</span><span class="p">(</span><span class="n">iteration</span><span class="p">)</span>
+
+        <span class="c1"># Every self.period, write the buffered slices to disk</span>
+        <span class="k">if</span> <span class="n">iteration</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">period</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">flush_to_disk</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">store_snapshot_slices</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">iteration</span> <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Store slices of the particles in the memory buffers of the</span>
+<span class="sd">        corresponding lab snapshots</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        iteration : int</span>
+<span class="sd">            Current iteration of the boosted frame simulation</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Find the limits of the local subdomain at this iteration</span>
+        <span class="n">zmin_boost</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">zmin</span>
+        <span class="n">zmax_boost</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">zmax</span>
+
+        <span class="c1"># Extract the current time in the boosted frame</span>
+        <span class="n">time</span> <span class="o">=</span> <span class="n">iteration</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span>
+
+        <span class="c1"># Loop through the labsnapshots</span>
+        <span class="k">for</span> <span class="n">snapshot</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">snapshots</span><span class="p">:</span>
+
+            <span class="c1"># Update the positions of the output slice of this snapshot</span>
+            <span class="c1"># in the lab and boosted frame (current_z_lab and current_z_boost)</span>
+            <span class="n">snapshot</span><span class="o">.</span><span class="n">update_current_output_positions</span><span class="p">(</span> <span class="n">time</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">inv_gamma_boost</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">inv_beta_boost</span><span class="p">)</span>
+
+            <span class="c1"># For this snapshot:</span>
+            <span class="c1"># - check if the output position *in the boosted frame*</span>
+            <span class="c1">#   is in the current local domain</span>
+            <span class="c1"># - check if the output position *in the lab frame*</span>
+            <span class="c1">#   is within the lab-frame boundaries of the current snapshot</span>
+            <span class="k">if</span> <span class="p">(</span> <span class="p">(</span><span class="n">snapshot</span><span class="o">.</span><span class="n">current_z_boost</span> <span class="o">&gt;</span> <span class="n">zmin_boost</span><span class="p">)</span> <span class="ow">and</span> \
+                 <span class="p">(</span><span class="n">snapshot</span><span class="o">.</span><span class="n">current_z_boost</span> <span class="o">&lt;</span> <span class="n">zmax_boost</span><span class="p">)</span> <span class="ow">and</span> \
+                 <span class="p">(</span><span class="n">snapshot</span><span class="o">.</span><span class="n">current_z_lab</span> <span class="o">&gt;</span> <span class="n">snapshot</span><span class="o">.</span><span class="n">zmin_lab</span><span class="p">)</span> <span class="ow">and</span> \
+                 <span class="p">(</span><span class="n">snapshot</span><span class="o">.</span><span class="n">current_z_lab</span> <span class="o">&lt;</span> <span class="n">snapshot</span><span class="o">.</span><span class="n">zmax_lab</span><span class="p">)</span> <span class="p">):</span>
+
+                <span class="c1"># Loop through the particle species and register the</span>
+                <span class="c1"># particle arrays in the snapshot objects (buffering)</span>
+                <span class="k">for</span> <span class="n">species_name</span><span class="p">,</span> <span class="n">species</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">species_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="c1"># Extract the slice of particles</span>
+                    <span class="n">slice_array</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">particle_catcher</span><span class="o">.</span><span class="n">extract_slice</span><span class="p">(</span>
+                        <span class="n">species</span><span class="p">,</span> <span class="n">snapshot</span><span class="o">.</span><span class="n">current_z_boost</span><span class="p">,</span>
+                        <span class="n">snapshot</span><span class="o">.</span><span class="n">prev_z_boost</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">select</span><span class="p">)</span>
+                    <span class="c1"># Register new slice in the LabSnapshot</span>
+                    <span class="n">snapshot</span><span class="o">.</span><span class="n">register_slice</span><span class="p">(</span> <span class="n">slice_array</span><span class="p">,</span> <span class="n">species_name</span> <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">flush_to_disk</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Writes the buffered slices of particles to the disk. Erase the</span>
+<span class="sd">        buffered slices of the LabSnapshot objects</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Loop through the labsnapshots and flush the data</span>
+        <span class="k">for</span> <span class="n">snapshot</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">snapshots</span><span class="p">:</span>
+
+            <span class="c1"># Compact the successive slices that have been buffered</span>
+            <span class="c1"># over time into a single array</span>
+            <span class="k">for</span> <span class="n">species_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">species_dict</span><span class="p">:</span>
+
+                <span class="c1"># Compact the slices in a single array (on each proc)</span>
+                <span class="n">local_particle_array</span> <span class="o">=</span> <span class="n">snapshot</span><span class="o">.</span><span class="n">compact_slices</span><span class="p">(</span><span class="n">species_name</span><span class="p">)</span>
+
+                <span class="c1"># Gather the slices on the first proc</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">particle_array</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gather_particle_arrays</span><span class="p">(</span>
+                                    <span class="n">local_particle_array</span> <span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">particle_array</span> <span class="o">=</span> <span class="n">local_particle_array</span>
+
+                <span class="c1"># The first proc writes this array to disk</span>
+                <span class="c1"># (if this snapshot has new slices)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rank</span><span class="o">==</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">particle_array</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">write_slices</span><span class="p">(</span> <span class="n">particle_array</span><span class="p">,</span> <span class="n">species_name</span><span class="p">,</span>
+                        <span class="n">snapshot</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">particle_catcher</span><span class="o">.</span><span class="n">particle_to_index</span> <span class="p">)</span>
+
+                <span class="c1"># Erase the previous slices</span>
+                <span class="n">snapshot</span><span class="o">.</span><span class="n">buffered_slices</span><span class="p">[</span><span class="n">species_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span> <span class="nf">gather_particle_arrays</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="mi">0</span> <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gather the compacted arrays of particle slices, on the</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        -----------</span>
+<span class="sd">        array: A local array of reals of shape (7, n_particles_local )</span>
+<span class="sd">            An array that packs together the slices of the different particles.</span>
+<span class="sd">            (First dimension corresponds to the particle position and momenta.)</span>
+
+<span class="sd">        root: int, optional</span>
+<span class="sd">            Processor that gathers the data</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        --------</span>
+<span class="sd">        gathered_array: an array of shape (7, n_particles_total) or None</span>
+<span class="sd">        (None is returned on all other processors than root.)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Send the local number of particles to all procs</span>
+        <span class="n">n_particles_local</span> <span class="o">=</span> <span class="n">array</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">n_particles_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">mpi_comm</span><span class="o">.</span><span class="n">allgather</span><span class="p">(</span> <span class="n">n_particles_local</span> <span class="p">)</span>
+
+        <span class="c1"># Prepare the send and receive buffers</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rank</span> <span class="o">==</span> <span class="n">root</span><span class="p">:</span>
+            <span class="c1"># Root process creates empty numpy array</span>
+            <span class="n">gathered_shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="nb">sum</span><span class="p">(</span> <span class="n">n_particles_list</span> <span class="p">)</span> <span class="p">)</span>
+            <span class="n">gathered_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span> <span class="n">gathered_shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span> <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Other processes do not need to initialize a new array</span>
+            <span class="n">gathered_array</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">i_start_procs</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span> <span class="mi">7</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">([</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">n_particles_list</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="p">)</span>
+        <span class="n">n_size_procs</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span> <span class="mi">7</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">n_particles_list</span><span class="p">)</span> <span class="p">)</span>
+        <span class="n">sendbuf</span> <span class="o">=</span> <span class="p">[</span> <span class="n">array</span><span class="p">,</span> <span class="n">n_size_procs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">rank</span><span class="p">]</span> <span class="p">]</span>
+        <span class="n">recvbuf</span> <span class="o">=</span> <span class="p">[</span> <span class="n">gathered_array</span><span class="p">,</span> <span class="n">n_size_procs</span><span class="p">,</span> <span class="n">i_start_procs</span><span class="p">,</span> <span class="n">REAL8</span> <span class="p">]</span>
+
+        <span class="c1"># Send/receive the arrays</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">mpi_comm</span><span class="o">.</span><span class="n">Gatherv</span><span class="p">(</span> <span class="n">sendbuf</span><span class="p">,</span> <span class="n">recvbuf</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="n">root</span> <span class="p">)</span>
+
+        <span class="c1"># Return the gathered array</span>
+        <span class="k">return</span><span class="p">(</span> <span class="n">gathered_array</span> <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">write_slices</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">particle_array</span><span class="p">,</span> <span class="n">species_name</span><span class="p">,</span> <span class="n">snapshot</span><span class="p">,</span> <span class="n">p2i</span> <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        For one given snapshot, write the slices of the</span>
+<span class="sd">        different species to an openPMD file</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        particle_array: array of reals</span>
+<span class="sd">            Array of shape (7, num_part)</span>
+
+<span class="sd">        species_name: String</span>
+<span class="sd">            A String that acts as the key for the buffered_slices dictionary</span>
+
+<span class="sd">        snapshot: a LabSnaphot object</span>
+
+<span class="sd">        p2i: dict</span>
+<span class="sd">            Dictionary of correspondance between the particle quantities</span>
+<span class="sd">            and the integer index in the particle_array</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Open the file without parallel I/O in this implementation</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">open_file</span><span class="p">(</span><span class="n">snapshot</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
+        <span class="n">particle_path</span> <span class="o">=</span> <span class="s2">&quot;/data/</span><span class="si">%d</span><span class="s2">/particles/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">snapshot</span><span class="o">.</span><span class="n">iteration</span><span class="p">,</span>
+            <span class="n">species_name</span><span class="p">)</span>
+        <span class="n">species_grp</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="n">particle_path</span><span class="p">]</span>
+
+        <span class="c1"># Loop over the different quantities that should be written</span>
+        <span class="k">for</span> <span class="n">particle_var</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">particle_data</span><span class="p">:</span>
+
+            <span class="k">if</span> <span class="n">particle_var</span> <span class="o">==</span> <span class="s2">&quot;position&quot;</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">coord</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">,</span><span class="s2">&quot;y&quot;</span><span class="p">,</span><span class="s2">&quot;z&quot;</span><span class="p">]:</span>
+                    <span class="n">quantity</span><span class="o">=</span> <span class="n">coord</span>
+                    <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">particle_var</span><span class="p">,</span> <span class="n">quantity</span><span class="p">)</span>
+                    <span class="n">data</span> <span class="o">=</span> <span class="n">particle_array</span><span class="p">[</span> <span class="n">p2i</span><span class="p">[</span> <span class="n">quantity</span> <span class="p">]</span> <span class="p">]</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">write_particle_slices</span><span class="p">(</span><span class="n">species_grp</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span>
+                        <span class="n">quantity</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="n">particle_var</span> <span class="o">==</span> <span class="s2">&quot;momentum&quot;</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">coord</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">,</span><span class="s2">&quot;y&quot;</span><span class="p">,</span><span class="s2">&quot;z&quot;</span><span class="p">]:</span>
+                    <span class="n">quantity</span><span class="o">=</span> <span class="s2">&quot;u</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span><span class="n">coord</span>
+                    <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">particle_var</span><span class="p">,</span><span class="n">coord</span><span class="p">)</span>
+                    <span class="n">data</span> <span class="o">=</span> <span class="n">particle_array</span><span class="p">[</span> <span class="n">p2i</span><span class="p">[</span> <span class="n">quantity</span> <span class="p">]</span> <span class="p">]</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">write_particle_slices</span><span class="p">(</span> <span class="n">species_grp</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span>
+                        <span class="n">quantity</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="n">particle_var</span> <span class="o">==</span> <span class="s2">&quot;weighting&quot;</span><span class="p">:</span>
+               <span class="n">quantity</span><span class="o">=</span> <span class="s2">&quot;w&quot;</span>
+               <span class="n">path</span> <span class="o">=</span> <span class="s1">&#39;weighting&#39;</span>
+               <span class="n">data</span> <span class="o">=</span> <span class="n">particle_array</span><span class="p">[</span> <span class="n">p2i</span><span class="p">[</span> <span class="n">quantity</span> <span class="p">]</span> <span class="p">]</span>
+               <span class="bp">self</span><span class="o">.</span><span class="n">write_particle_slices</span><span class="p">(</span><span class="n">species_grp</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span>
+                    <span class="n">quantity</span><span class="p">)</span>
+
+        <span class="c1"># Close the file</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">write_particle_slices</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">species_grp</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">quantity</span> <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Writes each quantity of the buffered dataset to the disk, the</span>
+<span class="sd">        final step of the writing</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dset</span> <span class="o">=</span> <span class="n">species_grp</span><span class="p">[</span><span class="n">path</span><span class="p">]</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="n">dset</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># Resize the h5py dataset</span>
+        <span class="n">dset</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">index</span><span class="o">+</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># Write the data to the dataset at correct indices</span>
+        <span class="n">dset</span><span class="p">[</span><span class="n">index</span><span class="p">:]</span> <span class="o">=</span> <span class="n">data</span>
+
+    <span class="k">def</span> <span class="nf">create_file_empty_slice</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">fullpath</span><span class="p">,</span> <span class="n">iteration</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">dt</span> <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create an openPMD file with empty meshes and setup all its attributes</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        fullpath: string</span>
+<span class="sd">            The absolute path to the file to be created</span>
+
+<span class="sd">        iteration: int</span>
+<span class="sd">            The iteration number of this diagnostic</span>
+
+<span class="sd">        time: float (seconds)</span>
+<span class="sd">            The physical time at this ibteration</span>
+
+<span class="sd">        dt: float (seconds)</span>
+<span class="sd">            The timestep of the simulation</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Create the file</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">open_file</span><span class="p">(</span> <span class="n">fullpath</span> <span class="p">)</span>
+
+        <span class="c1"># Setup the different layers of the openPMD file</span>
+        <span class="c1"># (f is None if this processor does not participate is writing data)</span>
+        <span class="k">if</span> <span class="n">f</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+
+            <span class="c1"># Setup the attributes of the top level of the file</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">setup_openpmd_file</span><span class="p">(</span> <span class="n">f</span><span class="p">,</span> <span class="n">iteration</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">dt</span> <span class="p">)</span>
+            <span class="c1"># Setup the meshes group (contains all the particles)</span>
+            <span class="n">particle_path</span> <span class="o">=</span> <span class="s2">&quot;/data/</span><span class="si">%d</span><span class="s2">/particles/&quot;</span> <span class="o">%</span><span class="n">iteration</span>
+
+            <span class="k">for</span> <span class="n">species_name</span><span class="p">,</span> <span class="n">species</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">species_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">species_path</span> <span class="o">=</span> <span class="n">particle_path</span><span class="o">+</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">species_name</span><span class="p">)</span>
+                <span class="c1"># Create and setup the h5py.Group species_grp</span>
+                <span class="n">species_grp</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">require_group</span><span class="p">(</span> <span class="n">species_path</span> <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">setup_openpmd_species_group</span><span class="p">(</span> <span class="n">species_grp</span><span class="p">,</span> <span class="n">species</span> <span class="p">)</span>
+
+                <span class="c1"># Loop over the different quantities that should be written</span>
+                <span class="c1"># and setup the corresponding datasets</span>
+                <span class="k">for</span> <span class="n">particle_var</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">particle_data</span> <span class="p">:</span>
+
+                    <span class="k">if</span> <span class="n">particle_var</span> <span class="o">==</span> <span class="s2">&quot;position&quot;</span> <span class="p">:</span>
+                        <span class="k">for</span> <span class="n">coord</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;z&quot;</span><span class="p">]</span> <span class="p">:</span>
+                            <span class="n">quantity</span> <span class="o">=</span> <span class="n">coord</span>
+                            <span class="n">quantity_path</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">particle_var</span><span class="p">,</span> <span class="n">coord</span><span class="p">)</span>
+                            <span class="n">dset</span> <span class="o">=</span> <span class="n">species_grp</span><span class="o">.</span><span class="n">require_dataset</span><span class="p">(</span>
+                                <span class="n">quantity_path</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,),</span>
+                                <span class="n">maxshape</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;f8&#39;</span><span class="p">)</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">setup_openpmd_species_component</span><span class="p">(</span>
+                                <span class="n">dset</span><span class="p">,</span> <span class="n">quantity</span> <span class="p">)</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">setup_openpmd_species_record</span><span class="p">(</span>
+                                <span class="n">species_grp</span><span class="p">[</span><span class="n">particle_var</span><span class="p">],</span> <span class="n">particle_var</span> <span class="p">)</span>
+
+                    <span class="k">elif</span> <span class="n">particle_var</span> <span class="o">==</span> <span class="s2">&quot;momentum&quot;</span> <span class="p">:</span>
+                        <span class="k">for</span> <span class="n">coord</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;z&quot;</span><span class="p">]</span> <span class="p">:</span>
+                            <span class="n">quantity</span> <span class="o">=</span> <span class="s2">&quot;u</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">coord</span><span class="p">)</span>
+                            <span class="n">quantity_path</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">particle_var</span><span class="p">,</span> <span class="n">coord</span><span class="p">)</span>
+                            <span class="n">dset</span> <span class="o">=</span> <span class="n">species_grp</span><span class="o">.</span><span class="n">require_dataset</span><span class="p">(</span>
+                                <span class="n">quantity_path</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,),</span>
+                                <span class="n">maxshape</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;f8&#39;</span><span class="p">)</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">setup_openpmd_species_component</span><span class="p">(</span>
+                                <span class="n">dset</span><span class="p">,</span> <span class="n">quantity</span> <span class="p">)</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">setup_openpmd_species_record</span><span class="p">(</span>
+                                <span class="n">species_grp</span><span class="p">[</span><span class="n">particle_var</span><span class="p">],</span> <span class="n">particle_var</span> <span class="p">)</span>
+
+                    <span class="k">elif</span> <span class="n">particle_var</span> <span class="o">==</span> <span class="s2">&quot;weighting&quot;</span> <span class="p">:</span>
+                        <span class="n">quantity</span> <span class="o">=</span> <span class="s2">&quot;w&quot;</span>
+                        <span class="n">quantity_path</span> <span class="o">=</span> <span class="s2">&quot;weighting&quot;</span>
+                        <span class="n">dset</span> <span class="o">=</span> <span class="n">species_grp</span><span class="o">.</span><span class="n">require_dataset</span><span class="p">(</span>
+                            <span class="n">quantity_path</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,),</span>
+                            <span class="n">maxshape</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;f8&#39;</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">setup_openpmd_species_component</span><span class="p">(</span>
+                            <span class="n">dset</span><span class="p">,</span> <span class="n">quantity</span> <span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">setup_openpmd_species_record</span><span class="p">(</span>
+                            <span class="n">species_grp</span><span class="p">[</span><span class="n">particle_var</span><span class="p">],</span> <span class="n">particle_var</span> <span class="p">)</span>
+
+                    <span class="k">else</span> <span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid string in </span><span class="si">%s</span><span class="s2"> of species&quot;</span>
+                                             <span class="o">%</span><span class="p">(</span><span class="n">particle_var</span><span class="p">))</span>
+
+            <span class="c1"># Close the file</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+<span class="k">class</span> <span class="nc">LabSnapshot</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class that stores data relative to one given snapshot</span>
+<span class="sd">    in the lab frame (i.e. one given *time* in the lab frame)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">t_lab</span><span class="p">,</span> <span class="n">zmin_lab</span><span class="p">,</span> <span class="n">zmax_lab</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span>
+                  <span class="n">write_dir</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">species_dict</span> <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize a LabSnapshot</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        t_lab: float (seconds)</span>
+<span class="sd">            Time of this snapshot *in the lab frame*</span>
+
+<span class="sd">        zmin_lab, zmax_lab: floats (meters)</span>
+<span class="sd">            Longitudinal limits of this snapshot</span>
+
+<span class="sd">        write_dir: string</span>
+<span class="sd">            Absolute path to the directory where the data for</span>
+<span class="sd">            this snapshot is to be written</span>
+
+<span class="sd">        dt : float (s)</span>
+<span class="sd">            The timestep of the simulation in the boosted frame</span>
+
+<span class="sd">        i: int</span>
+<span class="sd">            Number of the file where this snapshot is to be written</span>
+
+<span class="sd">        species_dict: dict</span>
+<span class="sd">            Contains all the species name of the species object</span>
+<span class="sd">            (inherited from Warp)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Deduce the name of the filename where this snapshot writes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span> <span class="n">write_dir</span><span class="p">,</span> <span class="s1">&#39;hdf5/data</span><span class="si">%08d</span><span class="s1">.h5&#39;</span> <span class="o">%</span><span class="n">i</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">iteration</span> <span class="o">=</span> <span class="n">i</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">=</span> <span class="n">dt</span>
+
+        <span class="c1"># Time and boundaries in the lab frame (constant quantities)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">zmin_lab</span> <span class="o">=</span> <span class="n">zmin_lab</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">zmax_lab</span> <span class="o">=</span> <span class="n">zmax_lab</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t_lab</span> <span class="o">=</span> <span class="n">t_lab</span>
+
+        <span class="c1"># Positions where the fields are to be registered</span>
+        <span class="c1"># (Change at every iteration)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_z_lab</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_z_boost</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c1"># Initialize empty dictionary to buffer the slices for each species</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">buffered_slices</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">species</span> <span class="ow">in</span> <span class="n">species_dict</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">buffered_slices</span><span class="p">[</span><span class="n">species</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span> <span class="nf">update_current_output_positions</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">t_boost</span><span class="p">,</span> <span class="n">inv_gamma</span><span class="p">,</span> <span class="n">inv_beta</span> <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update the current and previous positions of output for this snapshot,</span>
+<span class="sd">        so that it corresponds to the time t_boost in the boosted frame</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        t_boost: float (seconds)</span>
+<span class="sd">            Time of the current iteration, in the boosted frame</span>
+
+<span class="sd">        inv_gamma, inv_beta: floats</span>
+<span class="sd">            Inverse of the Lorentz factor of the boost, and inverse</span>
+<span class="sd">            of the corresponding beta</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Some shorcuts for further calculation&#39;s purposes</span>
+        <span class="n">t_lab</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_lab</span>
+        <span class="n">t_boost_prev</span> <span class="o">=</span> <span class="n">t_boost</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span>
+
+        <span class="c1"># This implements the Lorentz transformation formulas,</span>
+        <span class="c1"># for a snapshot having a fixed t_lab</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_z_boost</span> <span class="o">=</span> <span class="p">(</span><span class="n">t_lab</span><span class="o">*</span><span class="n">inv_gamma</span> <span class="o">-</span> <span class="n">t_boost</span><span class="p">)</span><span class="o">*</span><span class="n">c</span><span class="o">*</span><span class="n">inv_beta</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prev_z_boost</span> <span class="o">=</span> <span class="p">(</span><span class="n">t_lab</span><span class="o">*</span><span class="n">inv_gamma</span> <span class="o">-</span> <span class="n">t_boost_prev</span><span class="p">)</span><span class="o">*</span><span class="n">c</span><span class="o">*</span><span class="n">inv_beta</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_z_lab</span> <span class="o">=</span> <span class="p">(</span><span class="n">t_lab</span> <span class="o">-</span> <span class="n">t_boost</span><span class="o">*</span><span class="n">inv_gamma</span><span class="p">)</span><span class="o">*</span><span class="n">c</span><span class="o">*</span><span class="n">inv_beta</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prev_z_lab</span> <span class="o">=</span> <span class="p">(</span><span class="n">t_lab</span> <span class="o">-</span> <span class="n">t_boost_prev</span><span class="o">*</span><span class="n">inv_gamma</span><span class="p">)</span><span class="o">*</span><span class="n">c</span><span class="o">*</span><span class="n">inv_beta</span>
+
+    <span class="k">def</span> <span class="nf">register_slice</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">slice_array</span><span class="p">,</span> <span class="n">species</span> <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Store the slice of particles represented by slice_array</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        slice_array: array of reals</span>
+<span class="sd">            An array of packed fields that corresponds to one slice,</span>
+<span class="sd">            as given by the ParticleCatcher object</span>
+
+<span class="sd">        species: String, key of the species_dict</span>
+<span class="sd">            Act as the key for the buffered_slices dictionary</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Store the values</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">buffered_slices</span><span class="p">[</span><span class="n">species</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">slice_array</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">compact_slices</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">species</span> <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compact the successive slices that have been buffered</span>
+<span class="sd">        over time into a single array.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        species: String, key of the species_dict</span>
+<span class="sd">            Act as the key for the buffered_slices dictionary</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        paticle_array: an array of reals of shape (7, numPart)</span>
+<span class="sd">        regardless of the dimension</span>
+<span class="sd">        Returns an array of size (7,0) if the slices are empty</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">buffered_slices</span><span class="p">[</span><span class="n">species</span><span class="p">]</span> <span class="o">!=</span> <span class="p">[]:</span>
+            <span class="n">particle_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">buffered_slices</span><span class="p">[</span><span class="n">species</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">particle_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span> <span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span> <span class="p">)</span>
+
+        <span class="k">return</span><span class="p">(</span><span class="n">particle_array</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">ParticleCatcher</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class that extracts, Lorentz-transforms and gathers particles</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">gamma_boost</span><span class="p">,</span> <span class="n">beta_boost</span><span class="p">,</span> <span class="n">fldobject</span> <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the ParticleCatcher object</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        gamma_boost, beta_boost: float</span>
+<span class="sd">            The Lorentz factor of the boost and the corresponding beta</span>
+
+<span class="sd">        fldobject : a Fields object,</span>
+<span class="sd">            The Fields object of the simulation, that is needed to</span>
+<span class="sd">            extract some information about the grid</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Some attributes necessary for particle selections</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gamma_boost</span> <span class="o">=</span> <span class="n">gamma_boost</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">beta_boost</span> <span class="o">=</span> <span class="n">beta_boost</span>
+
+        <span class="c1"># Register the fields object</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fld</span> <span class="o">=</span> <span class="n">fldobject</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">dt</span>
+
+        <span class="c1"># Create a dictionary that contains the correspondance</span>
+        <span class="c1"># between the particles quantity and array index</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">particle_to_index</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span>
+                                  <span class="s1">&#39;ux&#39;</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span><span class="s1">&#39;uy&#39;</span><span class="p">:</span><span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;uz&#39;</span><span class="p">:</span><span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">:</span><span class="mi">6</span><span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">extract_slice</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">species</span><span class="p">,</span> <span class="n">current_z_boost</span><span class="p">,</span> <span class="n">previous_z_boost</span><span class="p">,</span>
+                       <span class="n">t</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="kc">None</span> <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Extract a slice of the particles at z_boost and if select is present,</span>
+<span class="sd">        extract only the particles that satisfy the given criteria</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        species : A ParticleObject</span>
+<span class="sd">            Contains the particle attributes to output</span>
+
+<span class="sd">        current_z_boost, previous_z_boost : float (m)</span>
+<span class="sd">            Current and previous position of the output plane</span>
+<span class="sd">            in the boosted frame</span>
+
+<span class="sd">        t : float (s)</span>
+<span class="sd">            Current time of the simulation in the boosted frame</span>
+
+<span class="sd">        select : dict</span>
+<span class="sd">            A set of rules defined by the users in selecting the particles</span>
+<span class="sd">            z: {&quot;uz&quot; : [50, 100]} for particles which have normalized</span>
+<span class="sd">            momenta between 50 and 100</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        slice_array : An array of reals of shape (7, numPart)</span>
+<span class="sd">            An array that packs together the slices of the different</span>
+<span class="sd">            particles.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Get a dictionary containing the particle data</span>
+        <span class="c1"># When running on the GPU, this only copies to CPU the particles</span>
+        <span class="c1"># within a small area around the output plane.</span>
+        <span class="c1"># (Return the result in the form of a dictionary of 1darrays)</span>
+        <span class="n">particle_data_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_particle_data</span><span class="p">(</span> <span class="n">species</span><span class="p">,</span>
+                            <span class="n">current_z_boost</span><span class="p">,</span> <span class="n">previous_z_boost</span><span class="p">,</span> <span class="n">t</span> <span class="p">)</span>
+
+        <span class="c1"># Get the selection of particles (slice) that crossed the</span>
+        <span class="c1"># output plane during the last iteration</span>
+        <span class="c1"># (Return the result in the form of a dictionary of smaller 1darrays)</span>
+        <span class="n">slice_data_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_particle_slice</span><span class="p">(</span>
+                <span class="n">particle_data_dict</span><span class="p">,</span> <span class="n">current_z_boost</span><span class="p">,</span> <span class="n">previous_z_boost</span> <span class="p">)</span>
+
+        <span class="c1"># Backpropagate particles to correct output position and</span>
+        <span class="c1"># transform particle attributes to the lab frame</span>
+        <span class="c1"># (Return the result in the form of a 2darray of shape (7, numpart))</span>
+        <span class="n">slice_array</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">interpolate_particles_to_lab_frame</span><span class="p">(</span>
+            <span class="n">slice_data_dict</span><span class="p">,</span> <span class="n">current_z_boost</span><span class="p">,</span> <span class="n">t</span> <span class="p">)</span>
+
+        <span class="c1"># Choose the particles based on the select criteria defined by the</span>
+        <span class="c1"># users. Notice: this implementation still comes with a cost,</span>
+        <span class="c1"># one way to optimize it would be to do the selection before Lorentz</span>
+        <span class="c1"># transformation back to the lab frame</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">select</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="n">slice_array</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
+            <span class="c1"># Find the particles that should be selected</span>
+            <span class="n">select_array</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">apply_selection</span><span class="p">(</span><span class="n">select</span><span class="p">,</span> <span class="n">slice_array</span><span class="p">)</span>
+            <span class="c1"># Keep only those particles in slice_array</span>
+            <span class="n">slice_array</span> <span class="o">=</span> <span class="n">slice_array</span><span class="p">[:,</span> <span class="n">select_array</span><span class="p">]</span>
+
+        <span class="c1"># Convert data to the OpenPMD standard</span>
+        <span class="n">slice_array</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">apply_opmd_standard</span><span class="p">(</span> <span class="n">slice_array</span><span class="p">,</span> <span class="n">species</span> <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">slice_array</span>
+
+    <span class="k">def</span> <span class="nf">get_particle_data</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">species</span><span class="p">,</span> <span class="n">current_z_boost</span><span class="p">,</span>
+                           <span class="n">previous_z_boost</span><span class="p">,</span> <span class="n">t</span> <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Extract the particle data from the species object.</span>
+<span class="sd">        In case CUDA is used, only a selection of particles</span>
+<span class="sd">        (i.e. particles that are within cells corresponding</span>
+<span class="sd">        to the immediate neighborhood of the output plane)</span>
+<span class="sd">        is received from the GPU (increases performance).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        species : A ParticleObject</span>
+<span class="sd">            Contains the particle attributes to output</span>
+
+<span class="sd">        current_z_boost, previous_z_boost : float (m)</span>
+<span class="sd">            Current and previous position of the output plane</span>
+<span class="sd">            in the boosted frame</span>
+
+<span class="sd">        t : float (s)</span>
+<span class="sd">            Current time of the simulation in the boosted frame</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        particle_data : A dictionary of 1D float arrays</span>
+<span class="sd">            A dictionary that contains the particle data of</span>
+<span class="sd">            the simulation (with normalized weigths).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># CPU</span>
+        <span class="k">if</span> <span class="n">species</span><span class="o">.</span><span class="n">use_cuda</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="c1"># Create a dictionary containing the particle attributes</span>
+            <span class="n">particle_data</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;x&#39;</span> <span class="p">:</span> <span class="n">species</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span> <span class="p">:</span> <span class="n">species</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span> <span class="p">:</span> <span class="n">species</span><span class="o">.</span><span class="n">z</span><span class="p">,</span>
+                <span class="s1">&#39;ux&#39;</span> <span class="p">:</span> <span class="n">species</span><span class="o">.</span><span class="n">ux</span><span class="p">,</span> <span class="s1">&#39;uy&#39;</span> <span class="p">:</span> <span class="n">species</span><span class="o">.</span><span class="n">uy</span><span class="p">,</span> <span class="s1">&#39;uz&#39;</span> <span class="p">:</span> <span class="n">species</span><span class="o">.</span><span class="n">uz</span><span class="p">,</span>
+                <span class="s1">&#39;w&#39;</span> <span class="p">:</span> <span class="n">species</span><span class="o">.</span><span class="n">w</span><span class="p">,</span> <span class="s1">&#39;inv_gamma&#39;</span> <span class="p">:</span> <span class="n">species</span><span class="o">.</span><span class="n">inv_gamma</span> <span class="p">}</span>
+        <span class="c1"># GPU</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Check if particles are sorted, otherwise raise exception</span>
+            <span class="k">if</span> <span class="n">species</span><span class="o">.</span><span class="n">sorted</span> <span class="o">==</span> <span class="kc">False</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Particle boosted-frame diagnostic: </span><span class="se">\</span>
+<span class="s1">                 The particles are not sorted!&#39;</span><span class="p">)</span>
+            <span class="c1"># Precalculating quantities and shortcuts</span>
+            <span class="n">dt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">dt</span>
+            <span class="n">dz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">dz</span>
+            <span class="n">zmin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">zmin</span>
+            <span class="n">pref_sum</span> <span class="o">=</span> <span class="n">species</span><span class="o">.</span><span class="n">prefix_sum</span>
+            <span class="n">Nz</span><span class="p">,</span> <span class="n">Nr</span> <span class="o">=</span> <span class="n">species</span><span class="o">.</span><span class="n">grid_shape</span>
+            <span class="c1"># Calculate cell area to get particles from</span>
+            <span class="c1"># (indices of the current and previous cell representing the</span>
+            <span class="c1"># boundaries of this area</span>
+            <span class="n">cell_curr</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">current_z_boost</span> <span class="o">-</span> <span class="n">zmin</span> <span class="o">-</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">dz</span><span class="p">)</span><span class="o">/</span><span class="n">dz</span><span class="p">)</span>
+            <span class="n">cell_prev</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">previous_z_boost</span> <span class="o">-</span> <span class="n">zmin</span> <span class="o">-</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">dz</span> <span class="o">+</span> <span class="n">dt</span><span class="o">*</span><span class="n">c</span><span class="p">)</span><span class="o">/</span><span class="n">dz</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span>
+            <span class="c1"># Get the prefix sum values for calculation</span>
+            <span class="c1"># of number of particles</span>
+            <span class="n">pref_sum_curr</span> <span class="o">=</span> <span class="n">pref_sum</span><span class="o">.</span><span class="n">getitem</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">fmax</span><span class="p">(</span> <span class="n">cell_curr</span><span class="o">*</span><span class="n">Nr</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span> <span class="p">)</span> <span class="p">)</span>
+            <span class="n">pref_sum_prev</span> <span class="o">=</span> <span class="n">pref_sum</span><span class="o">.</span><span class="n">getitem</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">fmin</span><span class="p">(</span> <span class="n">cell_prev</span><span class="o">*</span><span class="n">Nr</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">Nz</span><span class="o">*</span><span class="n">Nr</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">)</span>
+            <span class="c1"># Calculate number of particles in this area (N_area)</span>
+            <span class="n">N_area</span> <span class="o">=</span> <span class="n">pref_sum_prev</span> <span class="o">-</span> <span class="n">pref_sum_curr</span>
+            <span class="c1"># Check if there are particles to extract</span>
+            <span class="k">if</span> <span class="n">N_area</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="c1"># Create empty GPU array for particles</span>
+                <span class="n">particle_selection</span> <span class="o">=</span> <span class="n">cuda</span><span class="o">.</span><span class="n">device_array</span><span class="p">(</span>
+                    <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="n">N_area</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span> <span class="p">)</span>
+                <span class="c1"># Call kernel that extracts particles from GPU</span>
+                <span class="n">dim_grid_1d</span><span class="p">,</span> <span class="n">dim_block_1d</span> <span class="o">=</span> <span class="n">cuda_tpb_bpg_1d</span><span class="p">(</span><span class="n">N_area</span><span class="p">)</span>
+                <span class="n">extract_particles_from_gpu</span><span class="p">[</span><span class="n">dim_grid_1d</span><span class="p">,</span> <span class="n">dim_block_1d</span><span class="p">](</span>
+                     <span class="n">species</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">species</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">species</span><span class="o">.</span><span class="n">z</span><span class="p">,</span>
+                     <span class="n">species</span><span class="o">.</span><span class="n">ux</span><span class="p">,</span> <span class="n">species</span><span class="o">.</span><span class="n">uy</span><span class="p">,</span> <span class="n">species</span><span class="o">.</span><span class="n">uz</span><span class="p">,</span>
+                     <span class="n">species</span><span class="o">.</span><span class="n">w</span><span class="p">,</span> <span class="n">species</span><span class="o">.</span><span class="n">inv_gamma</span><span class="p">,</span>
+                     <span class="n">particle_selection</span><span class="p">,</span> <span class="n">pref_sum_curr</span><span class="p">)</span>
+                <span class="c1"># Copy GPU array to the host</span>
+                <span class="n">part_data</span> <span class="o">=</span> <span class="n">particle_selection</span><span class="o">.</span><span class="n">copy_to_host</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Create an empty array if N_area is zero.</span>
+                <span class="n">part_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">8</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+            <span class="c1"># Create a dictionary containing the particle attributes</span>
+            <span class="n">particle_data</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;x&#39;</span> <span class="p">:</span> <span class="n">part_data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;y&#39;</span> <span class="p">:</span> <span class="n">part_data</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;z&#39;</span> <span class="p">:</span> <span class="n">part_data</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                <span class="s1">&#39;ux&#39;</span> <span class="p">:</span> <span class="n">part_data</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="s1">&#39;uy&#39;</span> <span class="p">:</span> <span class="n">part_data</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="s1">&#39;uz&#39;</span> <span class="p">:</span> <span class="n">part_data</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
+                <span class="s1">&#39;w&#39;</span> <span class="p">:</span> <span class="n">part_data</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="s1">&#39;inv_gamma&#39;</span> <span class="p">:</span> <span class="n">part_data</span><span class="p">[</span><span class="mi">7</span><span class="p">]}</span>
+
+        <span class="k">return</span> <span class="n">particle_data</span>
+
+    <span class="k">def</span> <span class="nf">get_particle_slice</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">particle_data</span><span class="p">,</span> <span class="n">current_z_boost</span><span class="p">,</span>
+                             <span class="n">previous_z_boost</span> <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the selection of particles that crossed the output</span>
+<span class="sd">        plane during the last iteration.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        particle_data : dict</span>
+<span class="sd">            Dictionary with keys &#39;x&#39;, &#39;y&#39;, &#39;z&#39;, &#39;ux&#39;, &#39;uy&#39;, &#39;uz&#39;,</span>
+<span class="sd">            &#39;inv_gamma&#39;, &#39;w&#39;, containing the particle data, as 1darrays</span>
+
+<span class="sd">        current_z_boost, previous_z_boost : float (m)</span>
+<span class="sd">            Current and previous position of the output plane</span>
+<span class="sd">            in the boosted frame</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        slice_data : dict</span>
+<span class="sd">            Dictionary with keys &#39;x&#39;, &#39;y&#39;, &#39;z&#39;, &#39;ux&#39;, &#39;uy&#39;, &#39;uz&#39;,</span>
+<span class="sd">            &#39;inv_gamma&#39;, &#39;w&#39;, containing the particle data, as 1darrays</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Shortcut</span>
+        <span class="n">pd</span> <span class="o">=</span> <span class="n">particle_data</span>
+
+        <span class="c1"># Calculate current and previous position in z</span>
+        <span class="n">current_z</span> <span class="o">=</span> <span class="n">pd</span><span class="p">[</span><span class="s1">&#39;z&#39;</span><span class="p">]</span>
+        <span class="n">previous_z</span> <span class="o">=</span> <span class="n">pd</span><span class="p">[</span><span class="s1">&#39;z&#39;</span><span class="p">]</span><span class="o">-</span><span class="n">pd</span><span class="p">[</span><span class="s1">&#39;uz&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">pd</span><span class="p">[</span><span class="s1">&#39;inv_gamma&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">c</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span>
+
+        <span class="c1"># A particle array for mapping purposes</span>
+        <span class="n">particle_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">current_z</span><span class="p">))</span>
+
+        <span class="c1"># For this snapshot:</span>
+        <span class="c1"># - check if the output position *in the boosted frame*</span>
+        <span class="c1">#   crosses the zboost in a forward motion</span>
+        <span class="c1"># - check if the output position *in the boosted frame*</span>
+        <span class="c1">#   crosses the zboost_prev in a backward motion</span>
+        <span class="n">selected_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">compress</span><span class="p">((((</span><span class="n">current_z</span> <span class="o">&gt;=</span> <span class="n">current_z_boost</span><span class="p">)</span> <span class="o">&amp;</span>
+            <span class="p">(</span><span class="n">previous_z</span> <span class="o">&lt;=</span> <span class="n">previous_z_boost</span><span class="p">))</span> <span class="o">|</span>
+            <span class="p">((</span><span class="n">current_z</span> <span class="o">&lt;=</span> <span class="n">current_z_boost</span><span class="p">)</span> <span class="o">&amp;</span>
+            <span class="p">(</span><span class="n">previous_z</span> <span class="o">&gt;=</span> <span class="n">previous_z_boost</span><span class="p">))),</span> <span class="n">particle_indices</span><span class="p">)</span>
+
+        <span class="c1"># Create dictionary which contains only the selected particles</span>
+        <span class="n">slice_data</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">quantity</span> <span class="ow">in</span> <span class="n">pd</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">slice_data</span><span class="p">[</span><span class="n">quantity</span><span class="p">]</span> <span class="o">=</span> \
+                <span class="n">np</span><span class="o">.</span><span class="n">take</span><span class="p">(</span> <span class="n">particle_data</span><span class="p">[</span><span class="n">quantity</span><span class="p">],</span> <span class="n">selected_indices</span><span class="p">)</span>
+
+        <span class="k">return</span><span class="p">(</span> <span class="n">slice_data</span> <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">interpolate_particles_to_lab_frame</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">slice_data_dict</span><span class="p">,</span>
+                                                    <span class="n">current_z_boost</span><span class="p">,</span> <span class="n">t</span> <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Transform the particle quantities from the boosted frame to the</span>
+<span class="sd">        lab frame. These are classical Lorentz transformation equations</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        slice_data_dict : dictionary</span>
+<span class="sd">            Dictionary with keys &#39;x&#39;, &#39;y&#39;, &#39;z&#39;, &#39;ux&#39;, &#39;uy&#39;, &#39;uz&#39;,</span>
+<span class="sd">            &#39;inv_gamma&#39;, &#39;w&#39;, containing the particle data, as 1darrays</span>
+
+<span class="sd">        current_z_boost : float (m)</span>
+<span class="sd">            Current position of the output plane in the boosted frame</span>
+
+<span class="sd">        t : float (s)</span>
+<span class="sd">            Current time of the simulation in the boosted frame</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        slice_array : An array of reals of shape (7, numPart)</span>
+<span class="sd">            An array that packs together the slices of the different</span>
+<span class="sd">            particles: x, y, z, ux, uy, uz, w</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Shortcuts for particle attributes</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">slice_data_dict</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">slice_data_dict</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="n">slice_data_dict</span><span class="p">[</span><span class="s1">&#39;z&#39;</span><span class="p">]</span>
+        <span class="n">ux</span> <span class="o">=</span> <span class="n">slice_data_dict</span><span class="p">[</span><span class="s1">&#39;ux&#39;</span><span class="p">]</span>
+        <span class="n">uy</span> <span class="o">=</span> <span class="n">slice_data_dict</span><span class="p">[</span><span class="s1">&#39;uy&#39;</span><span class="p">]</span>
+        <span class="n">uz</span> <span class="o">=</span> <span class="n">slice_data_dict</span><span class="p">[</span><span class="s1">&#39;uz&#39;</span><span class="p">]</span>
+        <span class="n">inv_gamma</span> <span class="o">=</span> <span class="n">slice_data_dict</span><span class="p">[</span><span class="s1">&#39;inv_gamma&#39;</span><span class="p">]</span>
+
+        <span class="c1"># Calculate time (t_cross) when particle and plane intersect</span>
+        <span class="c1"># Velocity of the particles</span>
+        <span class="n">v_z</span> <span class="o">=</span> <span class="n">uz</span><span class="o">*</span><span class="n">inv_gamma</span><span class="o">*</span><span class="n">c</span>
+        <span class="c1"># Velocity of the plane</span>
+        <span class="n">v_plane</span> <span class="o">=</span> <span class="o">-</span><span class="n">c</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">beta_boost</span>
+        <span class="c1"># Time in the boosted frame when particles cross the output plane</span>
+        <span class="n">t_cross</span> <span class="o">=</span> <span class="n">t</span> <span class="o">-</span> <span class="p">(</span><span class="n">current_z_boost</span> <span class="o">-</span> <span class="n">z</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">v_plane</span> <span class="o">-</span> <span class="n">v_z</span><span class="p">)</span>
+
+        <span class="c1"># Push particles to position of plane intersection</span>
+        <span class="n">x</span> <span class="o">+=</span> <span class="n">c</span><span class="o">*</span><span class="p">(</span><span class="n">t_cross</span> <span class="o">-</span> <span class="n">t</span><span class="p">)</span><span class="o">*</span><span class="n">inv_gamma</span><span class="o">*</span><span class="n">ux</span>
+        <span class="n">y</span> <span class="o">+=</span> <span class="n">c</span><span class="o">*</span><span class="p">(</span><span class="n">t_cross</span> <span class="o">-</span> <span class="n">t</span><span class="p">)</span><span class="o">*</span><span class="n">inv_gamma</span><span class="o">*</span><span class="n">uy</span>
+        <span class="n">z</span> <span class="o">+=</span> <span class="n">c</span><span class="o">*</span><span class="p">(</span><span class="n">t_cross</span> <span class="o">-</span> <span class="n">t</span><span class="p">)</span><span class="o">*</span><span class="n">inv_gamma</span><span class="o">*</span><span class="n">uz</span>
+
+        <span class="c1"># Back-transformation of position with updated time (t_cross)</span>
+        <span class="n">z_lab</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma_boost</span><span class="o">*</span><span class="p">(</span> <span class="n">z</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">beta_boost</span><span class="o">*</span><span class="n">c</span><span class="o">*</span><span class="n">t_cross</span> <span class="p">)</span>
+
+        <span class="c1"># Back-transformation of momentum</span>
+        <span class="n">gamma</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="n">inv_gamma</span>
+        <span class="n">uz_lab</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma_boost</span><span class="o">*</span><span class="n">uz</span> \
+            <span class="o">+</span> <span class="n">gamma</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">beta_boost</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">gamma_boost</span><span class="p">)</span>
+
+        <span class="c1"># Create empty compact 2D slice array of shape (7, num_part)</span>
+        <span class="c1"># to store the final result</span>
+        <span class="n">num_part</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">slice_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span> <span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="n">num_part</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span> <span class="p">)</span>
+
+        <span class="c1"># Write the modified quantities to slice_array</span>
+        <span class="n">p2i</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">particle_to_index</span>
+        <span class="n">slice_array</span><span class="p">[</span><span class="n">p2i</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],:]</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="n">slice_array</span><span class="p">[</span><span class="n">p2i</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">],:]</span> <span class="o">=</span> <span class="n">y</span>
+        <span class="n">slice_array</span><span class="p">[</span><span class="n">p2i</span><span class="p">[</span><span class="s1">&#39;z&#39;</span><span class="p">],:]</span> <span class="o">=</span> <span class="n">z_lab</span>
+        <span class="n">slice_array</span><span class="p">[</span><span class="n">p2i</span><span class="p">[</span><span class="s1">&#39;ux&#39;</span><span class="p">],:]</span> <span class="o">=</span> <span class="n">ux</span>
+        <span class="n">slice_array</span><span class="p">[</span><span class="n">p2i</span><span class="p">[</span><span class="s1">&#39;uy&#39;</span><span class="p">],:]</span> <span class="o">=</span> <span class="n">uy</span>
+        <span class="n">slice_array</span><span class="p">[</span><span class="n">p2i</span><span class="p">[</span><span class="s1">&#39;uz&#39;</span><span class="p">],:]</span> <span class="o">=</span> <span class="n">uz_lab</span>
+        <span class="n">slice_array</span><span class="p">[</span><span class="n">p2i</span><span class="p">[</span><span class="s1">&#39;w&#39;</span><span class="p">],:]</span> <span class="o">=</span> <span class="n">slice_data_dict</span><span class="p">[</span><span class="s1">&#39;w&#39;</span><span class="p">]</span>
+        <span class="c1"># Note: now that the back-transformation has been performed,</span>
+        <span class="c1"># the quantity inv_gamma is not need anymore. Therefore it is not</span>
+        <span class="c1"># stored in the returned slice_array.</span>
+
+        <span class="k">return</span><span class="p">(</span> <span class="n">slice_array</span> <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">apply_opmd_standard</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">slice_array</span><span class="p">,</span> <span class="n">species</span> <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Apply the OpenPMD standard to the particle quantities.</span>
+<span class="sd">        Momentum (u) is multiplied by m * c and weights are</span>
+<span class="sd">        divided by the particle charge q.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        slice_array : 2D array of floats</span>
+<span class="sd">            Contains the particle slice data to output.</span>
+
+<span class="sd">        species : A ParticleObject</span>
+<span class="sd">            Contains the particle data and the meta-data</span>
+<span class="sd">            needed for the conversion to the OpenPMD format.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        slice_array : 2D array of floats</span>
+<span class="sd">            Contains the particle slice data to output in</span>
+<span class="sd">            the OpenPMD format.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Normalize momenta</span>
+        <span class="k">for</span> <span class="n">quantity</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;ux&#39;</span><span class="p">,</span> <span class="s1">&#39;uy&#39;</span><span class="p">,</span> <span class="s1">&#39;uz&#39;</span><span class="p">]:</span>
+            <span class="n">idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">particle_to_index</span><span class="p">[</span><span class="n">quantity</span><span class="p">]</span>
+            <span class="n">slice_array</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">*=</span> <span class="n">species</span><span class="o">.</span><span class="n">m</span> <span class="o">*</span> <span class="n">c</span>
+        <span class="c1"># Normalize weights</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">particle_to_index</span><span class="p">[</span><span class="s1">&#39;w&#39;</span><span class="p">]</span>
+        <span class="n">slice_array</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">*=</span> <span class="mf">1.</span><span class="o">/</span><span class="n">species</span><span class="o">.</span><span class="n">q</span>
+
+        <span class="k">return</span> <span class="n">slice_array</span>
+
+    <span class="k">def</span> <span class="nf">apply_selection</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">select</span><span class="p">,</span> <span class="n">slice_array</span> <span class="p">)</span> <span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Apply the rules of self.select to determine which</span>
+<span class="sd">        particles should be written</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        select : a dictionary that defines all selection rules based</span>
+<span class="sd">        on the quantities</span>
+
+<span class="sd">        slice_array: 2d array of floats</span>
+<span class="sd">           An array of shape (7, num_part) which contains the particle slice</span>
+<span class="sd">           data, from which particle data is to be further selected</span>
+<span class="sd">           according to `select`</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        select_array: 1darray of bools</span>
+<span class="sd">            A 1darray of shape (num_part,) containing True for the particles</span>
+<span class="sd">            that satisfy all the rules of select.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">p2i</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">particle_to_index</span>
+
+        <span class="c1"># Initialize an array filled with True</span>
+        <span class="n">select_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">slice_array</span><span class="p">)[</span><span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;bool&#39;</span> <span class="p">)</span>
+
+        <span class="c1"># Apply the rules successively</span>
+        <span class="c1"># Go through the quantities on which a rule applies</span>
+        <span class="k">for</span> <span class="n">quantity</span> <span class="ow">in</span> <span class="n">select</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="p">:</span>
+            <span class="c1"># Lower bound</span>
+            <span class="k">if</span> <span class="n">select</span><span class="p">[</span><span class="n">quantity</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="p">:</span>
+                <span class="n">select_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span>
+                    <span class="n">slice_array</span><span class="p">[</span><span class="n">p2i</span><span class="p">[</span><span class="n">quantity</span><span class="p">]]</span> <span class="o">&gt;</span>\
+                     <span class="n">select</span><span class="p">[</span><span class="n">quantity</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">select_array</span> <span class="p">)</span>
+            <span class="c1"># Upper bound</span>
+            <span class="k">if</span> <span class="n">select</span><span class="p">[</span><span class="n">quantity</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="p">:</span>
+                <span class="n">select_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span>
+                    <span class="n">slice_array</span><span class="p">[</span><span class="n">p2i</span><span class="p">[</span><span class="n">quantity</span><span class="p">]]</span> <span class="o">&lt;</span>\
+                    <span class="n">select</span><span class="p">[</span><span class="n">quantity</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">select_array</span> <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">select_array</span>
+
+<span class="nd">@cuda</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span> <span class="nf">extract_particles_from_gpu</span><span class="p">(</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">ux</span><span class="p">,</span> <span class="n">uy</span><span class="p">,</span> <span class="n">uz</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">inv_gamma</span><span class="p">,</span>
+                                <span class="n">selected</span><span class="p">,</span> <span class="n">part_idx_start</span> <span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Extract a selection of particles from the GPU and</span>
+<span class="sd">    store them in a 2D array (8, N_part) in the following</span>
+<span class="sd">    order: x, y, z, ux, uy, uz, w, inv_gamma.</span>
+<span class="sd">    Selection goes from starting index (part_idx_start)</span>
+<span class="sd">    to (part_idx_start + N_part-1), where N_part is derived</span>
+<span class="sd">    from the shape of the 2D array (selected).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x, y, z, ux, uy, uz, w, inv_gamma : 1D arrays of floats</span>
+<span class="sd">        The GPU particle arrays for a given species.</span>
+
+<span class="sd">    selected : 2D array of floats</span>
+<span class="sd">        An empty GPU array to store the particles</span>
+<span class="sd">        that are extracted.</span>
+
+<span class="sd">    part_idx_start : int</span>
+<span class="sd">        The starting index needed for the extraction process.</span>
+<span class="sd">        ( minimum particle index to be extracted )</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">i</span> <span class="o">=</span> <span class="n">cuda</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">N_part</span> <span class="o">=</span> <span class="n">selected</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N_part</span><span class="p">:</span>
+        <span class="n">ptcl_idx</span> <span class="o">=</span> <span class="n">part_idx_start</span><span class="o">+</span><span class="n">i</span>
+        <span class="n">selected</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">ptcl_idx</span><span class="p">]</span>
+        <span class="n">selected</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">ptcl_idx</span><span class="p">]</span>
+        <span class="n">selected</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">z</span><span class="p">[</span><span class="n">ptcl_idx</span><span class="p">]</span>
+        <span class="n">selected</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">ux</span><span class="p">[</span><span class="n">ptcl_idx</span><span class="p">]</span>
+        <span class="n">selected</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">uy</span><span class="p">[</span><span class="n">ptcl_idx</span><span class="p">]</span>
+        <span class="n">selected</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">uz</span><span class="p">[</span><span class="n">ptcl_idx</span><span class="p">]</span>
+        <span class="n">selected</span><span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">w</span><span class="p">[</span><span class="n">ptcl_idx</span><span class="p">]</span>
+        <span class="n">selected</span><span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">inv_gamma</span><span class="p">[</span><span class="n">ptcl_idx</span><span class="p">]</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, FBPIC contributors.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'0.2.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

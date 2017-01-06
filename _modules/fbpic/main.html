@@ -1,0 +1,805 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>fbpic.main &mdash; FBPIC 0.2.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="FBPIC 0.2.0 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> FBPIC
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../overview.html">Overview of the code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../how_to_run.html">How to run the code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api_reference/api_reference.html">API reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">FBPIC</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      
+    <li>fbpic.main</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for fbpic.main</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2016, FBPIC contributors</span>
+<span class="c1"># Authors: Remi Lehe, Manuel Kirchen, Kevin Peters, Soeren Jalas</span>
+<span class="c1"># License: 3-Clause-BSD-LBNL</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Fourier-Bessel Particle-In-Cell (FB-PIC) main file</span>
+
+<span class="sd">This file steers and controls the simulation.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1"># When cuda is available, select one GPU per mpi process</span>
+<span class="c1"># (This needs to be done before the other imports,</span>
+<span class="c1"># as it sets the cuda context)</span>
+<span class="kn">from</span> <span class="nn">mpi4py</span> <span class="k">import</span> <span class="n">MPI</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.cuda_utils</span> <span class="k">import</span> <span class="n">cuda</span><span class="p">,</span> <span class="n">send_data_to_gpu</span><span class="p">,</span> \
+                <span class="n">receive_data_from_gpu</span><span class="p">,</span> <span class="n">mpi_select_gpus</span>
+    <span class="n">cuda_installed</span> <span class="o">=</span> <span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">cuda_installed</span><span class="p">:</span>
+        <span class="n">mpi_select_gpus</span><span class="p">(</span> <span class="n">MPI</span> <span class="p">)</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">cuda_installed</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="c1"># Import the rest of the requirements</span>
+<span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">scipy.constants</span> <span class="k">import</span> <span class="n">m_e</span><span class="p">,</span> <span class="n">m_p</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">c</span>
+<span class="kn">from</span> <span class="nn">.particles</span> <span class="k">import</span> <span class="n">Particles</span>
+<span class="kn">from</span> <span class="nn">.lpa_utils.boosted_frame</span> <span class="k">import</span> <span class="n">BoostConverter</span>
+<span class="kn">from</span> <span class="nn">.fields</span> <span class="k">import</span> <span class="n">Fields</span><span class="p">,</span> <span class="n">cuda_installed</span>
+<span class="kn">from</span> <span class="nn">.boundaries</span> <span class="k">import</span> <span class="n">BoundaryCommunicator</span><span class="p">,</span> <span class="n">MovingWindow</span>
+
+<div class="viewcode-block" id="Simulation"><a class="viewcode-back" href="../../api_reference/simulation.html#fbpic.main.Simulation">[docs]</a><span class="k">class</span> <span class="nc">Simulation</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Top-level simulation class that contains all the simulation</span>
+<span class="sd">    data, as well as the methods to perform the PIC cycle.</span>
+
+<span class="sd">    The `Simulation` class has several important attributes:</span>
+
+<span class="sd">    - `fld`, a `Fields` object which contains the field information</span>
+<span class="sd">    - `ptcl`, a list of `Particles` objects (one per species)</span>
+<span class="sd">    - `diags`, a list of diagnostics to be run during the simulation</span>
+<span class="sd">    - `comm`, a `BoundaryCommunicator`, which contains the MPI decomposition</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Nz</span><span class="p">,</span> <span class="n">zmax</span><span class="p">,</span> <span class="n">Nr</span><span class="p">,</span> <span class="n">rmax</span><span class="p">,</span> <span class="n">Nm</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">p_zmin</span><span class="p">,</span> <span class="n">p_zmax</span><span class="p">,</span>
+                 <span class="n">p_rmin</span><span class="p">,</span> <span class="n">p_rmax</span><span class="p">,</span> <span class="n">p_nz</span><span class="p">,</span> <span class="n">p_nr</span><span class="p">,</span> <span class="n">p_nt</span><span class="p">,</span> <span class="n">n_e</span><span class="p">,</span> <span class="n">zmin</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
+                 <span class="n">n_order</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">dens_func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filter_currents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                 <span class="n">v_comoving</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">use_galilean</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">initialize_ions</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">use_cuda</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">n_guard</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">exchange_period</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">boundaries</span><span class="o">=</span><span class="s1">&#39;periodic&#39;</span><span class="p">,</span>
+                 <span class="n">gamma_boost</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">use_all_mpi_ranks</span><span class="o">=</span><span class="kc">True</span> <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initializes a simulation, by creating the following structures:</span>
+
+<span class="sd">        - the `Fields` object, which contains the field data on the grids</span>
+<span class="sd">        - a set of electrons</span>
+<span class="sd">        - a set of ions (if initialize_ions is True)</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        Nz: int</span>
+<span class="sd">            The number of gridpoints along z</span>
+<span class="sd">        Nr: int</span>
+<span class="sd">            The number of gridpoints along r</span>
+
+<span class="sd">        zmax: float</span>
+<span class="sd">            The position of the edge of the simulation in z</span>
+<span class="sd">            (More precisely, the position of the edge of the last cell)</span>
+<span class="sd">        rmax: float</span>
+<span class="sd">            The position of the edge of the simulation in r</span>
+<span class="sd">            (More precisely, the position of the edge of the last</span>
+<span class="sd">            cell)</span>
+
+<span class="sd">        Nm: int</span>
+<span class="sd">            The number of azimuthal modes taken into account</span>
+
+<span class="sd">        dt: float</span>
+<span class="sd">            The timestep of the simulation</span>
+
+<span class="sd">        p_zmin: float</span>
+<span class="sd">            The minimal z position above which the particles are initialized</span>
+<span class="sd">        p_zmax: float</span>
+<span class="sd">            The maximal z position below which the particles are initialized</span>
+<span class="sd">        p_rmin: float</span>
+<span class="sd">            The minimal r position above which the particles are initialized</span>
+<span class="sd">        p_rmax: float</span>
+<span class="sd">            The maximal r position below which the particles are initialized</span>
+
+<span class="sd">        p_nz: int</span>
+<span class="sd">            The number of macroparticles per cell along the z direction</span>
+<span class="sd">        p_nr: int</span>
+<span class="sd">            The number of macroparticles per cell along the r direction</span>
+<span class="sd">        p_nt: int</span>
+<span class="sd">            The number of macroparticles along the theta direction</span>
+
+<span class="sd">        n_e: float (in particles per m^3)</span>
+<span class="sd">           Peak density of the electrons</span>
+
+<span class="sd">        n_order: int, optional</span>
+<span class="sd">           The order of the stencil for the z derivatives.</span>
+<span class="sd">           Use -1 for infinite order, otherwise use a positive, even</span>
+<span class="sd">           number. In this case, the stencil extends up to n_order/2</span>
+<span class="sd">           cells on each side.</span>
+
+<span class="sd">        zmin: float, optional</span>
+<span class="sd">           The position of the edge of the simulation box.</span>
+<span class="sd">           (More precisely, the position of the edge of the first cell)</span>
+
+<span class="sd">        dens_func: callable, optional</span>
+<span class="sd">           A function of the form:</span>
+<span class="sd">           def dens_func( z, r ) ...</span>
+<span class="sd">           where z and r are 1d arrays, and which returns</span>
+<span class="sd">           a 1d array containing the density *relative to n*</span>
+<span class="sd">           (i.e. a number between 0 and 1) at the given positions</span>
+
+<span class="sd">        initialize_ions: bool, optional</span>
+<span class="sd">           Whether to initialize the neutralizing ions</span>
+<span class="sd">        filter_currents: bool, optional</span>
+<span class="sd">            Whether to filter the currents and charge in k space</span>
+
+<span class="sd">        v_comoving: float or None, optional</span>
+<span class="sd">            If this variable is None, the standard PSATD is used (default).</span>
+<span class="sd">            Otherwise, the current is assumed to be &quot;comoving&quot;,</span>
+<span class="sd">            i.e. constant with respect to (z - v_comoving * t).</span>
+<span class="sd">            This can be done in two ways: either by</span>
+<span class="sd">            - Using a PSATD scheme that takes this hypothesis into account</span>
+<span class="sd">            - Solving the PSATD scheme in a Galilean frame</span>
+<span class="sd">        use_galilean: bool, optional</span>
+<span class="sd">            Determines which one of the two above schemes is used</span>
+<span class="sd">            When use_galilean is true, the whole grid moves</span>
+<span class="sd">            with a speed v_comoving</span>
+
+<span class="sd">        use_cuda: bool, optional</span>
+<span class="sd">            Wether to use CUDA (GPU) acceleration</span>
+
+<span class="sd">        n_guard: int, optional</span>
+<span class="sd">            Number of guard cells to use at the left and right of</span>
+<span class="sd">            a domain, when using MPI.</span>
+<span class="sd">        exchange_period: int, optional</span>
+<span class="sd">            Number of iteration before which the particles are exchanged</span>
+<span class="sd">            and the window is moved (the two operations are simultaneous)</span>
+<span class="sd">            If set to None, the particles are exchanged every n_guard/2</span>
+
+<span class="sd">        boundaries: string, optional</span>
+<span class="sd">            Indicates how to exchange the fields at the left and right</span>
+<span class="sd">            boundaries of the global simulation box.</span>
+<span class="sd">            Either &#39;periodic&#39; or &#39;open&#39;</span>
+
+<span class="sd">        gamma_boost : float, optional</span>
+<span class="sd">            When initializing the laser in a boosted frame, set the</span>
+<span class="sd">            value of `gamma_boost` to the corresponding Lorentz factor.</span>
+<span class="sd">            All the other quantities (zmin, zmax, n_e, etc.) are to be given</span>
+<span class="sd">            in the lab frame.</span>
+
+<span class="sd">        use_all_mpi_ranks: bool, optional</span>
+<span class="sd">            When launching the simulation with mpirun:</span>
+
+<span class="sd">            - if `use_all_mpi_ranks` is True (default):</span>
+<span class="sd">              All the MPI ranks will contribute to the same simulation,</span>
+<span class="sd">              using domain-decomposition to share the work.</span>
+<span class="sd">            - if `use_all_mpi_ranks` is False:</span>
+<span class="sd">              Each MPI rank will run an independent simulation.</span>
+<span class="sd">              This can be useful when running parameter scans. In this case,</span>
+<span class="sd">              make sure that your input script is written so that the input</span>
+<span class="sd">              parameters and output folder depend on the MPI rank.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Check whether to use cuda</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">use_cuda</span> <span class="o">=</span> <span class="n">use_cuda</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">use_cuda</span><span class="o">==</span><span class="kc">True</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">cuda_installed</span><span class="o">==</span><span class="kc">False</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;*** Cuda not available for the simulation.&#39;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;*** Performing the simulation on CPU.&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">use_cuda</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="c1"># Register the comoving parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">v_comoving</span> <span class="o">=</span> <span class="n">v_comoving</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">use_galilean</span> <span class="o">=</span> <span class="n">use_galilean</span>
+        <span class="k">if</span> <span class="n">v_comoving</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">use_galilean</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="c1"># When running the simulation in a boosted frame, convert the arguments</span>
+        <span class="n">uz_m</span> <span class="o">=</span> <span class="mf">0.</span>   <span class="c1"># Mean normalized momentum of the particles</span>
+        <span class="k">if</span> <span class="n">gamma_boost</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">boost</span> <span class="o">=</span> <span class="n">BoostConverter</span><span class="p">(</span> <span class="n">gamma_boost</span> <span class="p">)</span>
+            <span class="n">zmin</span><span class="p">,</span> <span class="n">zmax</span><span class="p">,</span> <span class="n">dt</span> <span class="o">=</span> <span class="n">boost</span><span class="o">.</span><span class="n">copropag_length</span><span class="p">([</span> <span class="n">zmin</span><span class="p">,</span> <span class="n">zmax</span><span class="p">,</span> <span class="n">dt</span> <span class="p">])</span>
+            <span class="n">p_zmin</span><span class="p">,</span> <span class="n">p_zmax</span> <span class="o">=</span> <span class="n">boost</span><span class="o">.</span><span class="n">static_length</span><span class="p">([</span> <span class="n">p_zmin</span><span class="p">,</span> <span class="n">p_zmax</span> <span class="p">])</span>
+            <span class="n">n_e</span><span class="p">,</span> <span class="o">=</span> <span class="n">boost</span><span class="o">.</span><span class="n">static_density</span><span class="p">([</span> <span class="n">n_e</span> <span class="p">])</span>
+            <span class="n">uz_m</span><span class="p">,</span> <span class="o">=</span> <span class="n">boost</span><span class="o">.</span><span class="n">longitudinal_momentum</span><span class="p">([</span> <span class="n">uz_m</span> <span class="p">])</span>
+
+        <span class="c1"># Initialize the boundary communicator</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">comm</span> <span class="o">=</span> <span class="n">BoundaryCommunicator</span><span class="p">(</span><span class="n">Nz</span><span class="p">,</span> <span class="n">Nr</span><span class="p">,</span> <span class="n">n_guard</span><span class="p">,</span> <span class="n">Nm</span><span class="p">,</span>
+            <span class="n">boundaries</span><span class="p">,</span> <span class="n">n_order</span><span class="p">,</span> <span class="n">exchange_period</span><span class="p">,</span> <span class="n">use_all_mpi_ranks</span> <span class="p">)</span>
+        <span class="n">print_simulation_setup</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_cuda</span> <span class="p">)</span>
+        <span class="c1"># Modify domain region</span>
+        <span class="n">zmin</span><span class="p">,</span> <span class="n">zmax</span><span class="p">,</span> <span class="n">p_zmin</span><span class="p">,</span> <span class="n">p_zmax</span><span class="p">,</span> <span class="n">Nz</span> <span class="o">=</span> \
+              <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">divide_into_domain</span><span class="p">(</span><span class="n">zmin</span><span class="p">,</span> <span class="n">zmax</span><span class="p">,</span> <span class="n">p_zmin</span><span class="p">,</span> <span class="n">p_zmax</span><span class="p">)</span>
+
+        <span class="c1"># Initialize the field structure</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fld</span> <span class="o">=</span> <span class="n">Fields</span><span class="p">(</span> <span class="n">Nz</span><span class="p">,</span> <span class="n">zmax</span><span class="p">,</span> <span class="n">Nr</span><span class="p">,</span> <span class="n">rmax</span><span class="p">,</span> <span class="n">Nm</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span>
+                    <span class="n">n_order</span><span class="o">=</span><span class="n">n_order</span><span class="p">,</span> <span class="n">zmin</span><span class="o">=</span><span class="n">zmin</span><span class="p">,</span>
+                    <span class="n">v_comoving</span><span class="o">=</span><span class="n">v_comoving</span><span class="p">,</span>
+                    <span class="n">use_galilean</span><span class="o">=</span><span class="n">use_galilean</span><span class="p">,</span>
+                    <span class="n">use_cuda</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">use_cuda</span> <span class="p">)</span>
+
+        <span class="c1"># Modify the input parameters p_zmin, p_zmax, r_zmin, r_zmax, so that</span>
+        <span class="c1"># they fall exactly on the grid, and infer the number of particles</span>
+        <span class="n">p_zmin</span><span class="p">,</span> <span class="n">p_zmax</span><span class="p">,</span> <span class="n">Npz</span> <span class="o">=</span> <span class="n">adapt_to_grid</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">z</span><span class="p">,</span>
+                                <span class="n">p_zmin</span><span class="p">,</span> <span class="n">p_zmax</span><span class="p">,</span> <span class="n">p_nz</span> <span class="p">)</span>
+        <span class="n">p_rmin</span><span class="p">,</span> <span class="n">p_rmax</span><span class="p">,</span> <span class="n">Npr</span> <span class="o">=</span> <span class="n">adapt_to_grid</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">r</span><span class="p">,</span>
+                                <span class="n">p_rmin</span><span class="p">,</span> <span class="n">p_rmax</span><span class="p">,</span> <span class="n">p_nr</span> <span class="p">)</span>
+
+        <span class="c1"># Initialize the electrons and the ions</span>
+        <span class="n">grid_shape</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">Ez</span><span class="o">.</span><span class="n">shape</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ptcl</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">Particles</span><span class="p">(</span> <span class="n">q</span><span class="o">=-</span><span class="n">e</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="n">m_e</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n_e</span><span class="p">,</span> <span class="n">Npz</span><span class="o">=</span><span class="n">Npz</span><span class="p">,</span> <span class="n">zmin</span><span class="o">=</span><span class="n">p_zmin</span><span class="p">,</span>
+                       <span class="n">zmax</span><span class="o">=</span><span class="n">p_zmax</span><span class="p">,</span> <span class="n">Npr</span><span class="o">=</span><span class="n">Npr</span><span class="p">,</span> <span class="n">rmin</span><span class="o">=</span><span class="n">p_rmin</span><span class="p">,</span> <span class="n">rmax</span><span class="o">=</span><span class="n">p_rmax</span><span class="p">,</span>
+                       <span class="n">Nptheta</span><span class="o">=</span><span class="n">p_nt</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">,</span> <span class="n">dens_func</span><span class="o">=</span><span class="n">dens_func</span><span class="p">,</span>
+                       <span class="n">use_cuda</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">use_cuda</span><span class="p">,</span> <span class="n">uz_m</span><span class="o">=</span><span class="n">uz_m</span><span class="p">,</span>
+                       <span class="n">grid_shape</span><span class="o">=</span><span class="n">grid_shape</span><span class="p">)</span> <span class="p">]</span>
+        <span class="k">if</span> <span class="n">initialize_ions</span> <span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ptcl</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">Particles</span><span class="p">(</span><span class="n">q</span><span class="o">=</span><span class="n">e</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="n">m_p</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n_e</span><span class="p">,</span> <span class="n">Npz</span><span class="o">=</span><span class="n">Npz</span><span class="p">,</span> <span class="n">zmin</span><span class="o">=</span><span class="n">p_zmin</span><span class="p">,</span>
+                          <span class="n">zmax</span><span class="o">=</span><span class="n">p_zmax</span><span class="p">,</span> <span class="n">Npr</span><span class="o">=</span><span class="n">Npr</span><span class="p">,</span> <span class="n">rmin</span><span class="o">=</span><span class="n">p_rmin</span><span class="p">,</span> <span class="n">rmax</span><span class="o">=</span><span class="n">p_rmax</span><span class="p">,</span>
+                          <span class="n">Nptheta</span><span class="o">=</span><span class="n">p_nt</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">,</span> <span class="n">dens_func</span><span class="o">=</span><span class="n">dens_func</span><span class="p">,</span>
+                          <span class="n">use_cuda</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">use_cuda</span><span class="p">,</span> <span class="n">uz_m</span><span class="o">=</span><span class="n">uz_m</span><span class="p">,</span>
+                          <span class="n">grid_shape</span><span class="o">=</span><span class="n">grid_shape</span> <span class="p">)</span> <span class="p">)</span>
+
+        <span class="c1"># Register the number of particles per cell along z, and dt</span>
+        <span class="c1"># (Necessary for the moving window)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">=</span> <span class="n">dt</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p_nz</span> <span class="o">=</span> <span class="n">p_nz</span>
+        <span class="c1"># Register the time and the iteration</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="mf">0.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">iteration</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="c1"># Register the filtering flag</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filter_currents</span> <span class="o">=</span> <span class="n">filter_currents</span>
+
+        <span class="c1"># Initialize an empty list of external fields</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">external_fields</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># Initialize an empty list of diagnostics</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">diags</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># Initialize an empty list of laser antennas</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">laser_antennas</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Do the initial charge deposition (at t=0) now</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">deposit</span><span class="p">(</span><span class="s1">&#39;rho_prev&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Simulation.step"><a class="viewcode-back" href="../../api_reference/simulation.html#fbpic.main.Simulation.step">[docs]</a>    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">correct_currents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">correct_divE</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">use_true_rho</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">move_positions</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">move_momenta</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">show_progress</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Perform N PIC cycles.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        N: int, optional</span>
+<span class="sd">            The number of timesteps to take</span>
+<span class="sd">            Default: N=1</span>
+
+<span class="sd">        correct_currents: bool, optional</span>
+<span class="sd">            Whether to correct the currents in spectral space</span>
+
+<span class="sd">        correct_divE: bool, optional</span>
+<span class="sd">            Whether to correct the divergence of E in spectral space</span>
+
+<span class="sd">        use_true_rho: bool, optional</span>
+<span class="sd">            Wether to use the true rho deposited on the grid for the</span>
+<span class="sd">            field push or not. (requires initialize_ions = True)</span>
+
+<span class="sd">        move_positions: bool, optional</span>
+<span class="sd">            Whether to move or freeze the particles&#39; positions</span>
+
+<span class="sd">        move_momenta: bool, optional</span>
+<span class="sd">            Whether to move or freeze the particles&#39; momenta</span>
+
+<span class="sd">        show_progress: bool, optional</span>
+<span class="sd">            Whether to show a progression bar</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Shortcuts</span>
+        <span class="n">ptcl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ptcl</span>
+        <span class="n">fld</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fld</span>
+        <span class="c1"># Measure the time taken by the PIC cycle</span>
+        <span class="n">measured_start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+        <span class="c1"># Send simulation data to GPU (if CUDA is used)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_cuda</span><span class="p">:</span>
+            <span class="n">send_data_to_gpu</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="c1"># Loop over timesteps</span>
+        <span class="k">for</span> <span class="n">i_step</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+
+            <span class="c1"># Messages and diagnostics</span>
+            <span class="c1"># ------------------------</span>
+
+            <span class="c1"># Show a progression bar</span>
+            <span class="k">if</span> <span class="n">show_progress</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">rank</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+                <span class="n">progression_bar</span><span class="p">(</span> <span class="n">i_step</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">measured_start</span> <span class="p">)</span>
+
+            <span class="c1"># Run the diagnostics</span>
+            <span class="k">for</span> <span class="n">diag</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">diags</span><span class="p">:</span>
+                <span class="c1"># Check if the fields should be written at</span>
+                <span class="c1"># this iteration and do it if needed.</span>
+                <span class="c1"># (Send the data to the GPU if needed.)</span>
+                <span class="n">diag</span><span class="o">.</span><span class="n">write</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">iteration</span> <span class="p">)</span>
+
+            <span class="c1"># Exchanges to prepare for this iteration</span>
+            <span class="c1"># ---------------------------------------</span>
+
+            <span class="c1"># Exchange the fields (EB) in the guard cells between domains</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">exchange_fields</span><span class="p">(</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">,</span> <span class="s1">&#39;EB&#39;</span><span class="p">)</span>
+
+            <span class="c1"># Check whether this iteration involves</span>
+            <span class="c1"># particle exchange / moving window</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">iteration</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">exchange_period</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+
+                <span class="c1"># Move the grids if needed</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">moving_win</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="c1"># Damp the fields in the guard cells</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">damp_guard_EB</span><span class="p">(</span> <span class="n">fld</span><span class="o">.</span><span class="n">interp</span> <span class="p">)</span>
+                    <span class="c1"># Shift the fields, and prepare positions</span>
+                    <span class="c1"># between which new particles should be added</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">move_grids</span><span class="p">(</span><span class="n">fld</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
+                    <span class="c1"># Exchange the E and B fields via MPI if needed</span>
+                    <span class="c1"># (Notice that the fields have not been damped since the</span>
+                    <span class="c1"># last exchange, so fields are correct in the guard cells)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">exchange_fields</span><span class="p">(</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">,</span> <span class="s1">&#39;EB&#39;</span><span class="p">)</span>
+
+                <span class="c1"># Particle exchange after moving window / mpi communications</span>
+                <span class="c1"># This includes MPI exchange of particles, removal of</span>
+                <span class="c1"># out-of-box particles and (if there is a moving window)</span>
+                <span class="c1"># injection of new particles by the moving window.</span>
+                <span class="c1"># (In the case of single-proc periodic simulations, particles</span>
+                <span class="c1"># are shifted by one box length, so they remain inside the box.) </span>
+                <span class="k">for</span> <span class="n">species</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ptcl</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">exchange_particles</span><span class="p">(</span><span class="n">species</span><span class="p">,</span> <span class="n">fld</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
+
+                <span class="c1"># Reproject the charge on the interpolation grid</span>
+                <span class="c1"># (Since particles have been added/suppressed)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">deposit</span><span class="p">(</span><span class="s1">&#39;rho_prev&#39;</span><span class="p">)</span>
+
+            <span class="c1"># Standard PIC loop</span>
+            <span class="c1"># -----------------</span>
+            <span class="c1"># Gather the fields from the grid at t = n dt</span>
+            <span class="k">for</span> <span class="n">species</span> <span class="ow">in</span> <span class="n">ptcl</span><span class="p">:</span>
+                <span class="n">species</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span> <span class="n">fld</span><span class="o">.</span><span class="n">interp</span> <span class="p">)</span>
+            <span class="c1"># Apply the external fields at t = n dt</span>
+            <span class="k">for</span> <span class="n">ext_field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">external_fields</span><span class="p">:</span>
+                <span class="n">ext_field</span><span class="o">.</span><span class="n">apply_expression</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">ptcl</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="p">)</span>
+
+            <span class="c1"># Push the particles&#39; positions and velocities to t = (n+1/2) dt</span>
+            <span class="k">if</span> <span class="n">move_momenta</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">species</span> <span class="ow">in</span> <span class="n">ptcl</span><span class="p">:</span>
+                    <span class="n">species</span><span class="o">.</span><span class="n">push_p</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">move_positions</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">species</span> <span class="ow">in</span> <span class="n">ptcl</span><span class="p">:</span>
+                    <span class="n">species</span><span class="o">.</span><span class="n">halfpush_x</span><span class="p">()</span>
+            <span class="c1"># Get positions/velocities for antenna particles at t = (n+1/2) dt</span>
+            <span class="k">for</span> <span class="n">antenna</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">laser_antennas</span><span class="p">:</span>
+                <span class="n">antenna</span><span class="o">.</span><span class="n">update_v</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="p">)</span>
+                <span class="n">antenna</span><span class="o">.</span><span class="n">halfpush_x</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="p">)</span>
+            <span class="c1"># Shift the boundaries of the grid for the Galilean frame</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_galilean</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">shift_galilean_boundaries</span><span class="p">()</span>
+
+            <span class="c1"># Get the current at t = (n+1/2) dt</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">deposit</span><span class="p">(</span><span class="s1">&#39;J&#39;</span><span class="p">)</span>
+
+            <span class="c1"># Push the particles&#39; positions to t = (n+1) dt</span>
+            <span class="k">if</span> <span class="n">move_positions</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">species</span> <span class="ow">in</span> <span class="n">ptcl</span><span class="p">:</span>
+                    <span class="n">species</span><span class="o">.</span><span class="n">halfpush_x</span><span class="p">()</span>
+            <span class="c1"># Get positions for antenna particles at t = (n+1) dt</span>
+            <span class="k">for</span> <span class="n">antenna</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">laser_antennas</span><span class="p">:</span>
+                <span class="n">antenna</span><span class="o">.</span><span class="n">halfpush_x</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="p">)</span>
+            <span class="c1"># Shift the boundaries of the grid for the Galilean frame</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_galilean</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">shift_galilean_boundaries</span><span class="p">()</span>
+
+            <span class="c1"># Get the charge density at t = (n+1) dt</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">deposit</span><span class="p">(</span><span class="s1">&#39;rho_next&#39;</span><span class="p">)</span>
+            <span class="c1"># Correct the currents (requires rho at t = (n+1) dt )</span>
+            <span class="k">if</span> <span class="n">correct_currents</span><span class="p">:</span>
+                <span class="n">fld</span><span class="o">.</span><span class="n">correct_currents</span><span class="p">()</span>
+
+            <span class="c1"># Damp the fields in the guard cells</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">damp_guard_EB</span><span class="p">(</span> <span class="n">fld</span><span class="o">.</span><span class="n">interp</span> <span class="p">)</span>
+            <span class="c1"># Get the damped fields on the spectral grid at t = n dt</span>
+            <span class="n">fld</span><span class="o">.</span><span class="n">interp2spect</span><span class="p">(</span><span class="s1">&#39;E&#39;</span><span class="p">)</span>
+            <span class="n">fld</span><span class="o">.</span><span class="n">interp2spect</span><span class="p">(</span><span class="s1">&#39;B&#39;</span><span class="p">)</span>
+            <span class="c1"># Push the fields E and B on the spectral grid to t = (n+1) dt</span>
+            <span class="n">fld</span><span class="o">.</span><span class="n">push</span><span class="p">(</span> <span class="n">use_true_rho</span> <span class="p">)</span>
+            <span class="k">if</span> <span class="n">correct_divE</span><span class="p">:</span>
+                <span class="n">fld</span><span class="o">.</span><span class="n">correct_divE</span><span class="p">()</span>
+            <span class="c1"># Get the fields E and B on the interpolation grid at t = (n+1) dt</span>
+            <span class="n">fld</span><span class="o">.</span><span class="n">spect2interp</span><span class="p">(</span><span class="s1">&#39;E&#39;</span><span class="p">)</span>
+            <span class="n">fld</span><span class="o">.</span><span class="n">spect2interp</span><span class="p">(</span><span class="s1">&#39;B&#39;</span><span class="p">)</span>
+
+            <span class="c1"># Increment the global time and iteration</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">iteration</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="c1"># Receive simulation data from GPU (if CUDA is used)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_cuda</span><span class="p">:</span>
+            <span class="n">receive_data_from_gpu</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="c1"># Print the measured time taken by the PIC cycle</span>
+        <span class="k">if</span> <span class="n">show_progress</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">rank</span><span class="o">==</span><span class="mi">0</span><span class="p">):</span>
+            <span class="n">measured_duration</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">measured_start</span>
+            <span class="n">m</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="nb">divmod</span><span class="p">(</span><span class="n">measured_duration</span><span class="p">,</span> <span class="mi">60</span><span class="p">)</span>
+            <span class="n">h</span><span class="p">,</span> <span class="n">m</span> <span class="o">=</span> <span class="nb">divmod</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="mi">60</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1"> Time taken by the loop: </span><span class="si">%d</span><span class="s1">:</span><span class="si">%02d</span><span class="s1">:</span><span class="si">%02d</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">s</span><span class="p">))</span></div>
+
+    <span class="k">def</span> <span class="nf">deposit</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">fieldtype</span> <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Deposit the charge or the currents to the interpolation grid</span>
+<span class="sd">        and then to the spectral grid.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        fieldtype: str</span>
+<span class="sd">            The designation of the spectral field that</span>
+<span class="sd">            should be changed by the deposition</span>
+<span class="sd">            Either &#39;rho_prev&#39;, &#39;rho_next&#39; or &#39;J&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Shortcut</span>
+        <span class="n">fld</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fld</span>
+
+        <span class="c1"># Deposit charge or currents on the interpolation grid</span>
+
+        <span class="c1"># Charge</span>
+        <span class="k">if</span> <span class="n">fieldtype</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;rho_prev&#39;</span><span class="p">,</span> <span class="s1">&#39;rho_next&#39;</span><span class="p">]:</span>
+            <span class="n">fld</span><span class="o">.</span><span class="n">erase</span><span class="p">(</span><span class="s1">&#39;rho&#39;</span><span class="p">)</span>
+            <span class="c1"># Deposit the particle charge</span>
+            <span class="k">for</span> <span class="n">species</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ptcl</span><span class="p">:</span>
+                <span class="n">species</span><span class="o">.</span><span class="n">deposit</span><span class="p">(</span> <span class="n">fld</span><span class="p">,</span> <span class="s1">&#39;rho&#39;</span> <span class="p">)</span>
+            <span class="c1"># Deposit the charge of the virtual particles in the antenna</span>
+            <span class="k">for</span> <span class="n">antenna</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">laser_antennas</span><span class="p">:</span>
+                <span class="n">antenna</span><span class="o">.</span><span class="n">deposit</span><span class="p">(</span> <span class="n">fld</span><span class="p">,</span> <span class="s1">&#39;rho&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span> <span class="p">)</span>
+            <span class="c1"># Divide by cell volume</span>
+            <span class="n">fld</span><span class="o">.</span><span class="n">divide_by_volume</span><span class="p">(</span><span class="s1">&#39;rho&#39;</span><span class="p">)</span>
+            <span class="c1"># Exchange the charge density of the guard cells between domains</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">exchange_fields</span><span class="p">(</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">,</span> <span class="s1">&#39;rho&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Currents</span>
+        <span class="k">elif</span> <span class="n">fieldtype</span> <span class="o">==</span> <span class="s1">&#39;J&#39;</span><span class="p">:</span>
+            <span class="n">fld</span><span class="o">.</span><span class="n">erase</span><span class="p">(</span><span class="s1">&#39;J&#39;</span><span class="p">)</span>
+            <span class="c1"># Deposit the particle current</span>
+            <span class="k">for</span> <span class="n">species</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ptcl</span><span class="p">:</span>
+                <span class="n">species</span><span class="o">.</span><span class="n">deposit</span><span class="p">(</span> <span class="n">fld</span><span class="p">,</span> <span class="s1">&#39;J&#39;</span> <span class="p">)</span>
+            <span class="c1"># Deposit the current of the virtual particles in the antenna</span>
+            <span class="k">for</span> <span class="n">antenna</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">laser_antennas</span><span class="p">:</span>
+                <span class="n">antenna</span><span class="o">.</span><span class="n">deposit</span><span class="p">(</span> <span class="n">fld</span><span class="p">,</span> <span class="s1">&#39;J&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span> <span class="p">)</span>
+            <span class="c1"># Divide by cell volume</span>
+            <span class="n">fld</span><span class="o">.</span><span class="n">divide_by_volume</span><span class="p">(</span><span class="s1">&#39;J&#39;</span><span class="p">)</span>
+            <span class="c1"># Exchange the current of the guard cells between domains</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">exchange_fields</span><span class="p">(</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">,</span> <span class="s1">&#39;J&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Unknown fieldtype: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span><span class="n">fieldtype</span><span class="p">)</span>
+
+        <span class="c1"># Get the charge or currents on the spectral grid</span>
+        <span class="n">fld</span><span class="o">.</span><span class="n">interp2spect</span><span class="p">(</span> <span class="n">fieldtype</span> <span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter_currents</span><span class="p">:</span>
+            <span class="n">fld</span><span class="o">.</span><span class="n">filter_spect</span><span class="p">(</span> <span class="n">fieldtype</span> <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">shift_galilean_boundaries</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Shift the interpolation grids by v_comoving over</span>
+<span class="sd">        a half-timestep. (The arrays of values are unchanged,</span>
+<span class="sd">        only position attributes are changed.)</span>
+
+<span class="sd">        With the Galilean frame, in principle everything should</span>
+<span class="sd">        be solved in variables xi = z - v_comoving t, and -v_comoving</span>
+<span class="sd">        should be added to the motion of the particles. However, it</span>
+<span class="sd">        is equivalent to, instead, shift the boundaries of the grid.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Calculate shift distance over a half timestep</span>
+        <span class="n">shift_distance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">v_comoving</span> <span class="o">*</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span>
+        <span class="c1"># Shift the boundaries of the grid</span>
+        <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">Nm</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">[</span><span class="n">m</span><span class="p">]</span><span class="o">.</span><span class="n">zmin</span> <span class="o">+=</span> <span class="n">shift_distance</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">[</span><span class="n">m</span><span class="p">]</span><span class="o">.</span><span class="n">zmax</span> <span class="o">+=</span> <span class="n">shift_distance</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">[</span><span class="n">m</span><span class="p">]</span><span class="o">.</span><span class="n">z</span> <span class="o">+=</span> <span class="n">shift_distance</span>
+
+<div class="viewcode-block" id="Simulation.set_moving_window"><a class="viewcode-back" href="../../api_reference/simulation.html#fbpic.main.Simulation.set_moving_window">[docs]</a>    <span class="k">def</span> <span class="nf">set_moving_window</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="o">=</span><span class="n">c</span><span class="p">,</span> <span class="n">ux_m</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">uy_m</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">uz_m</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
+                  <span class="n">ux_th</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">uy_th</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">uz_th</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">gamma_boost</span><span class="o">=</span><span class="kc">None</span> <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initializes a moving window for the simulation.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        v: float (in meters per seconds), optional</span>
+<span class="sd">            The speed of the moving window</span>
+
+<span class="sd">        ux_m: float (dimensionless), optional</span>
+<span class="sd">           Normalized mean momenta of the injected particles along x</span>
+<span class="sd">        uy_m: float (dimensionless), optional</span>
+<span class="sd">           Normalized mean momenta of the injected particles along y</span>
+<span class="sd">        uz_m: float (dimensionless), optional</span>
+<span class="sd">           Normalized mean momenta of the injected particles along z</span>
+
+<span class="sd">        ux_th: float (dimensionless), optional</span>
+<span class="sd">           Normalized thermal momenta of the injected particles along x</span>
+<span class="sd">        uy_th: float (dimensionless), optional</span>
+<span class="sd">           Normalized thermal momenta of the injected particles along y</span>
+<span class="sd">        uz_th: float (dimensionless), optional</span>
+<span class="sd">           Normalized thermal momenta of the injected particles along z</span>
+
+<span class="sd">        gamma_boost : float, optional</span>
+<span class="sd">            When initializing a moving window in a boosted frame, set the</span>
+<span class="sd">            value of `gamma_boost` to the corresponding Lorentz factor.</span>
+<span class="sd">            Quantities like uz_m of the injected particles will be</span>
+<span class="sd">            automatically Lorentz-transformed.</span>
+<span class="sd">            (uz_m is to be given in the lab frame ; for the moment, this</span>
+<span class="sd">            will not work if any of ux_th, uy_th, uz_th, ux_m, uy_m is nonzero)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Attach the moving window to the boundary communicator</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">moving_win</span> <span class="o">=</span> <span class="n">MovingWindow</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ptcl</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">p_nz</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">ux_m</span><span class="p">,</span> <span class="n">uy_m</span><span class="p">,</span> <span class="n">uz_m</span><span class="p">,</span>
+            <span class="n">ux_th</span><span class="p">,</span> <span class="n">uy_th</span><span class="p">,</span> <span class="n">uz_th</span><span class="p">,</span> <span class="n">gamma_boost</span> <span class="p">)</span></div></div>
+
+<span class="k">def</span> <span class="nf">progression_bar</span><span class="p">(</span> <span class="n">i</span><span class="p">,</span> <span class="n">Ntot</span><span class="p">,</span> <span class="n">measured_start</span><span class="p">,</span> <span class="n">Nbars</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">char</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Shows a progression bar with Nbars and the remaining</span>
+<span class="sd">    simulation time.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">nbars</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span> <span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="mf">1.</span><span class="o">/</span><span class="n">Ntot</span><span class="o">*</span><span class="n">Nbars</span> <span class="p">)</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\r</span><span class="s1">[&#39;</span> <span class="o">+</span> <span class="n">nbars</span><span class="o">*</span><span class="n">char</span> <span class="p">)</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">((</span><span class="n">Nbars</span><span class="o">-</span><span class="n">nbars</span><span class="p">)</span><span class="o">*</span><span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="s1">&#39;]&#39;</span><span class="p">)</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39; </span><span class="si">%d</span><span class="s1">/</span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">Ntot</span><span class="p">))</span>
+    <span class="c1"># Estimated time in seconds until it will finish (linear interpolation)</span>
+    <span class="n">eta</span> <span class="o">=</span> <span class="p">(((</span><span class="nb">float</span><span class="p">(</span><span class="n">Ntot</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mf">1.</span><span class="p">))</span><span class="o">-</span><span class="mf">1.</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">measured_start</span><span class="p">))</span>
+    <span class="c1"># Conversion to H:M:S</span>
+    <span class="n">m</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="nb">divmod</span><span class="p">(</span><span class="n">eta</span><span class="p">,</span> <span class="mi">60</span><span class="p">)</span>
+    <span class="n">h</span><span class="p">,</span> <span class="n">m</span> <span class="o">=</span> <span class="nb">divmod</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="mi">60</span><span class="p">)</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;, </span><span class="si">%d</span><span class="s1">:</span><span class="si">%02d</span><span class="s1">:</span><span class="si">%02d</span><span class="s1"> left&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">s</span><span class="p">))</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">print_simulation_setup</span><span class="p">(</span> <span class="n">comm</span><span class="p">,</span> <span class="n">use_cuda</span> <span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Print message about the number of proc and</span>
+<span class="sd">    whether it is using GPU or CPU.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    comm: an fbpic BoundaryCommunicator object</span>
+<span class="sd">        Contains the information on the MPI decomposition</span>
+
+<span class="sd">    use_cuda: bool</span>
+<span class="sd">        Whether the simulation is set up to use CUDA</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">comm</span><span class="o">.</span><span class="n">rank</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">use_cuda</span><span class="p">:</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Running FBPIC on GPU &quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Running FBPIC on CPU &quot;</span>
+        <span class="n">message</span> <span class="o">+=</span> <span class="s2">&quot;with </span><span class="si">%d</span><span class="s2"> proc.</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span><span class="n">comm</span><span class="o">.</span><span class="n">size</span>
+        <span class="nb">print</span><span class="p">(</span> <span class="n">message</span> <span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">adapt_to_grid</span><span class="p">(</span> <span class="n">x</span><span class="p">,</span> <span class="n">p_xmin</span><span class="p">,</span> <span class="n">p_xmax</span><span class="p">,</span> <span class="n">p_nx</span><span class="p">,</span> <span class="n">ncells_empty</span><span class="o">=</span><span class="mi">0</span> <span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Adapt p_xmin and p_xmax, so that they fall exactly on the grid x</span>
+<span class="sd">    Return the total number of particles, assuming p_nx particles</span>
+<span class="sd">    per gridpoint</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x: 1darray</span>
+<span class="sd">        The positions of the gridpoints along the x direction</span>
+
+<span class="sd">    p_xmin, p_xmax: float</span>
+<span class="sd">        The minimal and maximal position of the particles</span>
+<span class="sd">        These may not fall exactly on the grid</span>
+
+<span class="sd">    p_nx: int</span>
+<span class="sd">        Number of particle per gridpoint</span>
+
+<span class="sd">    ncells_empty: int</span>
+<span class="sd">        Number of empty cells at the righthand side of the box</span>
+<span class="sd">        (Typically used when using a moving window)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    A tuple with:</span>
+<span class="sd">       - p_xmin: a float that falls exactly on the grid</span>
+<span class="sd">       - p_xmax: a float that falls exactly on the grid</span>
+<span class="sd">       - Npx: the total number of particles</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Find the max and the step of the array</span>
+    <span class="n">xmin</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+    <span class="n">xmax</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+    <span class="n">dx</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># Do not load particles below the lower bound of the box</span>
+    <span class="k">if</span> <span class="n">p_xmin</span> <span class="o">&lt;</span> <span class="n">xmin</span> <span class="o">-</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">dx</span><span class="p">:</span>
+        <span class="n">p_xmin</span> <span class="o">=</span> <span class="n">xmin</span> <span class="o">-</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">dx</span>
+    <span class="c1"># Do not load particles in the two last upper cells</span>
+    <span class="c1"># (This is because the charge density may extend over these cells</span>
+    <span class="c1"># when it is smoothed. If particles are loaded closer to the right</span>
+    <span class="c1"># boundary, this extended charge density can wrap around and appear</span>
+    <span class="c1"># at the left boundary.)</span>
+    <span class="k">if</span> <span class="n">p_xmax</span> <span class="o">&gt;</span> <span class="n">xmax</span> <span class="o">+</span> <span class="p">(</span><span class="mf">0.5</span><span class="o">-</span><span class="n">ncells_empty</span><span class="p">)</span><span class="o">*</span><span class="n">dx</span><span class="p">:</span>
+        <span class="n">p_xmax</span> <span class="o">=</span> <span class="n">xmax</span> <span class="o">+</span> <span class="p">(</span><span class="mf">0.5</span><span class="o">-</span><span class="n">ncells_empty</span><span class="p">)</span><span class="o">*</span><span class="n">dx</span>
+
+    <span class="c1"># Find the gridpoints on which the particles should be loaded</span>
+    <span class="n">x_load</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span> <span class="p">(</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="n">p_xmin</span> <span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">p_xmax</span> <span class="p">)</span> <span class="p">]</span>
+    <span class="c1"># Deduce the total number of particles</span>
+    <span class="n">Npx</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x_load</span><span class="p">)</span> <span class="o">*</span> <span class="n">p_nx</span>
+    <span class="c1"># Reajust p_xmin and p_xmanx so that they match the grid</span>
+    <span class="k">if</span> <span class="n">Npx</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">p_xmin</span> <span class="o">=</span> <span class="n">x_load</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">-</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">dx</span>
+        <span class="n">p_xmax</span> <span class="o">=</span> <span class="n">x_load</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">dx</span>
+
+    <span class="k">return</span><span class="p">(</span> <span class="n">p_xmin</span><span class="p">,</span> <span class="n">p_xmax</span><span class="p">,</span> <span class="n">Npx</span> <span class="p">)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, FBPIC contributors.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.2.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
