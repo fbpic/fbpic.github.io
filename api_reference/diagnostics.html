@@ -192,81 +192,9 @@ adding or removing a corresponding diagnostic object in the list of diagnostics 
 <h2>Regular diagnostics<a class="headerlink" href="#regular-diagnostics" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="field-diagnostic">
 <h3>Field diagnostic<a class="headerlink" href="#field-diagnostic" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
-<dt id="fbpic.openpmd_diag.FieldDiagnostic">
-<em class="property">class </em><code class="descclassname">fbpic.openpmd_diag.</code><code class="descname">FieldDiagnostic</code><span class="sig-paren">(</span><em>period, fldobject, comm=None, fieldtypes=['rho', 'E', 'B', 'J'], write_dir=None, iteration_min=0, iteration_max=inf</em><span class="sig-paren">)</span><a class="headerlink" href="#fbpic.openpmd_diag.FieldDiagnostic" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize the field diagnostic.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>period</strong> (<em>int</em>) &#8211; The period of the diagnostics, in number of timesteps.
-(i.e. the diagnostics are written whenever the number
-of iterations is divisible by <cite>period</cite>)</li>
-<li><strong>fldobject</strong> (<em>a Fields object</em>) &#8211; Points to the data that has to be written at each output</li>
-<li><strong>comm</strong> (<em>an fbpic BoundaryCommunicator object</em><em> or </em><em>None</em>) &#8211; If this is not None, the data is gathered on the first proc,
-and the guard cells are removed from the output.
-Otherwise, each proc writes its own data, including guard cells.
-(Make sure to use different write_dir in this case.)</li>
-<li><strong>fieldtypes</strong> (<em>a list of strings</em><em>, </em><em>optional</em>) &#8211; The strings are either &#8220;rho&#8221;, &#8220;E&#8221;, &#8220;B&#8221; or &#8220;J&#8221;
-and indicate which field should be written.
-Default : all fields are written</li>
-<li><strong>write_dir</strong> (<em>string</em><em>, </em><em>optional</em>) &#8211; The POSIX path to the directory where the results are
-to be written. If none is provided, this will be the path
-of the current working directory.</li>
-<li><strong>iteration_max</strong> (<em>iteration_min</em><em>,</em><em></em>) &#8211; The iterations between which data should be written
-(<cite>iteration_min</cite> is inclusive, <cite>iteration_max</cite> is exclusive)</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
 </div>
 <div class="section" id="particle-diagnostic">
 <h3>Particle diagnostic<a class="headerlink" href="#particle-diagnostic" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
-<dt id="fbpic.openpmd_diag.ParticleDiagnostic">
-<em class="property">class </em><code class="descclassname">fbpic.openpmd_diag.</code><code class="descname">ParticleDiagnostic</code><span class="sig-paren">(</span><em>period, species={'electrons': None}, comm=None, particle_data=['position', 'momentum', 'weighting'], select=None, write_dir=None, iteration_min=0, iteration_max=inf</em><span class="sig-paren">)</span><a class="headerlink" href="#fbpic.openpmd_diag.ParticleDiagnostic" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize the particle diagnostics.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>period</strong> (<em>int</em>) &#8211; The period of the diagnostics, in number of timesteps.
-(i.e. the diagnostics are written whenever the number
-of iterations is divisible by <cite>period</cite>)</li>
-<li><strong>species</strong> (<em>a dictionary of Particle objects</em>) &#8211; The object that is written (e.g. elec)
-is assigned to the particleName of this species.
-(e.g. {&#8220;electrons&#8221; : elec })</li>
-<li><strong>comm</strong> (<em>an fbpic BoundaryCommunicator object</em><em> or </em><em>None</em>) &#8211; If this is not None, the data is gathered by the communicator, and
-guard cells are removed.
-Otherwise, each rank writes its own data, including guard cells.
-(Make sure to use different write_dir in this case.)</li>
-<li><strong>particle_data</strong> (<em>a list of strings</em><em>, </em><em>optional</em>) &#8211; The particle properties are given by:
-[&#8220;position&#8221;, &#8220;momentum&#8221;, &#8220;weighting&#8221;]
-for the coordinates x,y,z.
-By default, if a particle is tracked, its id is always written.</li>
-<li><strong>select</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; Either None or a dictionary of rules
-to select the particles, of the form
-&#8216;x&#8217; : [-4., 10.]   (Particles having x between -4 and 10 microns)
-&#8216;ux&#8217; : [-0.1, 0.1] (Particles having ux between -0.1 and 0.1 mc)
-&#8216;uz&#8217; : [5., None]  (Particles with uz above 5 mc)</li>
-<li><strong>write_dir</strong> (<em>a list of strings</em><em>, </em><em>optional</em>) &#8211; The POSIX path to the directory where the results are
-to be written. If none is provided, this will be the path
-of the current working directory.</li>
-<li><strong>iteration_max</strong> (<em>iteration_min</em><em>,</em><em></em>) &#8211; The iterations between which data should be written
-(<cite>iteration_min</cite> is inclusive, <cite>iteration_max</cite> is exclusive)</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
 </div>
 </div>
 <div class="section" id="back-transformed-diagnostics-boosted-frame-simulations">
@@ -275,78 +203,9 @@ of the current working directory.</li>
 during a boosted-frame simulation.</p>
 <div class="section" id="id1">
 <h3>Field diagnostic<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
-<dt id="fbpic.openpmd_diag.BoostedFieldDiagnostic">
-<em class="property">class </em><code class="descclassname">fbpic.openpmd_diag.</code><code class="descname">BoostedFieldDiagnostic</code><span class="sig-paren">(</span><em>zmin_lab, zmax_lab, v_lab, dt_snapshots_lab, Ntot_snapshots_lab, gamma_boost, period, fldobject, comm=None, fieldtypes=['E', 'B'], write_dir=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fbpic.openpmd_diag.BoostedFieldDiagnostic" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize diagnostics that retrieve the data in the lab frame,
-as a series of snapshot (one file per snapshot),
-within a virtual moving window defined by zmin_lab, zmax_lab, v_lab.</p>
-<p>The parameters defined below are specific to the back-transformed
-diagnostics. See the documentation of <cite>FieldDiagnostic</cite> for
-the other parameters.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>zmin_lab</strong> (<em>float</em><em> (</em><em>in meters</em><em>)</em><em></em>) &#8211; The position of the left edge of the virtual moving window,
-<em>in the lab frame</em>, at t=0</li>
-<li><strong>zmax_lab</strong> (<em>float</em><em> (</em><em>in meters</em><em>)</em><em></em>) &#8211; The position of the right edge of the virtual moving window,
-<em>in the lab frame</em>, at t=0</li>
-<li><strong>v_lab</strong> (<em>float</em><em> (</em><em>in m.s^-1</em><em>)</em><em></em>) &#8211; Speed of the moving window <em>in the lab frame</em></li>
-<li><strong>dt_snapshots_lab</strong> (<em>float</em><em> (</em><em>in seconds</em><em>)</em><em></em>) &#8211; Time interval <em>in the lab frame</em> between two successive snapshots</li>
-<li><strong>Ntot_snapshots_lab</strong> (<em>int</em>) &#8211; Total number of snapshots that this diagnostic will produce</li>
-<li><strong>period</strong> (<em>int</em>) &#8211; Number of iterations for which the data is accumulated in memory,
-before finally writing it to the disk.</li>
-<li><strong>fieldtypes</strong> (<em>a list of strings</em><em>, </em><em>optional</em>) &#8211; The strings are either &#8220;rho&#8221;, &#8220;E&#8221;, &#8220;B&#8221; or &#8220;J&#8221;
-and indicate which field should be written.
-Default : only &#8220;E&#8221; and &#8220;B&#8221; are written. This is because the
-backward Lorentz transform is not as precise for &#8220;rho&#8221; and &#8220;J&#8221; as
-for &#8220;E&#8221; and &#8220;B&#8221; (because &#8220;rho&#8221; and &#8220;J&#8221; are staggered in time).
-The user can still output &#8220;rho&#8221; and &#8220;J&#8221; by changing <cite>fieldtypes</cite>,
-but has to be aware that there may errors in the backward transform.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
 </div>
 <div class="section" id="id2">
 <h3>Particle diagnostic<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
-<dt id="fbpic.openpmd_diag.BoostedParticleDiagnostic">
-<em class="property">class </em><code class="descclassname">fbpic.openpmd_diag.</code><code class="descname">BoostedParticleDiagnostic</code><span class="sig-paren">(</span><em>zmin_lab, zmax_lab, v_lab, dt_snapshots_lab, Ntot_snapshots_lab, gamma_boost, period, fldobject, particle_data=['position', 'momentum', 'weighting'], select=None, write_dir=None, species={'electrons': None}, comm=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fbpic.openpmd_diag.BoostedParticleDiagnostic" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize diagnostics that retrieve the data in the lab frame,
-as a series of snapshot (one file per snapshot),
-within a virtual moving window defined by zmin_lab, zmax_lab, v_lab.</p>
-<p>The parameters defined below are specific to the back-transformed
-diagnostics. See the documentation of <cite>FieldDiagnostic</cite> for
-the other parameters.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>zmin_lab</strong> (<em>float</em><em> (</em><em>in meters</em><em>)</em><em></em>) &#8211; The position of the left edge of the virtual moving window,
-<em>in the lab frame</em>, at t=0</li>
-<li><strong>zmax_lab</strong> (<em>float</em><em> (</em><em>in meters</em><em>)</em><em></em>) &#8211; The position of the right edge of the virtual moving window,
-<em>in the lab frame</em>, at t=0</li>
-<li><strong>v_lab</strong> (<em>float</em><em> (</em><em>m.s^-1</em><em>)</em><em></em>) &#8211; Speed of the moving window <em>in the lab frame</em></li>
-<li><strong>dt_snapshots_lab</strong> (<em>float</em><em> (</em><em>seconds</em><em>)</em><em></em>) &#8211; Time interval <em>in the lab frame</em> between two successive snapshots</li>
-<li><strong>Ntot_snapshots_lab</strong> (<em>int</em>) &#8211; Total number of snapshots that this diagnostic will produce</li>
-<li><strong>period</strong> (<em>int</em>) &#8211; Number of iterations for which the data is accumulated in memory,
-before finally writing it to the disk.</li>
-<li><strong>fldobject</strong> (<em>a Fields object</em><em>,</em><em></em>) &#8211; The Fields object of the simulation, that is needed to
-extract some information about the grid</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
 </div>
 </div>
 </div>
