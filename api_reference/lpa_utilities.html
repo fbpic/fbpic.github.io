@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Laser-plasma utilities &mdash; FBPIC 0.2.0 documentation</title>
+  <title>Laser-plasma utilities &mdash; FBPIC 0.3.0 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="FBPIC 0.2.0 documentation" href="../index.html"/>
+    <link rel="top" title="FBPIC 0.3.0 documentation" href="../index.html"/>
         <link rel="up" title="API reference" href="api_reference.html"/>
         <link rel="prev" title="Checkpoints and restarts" href="checkpoint_restart.html"/> 
 
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.2.0
+                0.3.0
               </div>
             
           
@@ -183,12 +183,212 @@
 </div>
 <div class="section" id="laser-utility">
 <h2>Laser utility<a class="headerlink" href="#laser-utility" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="fbpic.lpa_utils.laser.add_laser">
+<code class="descclassname">fbpic.lpa_utils.laser.</code><code class="descname">add_laser</code><span class="sig-paren">(</span><em>sim</em>, <em>a0</em>, <em>w0</em>, <em>ctau</em>, <em>z0</em>, <em>zf=None</em>, <em>lambda0=8e-07</em>, <em>theta_pol=0.0</em>, <em>gamma_boost=None</em>, <em>method='direct'</em>, <em>fw_propagating=True</em>, <em>update_spectral=True</em>, <em>z0_antenna=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fbpic.lpa_utils.laser.add_laser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Introduce a linearly-polarized, Gaussian laser in the simulation</p>
+<p>The laser is either added directly to the interpolation grid initially
+(method=`direct`) or it is progressively emitted by an antenna
+(method=`antenna`)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>sim</strong> (<em>a Simulation object</em>) &#8211; The structure that contains the simulation.</li>
+<li><strong>a0</strong> (<em>float</em><em> (</em><em>unitless</em><em>)</em><em></em>) &#8211; The a0 of the pulse at focus (in the lab-frame).</li>
+<li><strong>w0</strong> (<em>float</em><em> (</em><em>in meters</em><em>)</em><em></em>) &#8211; The waist of the pulse at focus.</li>
+<li><strong>ctau</strong> (<em>float</em><em> (</em><em>in meters</em><em>)</em><em></em>) &#8211; The pulse length (in the lab-frame), defined as:
+E_laser ~ exp( - (z-ct)**2 / ctau**2 )</li>
+<li><strong>z0</strong> (<em>float</em><em> (</em><em>in meters</em><em>)</em><em></em>) &#8211; The position of the laser centroid relative to z=0 (in the lab-frame).</li>
+<li><strong>zf</strong> (<em>float</em><em> (</em><em>in meters</em><em>)</em><em></em><em>, </em><em>optional</em>) &#8211; The position of the laser focus relative to z=0 (in the lab-frame).
+Default: the laser focus is at z0.</li>
+<li><strong>lambda0</strong> (<em>float</em><em> (</em><em>in meters</em><em>)</em><em></em><em>, </em><em>optional</em>) &#8211; The central wavelength of the laser (in the lab-frame).
+Default: 0.8 microns (Ti:Sapph laser).</li>
+<li><strong>theta_pol</strong> (<em>float</em><em> (</em><em>in radians</em><em>)</em><em></em><em>, </em><em>optional</em>) &#8211; The angle of polarization with respect to the x axis.
+Default: 0 rad.</li>
+<li><strong>gamma_boost</strong> (<em>float</em><em>, </em><em>optional</em>) &#8211; When initializing the laser in a boosted frame, set the value of
+<cite>gamma_boost</cite> to the corresponding Lorentz factor. All the other
+quantities (ctau, zf, etc.) are to be given in the lab frame.</li>
+<li><strong>method</strong> (<em>string</em><em>, </em><em>optional</em>) &#8211; Whether to initialize the laser directly in the box (method=`direct`)
+or through a laser antenna (method=`antenna`)</li>
+<li><strong>fw_propagating</strong> (<em>bool</em><em>, </em><em>optional</em>) &#8211; Only for the <cite>direct</cite> method: Wether the laser is propagating in the
+forward or backward direction.</li>
+<li><strong>update_spectral</strong> (<em>bool</em><em>, </em><em>optional</em>) &#8211; Only for the <cite>direct</cite> method: Wether to update the fields in spectral
+space after modifying the fields on the interpolation grid.</li>
+<li><strong>z0_antenna</strong> (<em>float</em><em>, </em><em>optional</em><em> (</em><em>meters</em><em>)</em><em></em>) &#8211; Only for the <cite>antenna</cite> method: initial position (in the lab frame)
+of the antenna. If not provided, then the z0_antenna is set to zf.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 <div class="section" id="beam-utilities">
 <h2>Beam utilities<a class="headerlink" href="#beam-utilities" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="fbpic.lpa_utils.bunch.add_elec_bunch">
+<code class="descclassname">fbpic.lpa_utils.bunch.</code><code class="descname">add_elec_bunch</code><span class="sig-paren">(</span><em>sim</em>, <em>gamma0</em>, <em>n_e</em>, <em>p_zmin</em>, <em>p_zmax</em>, <em>p_rmin</em>, <em>p_rmax</em>, <em>p_nr=2</em>, <em>p_nz=2</em>, <em>p_nt=4</em>, <em>dens_func=None</em>, <em>boost=None</em>, <em>direction='forward'</em>, <em>filter_currents=True</em><span class="sig-paren">)</span><a class="headerlink" href="#fbpic.lpa_utils.bunch.add_elec_bunch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Introduce a simple relativistic electron bunch in the simulation,
+along with its space charge field.</p>
+<p>Uniform particle distribution with weights according to density function.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>sim</strong> (<em>a Simulation object</em>) &#8211; The structure that contains the simulation.</li>
+<li><strong>gamma0</strong> (<em>float</em>) &#8211; The Lorentz factor of the electrons</li>
+<li><strong>n_e</strong> (<em>float</em><em> (</em><em>in particles per m^3</em><em>)</em><em></em>) &#8211; Density of the electron bunch</li>
+<li><strong>p_zmin</strong> (<em>float</em><em> (</em><em>in meters</em><em>)</em><em></em>) &#8211; The minimal z position above which the particles are initialized</li>
+<li><strong>p_zmax</strong> (<em>float</em><em> (</em><em>in meters</em><em>)</em><em></em>) &#8211; The maximal z position below which the particles are initialized</li>
+<li><strong>p_rmin</strong> (<em>float</em><em> (</em><em>in meters</em><em>)</em><em></em>) &#8211; The minimal r position above which the particles are initialized</li>
+<li><strong>p_rmax</strong> (<em>float</em><em> (</em><em>in meters</em><em>)</em><em></em>) &#8211; The maximal r position below which the particles are initialized</li>
+<li><strong>p_nz</strong> (<em>int</em>) &#8211; Number of macroparticles per cell along the z directions</li>
+<li><strong>p_nr</strong> (<em>int</em>) &#8211; Number of macroparticles per cell along the r directions</li>
+<li><strong>p_nt</strong> (<em>int</em>) &#8211; Number of macroparticles along the theta direction</li>
+<li><strong>dens_func</strong> (<em>callable</em><em>, </em><em>optional</em>) &#8211; A function of the form :
+<cite>def dens_func( z, r ) ...</cite>
+where <cite>z</cite> and <cite>r</cite> are 1d arrays, and which returns
+a 1d array containing the density <em>relative to n_e</em>
+(i.e. a number between 0 and 1) at the given positions.</li>
+<li><strong>boost</strong> (<em>a BoostConverter object</em><em>, </em><em>optional</em>) &#8211; A BoostConverter object defining the Lorentz boost of
+the simulation.</li>
+<li><strong>filter_currents</strong> (<em>bool</em><em>, </em><em>optional</em>) &#8211; Whether to filter the currents in k space (True by default)</li>
+<li><strong>direction</strong> (<em>string</em><em>, </em><em>optional</em>) &#8211; Can be either &#8220;forward&#8221; or &#8220;backward&#8221;.
+Propagation direction of the beam.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="fbpic.lpa_utils.bunch.add_elec_bunch_gaussian">
+<code class="descclassname">fbpic.lpa_utils.bunch.</code><code class="descname">add_elec_bunch_gaussian</code><span class="sig-paren">(</span><em>sim</em>, <em>sig_r</em>, <em>sig_z</em>, <em>n_emit</em>, <em>gamma0</em>, <em>sig_gamma</em>, <em>Q</em>, <em>N</em>, <em>tf=0.0</em>, <em>zf=0.0</em>, <em>boost=None</em>, <em>filter_currents=True</em>, <em>save_beam=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fbpic.lpa_utils.bunch.add_elec_bunch_gaussian" title="Permalink to this definition">¶</a></dt>
+<dd><p>Introduce a relativistic Gaussian electron bunch in the simulation,
+along with its space charge field.</p>
+<p>The bunch is initialized with a normalized emittance <cite>n_emit</cite>,
+in such a way that it will be focused at time <cite>tf</cite>, at the position <cite>zf</cite>.
+Thus if <cite>tf</cite> is not 0, the bunch will be initially out of focus.
+(This does not take space charge effects into account.)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>sim</strong> (<em>a Simulation object</em>) &#8211; The structure that contains the simulation.</li>
+<li><strong>sig_r</strong> (<em>float</em><em> (</em><em>in meters</em><em>)</em><em></em>) &#8211; The transverse RMS bunch size.</li>
+<li><strong>sig_z</strong> (<em>float</em><em> (</em><em>in meters</em><em>)</em><em></em>) &#8211; The longitudinal RMS bunch size.</li>
+<li><strong>n_emit</strong> (<em>float</em><em> (</em><em>in meters</em><em>)</em><em></em>) &#8211; The normalized emittance of the bunch.</li>
+<li><strong>gamma0</strong> (<em>float</em>) &#8211; The Lorentz factor of the electrons.</li>
+<li><strong>sig_gamma</strong> (<em>float</em>) &#8211; The absolute energy spread of the bunch.</li>
+<li><strong>Q</strong> (<em>float</em><em> (</em><em>in Coulomb</em><em>)</em><em></em>) &#8211; The total charge of the bunch.</li>
+<li><strong>N</strong> (<em>int</em>) &#8211; The number of particles the bunch should consist of.</li>
+<li><strong>zf</strong> (<em>float</em><em> (</em><em>in meters</em><em>)</em><em></em><em>, </em><em>optional</em>) &#8211; Position of the focus.</li>
+<li><strong>tf</strong> (<em>float</em><em> (</em><em>in seconds</em><em>)</em><em></em><em>, </em><em>optional</em>) &#8211; Time at which the bunch reaches focus.</li>
+<li><strong>boost</strong> (<em>a BoostConverter object</em><em>, </em><em>optional</em>) &#8211; A BoostConverter object defining the Lorentz boost of
+the simulation.</li>
+<li><strong>filter_currents</strong> (<em>bool</em><em>, </em><em>optional</em>) &#8211; Whether to filter the currents in k space (True by default)</li>
+<li><strong>save_beam</strong> (<em>string</em><em>, </em><em>optional</em>) &#8211; Saves the generated beam distribution as an .npz file &#8220;string&#8221;.npz</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="fbpic.lpa_utils.bunch.add_elec_bunch_file">
+<code class="descclassname">fbpic.lpa_utils.bunch.</code><code class="descname">add_elec_bunch_file</code><span class="sig-paren">(</span><em>sim</em>, <em>filename</em>, <em>Q_tot</em>, <em>z_off=0.0</em>, <em>boost=None</em>, <em>filter_currents=True</em>, <em>direction='forward'</em><span class="sig-paren">)</span><a class="headerlink" href="#fbpic.lpa_utils.bunch.add_elec_bunch_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Introduce a relativistic electron bunch in the simulation,
+along with its space charge field, loading particles from text file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>sim</strong> (<em>a Simulation object</em>) &#8211; The structure that contains the simulation.</li>
+<li><strong>filename</strong> (<em>string</em>) &#8211; the file containing the particle phase space in seven columns
+all float, no header
+x [m]  y [m]  z [m]  ux [unitless]  uy [unitless]  uz [unitless]</li>
+<li><strong>Q_tot</strong> (<em>float</em><em> (</em><em>in Coulomb</em><em>)</em><em></em>) &#8211; total charge in bunch</li>
+<li><strong>z_off</strong> (<em>float</em><em> (</em><em>in meters</em><em>)</em><em></em>) &#8211; Shift the particle positions in z by z_off</li>
+<li><strong>boost</strong> (<em>a BoostConverter object</em><em>, </em><em>optional</em>) &#8211; A BoostConverter object defining the Lorentz boost of
+the simulation.</li>
+<li><strong>filter_currents</strong> (<em>bool</em><em>, </em><em>optional</em>) &#8211; Whether to filter the currents in k space (True by default)</li>
+<li><strong>direction</strong> (<em>string</em><em>, </em><em>optional</em>) &#8211; Can be either &#8220;forward&#8221; or &#8220;backward&#8221;.
+Propagation direction of the beam.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 <div class="section" id="external-fields">
 <h2>External fields<a class="headerlink" href="#external-fields" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="fbpic.lpa_utils.external_fields.ExternalField">
+<em class="property">class </em><code class="descclassname">fbpic.lpa_utils.external_fields.</code><code class="descname">ExternalField</code><span class="sig-paren">(</span><em>field_func</em>, <em>fieldtype</em>, <em>amplitude</em>, <em>length_scale</em>, <em>species=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fbpic.lpa_utils.external_fields.ExternalField" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize an ExternalField object, so that the function
+<cite>field_func</cite> is called at each time step on the field <cite>fieldtype</cite></p>
+<p>This object should be added to the list <cite>external_fields</cite>,
+which is an attribute of the Simulation object, so that the
+fields are applied at each timestep. (See the example below)</p>
+<p>The function <cite>field_func</cite> is automatically converted to a GPU
+function if needed, by using numba&#8217;s ufunc feature.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>field_func</strong> (<em>callable</em>) &#8211; <p>Function of the form <cite>field_func( F, x, y, z, t, amplitude,
+length_scale )</cite> and which returns the modified field F&#8217;</p>
+<p>This function will be called at each timestep, with:</p>
+<ul>
+<li>F: 1d array of shape (N_ptcl,), containing the field
+designated by fieldtype, gathered on the particles</li>
+<li>x, y, z: 1d arrays of shape (N_ptcl), containing the
+positions of the particles</li>
+<li>t: float, the time in the simulation</li>
+<li>amplitude and length_scale: floats that can be used within
+the function expression</li>
+</ul>
+<p><strong>WARNING:</strong> In the PIC loop, this function is called after
+the field gathering. Thus this function can potentially
+overwrite the fields that were gathered on the grid.
+To avoid this, use &#8220;return(F + external_field) &#8221; inside
+the definition of <cite>field_func</cite> instead of &#8220;return(external_field)&#8221;</p>
+<p><strong>WARNING:</strong> Inside the definition of <cite>field_func</cite> please use
+the <cite>math</cite> module for mathematical functions, instead of numpy.
+This will allow the function to be compiled for GPU.</p>
+</li>
+<li><strong>fieldtype</strong> (<em>string</em>) &#8211; Specifies on which field <cite>field_func</cite> will be applied.
+Either &#8216;Ex&#8217;, &#8216;Ey&#8217;, &#8216;Ez&#8217;, &#8216;Bx&#8217;, &#8216;By&#8217;, &#8216;Bz&#8217;</li>
+<li><strong>species</strong> (<em>a Particles object</em><em>, </em><em>optionals</em>) &#8211; The species on which the external field has to be applied.
+If no species is specified, the external field is applied
+to all particles.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Example</p>
+<p>In order to define a magnetic undulator, polarized along y, with
+a field of 1 Tesla and a period of 1 cm :</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">field_func</span><span class="p">(</span> <span class="n">F</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">t</span> <span class="p">,</span> <span class="n">amplitude</span><span class="p">,</span> <span class="n">length_scale</span> <span class="p">):</span>
+<span class="go">        return( F + amplitude * math.cos( 2*np.pi*z/length_scale ) )</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sim</span><span class="o">.</span><span class="n">external_fields</span> <span class="o">=</span> <span class="p">[</span>
+<span class="go">        ExternalField( field_func, &#39;By&#39;, 1., 1.e-2 ) ]</span>
+</pre></div>
+</div>
+</dd></dl>
+
 </div>
 </div>
 
@@ -234,7 +434,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.2.0',
+            VERSION:'0.3.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

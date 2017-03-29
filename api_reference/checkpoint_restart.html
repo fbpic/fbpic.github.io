@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Checkpoints and restarts &mdash; FBPIC 0.2.0 documentation</title>
+  <title>Checkpoints and restarts &mdash; FBPIC 0.3.0 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="FBPIC 0.2.0 documentation" href="../index.html"/>
+    <link rel="top" title="FBPIC 0.3.0 documentation" href="../index.html"/>
         <link rel="up" title="API reference" href="api_reference.html"/>
         <link rel="next" title="Laser-plasma utilities" href="lpa_utilities.html"/>
         <link rel="prev" title="The openPMD diagnostics" href="diagnostics.html"/> 
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                0.2.0
+                0.3.0
               </div>
             
           
@@ -183,9 +183,66 @@ clusters). In this case, thanks to checkpoints, the simulation can be restarted
 without having to run it again from the beginning.</p>
 <div class="section" id="setting-checkpoints">
 <h2>Setting checkpoints<a class="headerlink" href="#setting-checkpoints" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="fbpic.openpmd_diag.set_periodic_checkpoint">
+<code class="descclassname">fbpic.openpmd_diag.</code><code class="descname">set_periodic_checkpoint</code><span class="sig-paren">(</span><em>sim</em>, <em>period</em><span class="sig-paren">)</span><a class="headerlink" href="#fbpic.openpmd_diag.set_periodic_checkpoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set up periodic checkpoints of the simulation</p>
+<p>The checkpoints are saved in openPMD format, in the directory
+<cite>./checkpoints</cite>, with one subdirectory per process.
+All the field and particle information of each processor is saved.</p>
+<p>NB: Checkpoints are registered among the list of diagnostics
+<cite>diags</cite> of the Simulation object <cite>sim</cite>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>sim</strong> (<em>a Simulation object</em>) &#8211; The simulation that is to be saved in checkpoints</li>
+<li><strong>period</strong> (<em>integer</em>) &#8211; The number of PIC iteration between each checkpoint.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 <div class="section" id="restarting-a-simulation">
 <h2>Restarting a simulation<a class="headerlink" href="#restarting-a-simulation" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="fbpic.openpmd_diag.restart_from_checkpoint">
+<code class="descclassname">fbpic.openpmd_diag.</code><code class="descname">restart_from_checkpoint</code><span class="sig-paren">(</span><em>sim</em>, <em>iteration=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fbpic.openpmd_diag.restart_from_checkpoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fills the Simulation object <cite>sim</cite> with data saved in a checkpoint.</p>
+<p>More precisely, the following data from <cite>sim</cite> is overwritten:</p>
+<ul class="simple">
+<li>Current time and iteration number of the simulation</li>
+<li>Position of the boundaries of the simulation box</li>
+<li>Values of the field arrays</li>
+<li>Size and values of the particle arrays</li>
+</ul>
+<p>Any other information (e.g. diagnostics of the simulation, presence of a
+moving window, presence of a laser antenna, etc.) need to be set by hand.</p>
+<p>For this reason, a successful restart will often require to modify the
+original input script that produced the checkpoint, rather than to start
+a new input script from scratch.</p>
+<p>NB: This function should always be called <em>before</em> the initialization
+of the moving window, since the moving window infers the position of
+particle injection from the existing particle data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>sim</strong> (<em>a Simulation object</em>) &#8211; The Simulation object into which the checkpoint should be loaded</li>
+<li><strong>iteration</strong> (<em>integer</em><em> (</em><em>optional</em><em>)</em><em></em>) &#8211; The iteration number of the checkpoint from which to restart
+If None, the latest checkpoint available will be used.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 </div>
 
@@ -233,7 +290,7 @@ without having to run it again from the beginning.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.2.0',
+            VERSION:'0.3.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
