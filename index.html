@@ -13,6 +13,8 @@
 
   
   
+  
+  
 
   
 
@@ -30,6 +32,9 @@
   
 
   
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
     <link rel="top" title="FBPIC 0.2.0 documentation" href="#"/>
         <link rel="next" title="Overview of the code" href="overview.html"/> 
 
@@ -40,6 +45,7 @@
 
 <body class="wy-body-for-nav" role="document">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -80,7 +86,10 @@
           
             
             
-                <ul>
+              
+            
+            
+              <ul>
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Overview of the code</a></li>
 <li class="toctree-l1"><a class="reference internal" href="install/installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="how_to_run.html">How to run the code</a></li>
@@ -97,8 +106,10 @@
 
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="#">FBPIC</a>
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">FBPIC</a>
+        
       </nav>
 
 
@@ -107,23 +118,40 @@
         <div class="rst-content">
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="#">Docs</a> &raquo;</li>
-      
-    <li>FBPIC documentation</li>
+    
+      <li><a href="#">Docs</a> &raquo;</li>
+        
+      <li>FBPIC documentation</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
-            <a href="_sources/index.txt" rel="nofollow"> View page source</a>
+            
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -147,15 +175,9 @@ simulations, running the code on GPU can be up to <strong>40 times faster</stron
 than on CPU.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p>This is an Alpha release, and some parts of the code are not yet fully
-functional:</p>
-<ul class="last simple">
-<li>For <strong>multi</strong>-CPU and <strong>multi</strong>-GPU runs (using MPI), the code is not yet
-production-ready.</li>
-<li>Only linear shape factors (a.k.a. first-order shape factors) are implemented for the
-macroparticles. Third-order shape factors will be implemented in a
-future release</li>
-</ul>
+<p class="last">This is an Alpha release, and some parts of the code are not yet fully
+functional. In particular, for <strong>multi</strong>-CPU and <strong>multi</strong>-GPU runs
+(using MPI), the code is not yet production-ready.</p>
 </div>
 <div class="section" id="contents-of-the-documentation">
 <h2>Contents of the documentation<a class="headerlink" href="#contents-of-the-documentation" title="Permalink to this headline">¶</a></h2>
@@ -199,12 +221,15 @@ paper, which can be found <a class="reference external" href="http://www.science
 
 
            </div>
+           <div class="articleComments">
+            
+           </div>
           </div>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="overview.html" class="btn btn-neutral float-right" title="Overview of the code" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="overview.html" class="btn btn-neutral float-right" title="Overview of the code" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
     </div>
@@ -239,7 +264,8 @@ paper, which can be found <a class="reference external" href="http://www.science
             VERSION:'0.2.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="_static/jquery.js"></script>

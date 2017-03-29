@@ -13,6 +13,8 @@
 
   
   
+  
+  
 
   
 
@@ -30,6 +32,9 @@
   
 
   
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
     <link rel="top" title="FBPIC 0.2.0 documentation" href="../index.html"/>
         <link rel="up" title="API reference" href="api_reference.html"/>
         <link rel="next" title="The openPMD diagnostics" href="diagnostics.html"/>
@@ -42,6 +47,7 @@
 
 <body class="wy-body-for-nav" role="document">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -82,7 +88,10 @@
           
             
             
-                <ul class="current">
+              
+            
+            
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview of the code</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../install/installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../how_to_run.html">How to run the code</a></li>
@@ -105,8 +114,10 @@
 
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../index.html">FBPIC</a>
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">FBPIC</a>
+        
       </nav>
 
 
@@ -115,25 +126,42 @@
         <div class="rst-content">
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="api_reference.html">API reference</a> &raquo;</li>
-      
-    <li>The Simulation class</li>
+        
+      <li>The Simulation class</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
-            <a href="../_sources/api_reference/simulation.txt" rel="nofollow"> View page source</a>
+            
+            <a href="../_sources/api_reference/simulation.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -154,7 +182,7 @@ the simulation data, and has the high-level methods to perform the PIC cycle.</p
 </div></blockquote>
 <dl class="class">
 <dt id="fbpic.main.Simulation">
-<em class="property">class </em><code class="descclassname">fbpic.main.</code><code class="descname">Simulation</code><span class="sig-paren">(</span><em>Nz</em>, <em>zmax</em>, <em>Nr</em>, <em>rmax</em>, <em>Nm</em>, <em>dt</em>, <em>p_zmin</em>, <em>p_zmax</em>, <em>p_rmin</em>, <em>p_rmax</em>, <em>p_nz</em>, <em>p_nr</em>, <em>p_nt</em>, <em>n_e</em>, <em>zmin=0.0</em>, <em>n_order=-1</em>, <em>dens_func=None</em>, <em>filter_currents=True</em>, <em>v_comoving=None</em>, <em>use_galilean=False</em>, <em>initialize_ions=False</em>, <em>use_cuda=False</em>, <em>n_guard=50</em>, <em>exchange_period=None</em>, <em>boundaries='periodic'</em>, <em>gamma_boost=None</em>, <em>use_all_mpi_ranks=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/main.html#Simulation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.main.Simulation" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">fbpic.main.</code><code class="descname">Simulation</code><span class="sig-paren">(</span><em>Nz</em>, <em>zmax</em>, <em>Nr</em>, <em>rmax</em>, <em>Nm</em>, <em>dt</em>, <em>p_zmin</em>, <em>p_zmax</em>, <em>p_rmin</em>, <em>p_rmax</em>, <em>p_nz</em>, <em>p_nr</em>, <em>p_nt</em>, <em>n_e</em>, <em>zmin=0.0</em>, <em>n_order=-1</em>, <em>dens_func=None</em>, <em>filter_currents=True</em>, <em>v_comoving=None</em>, <em>use_galilean=False</em>, <em>initialize_ions=False</em>, <em>use_cuda=False</em>, <em>n_guard=50</em>, <em>exchange_period=None</em>, <em>boundaries='periodic'</em>, <em>gamma_boost=None</em>, <em>use_all_mpi_ranks=True</em>, <em>particle_shape='linear'</em><span class="sig-paren">)</span><a class="headerlink" href="#fbpic.main.Simulation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initializes a simulation, by creating the following structures:</p>
 <ul class="simple">
 <li>the <cite>Fields</cite> object, which contains the field data on the grids</li>
@@ -182,43 +210,43 @@ cell)</li>
 <li><strong>p_nz</strong> (<em>int</em>) &#8211; The number of macroparticles per cell along the z direction</li>
 <li><strong>p_nr</strong> (<em>int</em>) &#8211; The number of macroparticles per cell along the r direction</li>
 <li><strong>p_nt</strong> (<em>int</em>) &#8211; The number of macroparticles along the theta direction</li>
-<li><strong>n_e</strong> (<em>float (in particles per m^3)</em>) &#8211; Peak density of the electrons</li>
-<li><strong>n_order</strong> (<em>int, optional</em>) &#8211; The order of the stencil for the z derivatives.
+<li><strong>n_e</strong> (<em>float</em><em> (</em><em>in particles per m^3</em><em>)</em><em></em>) &#8211; Peak density of the electrons</li>
+<li><strong>n_order</strong> (<em>int</em><em>, </em><em>optional</em>) &#8211; The order of the stencil for the z derivatives.
 Use -1 for infinite order, otherwise use a positive, even
 number. In this case, the stencil extends up to n_order/2
 cells on each side.</li>
-<li><strong>zmin</strong> (<em>float, optional</em>) &#8211; The position of the edge of the simulation box.
+<li><strong>zmin</strong> (<em>float</em><em>, </em><em>optional</em>) &#8211; The position of the edge of the simulation box.
 (More precisely, the position of the edge of the first cell)</li>
-<li><strong>dens_func</strong> (<em>callable, optional</em>) &#8211; A function of the form:
+<li><strong>dens_func</strong> (<em>callable</em><em>, </em><em>optional</em>) &#8211; A function of the form:
 def dens_func( z, r ) ...
 where z and r are 1d arrays, and which returns
 a 1d array containing the density <em>relative to n</em>
 (i.e. a number between 0 and 1) at the given positions</li>
-<li><strong>initialize_ions</strong> (<em>bool, optional</em>) &#8211; Whether to initialize the neutralizing ions</li>
-<li><strong>filter_currents</strong> (<em>bool, optional</em>) &#8211; Whether to filter the currents and charge in k space</li>
-<li><strong>v_comoving</strong> (<em>float or None, optional</em>) &#8211; If this variable is None, the standard PSATD is used (default).
+<li><strong>initialize_ions</strong> (<em>bool</em><em>, </em><em>optional</em>) &#8211; Whether to initialize the neutralizing ions</li>
+<li><strong>filter_currents</strong> (<em>bool</em><em>, </em><em>optional</em>) &#8211; Whether to filter the currents and charge in k space</li>
+<li><strong>v_comoving</strong> (<em>float</em><em> or </em><em>None</em><em>, </em><em>optional</em>) &#8211; If this variable is None, the standard PSATD is used (default).
 Otherwise, the current is assumed to be &#8220;comoving&#8221;,
 i.e. constant with respect to (z - v_comoving * t).
 This can be done in two ways: either by
 - Using a PSATD scheme that takes this hypothesis into account
 - Solving the PSATD scheme in a Galilean frame</li>
-<li><strong>use_galilean</strong> (<em>bool, optional</em>) &#8211; Determines which one of the two above schemes is used
+<li><strong>use_galilean</strong> (<em>bool</em><em>, </em><em>optional</em>) &#8211; Determines which one of the two above schemes is used
 When use_galilean is true, the whole grid moves
 with a speed v_comoving</li>
-<li><strong>use_cuda</strong> (<em>bool, optional</em>) &#8211; Wether to use CUDA (GPU) acceleration</li>
-<li><strong>n_guard</strong> (<em>int, optional</em>) &#8211; Number of guard cells to use at the left and right of
+<li><strong>use_cuda</strong> (<em>bool</em><em>, </em><em>optional</em>) &#8211; Wether to use CUDA (GPU) acceleration</li>
+<li><strong>n_guard</strong> (<em>int</em><em>, </em><em>optional</em>) &#8211; Number of guard cells to use at the left and right of
 a domain, when using MPI.</li>
-<li><strong>exchange_period</strong> (<em>int, optional</em>) &#8211; Number of iteration before which the particles are exchanged
+<li><strong>exchange_period</strong> (<em>int</em><em>, </em><em>optional</em>) &#8211; Number of iteration before which the particles are exchanged
 and the window is moved (the two operations are simultaneous)
 If set to None, the particles are exchanged every n_guard/2</li>
-<li><strong>boundaries</strong> (<em>string, optional</em>) &#8211; Indicates how to exchange the fields at the left and right
+<li><strong>boundaries</strong> (<em>string</em><em>, </em><em>optional</em>) &#8211; Indicates how to exchange the fields at the left and right
 boundaries of the global simulation box.
 Either &#8216;periodic&#8217; or &#8216;open&#8217;</li>
-<li><strong>gamma_boost</strong> (<em>float, optional</em>) &#8211; When initializing the laser in a boosted frame, set the
+<li><strong>gamma_boost</strong> (<em>float</em><em>, </em><em>optional</em>) &#8211; When initializing the laser in a boosted frame, set the
 value of <cite>gamma_boost</cite> to the corresponding Lorentz factor.
 All the other quantities (zmin, zmax, n_e, etc.) are to be given
 in the lab frame.</li>
-<li><strong>use_all_mpi_ranks</strong> (<em>bool, optional</em>) &#8211; <p>When launching the simulation with mpirun:</p>
+<li><strong>use_all_mpi_ranks</strong> (<em>bool</em><em>, </em><em>optional</em>) &#8211; <p>When launching the simulation with mpirun:</p>
 <ul>
 <li>if <cite>use_all_mpi_ranks</cite> is True (default):
 All the MPI ranks will contribute to the same simulation,
@@ -230,6 +258,11 @@ make sure that your input script is written so that the input
 parameters and output folder depend on the MPI rank.</li>
 </ul>
 </li>
+<li><strong>particle_shape</strong> (<em>str</em><em>, </em><em>optional</em>) &#8211; Set the particle shape for the charge/current deposition.
+Possible values are &#8216;cubic&#8217;, &#8216;linear&#8217; and &#8216;linear_non_atomic&#8217;.
+While &#8216;cubic&#8217; corresponds to third order shapes and &#8216;linear&#8217;
+to first order shapes, &#8216;linear_non_atomic&#8217; uses an equivalent
+deposition scheme to &#8216;linear&#8217; which avoids atomics on the GPU.</li>
 </ul>
 </td>
 </tr>
@@ -237,21 +270,21 @@ parameters and output folder depend on the MPI rank.</li>
 </table>
 <dl class="method">
 <dt id="fbpic.main.Simulation.set_moving_window">
-<code class="descname">set_moving_window</code><span class="sig-paren">(</span><em>v=299792458.0</em>, <em>ux_m=0.0</em>, <em>uy_m=0.0</em>, <em>uz_m=0.0</em>, <em>ux_th=0.0</em>, <em>uy_th=0.0</em>, <em>uz_th=0.0</em>, <em>gamma_boost=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/main.html#Simulation.set_moving_window"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.main.Simulation.set_moving_window" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_moving_window</code><span class="sig-paren">(</span><em>v=299792458.0</em>, <em>ux_m=0.0</em>, <em>uy_m=0.0</em>, <em>uz_m=0.0</em>, <em>ux_th=0.0</em>, <em>uy_th=0.0</em>, <em>uz_th=0.0</em>, <em>gamma_boost=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fbpic.main.Simulation.set_moving_window" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initializes a moving window for the simulation.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>v</strong> (<em>float (in meters per seconds), optional</em>) &#8211; The speed of the moving window</li>
-<li><strong>ux_m</strong> (<em>float (dimensionless), optional</em>) &#8211; Normalized mean momenta of the injected particles along x</li>
-<li><strong>uy_m</strong> (<em>float (dimensionless), optional</em>) &#8211; Normalized mean momenta of the injected particles along y</li>
-<li><strong>uz_m</strong> (<em>float (dimensionless), optional</em>) &#8211; Normalized mean momenta of the injected particles along z</li>
-<li><strong>ux_th</strong> (<em>float (dimensionless), optional</em>) &#8211; Normalized thermal momenta of the injected particles along x</li>
-<li><strong>uy_th</strong> (<em>float (dimensionless), optional</em>) &#8211; Normalized thermal momenta of the injected particles along y</li>
-<li><strong>uz_th</strong> (<em>float (dimensionless), optional</em>) &#8211; Normalized thermal momenta of the injected particles along z</li>
-<li><strong>gamma_boost</strong> (<em>float, optional</em>) &#8211; When initializing a moving window in a boosted frame, set the
+<li><strong>v</strong> (<em>float</em><em> (</em><em>in meters per seconds</em><em>)</em><em></em><em>, </em><em>optional</em>) &#8211; The speed of the moving window</li>
+<li><strong>ux_m</strong> (<em>float</em><em> (</em><em>dimensionless</em><em>)</em><em></em><em>, </em><em>optional</em>) &#8211; Normalized mean momenta of the injected particles along x</li>
+<li><strong>uy_m</strong> (<em>float</em><em> (</em><em>dimensionless</em><em>)</em><em></em><em>, </em><em>optional</em>) &#8211; Normalized mean momenta of the injected particles along y</li>
+<li><strong>uz_m</strong> (<em>float</em><em> (</em><em>dimensionless</em><em>)</em><em></em><em>, </em><em>optional</em>) &#8211; Normalized mean momenta of the injected particles along z</li>
+<li><strong>ux_th</strong> (<em>float</em><em> (</em><em>dimensionless</em><em>)</em><em></em><em>, </em><em>optional</em>) &#8211; Normalized thermal momenta of the injected particles along x</li>
+<li><strong>uy_th</strong> (<em>float</em><em> (</em><em>dimensionless</em><em>)</em><em></em><em>, </em><em>optional</em>) &#8211; Normalized thermal momenta of the injected particles along y</li>
+<li><strong>uz_th</strong> (<em>float</em><em> (</em><em>dimensionless</em><em>)</em><em></em><em>, </em><em>optional</em>) &#8211; Normalized thermal momenta of the injected particles along z</li>
+<li><strong>gamma_boost</strong> (<em>float</em><em>, </em><em>optional</em>) &#8211; When initializing a moving window in a boosted frame, set the
 value of <cite>gamma_boost</cite> to the corresponding Lorentz factor.
 Quantities like uz_m of the injected particles will be
 automatically Lorentz-transformed.
@@ -266,22 +299,22 @@ will not work if any of ux_th, uy_th, uz_th, ux_m, uy_m is nonzero)</li>
 
 <dl class="method">
 <dt id="fbpic.main.Simulation.step">
-<code class="descname">step</code><span class="sig-paren">(</span><em>N=1</em>, <em>correct_currents=True</em>, <em>correct_divE=False</em>, <em>use_true_rho=False</em>, <em>move_positions=True</em>, <em>move_momenta=True</em>, <em>show_progress=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/main.html#Simulation.step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.main.Simulation.step" title="Permalink to this definition">¶</a></dt>
+<code class="descname">step</code><span class="sig-paren">(</span><em>N=1</em>, <em>correct_currents=True</em>, <em>correct_divE=False</em>, <em>use_true_rho=False</em>, <em>move_positions=True</em>, <em>move_momenta=True</em>, <em>show_progress=True</em><span class="sig-paren">)</span><a class="headerlink" href="#fbpic.main.Simulation.step" title="Permalink to this definition">¶</a></dt>
 <dd><p>Perform N PIC cycles.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>N</strong> (<em>int, optional</em>) &#8211; The number of timesteps to take
+<li><strong>N</strong> (<em>int</em><em>, </em><em>optional</em>) &#8211; The number of timesteps to take
 Default: N=1</li>
-<li><strong>correct_currents</strong> (<em>bool, optional</em>) &#8211; Whether to correct the currents in spectral space</li>
-<li><strong>correct_divE</strong> (<em>bool, optional</em>) &#8211; Whether to correct the divergence of E in spectral space</li>
-<li><strong>use_true_rho</strong> (<em>bool, optional</em>) &#8211; Wether to use the true rho deposited on the grid for the
+<li><strong>correct_currents</strong> (<em>bool</em><em>, </em><em>optional</em>) &#8211; Whether to correct the currents in spectral space</li>
+<li><strong>correct_divE</strong> (<em>bool</em><em>, </em><em>optional</em>) &#8211; Whether to correct the divergence of E in spectral space</li>
+<li><strong>use_true_rho</strong> (<em>bool</em><em>, </em><em>optional</em>) &#8211; Wether to use the true rho deposited on the grid for the
 field push or not. (requires initialize_ions = True)</li>
-<li><strong>move_positions</strong> (<em>bool, optional</em>) &#8211; Whether to move or freeze the particles&#8217; positions</li>
-<li><strong>move_momenta</strong> (<em>bool, optional</em>) &#8211; Whether to move or freeze the particles&#8217; momenta</li>
-<li><strong>show_progress</strong> (<em>bool, optional</em>) &#8211; Whether to show a progression bar</li>
+<li><strong>move_positions</strong> (<em>bool</em><em>, </em><em>optional</em>) &#8211; Whether to move or freeze the particles&#8217; positions</li>
+<li><strong>move_momenta</strong> (<em>bool</em><em>, </em><em>optional</em>) &#8211; Whether to move or freeze the particles&#8217; momenta</li>
+<li><strong>show_progress</strong> (<em>bool</em><em>, </em><em>optional</em>) &#8211; Whether to show a progression bar</li>
 </ul>
 </td>
 </tr>
@@ -295,15 +328,18 @@ field push or not. (requires initialize_ions = True)</li>
 
 
            </div>
+           <div class="articleComments">
+            
+           </div>
           </div>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="diagnostics.html" class="btn btn-neutral float-right" title="The openPMD diagnostics" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="diagnostics.html" class="btn btn-neutral float-right" title="The openPMD diagnostics" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="api_reference.html" class="btn btn-neutral" title="API reference" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="api_reference.html" class="btn btn-neutral" title="API reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -337,7 +373,8 @@ field push or not. (requires initialize_ions = True)</li>
             VERSION:'0.2.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../_static/jquery.js"></script>

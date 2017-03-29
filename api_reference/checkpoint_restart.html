@@ -13,6 +13,8 @@
 
   
   
+  
+  
 
   
 
@@ -30,6 +32,9 @@
   
 
   
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
     <link rel="top" title="FBPIC 0.2.0 documentation" href="../index.html"/>
         <link rel="up" title="API reference" href="api_reference.html"/>
         <link rel="next" title="Laser-plasma utilities" href="lpa_utilities.html"/>
@@ -42,6 +47,7 @@
 
 <body class="wy-body-for-nav" role="document">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -82,7 +88,10 @@
           
             
             
-                <ul class="current">
+              
+            
+            
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview of the code</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../install/installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../how_to_run.html">How to run the code</a></li>
@@ -109,8 +118,10 @@
 
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../index.html">FBPIC</a>
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">FBPIC</a>
+        
       </nav>
 
 
@@ -119,25 +130,42 @@
         <div class="rst-content">
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="api_reference.html">API reference</a> &raquo;</li>
-      
-    <li>Checkpoints and restarts</li>
+        
+      <li>Checkpoints and restarts</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
-            <a href="../_sources/api_reference/checkpoint_restart.txt" rel="nofollow"> View page source</a>
+            
+            <a href="../_sources/api_reference/checkpoint_restart.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -157,7 +185,7 @@ without having to run it again from the beginning.</p>
 <h2>Setting checkpoints<a class="headerlink" href="#setting-checkpoints" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="fbpic.openpmd_diag.set_periodic_checkpoint">
-<code class="descclassname">fbpic.openpmd_diag.</code><code class="descname">set_periodic_checkpoint</code><span class="sig-paren">(</span><em>sim</em>, <em>period</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/openpmd_diag/checkpoint_restart.html#set_periodic_checkpoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.openpmd_diag.set_periodic_checkpoint" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">fbpic.openpmd_diag.</code><code class="descname">set_periodic_checkpoint</code><span class="sig-paren">(</span><em>sim</em>, <em>period</em><span class="sig-paren">)</span><a class="headerlink" href="#fbpic.openpmd_diag.set_periodic_checkpoint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set up periodic checkpoints of the simulation</p>
 <p>The checkpoints are saved in openPMD format, in the directory
 <cite>./checkpoints</cite>, with one subdirectory per process.
@@ -183,7 +211,7 @@ All the field and particle information of each processor is saved.</p>
 <h2>Restarting a simulation<a class="headerlink" href="#restarting-a-simulation" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="fbpic.openpmd_diag.restart_from_checkpoint">
-<code class="descclassname">fbpic.openpmd_diag.</code><code class="descname">restart_from_checkpoint</code><span class="sig-paren">(</span><em>sim</em>, <em>iteration=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/openpmd_diag/checkpoint_restart.html#restart_from_checkpoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.openpmd_diag.restart_from_checkpoint" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">fbpic.openpmd_diag.</code><code class="descname">restart_from_checkpoint</code><span class="sig-paren">(</span><em>sim</em>, <em>iteration=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fbpic.openpmd_diag.restart_from_checkpoint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fills the Simulation object <cite>sim</cite> with data saved in a checkpoint.</p>
 <p>More precisely, the following data from <cite>sim</cite> is overwritten:</p>
 <ul class="simple">
@@ -206,7 +234,7 @@ particle injection from the existing particle data.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>sim</strong> (<em>a Simulation object</em>) &#8211; The Simulation object into which the checkpoint should be loaded</li>
-<li><strong>iteration</strong> (<em>integer (optional)</em>) &#8211; The iteration number of the checkpoint from which to restart
+<li><strong>iteration</strong> (<em>integer</em><em> (</em><em>optional</em><em>)</em><em></em>) &#8211; The iteration number of the checkpoint from which to restart
 If None, the latest checkpoint available will be used.</li>
 </ul>
 </td>
@@ -220,15 +248,18 @@ If None, the latest checkpoint available will be used.</li>
 
 
            </div>
+           <div class="articleComments">
+            
+           </div>
           </div>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="lpa_utilities.html" class="btn btn-neutral float-right" title="Laser-plasma utilities" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="lpa_utilities.html" class="btn btn-neutral float-right" title="Laser-plasma utilities" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="diagnostics.html" class="btn btn-neutral" title="The openPMD diagnostics" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="diagnostics.html" class="btn btn-neutral" title="The openPMD diagnostics" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -262,7 +293,8 @@ If None, the latest checkpoint available will be used.</li>
             VERSION:'0.2.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../_static/jquery.js"></script>
