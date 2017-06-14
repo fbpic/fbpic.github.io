@@ -1,0 +1,338 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Profiling the code &mdash; FBPIC 0.4.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="FBPIC 0.4.0 documentation" href="../index.html"/>
+        <link rel="up" title="Advanced use" href="advanced.html"/>
+        <link rel="next" title="Performing parameter scans in parallel" href="parameter_scans.html"/>
+        <link rel="prev" title="Advanced use" href="advanced.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> FBPIC
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.4.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview of the code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how_to_run.html">How to run the code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api_reference/api_reference.html">API reference</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="advanced.html">Advanced use</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Profiling the code</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#quick-text-based-profiling">Quick text-based profiling</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#on-cpu">On CPU</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#on-gpu">On GPU</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#using-a-visual-profiler">Using a visual profiler</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">On CPU</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id2">On GPU</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="parameter_scans.html">Performing parameter scans in parallel</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">FBPIC</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="advanced.html">Advanced use</a> &raquo;</li>
+        
+      <li>Profiling the code</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/advanced/profiling.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="profiling-the-code">
+<h1>Profiling the code<a class="headerlink" href="#profiling-the-code" title="Permalink to this headline">¶</a></h1>
+<p>Profiling the code consists in finding which parts of the algorithm <strong>dominate
+the computational time</strong>, for your particular simulation setup.</p>
+<div class="section" id="quick-text-based-profiling">
+<h2>Quick text-based profiling<a class="headerlink" href="#quick-text-based-profiling" title="Permalink to this headline">¶</a></h2>
+<p>The tools below allow to dump timing statistics into a simple text file, so
+as to quickly profile the execution of a simulation.</p>
+<div class="section" id="on-cpu">
+<h3>On CPU<a class="headerlink" href="#on-cpu" title="Permalink to this headline">¶</a></h3>
+<p>Run the code with
+<a class="reference external" href="http://docs.python.org/2/library/profile.html">cProfile</a> :</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">cProfile</span> <span class="o">-</span><span class="n">s</span> <span class="n">time</span> <span class="n">fbpic_script</span><span class="o">.</span><span class="n">py</span> <span class="o">&gt;</span> <span class="n">cpu</span><span class="o">.</span><span class="n">log</span>
+</pre></div>
+</div>
+<p>and then open the file <code class="docutils literal"><span class="pre">cpu.log</span></code> with a text editor.</p>
+</div>
+<div class="section" id="on-gpu">
+<h3>On GPU<a class="headerlink" href="#on-gpu" title="Permalink to this headline">¶</a></h3>
+<p>Run the code with
+<a class="reference external" href="http://docs.nvidia.com/cuda/profiler-users-guide/index.html#nvprof-overview">nvprof</a> :</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">nvprof</span> <span class="o">--</span><span class="n">log</span><span class="o">-</span><span class="n">file</span> <span class="n">gpu</span><span class="o">.</span><span class="n">log</span> <span class="n">python</span> <span class="n">fbpic_script</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<p>in order to profile the device-side (i.e. GPU-side) code alone, or</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">nvprof</span> <span class="o">--</span><span class="n">log</span><span class="o">-</span><span class="n">file</span> <span class="n">gpu</span><span class="o">.</span><span class="n">log</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">cProfile</span> <span class="o">-</span><span class="n">s</span> <span class="n">time</span> <span class="n">fbpic_script</span><span class="o">.</span><span class="n">py</span> <span class="o">&gt;</span> <span class="n">cpu</span><span class="o">.</span><span class="n">log</span>
+</pre></div>
+</div>
+<p>in order to simultaneously profile the device-side (i.e. GPU-side)
+and host-side (i.e. CPU-side) code.
+Then open the files <code class="docutils literal"><span class="pre">gpu.log</span></code> and/or <code class="docutils literal"><span class="pre">cpu.log</span></code> with a text editor.</p>
+</div>
+</div>
+<div class="section" id="using-a-visual-profiler">
+<h2>Using a visual profiler<a class="headerlink" href="#using-a-visual-profiler" title="Permalink to this headline">¶</a></h2>
+<p>For a more detailed analysis, you can use visual profilers (i.e. profilers with
+a graphical user interface).</p>
+<div class="section" id="id1">
+<h3>On CPU<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>Run the code with
+<a class="reference external" href="http://docs.python.org/2/library/profile.html">cProfile</a>, using binary output:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">cProfile</span> <span class="o">-</span><span class="n">o</span> <span class="n">cpu</span><span class="o">.</span><span class="n">prof</span> <span class="n">fbpic_script</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<p>and then open the file <code class="docutils literal"><span class="pre">cpu.prof</span></code> with <a class="reference external" href="https://jiffyclub.github.io/snakeviz/">snakeviz</a></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">snakeviz</span> <span class="n">cpu</span><span class="o">.</span><span class="n">prof</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id2">
+<h3>On GPU<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<p>Run the code with
+<a class="reference external" href="http://docs.nvidia.com/cuda/profiler-users-guide/index.html#nvprof-overview">nvprof</a>,
+using binary output:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">nvprof</span> <span class="o">-</span><span class="n">o</span> <span class="n">gpu</span><span class="o">.</span><span class="n">prof</span> <span class="n">python</span> <span class="n">fbpic_script</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<p>and then launch
+<a class="reference external" href="http://docs.nvidia.com/cuda/profiler-users-guide/index.html#visual">nvvp</a>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">nvvp</span>
+</pre></div>
+</div>
+<p>And click <code class="docutils literal"><span class="pre">File</span> <span class="pre">&gt;</span> <span class="pre">Open</span></code>, in order to select the file <code class="docutils literal"><span class="pre">gpu.prof</span></code>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>You do not need to run <strong>snakeviz</strong> or <strong>nvvp</strong> on the same machine on
+which the simulation was run. (In particular, <strong>nvvp</strong> does not need to
+have access to a GPU.) This means for example that, if your simulation
+was run on a remote cluster, you can simply transfer the
+files <strong>cpu.prof</strong> and/or <strong>gpu.prof</strong> to your local computer, and run
+<strong>snakeviz</strong> or <strong>nvvp</strong> locally.</p>
+<p class="last">You can install <strong>nvvp</strong> on your local computer by installing the
+<a class="reference external" href="http://developer.nvidia.com/cuda-downloads">cuda toolkit</a>.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">When profiling the code with <strong>nvprof</strong>, the profiling data can quickly
+become very large. Therefore we recommend to profile the code only
+on a small number of PIC iterations (&lt;1000).</p>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="parameter_scans.html" class="btn btn-neutral float-right" title="Performing parameter scans in parallel" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="advanced.html" class="btn btn-neutral" title="Advanced use" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, FBPIC contributors.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.4.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

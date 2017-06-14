@@ -8,9 +8,11 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fbpic.openpmd_diag.field_diag &mdash; FBPIC 0.2.0 documentation</title>
+  <title>fbpic.openpmd_diag.field_diag &mdash; FBPIC 0.4.0 documentation</title>
   
 
+  
+  
   
   
 
@@ -30,7 +32,10 @@
   
 
   
-    <link rel="top" title="FBPIC 0.2.0 documentation" href="../../../index.html"/>
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
+    <link rel="top" title="FBPIC 0.4.0 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -40,6 +45,7 @@
 
 <body class="wy-body-for-nav" role="document">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -59,7 +65,7 @@
             
             
               <div class="version">
-                0.2.0
+                0.4.0
               </div>
             
           
@@ -80,11 +86,15 @@
           
             
             
-                <ul>
+              
+            
+            
+              <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../overview.html">Overview of the code</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../install/installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../how_to_run.html">How to run the code</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api_reference/api_reference.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../advanced/advanced.html">Advanced use</a></li>
 </ul>
 
             
@@ -97,8 +107,10 @@
 
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../../../index.html">FBPIC</a>
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">FBPIC</a>
+        
       </nav>
 
 
@@ -111,19 +123,36 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../../../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="../../index.html">Module code</a> &raquo;</li>
-      
-    <li>fbpic.openpmd_diag.field_diag</li>
+        
+      <li>fbpic.openpmd_diag.field_diag</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
+            
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -146,7 +175,8 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">period</span><span class="p">,</span> <span class="n">fldobject</span><span class="p">,</span> <span class="n">comm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">fieldtypes</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;rho&quot;</span><span class="p">,</span> <span class="s2">&quot;E&quot;</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="s2">&quot;J&quot;</span><span class="p">],</span> <span class="n">write_dir</span><span class="o">=</span><span class="kc">None</span> <span class="p">)</span> <span class="p">:</span>
+                 <span class="n">fieldtypes</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;rho&quot;</span><span class="p">,</span> <span class="s2">&quot;E&quot;</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="s2">&quot;J&quot;</span><span class="p">],</span> <span class="n">write_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">iteration_min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">iteration_max</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span> <span class="p">)</span> <span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize the field diagnostic.</span>
 
@@ -175,9 +205,14 @@
 <span class="sd">            The POSIX path to the directory where the results are</span>
 <span class="sd">            to be written. If none is provided, this will be the path</span>
 <span class="sd">            of the current working directory.</span>
+
+<span class="sd">        iteration_min, iteration_max: ints</span>
+<span class="sd">            The iterations between which data should be written</span>
+<span class="sd">            (`iteration_min` is inclusive, `iteration_max` is exclusive)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># General setup</span>
-        <span class="n">OpenPMDDiagnostic</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">period</span><span class="p">,</span> <span class="n">comm</span><span class="p">,</span> <span class="n">write_dir</span><span class="p">)</span>
+        <span class="n">OpenPMDDiagnostic</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">period</span><span class="p">,</span> <span class="n">comm</span><span class="p">,</span> <span class="n">write_dir</span><span class="p">,</span>
+                                    <span class="n">iteration_min</span><span class="p">,</span> <span class="n">iteration_max</span> <span class="p">)</span>
 
         <span class="c1"># Register the arguments</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fld</span> <span class="o">=</span> <span class="n">fldobject</span>
@@ -450,7 +485,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">dr</span><span class="p">,</span> <span class="n">dz</span> <span class="p">])</span>
         <span class="n">dset</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;gridGlobalOffset&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">rmin</span><span class="p">,</span> <span class="n">zmin</span> <span class="p">])</span>
-        <span class="n">dset</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;axisLabels&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="n">b</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">b</span><span class="s1">&#39;z&#39;</span> <span class="p">])</span>
+        <span class="n">dset</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;axisLabels&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="sa">b</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="sa">b</span><span class="s1">&#39;z&#39;</span> <span class="p">])</span>
 
         <span class="c1"># Generic attributes</span>
         <span class="n">dset</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;dataOrder&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">string_</span><span class="p">(</span><span class="s2">&quot;C&quot;</span><span class="p">)</span>
@@ -475,6 +510,9 @@
         <span class="n">dset</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;position&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">])</span></div>
 </pre></div>
 
+           </div>
+           <div class="articleComments">
+            
            </div>
           </div>
           <footer>
@@ -506,16 +544,17 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.2.0',
+            VERSION:'0.4.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../../../_static/jquery.js"></script>
       <script type="text/javascript" src="../../../_static/underscore.js"></script>
       <script type="text/javascript" src="../../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

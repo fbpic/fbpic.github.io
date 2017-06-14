@@ -8,9 +8,11 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fbpic.openpmd_diag.checkpoint_restart &mdash; FBPIC 0.2.0 documentation</title>
+  <title>fbpic.openpmd_diag.checkpoint_restart &mdash; FBPIC 0.4.0 documentation</title>
   
 
+  
+  
   
   
 
@@ -30,7 +32,10 @@
   
 
   
-    <link rel="top" title="FBPIC 0.2.0 documentation" href="../../../index.html"/>
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
+    <link rel="top" title="FBPIC 0.4.0 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -40,6 +45,7 @@
 
 <body class="wy-body-for-nav" role="document">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -59,7 +65,7 @@
             
             
               <div class="version">
-                0.2.0
+                0.4.0
               </div>
             
           
@@ -80,11 +86,15 @@
           
             
             
-                <ul>
+              
+            
+            
+              <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../overview.html">Overview of the code</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../install/installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../how_to_run.html">How to run the code</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api_reference/api_reference.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../advanced/advanced.html">Advanced use</a></li>
 </ul>
 
             
@@ -97,8 +107,10 @@
 
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../../../index.html">FBPIC</a>
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">FBPIC</a>
+        
       </nav>
 
 
@@ -111,19 +123,36 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../../../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="../../index.html">Module code</a> &raquo;</li>
-      
-    <li>fbpic.openpmd_diag.checkpoint_restart</li>
+        
+      <li>fbpic.openpmd_diag.checkpoint_restart</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
+            
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -143,35 +172,38 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">.field_diag</span> <span class="k">import</span> <span class="n">FieldDiagnostic</span>
 <span class="kn">from</span> <span class="nn">.particle_diag</span> <span class="k">import</span> <span class="n">ParticleDiagnostic</span>
+<span class="kn">from</span> <span class="nn">mpi4py.MPI</span> <span class="k">import</span> <span class="n">COMM_WORLD</span> <span class="k">as</span> <span class="n">comm</span>
 
 <div class="viewcode-block" id="set_periodic_checkpoint"><a class="viewcode-back" href="../../../api_reference/checkpoint_restart.html#fbpic.openpmd_diag.set_periodic_checkpoint">[docs]</a><span class="k">def</span> <span class="nf">set_periodic_checkpoint</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">period</span> <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Set up periodic checkpoints of the simulation</span>
 
-<span class="sd">    The checkpoints are saved in openPMD format, in the directory </span>
-<span class="sd">    `./checkpoints`, with one subdirectory per process. </span>
+<span class="sd">    The checkpoints are saved in openPMD format, in the directory</span>
+<span class="sd">    `./checkpoints`, with one subdirectory per process.</span>
 <span class="sd">    All the field and particle information of each processor is saved.</span>
-<span class="sd"> </span>
+
 <span class="sd">    NB: Checkpoints are registered among the list of diagnostics</span>
-<span class="sd">    `diags` of the Simulation object `sim`. </span>
+<span class="sd">    `diags` of the Simulation object `sim`.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    sim: a Simulation object</span>
 <span class="sd">       The simulation that is to be saved in checkpoints</span>
-<span class="sd">    </span>
+
 <span class="sd">    period: integer</span>
 <span class="sd">       The number of PIC iteration between each checkpoint.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Only processor 0 creates a directory where checkpoints will be stored</span>
     <span class="c1"># Make sure that all processors wait until this directory is created</span>
-    <span class="k">if</span> <span class="n">sim</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">rank</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="c1"># (Use the global MPI communicator instead of the `BoundaryCommunicator`</span>
+    <span class="c1"># so that this still works in the case `use_all_ranks=False`)</span>
+    <span class="k">if</span> <span class="n">comm</span><span class="o">.</span><span class="n">rank</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s1">&#39;./checkpoints&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
             <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="s1">&#39;./checkpoints&#39;</span><span class="p">)</span>
-    <span class="n">sim</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">mpi_comm</span><span class="o">.</span><span class="n">Barrier</span><span class="p">()</span>
-    
+    <span class="n">comm</span><span class="o">.</span><span class="n">Barrier</span><span class="p">()</span>
+
     <span class="c1"># Choose the name of the directory: one directory per processor</span>
-    <span class="n">write_dir</span> <span class="o">=</span> <span class="s1">&#39;checkpoints/proc</span><span class="si">%d</span><span class="s1">/&#39;</span> <span class="o">%</span><span class="n">sim</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">rank</span>
+    <span class="n">write_dir</span> <span class="o">=</span> <span class="s1">&#39;checkpoints/proc</span><span class="si">%d</span><span class="s1">/&#39;</span> <span class="o">%</span><span class="n">comm</span><span class="o">.</span><span class="n">rank</span>
 
     <span class="c1"># Register a periodic FieldDiagnostic in the diagnostics of the simulation</span>
     <span class="n">sim</span><span class="o">.</span><span class="n">diags</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
@@ -196,17 +228,17 @@
 <span class="sd">    - Values of the field arrays</span>
 <span class="sd">    - Size and values of the particle arrays</span>
 
-<span class="sd">    Any other information (e.g. diagnostics of the simulation, presence of a </span>
+<span class="sd">    Any other information (e.g. diagnostics of the simulation, presence of a</span>
 <span class="sd">    moving window, presence of a laser antenna, etc.) need to be set by hand.</span>
 
-<span class="sd">    For this reason, a successful restart will often require to modify the </span>
-<span class="sd">    original input script that produced the checkpoint, rather than to start </span>
+<span class="sd">    For this reason, a successful restart will often require to modify the</span>
+<span class="sd">    original input script that produced the checkpoint, rather than to start</span>
 <span class="sd">    a new input script from scratch.</span>
 
 <span class="sd">    NB: This function should always be called *before* the initialization</span>
 <span class="sd">    of the moving window, since the moving window infers the position of</span>
 <span class="sd">    particle injection from the existing particle data.</span>
-<span class="sd"> </span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    sim: a Simulation object</span>
@@ -225,19 +257,21 @@
         <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Please install it from https://github.com/openPMD/openPMD-viewer&#39;</span><span class="p">)</span>
 
     <span class="c1"># Verify that the restart is valid (only for the first processor)</span>
-    <span class="k">if</span> <span class="n">sim</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">rank</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="c1"># (Use the global MPI communicator instead of the `BoundaryCommunicator`,</span>
+    <span class="c1"># so that this also works for `use_all_ranks=False`)</span>
+    <span class="k">if</span> <span class="n">comm</span><span class="o">.</span><span class="n">rank</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">check_restart</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">iteration</span> <span class="p">)</span>
-    <span class="n">sim</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">mpi_comm</span><span class="o">.</span><span class="n">Barrier</span><span class="p">()</span>
+    <span class="n">comm</span><span class="o">.</span><span class="n">Barrier</span><span class="p">()</span>
 
     <span class="c1"># Choose the name of the directory from which to restart:</span>
     <span class="c1"># one directory per processor</span>
-    <span class="n">checkpoint_dir</span> <span class="o">=</span> <span class="s1">&#39;checkpoints/proc</span><span class="si">%d</span><span class="s1">/hdf5&#39;</span> <span class="o">%</span><span class="n">sim</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">rank</span>
+    <span class="n">checkpoint_dir</span> <span class="o">=</span> <span class="s1">&#39;checkpoints/proc</span><span class="si">%d</span><span class="s1">/hdf5&#39;</span> <span class="o">%</span><span class="n">comm</span><span class="o">.</span><span class="n">rank</span>
     <span class="n">ts</span> <span class="o">=</span> <span class="n">OpenPMDTimeSeries</span><span class="p">(</span> <span class="n">checkpoint_dir</span> <span class="p">)</span>
     <span class="c1"># Select the iteration, and its index</span>
     <span class="k">if</span> <span class="n">iteration</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">iteration</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">iterations</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">i_iteration</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">iterations</span><span class="o">.</span><span class="n">index</span><span class="p">(</span> <span class="n">iteration</span> <span class="p">)</span>
-    
+
     <span class="c1"># Modify parameters of the simulation</span>
     <span class="n">sim</span><span class="o">.</span><span class="n">iteration</span> <span class="o">=</span> <span class="n">iteration</span>
     <span class="n">sim</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">t</span><span class="p">[</span> <span class="n">i_iteration</span> <span class="p">]</span>
@@ -245,8 +279,8 @@
     <span class="c1"># Load the particles</span>
     <span class="c1"># Loop through the different species</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sim</span><span class="o">.</span><span class="n">ptcl</span><span class="p">)):</span>
-        <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;species </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span><span class="n">i</span>        
-        <span class="n">load_species</span><span class="p">(</span> <span class="n">sim</span><span class="o">.</span><span class="n">ptcl</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">name</span><span class="p">,</span> <span class="n">ts</span><span class="p">,</span> <span class="n">iteration</span><span class="p">)</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;species </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span><span class="n">i</span>
+        <span class="n">load_species</span><span class="p">(</span> <span class="n">sim</span><span class="o">.</span><span class="n">ptcl</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">name</span><span class="p">,</span> <span class="n">ts</span><span class="p">,</span> <span class="n">iteration</span><span class="p">,</span> <span class="n">sim</span><span class="o">.</span><span class="n">comm</span> <span class="p">)</span>
 
     <span class="c1"># Load the fields</span>
     <span class="c1"># Loop through the different modes</span>
@@ -255,16 +289,7 @@
         <span class="k">for</span> <span class="n">fieldtype</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;E&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;J&#39;</span><span class="p">]:</span>
             <span class="k">for</span> <span class="n">coord</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="s1">&#39;t&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">]:</span>
                 <span class="n">load_fields</span><span class="p">(</span> <span class="n">sim</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">[</span><span class="n">m</span><span class="p">],</span> <span class="n">fieldtype</span><span class="p">,</span>
-                             <span class="n">coord</span><span class="p">,</span> <span class="n">ts</span><span class="p">,</span> <span class="n">iteration</span> <span class="p">)</span>
-        <span class="c1"># Load the charge density (to prepare charge conservation)</span>
-        <span class="n">load_fields</span><span class="p">(</span> <span class="n">sim</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">[</span><span class="n">m</span><span class="p">],</span> <span class="s1">&#39;rho&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">ts</span><span class="p">,</span> <span class="n">iteration</span> <span class="p">)</span>
-
-    <span class="c1"># Convert &#39;rho&#39; to spectral space (&#39;rho_prev&#39;)</span>
-    <span class="c1"># to prepare charge conservation for the first timestep</span>
-    <span class="n">sim</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">interp2spect</span><span class="p">(</span> <span class="s1">&#39;rho_prev&#39;</span> <span class="p">)</span>
-    <span class="k">if</span> <span class="n">sim</span><span class="o">.</span><span class="n">filter_currents</span><span class="p">:</span>
-        <span class="n">sim</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">filter_spect</span><span class="p">(</span> <span class="s1">&#39;rho_prev&#39;</span> <span class="p">)</span></div>
-
+                             <span class="n">coord</span><span class="p">,</span> <span class="n">ts</span><span class="p">,</span> <span class="n">iteration</span> <span class="p">)</span></div>
 
 <span class="k">def</span> <span class="nf">check_restart</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">iteration</span> <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Verify that the restart is valid.&quot;&quot;&quot;</span>
@@ -281,7 +306,7 @@
     <span class="k">for</span> <span class="n">directory</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="s1">&#39;./checkpoints&#39;</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">regex_matcher</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">nproc</span> <span class="o">+=</span> <span class="mi">1</span>
-    <span class="k">if</span> <span class="n">nproc</span> <span class="o">!=</span> <span class="n">sim</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">nproc</span> <span class="o">!=</span> <span class="n">comm</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;For a valid restart, the current simulation &#39;</span>
         <span class="s1">&#39;should use </span><span class="si">%d</span><span class="s1"> MPI processes.&#39;</span> <span class="o">%</span><span class="n">nproc</span><span class="p">)</span>
 
@@ -301,7 +326,7 @@
 <span class="sd">    ----------</span>
 <span class="sd">    grid: an InterpolationGrid object</span>
 <span class="sd">       The object into which data should be loaded</span>
-<span class="sd">    </span>
+
 <span class="sd">    fieldtype: string</span>
 <span class="sd">       Either &#39;E&#39;, &#39;B&#39;, &#39;J&#39; or &#39;rho&#39;. Indicates which field to load.</span>
 
@@ -356,14 +381,14 @@
     <span class="n">length_new</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">zmax</span> <span class="o">-</span> <span class="n">grid</span><span class="o">.</span><span class="n">zmin</span>
     <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span> <span class="n">length_old</span><span class="p">,</span> <span class="n">length_new</span> <span class="p">)</span>
 
-<span class="k">def</span> <span class="nf">load_species</span><span class="p">(</span> <span class="n">species</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">ts</span><span class="p">,</span> <span class="n">iteration</span> <span class="p">):</span>
+<span class="k">def</span> <span class="nf">load_species</span><span class="p">(</span> <span class="n">species</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">ts</span><span class="p">,</span> <span class="n">iteration</span><span class="p">,</span> <span class="n">comm</span> <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Read the species data from the checkpoint `ts`</span>
 <span class="sd">    and load it into the Species object `species`</span>
 
 <span class="sd">    Parameters:</span>
 <span class="sd">    -----------</span>
-<span class="sd">    species: a Species object </span>
+<span class="sd">    species: a Species object</span>
 <span class="sd">        The object into which data is loaded</span>
 
 <span class="sd">    name: string</span>
@@ -374,9 +399,12 @@
 
 <span class="sd">    iteration: integer</span>
 <span class="sd">        The iteration at which to load the checkpoint</span>
+
+<span class="sd">    comm: an fbpic.BoundaryCommunicator object</span>
+<span class="sd">        Contains information about the number of procs</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Get the particles&#39; positions (convert to meters)</span>
-    <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">get_particle</span><span class="p">(</span> 
+    <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">get_particle</span><span class="p">(</span>
                 <span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">],</span> <span class="n">iteration</span><span class="o">=</span><span class="n">iteration</span><span class="p">,</span> <span class="n">species</span><span class="o">=</span><span class="n">name</span> <span class="p">)</span>
     <span class="n">species</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">species</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">species</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="mf">1.e-6</span><span class="o">*</span><span class="n">x</span><span class="p">,</span> <span class="mf">1.e-6</span><span class="o">*</span><span class="n">y</span><span class="p">,</span> <span class="mf">1.e-6</span><span class="o">*</span><span class="n">z</span>
     <span class="c1"># Get the particles&#39; momenta</span>
@@ -388,14 +416,20 @@
     <span class="c1"># Get the inverse gamma</span>
     <span class="n">species</span><span class="o">.</span><span class="n">inv_gamma</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span>
         <span class="mi">1</span> <span class="o">+</span> <span class="n">species</span><span class="o">.</span><span class="n">ux</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">species</span><span class="o">.</span><span class="n">uy</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">species</span><span class="o">.</span><span class="n">uz</span><span class="o">**</span><span class="mi">2</span> <span class="p">)</span>
+    <span class="c1"># Take into account the fact that the arrays are resized</span>
+    <span class="n">Ntot</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">species</span><span class="o">.</span><span class="n">w</span><span class="p">)</span>
+    <span class="n">species</span><span class="o">.</span><span class="n">Ntot</span> <span class="o">=</span> <span class="n">Ntot</span>
+
+    <span class="c1"># Check if the particles where tracked</span>
+    <span class="k">if</span> <span class="s2">&quot;id&quot;</span> <span class="ow">in</span> <span class="n">ts</span><span class="o">.</span><span class="n">avail_record_components</span><span class="p">[</span><span class="n">name</span><span class="p">]:</span>
+        <span class="n">pid</span><span class="p">,</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">get_particle</span><span class="p">(</span> <span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">],</span> <span class="n">iteration</span><span class="o">=</span><span class="n">iteration</span><span class="p">,</span> <span class="n">species</span><span class="o">=</span><span class="n">name</span> <span class="p">)</span>
+        <span class="n">species</span><span class="o">.</span><span class="n">track</span><span class="p">(</span> <span class="n">comm</span> <span class="p">)</span>
+        <span class="n">species</span><span class="o">.</span><span class="n">tracker</span><span class="o">.</span><span class="n">overwrite_ids</span><span class="p">(</span> <span class="n">pid</span><span class="p">,</span> <span class="n">comm</span> <span class="p">)</span>
 
     <span class="c1"># As a safe-guard, check that the loaded data is in float64</span>
     <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">,</span> <span class="s1">&#39;ux&#39;</span><span class="p">,</span> <span class="s1">&#39;uy&#39;</span><span class="p">,</span> <span class="s1">&#39;uz&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="s1">&#39;inv_gamma&#39;</span> <span class="p">]:</span>
         <span class="k">assert</span> <span class="nb">getattr</span><span class="p">(</span> <span class="n">species</span><span class="p">,</span> <span class="n">attr</span> <span class="p">)</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span>
-    
-    <span class="c1"># Take into account the fact that the arrays are resized</span>
-    <span class="n">Ntot</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">species</span><span class="o">.</span><span class="n">w</span><span class="p">)</span>
-    <span class="n">species</span><span class="o">.</span><span class="n">Ntot</span> <span class="o">=</span> <span class="n">Ntot</span>
+
     <span class="c1"># Field arrays</span>
     <span class="n">species</span><span class="o">.</span><span class="n">Ez</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span> <span class="n">Ntot</span> <span class="p">)</span>
     <span class="n">species</span><span class="o">.</span><span class="n">Ex</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span> <span class="n">Ntot</span> <span class="p">)</span>
@@ -411,6 +445,9 @@
         <span class="n">species</span><span class="o">.</span><span class="n">sorted</span> <span class="o">=</span> <span class="kc">False</span>
 </pre></div>
 
+           </div>
+           <div class="articleComments">
+            
            </div>
           </div>
           <footer>
@@ -442,16 +479,17 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.2.0',
+            VERSION:'0.4.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../../../_static/jquery.js"></script>
       <script type="text/javascript" src="../../../_static/underscore.js"></script>
       <script type="text/javascript" src="../../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

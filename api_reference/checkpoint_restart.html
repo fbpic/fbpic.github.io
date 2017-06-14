@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Checkpoints and restarts &mdash; FBPIC 0.3.0 documentation</title>
+  <title>Checkpoints and restarts &mdash; FBPIC 0.4.0 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="FBPIC 0.3.0 documentation" href="../index.html"/>
+    <link rel="top" title="FBPIC 0.4.0 documentation" href="../index.html"/>
         <link rel="up" title="API reference" href="api_reference.html"/>
         <link rel="next" title="Laser-plasma utilities" href="lpa_utilities.html"/>
         <link rel="prev" title="The openPMD diagnostics" href="diagnostics.html"/> 
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                0.3.0
+                0.4.0
               </div>
             
           
@@ -106,6 +106,7 @@
 <li class="toctree-l2"><a class="reference internal" href="lpa_utilities.html">Laser-plasma utilities</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/advanced.html">Advanced use</a></li>
 </ul>
 
             
@@ -185,7 +186,7 @@ without having to run it again from the beginning.</p>
 <h2>Setting checkpoints<a class="headerlink" href="#setting-checkpoints" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="fbpic.openpmd_diag.set_periodic_checkpoint">
-<code class="descclassname">fbpic.openpmd_diag.</code><code class="descname">set_periodic_checkpoint</code><span class="sig-paren">(</span><em>sim</em>, <em>period</em><span class="sig-paren">)</span><a class="headerlink" href="#fbpic.openpmd_diag.set_periodic_checkpoint" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">fbpic.openpmd_diag.</code><code class="descname">set_periodic_checkpoint</code><span class="sig-paren">(</span><em>sim</em>, <em>period</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/openpmd_diag/checkpoint_restart.html#set_periodic_checkpoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.openpmd_diag.set_periodic_checkpoint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set up periodic checkpoints of the simulation</p>
 <p>The checkpoints are saved in openPMD format, in the directory
 <cite>./checkpoints</cite>, with one subdirectory per process.
@@ -197,8 +198,8 @@ All the field and particle information of each processor is saved.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>sim</strong> (<em>a Simulation object</em>) &#8211; The simulation that is to be saved in checkpoints</li>
-<li><strong>period</strong> (<em>integer</em>) &#8211; The number of PIC iteration between each checkpoint.</li>
+<li><strong>sim</strong> (<em>a Simulation object</em>) – The simulation that is to be saved in checkpoints</li>
+<li><strong>period</strong> (<em>integer</em>) – The number of PIC iteration between each checkpoint.</li>
 </ul>
 </td>
 </tr>
@@ -211,7 +212,7 @@ All the field and particle information of each processor is saved.</p>
 <h2>Restarting a simulation<a class="headerlink" href="#restarting-a-simulation" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="fbpic.openpmd_diag.restart_from_checkpoint">
-<code class="descclassname">fbpic.openpmd_diag.</code><code class="descname">restart_from_checkpoint</code><span class="sig-paren">(</span><em>sim</em>, <em>iteration=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fbpic.openpmd_diag.restart_from_checkpoint" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">fbpic.openpmd_diag.</code><code class="descname">restart_from_checkpoint</code><span class="sig-paren">(</span><em>sim</em>, <em>iteration=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/openpmd_diag/checkpoint_restart.html#restart_from_checkpoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.openpmd_diag.restart_from_checkpoint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fills the Simulation object <cite>sim</cite> with data saved in a checkpoint.</p>
 <p>More precisely, the following data from <cite>sim</cite> is overwritten:</p>
 <ul class="simple">
@@ -233,8 +234,8 @@ particle injection from the existing particle data.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>sim</strong> (<em>a Simulation object</em>) &#8211; The Simulation object into which the checkpoint should be loaded</li>
-<li><strong>iteration</strong> (<em>integer</em><em> (</em><em>optional</em><em>)</em><em></em>) &#8211; The iteration number of the checkpoint from which to restart
+<li><strong>sim</strong> (<em>a Simulation object</em>) – The Simulation object into which the checkpoint should be loaded</li>
+<li><strong>iteration</strong> (<em>integer</em><em> (</em><em>optional</em><em>)</em>) – The iteration number of the checkpoint from which to restart
 If None, the latest checkpoint available will be used.</li>
 </ul>
 </td>
@@ -290,7 +291,7 @@ If None, the latest checkpoint available will be used.</li>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.3.0',
+            VERSION:'0.4.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
@@ -300,7 +301,7 @@ If None, the latest checkpoint available will be used.</li>
       <script type="text/javascript" src="../_static/jquery.js"></script>
       <script type="text/javascript" src="../_static/underscore.js"></script>
       <script type="text/javascript" src="../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 
