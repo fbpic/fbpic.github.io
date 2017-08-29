@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>The openPMD diagnostics &mdash; FBPIC 0.4.0 documentation</title>
+  <title>The openPMD diagnostics &mdash; FBPIC 0.5.0 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="FBPIC 0.4.0 documentation" href="../index.html"/>
+    <link rel="top" title="FBPIC 0.5.0 documentation" href="../index.html"/>
         <link rel="up" title="API reference" href="api_reference.html"/>
         <link rel="next" title="Checkpoints and restarts" href="checkpoint_restart.html"/>
         <link rel="prev" title="The Simulation class" href="simulation.html"/> 
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                0.4.0
+                0.5.0
               </div>
             
           
@@ -305,7 +305,9 @@ Default : only “E” and “B” are written. This is because the
 backward Lorentz transform is not as precise for “rho” and “J” as
 for “E” and “B” (because “rho” and “J” are staggered in time).
 The user can still output “rho” and “J” by changing <cite>fieldtypes</cite>,
-but has to be aware that there may errors in the backward transform.</li>
+but has to be aware that there may errors in the backward transform.
+Moreover, writing rho/J slows down the simulation, as these fields
+are then brought from spectral to real space, at each iteration.</li>
 </ul>
 </td>
 </tr>
@@ -396,7 +398,7 @@ extract some information about the grid</li>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.4.0',
+            VERSION:'0.5.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

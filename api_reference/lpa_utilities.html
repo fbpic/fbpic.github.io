@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Laser-plasma utilities &mdash; FBPIC 0.4.0 documentation</title>
+  <title>Laser-plasma utilities &mdash; FBPIC 0.5.0 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="FBPIC 0.4.0 documentation" href="../index.html"/>
+    <link rel="top" title="FBPIC 0.5.0 documentation" href="../index.html"/>
         <link rel="up" title="API reference" href="api_reference.html"/>
         <link rel="next" title="Advanced use" href="../advanced/advanced.html"/>
         <link rel="prev" title="Checkpoints and restarts" href="checkpoint_restart.html"/> 
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                0.4.0
+                0.5.0
               </div>
             
           
@@ -296,7 +296,7 @@ Thus if <cite>tf</cite> is not 0, the bunch will be initially out of focus.
 <li><strong>n_emit</strong> (<em>float</em><em> (</em><em>in meters</em><em>)</em>) – The normalized emittance of the bunch.</li>
 <li><strong>gamma0</strong> (<em>float</em>) – The Lorentz factor of the electrons.</li>
 <li><strong>sig_gamma</strong> (<em>float</em>) – The absolute energy spread of the bunch.</li>
-<li><strong>Q</strong> (<em>float</em><em> (</em><em>in Coulomb</em><em>)</em>) – The total charge of the bunch.</li>
+<li><strong>Q</strong> (<em>float</em><em> (</em><em>in Coulomb</em><em>)</em>) – The total charge of the bunch (should be a positive number)</li>
 <li><strong>N</strong> (<em>int</em>) – The number of particles the bunch should consist of.</li>
 <li><strong>zf</strong> (<em>float</em><em> (</em><em>in meters</em><em>)</em><em>, </em><em>optional</em>) – Position of the focus.</li>
 <li><strong>tf</strong> (<em>float</em><em> (</em><em>in seconds</em><em>)</em><em>, </em><em>optional</em>) – Time at which the bunch reaches focus.</li>
@@ -352,7 +352,7 @@ along with its space charge field, loading particles from text file.</p>
 <li><strong>filename</strong> (<em>string</em>) – the file containing the particle phase space in seven columns
 all float, no header
 x [m]  y [m]  z [m]  ux [unitless]  uy [unitless]  uz [unitless]</li>
-<li><strong>Q_tot</strong> (<em>float</em><em> (</em><em>in Coulomb</em><em>)</em>) – total charge in bunch</li>
+<li><strong>Q_tot</strong> (<em>float</em><em> (</em><em>in Coulomb</em><em>)</em>) – Total charge in bunch (should be a positive number)</li>
 <li><strong>z_off</strong> (<em>float</em><em> (</em><em>in meters</em><em>)</em>) – Shift the particle positions in z by z_off</li>
 <li><strong>boost</strong> (<em>a BoostConverter object</em><em>, </em><em>optional</em>) – A BoostConverter object defining the Lorentz boost of
 the simulation.</li>
@@ -473,7 +473,7 @@ a field of 1 Tesla and a period of 1 cm :</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.4.0',
+            VERSION:'0.5.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

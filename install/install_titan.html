@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Installation on Titan (OLCF) &mdash; FBPIC 0.4.0 documentation</title>
+  <title>Installation on Titan (OLCF) &mdash; FBPIC 0.5.0 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="FBPIC 0.4.0 documentation" href="../index.html"/>
+    <link rel="top" title="FBPIC 0.5.0 documentation" href="../index.html"/>
         <link rel="up" title="Installation" href="installation.html"/>
         <link rel="next" title="Installation on JURECA (JSC)" href="install_jureca.html"/>
         <link rel="prev" title="Installation on a local computer" href="install_local.html"/> 
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                0.4.0
+                0.5.0
               </div>
             
           
@@ -110,6 +110,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="install_jureca.html">Installation on JURECA (JSC)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="install_lawrencium.html">Installation on Lawrencium (LBNL)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install_cori_edison.html">Installation on Cori and Edison (NERSC)</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../how_to_run.html">How to run the code</a></li>
@@ -226,15 +227,11 @@ that you install locally.</p>
 <h3>Installation of FBPIC and its dependencies<a class="headerlink" href="#installation-of-fbpic-and-its-dependencies" title="Permalink to this headline">¶</a></h3>
 <ul>
 <li><p class="first">Install the dependencies by typing</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">numba</span> <span class="n">accelerate</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">numba</span>
 <span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">pyfftw</span>
+<span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">numba</span> <span class="n">pyculib</span>
 </pre></div>
 </div>
-<p>(The <code class="docutils literal"><span class="pre">accelerate</span></code> package is not free, but there is a 30-day free
-trial period, which starts when the above command is entered. For
-further use beyond 30 days, one option is to obtain an academic
-license, which is also free. To do so, please visit <a class="reference external" href="https://www.continuum.io/anaconda-academic-subscriptions-available">this
-page</a>.)</p>
 </li>
 <li><p class="first">Clone and install the <code class="docutils literal"><span class="pre">fbpic</span></code> repository using git</p>
 </li>
@@ -336,7 +333,7 @@ aprun -n &lt;number of nodes&gt; -N 1 python fbpic_script.py
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.4.0',
+            VERSION:'0.5.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

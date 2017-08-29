@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fbpic.openpmd_diag.boosted_particle_diag &mdash; FBPIC 0.4.0 documentation</title>
+  <title>fbpic.openpmd_diag.boosted_particle_diag &mdash; FBPIC 0.5.0 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="FBPIC 0.4.0 documentation" href="../../../index.html"/>
+    <link rel="top" title="FBPIC 0.5.0 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -65,7 +65,7 @@
             
             
               <div class="version">
-                0.4.0
+                0.5.0
               </div>
             
           
@@ -176,10 +176,10 @@
 <span class="kn">from</span> <span class="nn">scipy.constants</span> <span class="k">import</span> <span class="n">c</span><span class="p">,</span> <span class="n">e</span>
 <span class="kn">from</span> <span class="nn">.particle_diag</span> <span class="k">import</span> <span class="n">ParticleDiagnostic</span>
 
-<span class="c1"># If cuda is installed, it potentially allows to use a GPU</span>
-<span class="kn">from</span> <span class="nn">numba</span> <span class="k">import</span> <span class="n">cuda</span>
-<span class="k">if</span> <span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">():</span>
-    <span class="kn">from</span> <span class="nn">.cuda_methods</span> <span class="k">import</span> <span class="n">extract_particles_from_gpu</span>
+<span class="c1"># Check if CUDA is available, then import CUDA functions</span>
+<span class="kn">from</span> <span class="nn">fbpic.cuda_utils</span> <span class="k">import</span> <span class="n">cuda_installed</span>
+<span class="k">if</span> <span class="n">cuda_installed</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.cuda_methods</span> <span class="k">import</span> <span class="n">extract_slice_from_gpu</span>
 
 <div class="viewcode-block" id="BoostedParticleDiagnostic"><a class="viewcode-back" href="../../../api_reference/diagnostics.html#fbpic.openpmd_diag.BoostedParticleDiagnostic">[docs]</a><span class="k">class</span> <span class="nc">BoostedParticleDiagnostic</span><span class="p">(</span><span class="n">ParticleDiagnostic</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -803,9 +803,9 @@
         <span class="k">if</span> <span class="n">species</span><span class="o">.</span><span class="n">use_cuda</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
             <span class="c1"># Create a dictionary containing the particle attributes</span>
             <span class="n">particle_data</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="s1">&#39;x&#39;</span> <span class="p">:</span> <span class="n">species</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span> <span class="p">:</span> <span class="n">species</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span> <span class="p">:</span> <span class="n">species</span><span class="o">.</span><span class="n">z</span><span class="p">,</span>
-                <span class="s1">&#39;ux&#39;</span> <span class="p">:</span> <span class="n">species</span><span class="o">.</span><span class="n">ux</span><span class="p">,</span> <span class="s1">&#39;uy&#39;</span> <span class="p">:</span> <span class="n">species</span><span class="o">.</span><span class="n">uy</span><span class="p">,</span> <span class="s1">&#39;uz&#39;</span> <span class="p">:</span> <span class="n">species</span><span class="o">.</span><span class="n">uz</span><span class="p">,</span>
-                <span class="s1">&#39;w&#39;</span> <span class="p">:</span> <span class="n">species</span><span class="o">.</span><span class="n">w</span><span class="p">,</span> <span class="s1">&#39;inv_gamma&#39;</span> <span class="p">:</span> <span class="n">species</span><span class="o">.</span><span class="n">inv_gamma</span> <span class="p">}</span>
+                <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="n">species</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="n">species</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">:</span> <span class="n">species</span><span class="o">.</span><span class="n">z</span><span class="p">,</span>
+                <span class="s1">&#39;ux&#39;</span><span class="p">:</span> <span class="n">species</span><span class="o">.</span><span class="n">ux</span><span class="p">,</span> <span class="s1">&#39;uy&#39;</span> <span class="p">:</span> <span class="n">species</span><span class="o">.</span><span class="n">uy</span><span class="p">,</span> <span class="s1">&#39;uz&#39;</span><span class="p">:</span> <span class="n">species</span><span class="o">.</span><span class="n">uz</span><span class="p">,</span>
+                <span class="s1">&#39;w&#39;</span><span class="p">:</span> <span class="n">species</span><span class="o">.</span><span class="n">w</span><span class="p">,</span> <span class="s1">&#39;inv_gamma&#39;</span><span class="p">:</span> <span class="n">species</span><span class="o">.</span><span class="n">inv_gamma</span> <span class="p">}</span>
             <span class="c1"># Optional integer quantities</span>
             <span class="k">if</span> <span class="n">species</span><span class="o">.</span><span class="n">ionizer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">particle_data</span><span class="p">[</span><span class="s1">&#39;charge&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">species</span><span class="o">.</span><span class="n">ionizer</span><span class="o">.</span><span class="n">ionization_level</span>
@@ -813,10 +813,11 @@
                 <span class="n">particle_data</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">species</span><span class="o">.</span><span class="n">tracker</span><span class="o">.</span><span class="n">id</span>
         <span class="c1"># GPU</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="c1"># Check if particles are sorted, otherwise raise exception</span>
+            <span class="c1"># Check if particles are sorted, otherwise sort them</span>
             <span class="k">if</span> <span class="n">species</span><span class="o">.</span><span class="n">sorted</span> <span class="o">==</span> <span class="kc">False</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Particle boosted-frame diagnostic: </span><span class="se">\</span>
-<span class="s1">                 The particles are not sorted!&#39;</span><span class="p">)</span>
+                <span class="n">species</span><span class="o">.</span><span class="n">sort_particles</span><span class="p">(</span><span class="n">fld</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fld</span><span class="p">)</span>
+                <span class="c1"># The particles are now sorted and rearranged</span>
+                <span class="n">species</span><span class="o">.</span><span class="n">sorted</span> <span class="o">=</span> <span class="kc">True</span>
             <span class="c1"># Precalculating quantities and shortcuts</span>
             <span class="n">dt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">dt</span>
             <span class="n">dz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">dz</span>
@@ -837,7 +838,7 @@
             <span class="c1"># Check if there are particles to extract</span>
             <span class="k">if</span> <span class="n">N_area</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="c1"># Only copy a particle slice of size N_area from the GPU</span>
-                <span class="n">particle_data</span> <span class="o">=</span> <span class="n">extract_particles_from_gpu</span><span class="p">(</span>
+                <span class="n">particle_data</span> <span class="o">=</span> <span class="n">extract_slice_from_gpu</span><span class="p">(</span>
                                     <span class="n">pref_sum_curr</span><span class="p">,</span> <span class="n">N_area</span><span class="p">,</span> <span class="n">species</span> <span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="c1"># Empty particle data</span>
@@ -1000,8 +1001,6 @@
         <span class="c1"># Normalize momenta</span>
         <span class="k">for</span> <span class="n">quantity</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;ux&#39;</span><span class="p">,</span> <span class="s1">&#39;uy&#39;</span><span class="p">,</span> <span class="s1">&#39;uz&#39;</span><span class="p">]:</span>
             <span class="n">slice_data_dict</span><span class="p">[</span><span class="n">quantity</span><span class="p">]</span> <span class="o">*=</span> <span class="n">species</span><span class="o">.</span><span class="n">m</span> <span class="o">*</span> <span class="n">c</span>
-        <span class="c1"># Normalize weights</span>
-        <span class="n">slice_data_dict</span><span class="p">[</span><span class="s1">&#39;w&#39;</span><span class="p">]</span> <span class="o">*=</span> <span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="n">species</span><span class="o">.</span><span class="n">q</span><span class="p">)</span>
         <span class="c1"># Convert ionizable level (integer) to charge in Coulombs (float)</span>
         <span class="k">if</span> <span class="s1">&#39;charge&#39;</span> <span class="ow">in</span> <span class="n">slice_data_dict</span><span class="p">:</span>
             <span class="n">slice_data_dict</span><span class="p">[</span><span class="s1">&#39;charge&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">slice_data_dict</span><span class="p">[</span><span class="s1">&#39;charge&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">e</span>
@@ -1091,7 +1090,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.4.0',
+            VERSION:'0.5.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

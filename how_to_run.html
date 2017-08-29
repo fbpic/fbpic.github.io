@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>How to run the code &mdash; FBPIC 0.4.0 documentation</title>
+  <title>How to run the code &mdash; FBPIC 0.5.0 documentation</title>
   
 
   
@@ -35,9 +35,9 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="FBPIC 0.4.0 documentation" href="index.html"/>
+    <link rel="top" title="FBPIC 0.5.0 documentation" href="index.html"/>
         <link rel="next" title="API reference" href="api_reference/api_reference.html"/>
-        <link rel="prev" title="Installation on Lawrencium (LBNL)" href="install/install_lawrencium.html"/> 
+        <link rel="prev" title="Installation on Cori and Edison (NERSC)" href="install/install_cori_edison.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.4.0
+                0.5.0
               </div>
             
           
@@ -95,7 +95,8 @@
 <li class="toctree-l1"><a class="reference internal" href="install/installation.html">Installation</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">How to run the code</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#script-examples">Script examples</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#running-and-visualizing-the-simulation">Running and visualizing the simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#running-the-simulation">Running the simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#visualizing-the-simulation-results">Visualizing the simulation results</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="api_reference/api_reference.html">API reference</a></li>
@@ -179,8 +180,8 @@ to suit your needs):</p>
 <p>The different FBPIC objects that are used in the simulation scripts are defined
 in the section <a class="reference internal" href="api_reference/api_reference.html"><span class="doc">API reference</span></a>.</p>
 </div>
-<div class="section" id="running-and-visualizing-the-simulation">
-<h2>Running and visualizing the simulation<a class="headerlink" href="#running-and-visualizing-the-simulation" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="running-the-simulation">
+<h2>Running the simulation<a class="headerlink" href="#running-the-simulation" title="Permalink to this headline">¶</a></h2>
 <p>The simulation is then run by typing</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">fbpic_script</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
@@ -188,6 +189,30 @@ in the section <a class="reference internal" href="api_reference/api_reference.h
 <p>where <code class="docutils literal"><span class="pre">fbpic_script.py</span></code> should be replaced by the name of your
 Python script: either <code class="docutils literal"><span class="pre">lwfa_script.py</span></code> or
 <code class="docutils literal"><span class="pre">boosted_frame_script.py</span></code> for the above examples.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>When running on CPU, <strong>multi-threading</strong> is enabled by default, and the
+default number of threads is the number of cores on your system. You
+can modify this with environment variables:</p>
+<ul class="simple">
+<li>To modify the number of threads (e.g. set it to 8 threads):</li>
+</ul>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">export</span> <span class="n">MKL_NUM_THREADS</span><span class="o">=</span><span class="mi">8</span>
+<span class="n">export</span> <span class="n">NUMBA_NUM_THREADS</span><span class="o">=</span><span class="mi">8</span>
+<span class="n">python</span> <span class="n">fbpic_script</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>To disable multi-threading altogether (except for the FFT and DHT):</li>
+</ul>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">export</span> <span class="n">FBPIC_DISABLE_THREADING</span><span class="o">=</span><span class="mi">1</span>
+<span class="n">python</span> <span class="n">fbpic_script</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="visualizing-the-simulation-results">
+<h2>Visualizing the simulation results<a class="headerlink" href="#visualizing-the-simulation-results" title="Permalink to this headline">¶</a></h2>
 <p>The code outputs HDF5 files, that comply with the
 <a class="reference external" href="http://www.openpmd.org/#/start">openPMD standard</a>. As such, they
 can be visualized for instance with the <a class="reference external" href="https://github.com/openPMD/openPMD-viewer">openPMD-viewer</a>). To do so, first
@@ -218,7 +243,7 @@ learn more, see the tutorial notebook on the  <a class="reference external" href
         <a href="api_reference/api_reference.html" class="btn btn-neutral float-right" title="API reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="install/install_lawrencium.html" class="btn btn-neutral" title="Installation on Lawrencium (LBNL)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="install/install_cori_edison.html" class="btn btn-neutral" title="Installation on Cori and Edison (NERSC)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -249,7 +274,7 @@ learn more, see the tutorial notebook on the  <a class="reference external" href
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.4.0',
+            VERSION:'0.5.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

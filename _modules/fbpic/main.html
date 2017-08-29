@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fbpic.main &mdash; FBPIC 0.4.0 documentation</title>
+  <title>fbpic.main &mdash; FBPIC 0.5.0 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="FBPIC 0.4.0 documentation" href="../../index.html"/>
+    <link rel="top" title="FBPIC 0.5.0 documentation" href="../../index.html"/>
         <link rel="up" title="Module code" href="../index.html"/> 
 
   
@@ -65,7 +65,7 @@
             
             
               <div class="version">
-                0.4.0
+                0.5.0
               </div>
             
           
@@ -171,21 +171,22 @@
 <span class="c1"># (This needs to be done before the other imports,</span>
 <span class="c1"># as it sets the cuda context)</span>
 <span class="kn">from</span> <span class="nn">mpi4py</span> <span class="k">import</span> <span class="n">MPI</span>
-<span class="k">try</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">.cuda_utils</span> <span class="k">import</span> <span class="n">cuda</span><span class="p">,</span> <span class="n">send_data_to_gpu</span><span class="p">,</span> \
+<span class="kn">import</span> <span class="nn">numba</span>
+<span class="c1"># Check if threading is available</span>
+<span class="kn">from</span> <span class="nn">.threading_utils</span> <span class="k">import</span> <span class="n">threading_enabled</span>
+<span class="c1"># Check if CUDA is available, then import CUDA functions</span>
+<span class="kn">from</span> <span class="nn">.cuda_utils</span> <span class="k">import</span> <span class="n">cuda_installed</span>
+<span class="k">if</span> <span class="n">cuda_installed</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.cuda_utils</span> <span class="k">import</span> <span class="n">send_data_to_gpu</span><span class="p">,</span> \
                 <span class="n">receive_data_from_gpu</span><span class="p">,</span> <span class="n">mpi_select_gpus</span>
-    <span class="n">cuda_installed</span> <span class="o">=</span> <span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">cuda_installed</span><span class="p">:</span>
-        <span class="n">mpi_select_gpus</span><span class="p">(</span> <span class="n">MPI</span> <span class="p">)</span>
-<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-    <span class="n">cuda_installed</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">mpi_select_gpus</span><span class="p">(</span> <span class="n">MPI</span> <span class="p">)</span>
 
 <span class="c1"># Import the rest of the requirements</span>
 <span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">time</span>
 <span class="kn">from</span> <span class="nn">scipy.constants</span> <span class="k">import</span> <span class="n">m_e</span><span class="p">,</span> <span class="n">m_p</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">c</span>
 <span class="kn">from</span> <span class="nn">.particles</span> <span class="k">import</span> <span class="n">Particles</span>
 <span class="kn">from</span> <span class="nn">.lpa_utils.boosted_frame</span> <span class="k">import</span> <span class="n">BoostConverter</span>
-<span class="kn">from</span> <span class="nn">.fields</span> <span class="k">import</span> <span class="n">Fields</span><span class="p">,</span> <span class="n">cuda_installed</span>
+<span class="kn">from</span> <span class="nn">.fields</span> <span class="k">import</span> <span class="n">Fields</span>
 <span class="kn">from</span> <span class="nn">.boundaries</span> <span class="k">import</span> <span class="n">BoundaryCommunicator</span><span class="p">,</span> <span class="n">MovingWindow</span>
 
 <div class="viewcode-block" id="Simulation"><a class="viewcode-back" href="../../api_reference/simulation.html#fbpic.main.Simulation">[docs]</a><span class="k">class</span> <span class="nc">Simulation</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -204,11 +205,10 @@
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Nz</span><span class="p">,</span> <span class="n">zmax</span><span class="p">,</span> <span class="n">Nr</span><span class="p">,</span> <span class="n">rmax</span><span class="p">,</span> <span class="n">Nm</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">p_zmin</span><span class="p">,</span> <span class="n">p_zmax</span><span class="p">,</span>
                  <span class="n">p_rmin</span><span class="p">,</span> <span class="n">p_rmax</span><span class="p">,</span> <span class="n">p_nz</span><span class="p">,</span> <span class="n">p_nr</span><span class="p">,</span> <span class="n">p_nt</span><span class="p">,</span> <span class="n">n_e</span><span class="p">,</span> <span class="n">zmin</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
                  <span class="n">n_order</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">dens_func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filter_currents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                 <span class="n">v_comoving</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">use_galilean</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                 <span class="n">initialize_ions</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">use_cuda</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                 <span class="n">n_guard</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">exchange_period</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">boundaries</span><span class="o">=</span><span class="s1">&#39;periodic&#39;</span><span class="p">,</span>
-                 <span class="n">gamma_boost</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">use_all_mpi_ranks</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                 <span class="n">particle_shape</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span> <span class="p">):</span>
+                 <span class="n">v_comoving</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">use_galilean</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">initialize_ions</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">use_cuda</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">n_guard</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_damp</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">exchange_period</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">boundaries</span><span class="o">=</span><span class="s1">&#39;periodic&#39;</span><span class="p">,</span> <span class="n">gamma_boost</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">use_all_mpi_ranks</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">particle_shape</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span> <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initializes a simulation, by creating the following structures:</span>
 
@@ -259,8 +259,10 @@
 <span class="sd">        n_order: int, optional</span>
 <span class="sd">           The order of the stencil for the z derivatives.</span>
 <span class="sd">           Use -1 for infinite order, otherwise use a positive, even</span>
-<span class="sd">           number. In this case, the stencil extends up to n_order/2</span>
-<span class="sd">           cells on each side.</span>
+<span class="sd">           number. In this case, the stencil extends up to approx.</span>
+<span class="sd">           2*n_order cells on each side. (A finite order stencil</span>
+<span class="sd">           is required to have a localized field push that allows</span>
+<span class="sd">           to do simulations in parallel on multiple MPI ranks)</span>
 
 <span class="sd">        zmin: float, optional</span>
 <span class="sd">           The position of the edge of the simulation box.</span>
@@ -295,11 +297,26 @@
 
 <span class="sd">        n_guard: int, optional</span>
 <span class="sd">            Number of guard cells to use at the left and right of</span>
-<span class="sd">            a domain, when using MPI.</span>
+<span class="sd">            a domain, when performing parallel (MPI) computation</span>
+<span class="sd">            or when using open boundaries. Defaults to None, which</span>
+<span class="sd">            calculates the required guard cells for n_order</span>
+<span class="sd">            automatically (approx 2*n_order). If no MPI is used and</span>
+<span class="sd">            in the case of open boundaries with an infinite order stencil,</span>
+<span class="sd">            n_guard defaults to 30, if not set otherwise.</span>
+<span class="sd">        n_damp : int, optional</span>
+<span class="sd">            Number of damping guard cells at the left and right of a</span>
+<span class="sd">            simulation box if a moving window is attached. The guard</span>
+<span class="sd">            region at these areas (left / right of moving window) is</span>
+<span class="sd">            extended by n_damp (N=n_guard+n_damp) in order to smoothly</span>
+<span class="sd">            damp the fields such that they do not wrap around.</span>
+<span class="sd">            (Defaults to 30)</span>
 <span class="sd">        exchange_period: int, optional</span>
-<span class="sd">            Number of iteration before which the particles are exchanged</span>
-<span class="sd">            and the window is moved (the two operations are simultaneous)</span>
-<span class="sd">            If set to None, the particles are exchanged every n_guard/2</span>
+<span class="sd">            Number of iterations before which the particles are exchanged.</span>
+<span class="sd">            If set to None, the maximum exchange period is calculated</span>
+<span class="sd">            automatically: Within exchange_period timesteps, the</span>
+<span class="sd">            particles should never be able to travel more than</span>
+<span class="sd">            (n_guard - particle_shape order) cells. (Setting exchange_period</span>
+<span class="sd">            to small values can substantially affect the performance)</span>
 
 <span class="sd">        boundaries: string, optional</span>
 <span class="sd">            Indicates how to exchange the fields at the left and right</span>
@@ -326,17 +343,17 @@
 
 <span class="sd">        particle_shape: str, optional</span>
 <span class="sd">            Set the particle shape for the charge/current deposition.</span>
-<span class="sd">            Possible values are &#39;cubic&#39;, &#39;linear&#39; and &#39;linear_non_atomic&#39;.</span>
-<span class="sd">            While &#39;cubic&#39; corresponds to third order shapes and &#39;linear&#39;</span>
-<span class="sd">            to first order shapes, &#39;linear_non_atomic&#39; uses an equivalent</span>
-<span class="sd">            deposition scheme to &#39;linear&#39; which avoids atomics on the GPU.</span>
+<span class="sd">            Possible values are &#39;cubic&#39;, &#39;linear&#39;. (&#39;cubic&#39; corresponds to</span>
+<span class="sd">            third order shapes and &#39;linear&#39; to first order shapes).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># Check whether to use cuda</span>
+        <span class="c1"># Check whether to use CUDA</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">use_cuda</span> <span class="o">=</span> <span class="n">use_cuda</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">use_cuda</span><span class="o">==</span><span class="kc">True</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">cuda_installed</span><span class="o">==</span><span class="kc">False</span><span class="p">):</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;*** Cuda not available for the simulation.&#39;</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;*** Performing the simulation on CPU.&#39;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">use_cuda</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="c1"># CPU multi-threading</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">use_threading</span> <span class="o">=</span> <span class="n">threading_enabled</span>
 
         <span class="c1"># Register the comoving parameters</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">v_comoving</span> <span class="o">=</span> <span class="n">v_comoving</span>
@@ -354,9 +371,10 @@
             <span class="n">uz_m</span><span class="p">,</span> <span class="o">=</span> <span class="n">boost</span><span class="o">.</span><span class="n">longitudinal_momentum</span><span class="p">([</span> <span class="n">uz_m</span> <span class="p">])</span>
 
         <span class="c1"># Initialize the boundary communicator</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">comm</span> <span class="o">=</span> <span class="n">BoundaryCommunicator</span><span class="p">(</span><span class="n">Nz</span><span class="p">,</span> <span class="n">Nr</span><span class="p">,</span> <span class="n">n_guard</span><span class="p">,</span> <span class="n">Nm</span><span class="p">,</span>
-            <span class="n">boundaries</span><span class="p">,</span> <span class="n">n_order</span><span class="p">,</span> <span class="n">exchange_period</span><span class="p">,</span> <span class="n">use_all_mpi_ranks</span> <span class="p">)</span>
-        <span class="n">print_simulation_setup</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_cuda</span> <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">comm</span> <span class="o">=</span> <span class="n">BoundaryCommunicator</span><span class="p">(</span> <span class="n">Nz</span><span class="p">,</span> <span class="n">zmin</span><span class="p">,</span> <span class="n">zmax</span><span class="p">,</span> <span class="n">Nr</span><span class="p">,</span> <span class="n">rmax</span><span class="p">,</span> <span class="n">Nm</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span>
+            <span class="n">boundaries</span><span class="p">,</span> <span class="n">n_order</span><span class="p">,</span> <span class="n">n_guard</span><span class="p">,</span> <span class="n">n_damp</span><span class="p">,</span> <span class="n">exchange_period</span><span class="p">,</span>
+            <span class="n">use_all_mpi_ranks</span> <span class="p">)</span>
+        <span class="n">print_simulation_setup</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_cuda</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_threading</span> <span class="p">)</span>
         <span class="c1"># Modify domain region</span>
         <span class="n">zmin</span><span class="p">,</span> <span class="n">zmax</span><span class="p">,</span> <span class="n">p_zmin</span><span class="p">,</span> <span class="n">p_zmax</span><span class="p">,</span> <span class="n">Nz</span> <span class="o">=</span> \
               <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">divide_into_domain</span><span class="p">(</span><span class="n">zmin</span><span class="p">,</span> <span class="n">zmax</span><span class="p">,</span> <span class="n">p_zmin</span><span class="p">,</span> <span class="n">p_zmax</span><span class="p">)</span>
@@ -378,19 +396,18 @@
         <span class="c1"># Initialize the electrons and the ions</span>
         <span class="n">grid_shape</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">Ez</span><span class="o">.</span><span class="n">shape</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ptcl</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="n">Particles</span><span class="p">(</span> <span class="n">q</span><span class="o">=-</span><span class="n">e</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="n">m_e</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n_e</span><span class="p">,</span> <span class="n">Npz</span><span class="o">=</span><span class="n">Npz</span><span class="p">,</span> <span class="n">zmin</span><span class="o">=</span><span class="n">p_zmin</span><span class="p">,</span>
-                       <span class="n">zmax</span><span class="o">=</span><span class="n">p_zmax</span><span class="p">,</span> <span class="n">Npr</span><span class="o">=</span><span class="n">Npr</span><span class="p">,</span> <span class="n">rmin</span><span class="o">=</span><span class="n">p_rmin</span><span class="p">,</span> <span class="n">rmax</span><span class="o">=</span><span class="n">p_rmax</span><span class="p">,</span>
-                       <span class="n">Nptheta</span><span class="o">=</span><span class="n">p_nt</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">,</span> <span class="n">dens_func</span><span class="o">=</span><span class="n">dens_func</span><span class="p">,</span>
-                       <span class="n">use_cuda</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">use_cuda</span><span class="p">,</span> <span class="n">uz_m</span><span class="o">=</span><span class="n">uz_m</span><span class="p">,</span>
-                       <span class="n">grid_shape</span><span class="o">=</span><span class="n">grid_shape</span><span class="p">,</span> <span class="n">particle_shape</span><span class="o">=</span><span class="n">particle_shape</span><span class="p">)</span> <span class="p">]</span>
+            <span class="n">Particles</span><span class="p">(</span><span class="n">q</span><span class="o">=-</span><span class="n">e</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="n">m_e</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n_e</span><span class="p">,</span> <span class="n">Npz</span><span class="o">=</span><span class="n">Npz</span><span class="p">,</span> <span class="n">zmin</span><span class="o">=</span><span class="n">p_zmin</span><span class="p">,</span>
+                      <span class="n">zmax</span><span class="o">=</span><span class="n">p_zmax</span><span class="p">,</span> <span class="n">Npr</span><span class="o">=</span><span class="n">Npr</span><span class="p">,</span> <span class="n">rmin</span><span class="o">=</span><span class="n">p_rmin</span><span class="p">,</span> <span class="n">rmax</span><span class="o">=</span><span class="n">p_rmax</span><span class="p">,</span>
+                      <span class="n">Nptheta</span><span class="o">=</span><span class="n">p_nt</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">,</span> <span class="n">dens_func</span><span class="o">=</span><span class="n">dens_func</span><span class="p">,</span> <span class="n">uz_m</span><span class="o">=</span><span class="n">uz_m</span><span class="p">,</span>
+                      <span class="n">grid_shape</span><span class="o">=</span><span class="n">grid_shape</span><span class="p">,</span> <span class="n">particle_shape</span><span class="o">=</span><span class="n">particle_shape</span><span class="p">,</span>
+                      <span class="n">use_cuda</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">use_cuda</span> <span class="p">)</span> <span class="p">]</span>
         <span class="k">if</span> <span class="n">initialize_ions</span> <span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">ptcl</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                 <span class="n">Particles</span><span class="p">(</span><span class="n">q</span><span class="o">=</span><span class="n">e</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="n">m_p</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n_e</span><span class="p">,</span> <span class="n">Npz</span><span class="o">=</span><span class="n">Npz</span><span class="p">,</span> <span class="n">zmin</span><span class="o">=</span><span class="n">p_zmin</span><span class="p">,</span>
                           <span class="n">zmax</span><span class="o">=</span><span class="n">p_zmax</span><span class="p">,</span> <span class="n">Npr</span><span class="o">=</span><span class="n">Npr</span><span class="p">,</span> <span class="n">rmin</span><span class="o">=</span><span class="n">p_rmin</span><span class="p">,</span> <span class="n">rmax</span><span class="o">=</span><span class="n">p_rmax</span><span class="p">,</span>
-                          <span class="n">Nptheta</span><span class="o">=</span><span class="n">p_nt</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">,</span> <span class="n">dens_func</span><span class="o">=</span><span class="n">dens_func</span><span class="p">,</span>
-                          <span class="n">use_cuda</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">use_cuda</span><span class="p">,</span> <span class="n">uz_m</span><span class="o">=</span><span class="n">uz_m</span><span class="p">,</span>
-                          <span class="n">grid_shape</span><span class="o">=</span><span class="n">grid_shape</span><span class="p">,</span>
-                          <span class="n">particle_shape</span><span class="o">=</span><span class="n">particle_shape</span> <span class="p">)</span> <span class="p">)</span>
+                          <span class="n">Nptheta</span><span class="o">=</span><span class="n">p_nt</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">,</span> <span class="n">dens_func</span><span class="o">=</span><span class="n">dens_func</span><span class="p">,</span> <span class="n">uz_m</span><span class="o">=</span><span class="n">uz_m</span><span class="p">,</span>
+                          <span class="n">grid_shape</span><span class="o">=</span><span class="n">grid_shape</span><span class="p">,</span> <span class="n">particle_shape</span><span class="o">=</span><span class="n">particle_shape</span><span class="p">,</span>
+                          <span class="n">use_cuda</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">use_cuda</span> <span class="p">)</span> <span class="p">)</span>
 
         <span class="c1"># Register the number of particles per cell along z, and dt</span>
         <span class="c1"># (Necessary for the moving window)</span>
@@ -404,8 +421,10 @@
 
         <span class="c1"># Initialize an empty list of external fields</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">external_fields</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="c1"># Initialize an empty list of diagnostics</span>
+        <span class="c1"># Initialize an empty list of diagnostics and checkpoints</span>
+        <span class="c1"># (Checkpoints are used for restarting the simulation)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">diags</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">checkpoints</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="c1"># Initialize an empty list of laser antennas</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">laser_antennas</span> <span class="o">=</span> <span class="p">[]</span>
 
@@ -450,6 +469,9 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_cuda</span><span class="p">:</span>
             <span class="n">send_data_to_gpu</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
+        <span class="c1"># Beginning of the N iterations</span>
+        <span class="c1"># -----------------------------</span>
+
         <span class="c1"># Loop over timesteps</span>
         <span class="k">for</span> <span class="n">i_step</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
 
@@ -461,65 +483,51 @@
                 <span class="n">progression_bar</span><span class="p">(</span> <span class="n">i_step</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">measured_start</span> <span class="p">)</span>
 
             <span class="c1"># Run the diagnostics</span>
+            <span class="c1"># (E, B, rho, x are defined at time n; J, p at time n-1/2)</span>
             <span class="k">for</span> <span class="n">diag</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">diags</span><span class="p">:</span>
-                <span class="c1"># Check if the fields should be written at</span>
-                <span class="c1"># this iteration and do it if needed.</span>
-                <span class="c1"># (Send the data to the GPU if needed.)</span>
+                <span class="c1"># Check if the diagnostic should be written at this iteration</span>
+                <span class="c1"># and write it, if it is the case.</span>
+                <span class="c1"># (If needed: bring rho/J from spectral space, where they</span>
+                <span class="c1"># were smoothed/corrected, and copy the data from the GPU.)</span>
                 <span class="n">diag</span><span class="o">.</span><span class="n">write</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">iteration</span> <span class="p">)</span>
 
             <span class="c1"># Exchanges to prepare for this iteration</span>
             <span class="c1"># ---------------------------------------</span>
 
-            <span class="c1"># Exchange the fields (EB) in the guard cells between domains</span>
+            <span class="c1"># Exchange the fields (EB) in the guard cells between MPI domains</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">exchange_fields</span><span class="p">(</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">,</span> <span class="s1">&#39;EB&#39;</span><span class="p">)</span>
 
-            <span class="c1"># Check whether this iteration involves</span>
-            <span class="c1"># particle exchange / moving window</span>
+            <span class="c1"># Check whether this iteration involves particle exchange.</span>
+            <span class="c1"># Note: Particle exchange is imposed at the first iteration</span>
+            <span class="c1"># of this loop (i_step == 0) in order to ensure that all</span>
+            <span class="c1"># particles are inside the box, and that &#39;rho_prev&#39; is correct</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">iteration</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">exchange_period</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">i_step</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-
-                <span class="c1"># Note: Particle exchange is imposed at the first iteration</span>
-                <span class="c1"># of this loop (i_step == 0) in order to make sure that:</span>
-                <span class="c1"># - All particles are inside the box initially</span>
-                <span class="c1"># - The quantity `rho_prev` is properly defined</span>
-
-                <span class="c1"># Move the grids if needed</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">moving_win</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="c1"># Damp the fields in the guard cells</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">damp_guard_EB</span><span class="p">(</span> <span class="n">fld</span><span class="o">.</span><span class="n">interp</span> <span class="p">)</span>
-                    <span class="c1"># Shift the fields, and prepare positions</span>
-                    <span class="c1"># between which new particles should be added</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">move_grids</span><span class="p">(</span><span class="n">fld</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
-                    <span class="c1"># Exchange the E and B fields via MPI if needed</span>
-                    <span class="c1"># (Notice that the fields have not been damped since the</span>
-                    <span class="c1"># last exchange, so fields are correct in the guard cells)</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">exchange_fields</span><span class="p">(</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">,</span> <span class="s1">&#39;EB&#39;</span><span class="p">)</span>
-
-                <span class="c1"># Particle exchange after moving window / mpi communications</span>
-                <span class="c1"># This includes MPI exchange of particles, removal of</span>
-                <span class="c1"># out-of-box particles and (if there is a moving window)</span>
+                <span class="c1"># Particle exchange includes MPI exchange of particles, removal</span>
+                <span class="c1"># of out-of-box particles and (if there is a moving window)</span>
                 <span class="c1"># injection of new particles by the moving window.</span>
                 <span class="c1"># (In the case of single-proc periodic simulations, particles</span>
-                <span class="c1"># are shifted by one box length, so they remain inside the box.)</span>
+                <span class="c1"># are shifted by one box length, so they remain inside the box)</span>
                 <span class="k">for</span> <span class="n">species</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ptcl</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">exchange_particles</span><span class="p">(</span><span class="n">species</span><span class="p">,</span> <span class="n">fld</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
+                <span class="c1"># Set again the number of cells to be injected to 0</span>
+                <span class="c1"># (This number is incremented when `move_grids` is called)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">moving_win</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">moving_win</span><span class="o">.</span><span class="n">nz_inject</span> <span class="o">=</span> <span class="mi">0</span>
 
                 <span class="c1"># Reproject the charge on the interpolation grid</span>
-                <span class="c1"># (Since particles have been added/suppressed)</span>
+                <span class="c1"># (Since particles have been removed / added to the simulation;</span>
+                <span class="c1"># otherwise rho_prev is obtained from the previous iteration)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">deposit</span><span class="p">(</span><span class="s1">&#39;rho_prev&#39;</span><span class="p">)</span>
 
-            <span class="c1"># Standard PIC loop</span>
-            <span class="c1"># -----------------</span>
+            <span class="c1"># Main PIC iteration</span>
+            <span class="c1"># ------------------</span>
+
             <span class="c1"># Gather the fields from the grid at t = n dt</span>
             <span class="k">for</span> <span class="n">species</span> <span class="ow">in</span> <span class="n">ptcl</span><span class="p">:</span>
                 <span class="n">species</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span> <span class="n">fld</span><span class="o">.</span><span class="n">interp</span> <span class="p">)</span>
             <span class="c1"># Apply the external fields at t = n dt</span>
             <span class="k">for</span> <span class="n">ext_field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">external_fields</span><span class="p">:</span>
                 <span class="n">ext_field</span><span class="o">.</span><span class="n">apply_expression</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">ptcl</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="p">)</span>
-
-            <span class="c1"># Ionize the particles at t = n dt</span>
-            <span class="c1"># (if the species is not ionizable, `handle_ionization` skips it)</span>
-            <span class="k">for</span> <span class="n">species</span> <span class="ow">in</span> <span class="n">ptcl</span><span class="p">:</span>
-                <span class="n">species</span><span class="o">.</span><span class="n">handle_ionization</span><span class="p">()</span>
 
             <span class="c1"># Push the particles&#39; positions and velocities to t = (n+1/2) dt</span>
             <span class="k">if</span> <span class="n">move_momenta</span><span class="p">:</span>
@@ -538,6 +546,12 @@
 
             <span class="c1"># Get the current at t = (n+1/2) dt</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">deposit</span><span class="p">(</span><span class="s1">&#39;J&#39;</span><span class="p">)</span>
+
+            <span class="c1"># Handle elementary processes at t = (n + 1/2)dt</span>
+            <span class="c1"># i.e. when the particles&#39; velocity and position are synchronized</span>
+            <span class="c1"># (e.g. ionization, Compton scattering, ...)</span>
+            <span class="k">for</span> <span class="n">species</span> <span class="ow">in</span> <span class="n">ptcl</span><span class="p">:</span>
+                <span class="n">species</span><span class="o">.</span><span class="n">handle_elementary_processes</span><span class="p">()</span>
 
             <span class="c1"># Push the particles&#39; positions to t = (n+1) dt</span>
             <span class="k">if</span> <span class="n">move_positions</span><span class="p">:</span>
@@ -565,6 +579,11 @@
             <span class="n">fld</span><span class="o">.</span><span class="n">push</span><span class="p">(</span> <span class="n">use_true_rho</span> <span class="p">)</span>
             <span class="k">if</span> <span class="n">correct_divE</span><span class="p">:</span>
                 <span class="n">fld</span><span class="o">.</span><span class="n">correct_divE</span><span class="p">()</span>
+            <span class="c1"># Move the grids if needed</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">moving_win</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1"># Shift the fields is spectral space and update positions of</span>
+                <span class="c1"># the interpolation grids</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">move_grids</span><span class="p">(</span><span class="n">fld</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
             <span class="c1"># Get the fields E and B on the interpolation grid at t = (n+1) dt</span>
             <span class="n">fld</span><span class="o">.</span><span class="n">spect2interp</span><span class="p">(</span><span class="s1">&#39;E&#39;</span><span class="p">)</span>
             <span class="n">fld</span><span class="o">.</span><span class="n">spect2interp</span><span class="p">(</span><span class="s1">&#39;B&#39;</span><span class="p">)</span>
@@ -572,6 +591,18 @@
             <span class="c1"># Increment the global time and iteration</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">iteration</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="c1"># Write the checkpoints if needed</span>
+            <span class="k">for</span> <span class="n">checkpoint</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">checkpoints</span><span class="p">:</span>
+                <span class="n">checkpoint</span><span class="o">.</span><span class="n">write</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">iteration</span> <span class="p">)</span>
+
+        <span class="c1"># End of the N iterations</span>
+        <span class="c1"># -----------------------</span>
+
+        <span class="c1"># Finalize PIC loop</span>
+        <span class="c1"># Get the charge density and the current from spectral space.</span>
+        <span class="n">fld</span><span class="o">.</span><span class="n">spect2interp</span><span class="p">(</span><span class="s1">&#39;J&#39;</span><span class="p">)</span>
+        <span class="n">fld</span><span class="o">.</span><span class="n">spect2interp</span><span class="p">(</span><span class="s1">&#39;rho_prev&#39;</span><span class="p">)</span>
 
         <span class="c1"># Receive simulation data from GPU (if CUDA is used)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_cuda</span><span class="p">:</span>
@@ -689,8 +720,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Attach the moving window to the boundary communicator</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">moving_win</span> <span class="o">=</span> <span class="n">MovingWindow</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">ptcl</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">p_nz</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">ux_m</span><span class="p">,</span> <span class="n">uy_m</span><span class="p">,</span> <span class="n">uz_m</span><span class="p">,</span>
-            <span class="n">ux_th</span><span class="p">,</span> <span class="n">uy_th</span><span class="p">,</span> <span class="n">uz_th</span><span class="p">,</span> <span class="n">gamma_boost</span> <span class="p">)</span></div></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ptcl</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">p_nz</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
+            <span class="n">ux_m</span><span class="p">,</span> <span class="n">uy_m</span><span class="p">,</span> <span class="n">uz_m</span><span class="p">,</span> <span class="n">ux_th</span><span class="p">,</span> <span class="n">uy_th</span><span class="p">,</span> <span class="n">uz_th</span><span class="p">,</span> <span class="n">gamma_boost</span> <span class="p">)</span></div></div>
 
 <span class="k">def</span> <span class="nf">progression_bar</span><span class="p">(</span> <span class="n">i</span><span class="p">,</span> <span class="n">Ntot</span><span class="p">,</span> <span class="n">measured_start</span><span class="p">,</span> <span class="n">Nbars</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">char</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -709,7 +740,7 @@
     <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;, </span><span class="si">%d</span><span class="s1">:</span><span class="si">%02d</span><span class="s1">:</span><span class="si">%02d</span><span class="s1"> left&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">s</span><span class="p">))</span>
     <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
 
-<span class="k">def</span> <span class="nf">print_simulation_setup</span><span class="p">(</span> <span class="n">comm</span><span class="p">,</span> <span class="n">use_cuda</span> <span class="p">):</span>
+<span class="k">def</span> <span class="nf">print_simulation_setup</span><span class="p">(</span> <span class="n">comm</span><span class="p">,</span> <span class="n">use_cuda</span><span class="p">,</span> <span class="n">use_threading</span> <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Print message about the number of proc and</span>
 <span class="sd">    whether it is using GPU or CPU.</span>
@@ -721,13 +752,20 @@
 
 <span class="sd">    use_cuda: bool</span>
 <span class="sd">        Whether the simulation is set up to use CUDA</span>
+
+<span class="sd">    use_threading: bool</span>
+<span class="sd">        Whether the simulation is set up to use threads on CPU</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">comm</span><span class="o">.</span><span class="n">rank</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">use_cuda</span><span class="p">:</span>
             <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Running FBPIC on GPU &quot;</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Running FBPIC on CPU &quot;</span>
-        <span class="n">message</span> <span class="o">+=</span> <span class="s2">&quot;with </span><span class="si">%d</span><span class="s2"> proc.</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span><span class="n">comm</span><span class="o">.</span><span class="n">size</span>
+        <span class="n">message</span> <span class="o">+=</span> <span class="s2">&quot;with </span><span class="si">%d</span><span class="s2"> proc&quot;</span> <span class="o">%</span><span class="n">comm</span><span class="o">.</span><span class="n">size</span>
+        <span class="k">if</span> <span class="n">use_threading</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">use_cuda</span><span class="p">:</span>
+            <span class="n">message</span> <span class="o">+=</span> <span class="s2">&quot; (</span><span class="si">%d</span><span class="s2"> threads per proc)&quot;</span> <span class="o">%</span><span class="n">numba</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">NUMBA_NUM_THREADS</span>
+        <span class="n">message</span> <span class="o">+=</span> <span class="s2">&quot;.</span><span class="se">\n</span><span class="s2">&quot;</span>
+
         <span class="nb">print</span><span class="p">(</span> <span class="n">message</span> <span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">adapt_to_grid</span><span class="p">(</span> <span class="n">x</span><span class="p">,</span> <span class="n">p_xmin</span><span class="p">,</span> <span class="n">p_xmax</span><span class="p">,</span> <span class="n">p_nx</span><span class="p">,</span> <span class="n">ncells_empty</span><span class="o">=</span><span class="mi">0</span> <span class="p">):</span>
@@ -822,7 +860,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.4.0',
+            VERSION:'0.5.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

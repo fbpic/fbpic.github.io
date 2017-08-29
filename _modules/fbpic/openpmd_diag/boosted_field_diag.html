@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fbpic.openpmd_diag.boosted_field_diag &mdash; FBPIC 0.4.0 documentation</title>
+  <title>fbpic.openpmd_diag.boosted_field_diag &mdash; FBPIC 0.5.0 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="FBPIC 0.4.0 documentation" href="../../../index.html"/>
+    <link rel="top" title="FBPIC 0.5.0 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -65,7 +65,7 @@
             
             
               <div class="version">
-                0.4.0
+                0.5.0
               </div>
             
           
@@ -177,12 +177,10 @@
 <span class="kn">from</span> <span class="nn">scipy.constants</span> <span class="k">import</span> <span class="n">c</span>
 <span class="kn">from</span> <span class="nn">.field_diag</span> <span class="k">import</span> <span class="n">FieldDiagnostic</span>
 
-<span class="c1"># If accelerate is installed, it potentially allows to use a GPU</span>
-<span class="k">try</span> <span class="p">:</span>
+<span class="c1"># Check if CUDA is available, then import CUDA functions</span>
+<span class="kn">from</span> <span class="nn">fbpic.cuda_utils</span> <span class="k">import</span> <span class="n">cuda_installed</span>
+<span class="k">if</span> <span class="n">cuda_installed</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">fbpic.cuda_utils</span> <span class="k">import</span> <span class="n">cuda</span><span class="p">,</span> <span class="n">cuda_tpb_bpg_1d</span>
-    <span class="n">cuda_installed</span> <span class="o">=</span> <span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span>
-<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-    <span class="n">cuda_installed</span> <span class="o">=</span> <span class="kc">False</span>
 
 <div class="viewcode-block" id="BoostedFieldDiagnostic"><a class="viewcode-back" href="../../../api_reference/diagnostics.html#fbpic.openpmd_diag.BoostedFieldDiagnostic">[docs]</a><span class="k">class</span> <span class="nc">BoostedFieldDiagnostic</span><span class="p">(</span><span class="n">FieldDiagnostic</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -232,6 +230,8 @@
 <span class="sd">            for &quot;E&quot; and &quot;B&quot; (because &quot;rho&quot; and &quot;J&quot; are staggered in time).</span>
 <span class="sd">            The user can still output &quot;rho&quot; and &quot;J&quot; by changing `fieldtypes`,</span>
 <span class="sd">            but has to be aware that there may errors in the backward transform.</span>
+<span class="sd">            Moreover, writing rho/J slows down the simulation, as these fields</span>
+<span class="sd">            are then brought from spectral to real space, at each iteration.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Do not leave write_dir as None, as this may conflict with</span>
         <span class="c1"># the default directory (&#39;./diags&#39;) in which diagnostics in the</span>
@@ -293,6 +293,13 @@
 <span class="sd">        iteration : int</span>
 <span class="sd">            The current iteration in the boosted frame simulation</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># If needed: Bring rho/J from spectral space (where they where</span>
+        <span class="c1"># smoothed/corrected) to real space</span>
+        <span class="k">if</span> <span class="s2">&quot;rho&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fieldtypes</span> <span class="ow">or</span> <span class="s2">&quot;J&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fieldtypes</span><span class="p">:</span>
+            <span class="c1"># Get &#39;rho_prev&#39;, since it correspond to rho at time n</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">spect2interp</span><span class="p">(</span><span class="s1">&#39;rho_prev&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">spect2interp</span><span class="p">(</span><span class="s1">&#39;J&#39;</span><span class="p">)</span>
+
         <span class="c1"># Find the limits of the local subdomain at this iteration</span>
         <span class="n">zmin_boost</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">zmin</span>
         <span class="n">zmax_boost</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">zmax</span>
@@ -300,7 +307,11 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">dz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">dz</span>
             <span class="n">zmin_boost</span> <span class="o">+=</span> <span class="n">dz</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">n_guard</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">left_proc</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">zmin_boost</span> <span class="o">+=</span> <span class="n">dz</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">n_damp</span>
             <span class="n">zmax_boost</span> <span class="o">-=</span> <span class="n">dz</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">n_guard</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">right_proc</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">zmax_boost</span> <span class="o">-=</span> <span class="n">dz</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">n_damp</span>
 
         <span class="c1"># Extract the current time in the boosted frame</span>
         <span class="n">time</span> <span class="o">=</span> <span class="n">iteration</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">dt</span>
@@ -720,6 +731,8 @@
         <span class="c1"># Add the guard cells to the index iz</span>
         <span class="k">if</span> <span class="n">comm</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">iz</span> <span class="o">+=</span> <span class="n">comm</span><span class="o">.</span><span class="n">n_guard</span>
+            <span class="k">if</span> <span class="n">comm</span><span class="o">.</span><span class="n">left_proc</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">iz</span> <span class="o">+=</span> <span class="n">comm</span><span class="o">.</span><span class="n">n_damp</span>
 
         <span class="c1"># Extract the slice directly on the CPU</span>
         <span class="c1"># Fill the pre-allocated CPU array slice_array</span>
@@ -866,13 +879,7 @@
 
 <span class="k">if</span> <span class="n">cuda_installed</span><span class="p">:</span>
 
-    <span class="nd">@cuda</span><span class="o">.</span><span class="n">jit</span><span class="p">(</span><span class="s1">&#39;void( int32, int32, float64, float64[:,:,:], </span><span class="se">\</span>
-<span class="s1">        complex128[:,:], complex128[:,:], complex128[:,:], </span><span class="se">\</span>
-<span class="s1">        complex128[:,:], complex128[:,:], complex128[:,:], </span><span class="se">\</span>
-<span class="s1">        complex128[:,:], complex128[:,:], complex128[:,:], complex128[:,:], </span><span class="se">\</span>
-<span class="s1">        complex128[:,:], complex128[:,:], complex128[:,:], </span><span class="se">\</span>
-<span class="s1">        complex128[:,:], complex128[:,:], complex128[:,:], </span><span class="se">\</span>
-<span class="s1">        complex128[:,:], complex128[:,:], complex128[:,:], complex128[:,:])&#39;</span><span class="p">)</span>
+    <span class="nd">@cuda</span><span class="o">.</span><span class="n">jit</span>
     <span class="k">def</span> <span class="nf">extract_slice_cuda</span><span class="p">(</span> <span class="n">Nr</span><span class="p">,</span> <span class="n">iz</span><span class="p">,</span> <span class="n">Sz</span><span class="p">,</span> <span class="n">slice_arr</span><span class="p">,</span>
         <span class="n">Er0</span><span class="p">,</span> <span class="n">Et0</span><span class="p">,</span> <span class="n">Ez0</span><span class="p">,</span> <span class="n">Br0</span><span class="p">,</span> <span class="n">Bt0</span><span class="p">,</span> <span class="n">Bz0</span><span class="p">,</span> <span class="n">Jr0</span><span class="p">,</span> <span class="n">Jt0</span><span class="p">,</span> <span class="n">Jz0</span><span class="p">,</span> <span class="n">rho0</span><span class="p">,</span>
         <span class="n">Er1</span><span class="p">,</span> <span class="n">Et1</span><span class="p">,</span> <span class="n">Ez1</span><span class="p">,</span> <span class="n">Br1</span><span class="p">,</span> <span class="n">Bt1</span><span class="p">,</span> <span class="n">Bz1</span><span class="p">,</span> <span class="n">Jr1</span><span class="p">,</span> <span class="n">Jt1</span><span class="p">,</span> <span class="n">Jz1</span><span class="p">,</span> <span class="n">rho1</span> <span class="p">):</span>
@@ -987,7 +994,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.4.0',
+            VERSION:'0.5.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

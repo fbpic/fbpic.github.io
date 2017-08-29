@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>The Simulation class &mdash; FBPIC 0.4.0 documentation</title>
+  <title>The Simulation class &mdash; FBPIC 0.5.0 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="FBPIC 0.4.0 documentation" href="../index.html"/>
+    <link rel="top" title="FBPIC 0.5.0 documentation" href="../index.html"/>
         <link rel="up" title="API reference" href="api_reference.html"/>
         <link rel="next" title="The openPMD diagnostics" href="diagnostics.html"/>
         <link rel="prev" title="API reference" href="api_reference.html"/> 
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                0.4.0
+                0.5.0
               </div>
             
           
@@ -183,7 +183,7 @@ the simulation data, and has the high-level methods to perform the PIC cycle.</p
 </div></blockquote>
 <dl class="class">
 <dt id="fbpic.main.Simulation">
-<em class="property">class </em><code class="descclassname">fbpic.main.</code><code class="descname">Simulation</code><span class="sig-paren">(</span><em>Nz</em>, <em>zmax</em>, <em>Nr</em>, <em>rmax</em>, <em>Nm</em>, <em>dt</em>, <em>p_zmin</em>, <em>p_zmax</em>, <em>p_rmin</em>, <em>p_rmax</em>, <em>p_nz</em>, <em>p_nr</em>, <em>p_nt</em>, <em>n_e</em>, <em>zmin=0.0</em>, <em>n_order=-1</em>, <em>dens_func=None</em>, <em>filter_currents=True</em>, <em>v_comoving=None</em>, <em>use_galilean=False</em>, <em>initialize_ions=False</em>, <em>use_cuda=False</em>, <em>n_guard=50</em>, <em>exchange_period=None</em>, <em>boundaries=’periodic’</em>, <em>gamma_boost=None</em>, <em>use_all_mpi_ranks=True</em>, <em>particle_shape=’linear’</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/main.html#Simulation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.main.Simulation" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">fbpic.main.</code><code class="descname">Simulation</code><span class="sig-paren">(</span><em>Nz</em>, <em>zmax</em>, <em>Nr</em>, <em>rmax</em>, <em>Nm</em>, <em>dt</em>, <em>p_zmin</em>, <em>p_zmax</em>, <em>p_rmin</em>, <em>p_rmax</em>, <em>p_nz</em>, <em>p_nr</em>, <em>p_nt</em>, <em>n_e</em>, <em>zmin=0.0</em>, <em>n_order=-1</em>, <em>dens_func=None</em>, <em>filter_currents=True</em>, <em>v_comoving=None</em>, <em>use_galilean=False</em>, <em>initialize_ions=False</em>, <em>use_cuda=False</em>, <em>n_guard=None</em>, <em>n_damp=30</em>, <em>exchange_period=None</em>, <em>boundaries=’periodic’</em>, <em>gamma_boost=None</em>, <em>use_all_mpi_ranks=True</em>, <em>particle_shape=’linear’</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/main.html#Simulation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.main.Simulation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initializes a simulation, by creating the following structures:</p>
 <ul class="simple">
 <li>the <cite>Fields</cite> object, which contains the field data on the grids</li>
@@ -214,8 +214,10 @@ cell)</li>
 <li><strong>n_e</strong> (<em>float</em><em> (</em><em>in particles per m^3</em><em>)</em>) – Peak density of the electrons</li>
 <li><strong>n_order</strong> (<em>int</em><em>, </em><em>optional</em>) – The order of the stencil for the z derivatives.
 Use -1 for infinite order, otherwise use a positive, even
-number. In this case, the stencil extends up to n_order/2
-cells on each side.</li>
+number. In this case, the stencil extends up to approx.
+2*n_order cells on each side. (A finite order stencil
+is required to have a localized field push that allows
+to do simulations in parallel on multiple MPI ranks)</li>
 <li><strong>zmin</strong> (<em>float</em><em>, </em><em>optional</em>) – The position of the edge of the simulation box.
 (More precisely, the position of the edge of the first cell)</li>
 <li><strong>dens_func</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function of the form:
@@ -236,10 +238,24 @@ When use_galilean is true, the whole grid moves
 with a speed v_comoving</li>
 <li><strong>use_cuda</strong> (<em>bool</em><em>, </em><em>optional</em>) – Wether to use CUDA (GPU) acceleration</li>
 <li><strong>n_guard</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of guard cells to use at the left and right of
-a domain, when using MPI.</li>
-<li><strong>exchange_period</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of iteration before which the particles are exchanged
-and the window is moved (the two operations are simultaneous)
-If set to None, the particles are exchanged every n_guard/2</li>
+a domain, when performing parallel (MPI) computation
+or when using open boundaries. Defaults to None, which
+calculates the required guard cells for n_order
+automatically (approx 2*n_order). If no MPI is used and
+in the case of open boundaries with an infinite order stencil,
+n_guard defaults to 30, if not set otherwise.</li>
+<li><strong>n_damp</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of damping guard cells at the left and right of a
+simulation box if a moving window is attached. The guard
+region at these areas (left / right of moving window) is
+extended by n_damp (N=n_guard+n_damp) in order to smoothly
+damp the fields such that they do not wrap around.
+(Defaults to 30)</li>
+<li><strong>exchange_period</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of iterations before which the particles are exchanged.
+If set to None, the maximum exchange period is calculated
+automatically: Within exchange_period timesteps, the
+particles should never be able to travel more than
+(n_guard - particle_shape order) cells. (Setting exchange_period
+to small values can substantially affect the performance)</li>
 <li><strong>boundaries</strong> (<em>string</em><em>, </em><em>optional</em>) – Indicates how to exchange the fields at the left and right
 boundaries of the global simulation box.
 Either ‘periodic’ or ‘open’</li>
@@ -260,10 +276,8 @@ parameters and output folder depend on the MPI rank.</li>
 </ul>
 </li>
 <li><strong>particle_shape</strong> (<em>str</em><em>, </em><em>optional</em>) – Set the particle shape for the charge/current deposition.
-Possible values are ‘cubic’, ‘linear’ and ‘linear_non_atomic’.
-While ‘cubic’ corresponds to third order shapes and ‘linear’
-to first order shapes, ‘linear_non_atomic’ uses an equivalent
-deposition scheme to ‘linear’ which avoids atomics on the GPU.</li>
+Possible values are ‘cubic’, ‘linear’. (‘cubic’ corresponds to
+third order shapes and ‘linear’ to first order shapes).</li>
 </ul>
 </td>
 </tr>
@@ -371,7 +385,7 @@ field push or not. (requires initialize_ions = True)</li>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.4.0',
+            VERSION:'0.5.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

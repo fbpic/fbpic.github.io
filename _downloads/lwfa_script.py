@@ -41,9 +41,19 @@ zmin = -10.e-6   # Left end of the simulation box (meters)
 Nr = 50          # Number of gridpoints along r
 rmax = 20.e-6    # Length of the box along r (meters)
 Nm = 2           # Number of modes used
+
 # The simulation timestep
 dt = (zmax-zmin)/Nz/c   # Timestep (seconds)
 N_step = 200     # Number of iterations to perform
+
+# Order of accuracy of the spectral, Maxwell (PSATD) solver.
+# -1 correspond to infinite order, i.e. wave propagation is perfectly
+# dispersion-free in all directions. This is adviced for single GPU/CPU
+# simulations. For multi GPU/CPU simulations, choose n_order > 4
+# (and multiple of 2). A large n_order leads to more overhead in MPI
+# communications, but also to a more accurate dispersion for waves.
+# (Typically, n_order = 32 gives accurate physical results)
+n_order = -1
 
 # The particles
 p_zmin = 25.e-6  # Position of the beginning of the plasma (meters)
@@ -97,7 +107,7 @@ if __name__ == '__main__':
     sim = Simulation( Nz, zmax, Nr, rmax, Nm, dt,
         p_zmin, p_zmax, p_rmin, p_rmax, p_nz, p_nr, p_nt, n_e,
         dens_func=dens_func, zmin=zmin, boundaries='open',
-        use_cuda=use_cuda )
+        n_order=n_order, use_cuda=use_cuda )
 
     # Load initial fields
     # Add a laser to the fields of the simulation

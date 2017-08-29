@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Installation on Lawrencium (LBNL) &mdash; FBPIC 0.5.0 documentation</title>
+  <title>Installation on Cori and Edison (NERSC) &mdash; FBPIC 0.5.0 documentation</title>
   
 
   
@@ -37,8 +37,8 @@
         <link rel="search" title="Search" href="../search.html"/>
     <link rel="top" title="FBPIC 0.5.0 documentation" href="../index.html"/>
         <link rel="up" title="Installation" href="installation.html"/>
-        <link rel="next" title="Installation on Cori and Edison (NERSC)" href="install_cori_edison.html"/>
-        <link rel="prev" title="Installation on JURECA (JSC)" href="install_jureca.html"/> 
+        <link rel="next" title="How to run the code" href="../how_to_run.html"/>
+        <link rel="prev" title="Installation on Lawrencium (LBNL)" href="install_lawrencium.html"/> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -97,8 +97,8 @@
 <li class="toctree-l2"><a class="reference internal" href="install_local.html">Installation on a local computer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="install_titan.html">Installation on Titan (OLCF)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="install_jureca.html">Installation on JURECA (JSC)</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Installation on Lawrencium (LBNL)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#connecting-to-lawrencium">Connecting to Lawrencium</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install_lawrencium.html">Installation on Lawrencium (LBNL)</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Installation on Cori and Edison (NERSC)</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#installation-of-fbpic">Installation of FBPIC</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#installation-of-anaconda">Installation of Anaconda</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#installation-of-fbpic-and-its-dependencies">Installation of FBPIC and its dependencies</a></li>
@@ -109,12 +109,10 @@
 <li class="toctree-l4"><a class="reference internal" href="#interactive-jobs">Interactive jobs</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#batch-job">Batch job</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#visualizing-the-results-through-jupyter">Visualizing the results through Jupyter</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#transfering-data-to-your-local-computer">Transfering data to your local computer</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="install_cori_edison.html">Installation on Cori and Edison (NERSC)</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../how_to_run.html">How to run the code</a></li>
@@ -166,13 +164,13 @@
         
           <li><a href="installation.html">Installation</a> &raquo;</li>
         
-      <li>Installation on Lawrencium (LBNL)</li>
+      <li>Installation on Cori and Edison (NERSC)</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../_sources/install/install_lawrencium.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/install/install_cori_edison.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -185,54 +183,57 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="installation-on-lawrencium-lbnl">
-<h1>Installation on Lawrencium (LBNL)<a class="headerlink" href="#installation-on-lawrencium-lbnl" title="Permalink to this headline">¶</a></h1>
-<p><a class="reference external" href="https://sites.google.com/a/lbl.gov/high-performance-computing-services-group/lbnl-supercluster/lawrencium">Lawrencium</a>
-is a local cluster at the <a class="reference external" href="http://www.lbl.gov/">Lawrence Berkeley National Lab</a>
-(LBNL).</p>
-<p>It has a few nodes with GPUs (Tesla K20 and K80, as well as GeForce GTX 1080 Ti).</p>
-<div class="section" id="connecting-to-lawrencium">
-<h2>Connecting to Lawrencium<a class="headerlink" href="#connecting-to-lawrencium" title="Permalink to this headline">¶</a></h2>
-<p>Lawrencium uses a one-time password (OTP) system. Before being able to
-connect to Lawrencium via ssh, you need to configure an OTP Token, using
-<a class="reference external" href="https://commons.lbl.gov/display/itfaq/Installing+and+Configuring+the+OTP+Token">these
-instructions</a>.</p>
-<p>Once your OTP token is configured, you can connect by using</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ssh</span> <span class="o">&lt;</span><span class="n">username</span><span class="o">&gt;</span><span class="nd">@lrc</span><span class="o">-</span><span class="n">login</span><span class="o">.</span><span class="n">lbl</span><span class="o">.</span><span class="n">gov</span>
-</pre></div>
-</div>
+  <div class="section" id="installation-on-cori-and-edison-nersc">
+<h1>Installation on Cori and Edison (NERSC)<a class="headerlink" href="#installation-on-cori-and-edison-nersc" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="http://www.nersc.gov/users/computational-systems/cori/">Cori</a> and
+<a class="reference external" href="http://www.nersc.gov/users/computational-systems/edison/">Edison</a>
+are two high-performance clusters at <a class="reference external" href="http://www.nersc.gov/">NERSC</a>.</p>
+<p>Each node of Edison contains an Ivy Bridge processor (24-core Xeon processor).</p>
+<p>On the other hand, Cori has two types of nodes:</p>
+<ul class="simple">
+<li>Haswell (32-core Xeon processor)</li>
+<li>KNL (68-core Xeon-Phi processor)</li>
+</ul>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">FBPIC has not been optimized for KNL, and thus its performance on these
+nodes is poor. It is strongly recommended to use the Haswell nodes
+when running FBPIC on Cori.</p>
 </div>
 <div class="section" id="installation-of-fbpic">
 <h2>Installation of FBPIC<a class="headerlink" href="#installation-of-fbpic" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="installation-of-anaconda">
 <h3>Installation of Anaconda<a class="headerlink" href="#installation-of-anaconda" title="Permalink to this headline">¶</a></h3>
-<p>In order to download and install Anaconda and FBPIC, follow the steps
-below:</p>
+<p>In order to download and install Anaconda and FBPIC, follow the steps below:</p>
 <ul>
 <li><p class="first">Download Miniconda:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">wget</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">repo</span><span class="o">.</span><span class="n">continuum</span><span class="o">.</span><span class="n">io</span><span class="o">/</span><span class="n">miniconda</span><span class="o">/</span><span class="n">Miniconda3</span><span class="o">-</span><span class="n">latest</span><span class="o">-</span><span class="n">Linux</span><span class="o">-</span><span class="n">x86_64</span><span class="o">.</span><span class="n">sh</span>
 </pre></div>
 </div>
 </li>
-<li><p class="first">Execute the Miniconda installation script, and use <code class="docutils literal"><span class="pre">/global/scratch/&lt;yourUsername&gt;</span></code> as an install directory, for faster disk access.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">bash</span> <span class="n">Miniconda3</span><span class="o">-</span><span class="n">latest</span><span class="o">-</span><span class="n">Linux</span><span class="o">-</span><span class="n">x86_64</span><span class="o">.</span><span class="n">sh</span> <span class="o">-</span><span class="n">p</span> <span class="o">/</span><span class="k">global</span><span class="o">/</span><span class="n">scratch</span><span class="o">/&lt;</span><span class="n">yourUsername</span><span class="o">&gt;/</span><span class="n">miniconda3</span>
+<li><p class="first">Execute the Miniconda installation script</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>bash Miniconda3-latest-Linux-x86_64.sh -p $SCRATCH/miniconda3
 </pre></div>
 </div>
-<p>where the bracketed text should be replaced by your username. Then type</p>
+</li>
+<li><p class="first">Add the following lines at the end of your <code class="docutils literal"><span class="pre">.bashrc.ext</span></code></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>export PATH=$SCRATCH/miniconda3/bin:$PATH
+export PYTHONPATH=$SCRATCH/miniconda3/lib:$PYTHONPATH
+</pre></div>
+</div>
+<p>and then type</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">source</span> <span class="o">.</span><span class="n">bashrc</span>
+</pre></div>
+</div>
 </li>
 </ul>
-<blockquote>
-<div><div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">source</span> <span class="o">.</span><span class="n">bashrc</span>
-</pre></div>
-</div>
-</div></blockquote>
 </div>
 <div class="section" id="installation-of-fbpic-and-its-dependencies">
 <h3>Installation of FBPIC and its dependencies<a class="headerlink" href="#installation-of-fbpic-and-its-dependencies" title="Permalink to this headline">¶</a></h3>
 <ul>
 <li><p class="first">Install the dependencies of <code class="docutils literal"><span class="pre">fbpic</span></code></p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">numba</span> <span class="n">scipy</span> <span class="n">h5py</span> <span class="n">pyfftw</span> <span class="n">mpi4py</span>
-<span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">numba</span> <span class="n">pyculib</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">numba</span> <span class="n">scipy</span> <span class="n">h5py</span>
+<span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">pyfftw</span> <span class="n">mpi4py</span>
 </pre></div>
 </div>
 </li>
@@ -248,24 +249,19 @@ below:</p>
 <h2>Running simulations<a class="headerlink" href="#running-simulations" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="preparing-a-new-simulation">
 <h3>Preparing a new simulation<a class="headerlink" href="#preparing-a-new-simulation" title="Permalink to this headline">¶</a></h3>
-<p>It is adviced to use the directory <code class="docutils literal"><span class="pre">/global/scratch/&lt;yourUsername&gt;</span></code>
-for faster I/O access, where <code class="docutils literal"><span class="pre">&lt;yourUsername&gt;</span></code> should be replaced by
-your username.</p>
+<p>It is adviced to use the directory <code class="docutils literal"><span class="pre">$SCRATCH</span></code> for faster I/O.</p>
 <p>In order to prepare a new simulation, create a new subdirectory within
 the above-mentioned directory, and copy your input script there.</p>
 </div>
 <div class="section" id="interactive-jobs">
 <h3>Interactive jobs<a class="headerlink" href="#interactive-jobs" title="Permalink to this headline">¶</a></h3>
-<p>In order to request a node with a GPU:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">salloc</span> <span class="o">--</span><span class="n">time</span><span class="o">=</span><span class="mi">00</span><span class="p">:</span><span class="mi">30</span><span class="p">:</span><span class="mi">00</span> <span class="o">--</span><span class="n">nodes</span><span class="o">=</span><span class="mi">1</span> <span class="o">--</span><span class="n">partition</span> <span class="n">lr_manycore</span>  <span class="o">--</span><span class="n">constraint</span><span class="o">=</span><span class="n">lr_kepler</span> <span class="o">--</span><span class="n">qos</span><span class="o">=</span><span class="n">lr_normal</span>
+<p>In order to request a Haswell node on Cori:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">salloc</span> <span class="o">--</span><span class="n">time</span><span class="o">=</span><span class="mi">00</span><span class="p">:</span><span class="mi">30</span><span class="p">:</span><span class="mi">00</span> <span class="o">--</span><span class="n">nodes</span><span class="o">=</span><span class="mi">1</span> <span class="o">--</span><span class="n">partition</span> <span class="n">debug</span>  <span class="o">-</span><span class="n">C</span> <span class="n">haswell</span>
 </pre></div>
 </div>
-<p>Once the job has started, type</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">srun</span> <span class="o">--</span><span class="n">pty</span> <span class="o">-</span><span class="n">u</span> <span class="n">bash</span> <span class="o">-</span><span class="n">i</span>
-</pre></div>
-</div>
-<p>in order to connect to the node that has been allocated. Then <code class="docutils literal"><span class="pre">cd</span></code> to
-the directory where you prepared your input script and type</p>
+<p>(For Edison, simply remove the <cite>-C haswell</cite> option.)</p>
+<p>Once the job has started, you will directly be logged into the node. Then
+<code class="docutils literal"><span class="pre">cd</span></code> to the directory where you prepared your input script and type</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">&lt;</span><span class="n">fbpic_script</span><span class="o">.</span><span class="n">py</span><span class="o">&gt;</span>
 </pre></div>
 </div>
@@ -274,45 +270,36 @@ the directory where you prepared your input script and type</p>
 <h3>Batch job<a class="headerlink" href="#batch-job" title="Permalink to this headline">¶</a></h3>
 <p>Create a new file named <code class="docutils literal"><span class="pre">submission_file</span></code> in the same directory as
 your input script (typically this directory is a subdirectory of
-<code class="docutils literal"><span class="pre">/global/scratch/&lt;yourUsername&gt;</span></code>). Within this new file, copy the
-following text (and replace the bracketed text by the proper values).</p>
+<code class="docutils literal"><span class="pre">$SCRATCH</span></code>). Within this new file, copy the following text
+(and replace the bracketed text by the proper values).</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
 <span class="c1">#SBATCH -J my_job</span>
-<span class="c1">#SBATCH --partition=lr_manycore</span>
-<span class="c1">#SBATCH --constraint lr_kepler</span>
+<span class="c1">#SBATCH --partition=regular</span>
+<span class="c1">#SBATCH -C haswell</span>
 <span class="c1">#SBATCH --time &lt;requestedTime&gt;</span>
 <span class="c1">#SBATCH --nodes 1</span>
-<span class="c1">#SBATCH --qos lr_normal</span>
 
-<span class="n">python</span> <span class="o">&lt;</span><span class="n">fbpic_script</span><span class="o">.</span><span class="n">py</span><span class="o">&gt;</span>
+<span class="n">export</span> <span class="n">NUMBA_NUM_THREADS</span><span class="o">=&lt;</span><span class="n">Number</span> <span class="n">of</span> <span class="n">threads</span> <span class="n">per</span> <span class="n">MPI</span> <span class="n">rank</span><span class="o">&gt;</span>
+<span class="n">export</span> <span class="n">MKL_NUM_THREADS</span><span class="o">=&lt;</span><span class="n">Number</span> <span class="n">of</span> <span class="n">threads</span> <span class="n">per</span> <span class="n">MPI</span> <span class="n">rank</span><span class="o">&gt;</span>
+
+<span class="n">mpirun</span> <span class="o">-</span><span class="n">np</span> <span class="o">&lt;</span><span class="n">Number</span> <span class="n">of</span> <span class="n">MPI</span> <span class="n">ranks</span><span class="o">&gt;</span> <span class="n">python</span> <span class="o">&lt;</span><span class="n">fbpic_script</span><span class="o">.</span><span class="n">py</span><span class="o">&gt;</span>
 </pre></div>
 </div>
-<p>Then run:</p>
+<p>(The line <code class="docutils literal"><span class="pre">#SBATCH</span> <span class="pre">-C</span> <span class="pre">haswell</span></code> is specific to Cori. When running on
+Edison, simply remove this line.) Then run:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">sbatch</span> <span class="n">submission_file</span>
-</pre></div>
-</div>
-<p>In order to see the queue:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">squeue</span> <span class="o">-</span><span class="n">p</span> <span class="n">lr_manycore</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="visualizing-the-results-through-jupyter">
 <h3>Visualizing the results through Jupyter<a class="headerlink" href="#visualizing-the-results-through-jupyter" title="Permalink to this headline">¶</a></h3>
-<p>Lawrencium provides access to the cluster via Jupyter, at <a class="reference external" href="https://lrc-jupyter.lbl.gov">https://lrc-jupyter.lbl.gov</a>. Once you logged in and opened a Jupyter notebook, you can type in a cell:</p>
+<p>Cori provides access to the cluster via Jupyter, at
+<a class="reference external" href="https://jupyter-dev.nersc.gov">https://jupyter-dev.nersc.gov</a>.
+Once you logged in and opened a Jupyter notebook, you can type in a cell:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span>!pip install openPMD-viewer --user
 </pre></div>
 </div>
 <p>in order to install <a class="reference external" href="https://github.com/openPMD/openPMD-viewer">openPMD-viewer</a>.</p>
-</div>
-<div class="section" id="transfering-data-to-your-local-computer">
-<h3>Transfering data to your local computer<a class="headerlink" href="#transfering-data-to-your-local-computer" title="Permalink to this headline">¶</a></h3>
-<p>In order to transfer your data to your local machine, you need to
-connect to the transfer node. From a Lawrencium login node, type:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ssh</span> <span class="n">lrc</span><span class="o">-</span><span class="n">xfer</span><span class="o">.</span><span class="n">scs00</span>
-</pre></div>
-</div>
-<p>You can then use for instance <code class="docutils literal"><span class="pre">rsync</span></code> to transfer data to your local
-computer.</p>
 </div>
 </div>
 </div>
@@ -327,10 +314,10 @@ computer.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="install_cori_edison.html" class="btn btn-neutral float-right" title="Installation on Cori and Edison (NERSC)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="../how_to_run.html" class="btn btn-neutral float-right" title="How to run the code" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="install_jureca.html" class="btn btn-neutral" title="Installation on JURECA (JSC)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="install_lawrencium.html" class="btn btn-neutral" title="Installation on Lawrencium (LBNL)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

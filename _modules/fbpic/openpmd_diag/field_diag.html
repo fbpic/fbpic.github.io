@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fbpic.openpmd_diag.field_diag &mdash; FBPIC 0.4.0 documentation</title>
+  <title>fbpic.openpmd_diag.field_diag &mdash; FBPIC 0.5.0 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="FBPIC 0.4.0 documentation" href="../../../index.html"/>
+    <link rel="top" title="FBPIC 0.5.0 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -65,7 +65,7 @@
             
             
               <div class="version">
-                0.4.0
+                0.5.0
               </div>
             
           
@@ -228,7 +228,15 @@
 <span class="sd">        iteration : int</span>
 <span class="sd">             The current iteration number of the simulation.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># Receive data from the GPU if needed</span>
+        <span class="c1"># If needed: Bring rho/J from spectral space (where they where</span>
+        <span class="c1"># smoothed/corrected) to real space</span>
+        <span class="k">if</span> <span class="s2">&quot;rho&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fieldtypes</span><span class="p">:</span>
+            <span class="c1"># Get &#39;rho_prev&#39;, since it correspond to rho at time n</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">spect2interp</span><span class="p">(</span><span class="s1">&#39;rho_prev&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;J&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fieldtypes</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">spect2interp</span><span class="p">(</span><span class="s1">&#39;J&#39;</span><span class="p">)</span>
+
+        <span class="c1"># If needed: Receive data from the GPU</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">use_cuda</span> <span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">receive_fields_from_gpu</span><span class="p">()</span>
 
@@ -242,8 +250,14 @@
             <span class="n">Nz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">Nz</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># Communicator: remove guard cells and combine subdomains</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">left_proc</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1"># Additionally remove damping cells</span>
+                <span class="n">n_remove</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">n_guard</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">n_damp</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">n_remove</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">n_guard</span>
+            <span class="c1"># Calculate minimum z position of physical domain</span>
             <span class="n">zmin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">zmin</span> \
-            <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">n_guard</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">rank</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">Nz</span><span class="p">)</span><span class="o">*</span><span class="n">dz</span>
+                <span class="o">+</span> <span class="p">(</span><span class="n">n_remove</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">rank</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">Nz</span><span class="p">)</span><span class="o">*</span><span class="n">dz</span>
             <span class="n">Nz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">Nz</span>
 
         <span class="c1"># Create the file with these attributes</span>
@@ -544,7 +558,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.4.0',
+            VERSION:'0.5.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

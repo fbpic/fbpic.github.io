@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fbpic.openpmd_diag.checkpoint_restart &mdash; FBPIC 0.4.0 documentation</title>
+  <title>fbpic.openpmd_diag.checkpoint_restart &mdash; FBPIC 0.5.0 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="FBPIC 0.4.0 documentation" href="../../../index.html"/>
+    <link rel="top" title="FBPIC 0.5.0 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -65,7 +65,7 @@
             
             
               <div class="version">
-                0.4.0
+                0.5.0
               </div>
             
           
@@ -180,10 +180,11 @@
 
 <span class="sd">    The checkpoints are saved in openPMD format, in the directory</span>
 <span class="sd">    `./checkpoints`, with one subdirectory per process.</span>
-<span class="sd">    All the field and particle information of each processor is saved.</span>
+<span class="sd">    The E and B fields and particle information of each processor is saved.</span>
 
-<span class="sd">    NB: Checkpoints are registered among the list of diagnostics</span>
-<span class="sd">    `diags` of the Simulation object `sim`.</span>
+<span class="sd">    NB: Checkpoints are registered in the list `checkpoints` of the Simulation</span>
+<span class="sd">    object `sim`, and written at the end of the PIC loop (whereas regular</span>
+<span class="sd">    diagnostics are written at the beginning of the PIC loop).</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -206,15 +207,15 @@
     <span class="n">write_dir</span> <span class="o">=</span> <span class="s1">&#39;checkpoints/proc</span><span class="si">%d</span><span class="s1">/&#39;</span> <span class="o">%</span><span class="n">comm</span><span class="o">.</span><span class="n">rank</span>
 
     <span class="c1"># Register a periodic FieldDiagnostic in the diagnostics of the simulation</span>
-    <span class="n">sim</span><span class="o">.</span><span class="n">diags</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-        <span class="n">FieldDiagnostic</span><span class="p">(</span> <span class="n">period</span><span class="p">,</span> <span class="n">sim</span><span class="o">.</span><span class="n">fld</span><span class="p">,</span> <span class="n">write_dir</span><span class="o">=</span><span class="n">write_dir</span><span class="p">)</span> <span class="p">)</span>
+    <span class="n">sim</span><span class="o">.</span><span class="n">checkpoints</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">FieldDiagnostic</span><span class="p">(</span> <span class="n">period</span><span class="p">,</span> <span class="n">sim</span><span class="o">.</span><span class="n">fld</span><span class="p">,</span>
+                        <span class="n">fieldtypes</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;E&quot;</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">],</span> <span class="n">write_dir</span><span class="o">=</span><span class="n">write_dir</span> <span class="p">)</span> <span class="p">)</span>
 
     <span class="c1"># Register a periodic ParticleDiagnostic, which contains all</span>
     <span class="c1"># the particles which are present in the simulation</span>
     <span class="n">particle_dict</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sim</span><span class="o">.</span><span class="n">ptcl</span><span class="p">)):</span>
         <span class="n">particle_dict</span><span class="p">[</span> <span class="s1">&#39;species </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span><span class="n">i</span> <span class="p">]</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">ptcl</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-    <span class="n">sim</span><span class="o">.</span><span class="n">diags</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+    <span class="n">sim</span><span class="o">.</span><span class="n">checkpoints</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
         <span class="n">ParticleDiagnostic</span><span class="p">(</span> <span class="n">period</span><span class="p">,</span> <span class="n">particle_dict</span><span class="p">,</span> <span class="n">write_dir</span><span class="o">=</span><span class="n">write_dir</span> <span class="p">)</span> <span class="p">)</span></div>
 
 <div class="viewcode-block" id="restart_from_checkpoint"><a class="viewcode-back" href="../../../api_reference/checkpoint_restart.html#fbpic.openpmd_diag.restart_from_checkpoint">[docs]</a><span class="k">def</span> <span class="nf">restart_from_checkpoint</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">None</span> <span class="p">):</span>
@@ -286,7 +287,7 @@
     <span class="c1"># Loop through the different modes</span>
     <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span> <span class="n">sim</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">Nm</span> <span class="p">):</span>
         <span class="c1"># Load the fields E and B</span>
-        <span class="k">for</span> <span class="n">fieldtype</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;E&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;J&#39;</span><span class="p">]:</span>
+        <span class="k">for</span> <span class="n">fieldtype</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;E&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">]:</span>
             <span class="k">for</span> <span class="n">coord</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="s1">&#39;t&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">]:</span>
                 <span class="n">load_fields</span><span class="p">(</span> <span class="n">sim</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">[</span><span class="n">m</span><span class="p">],</span> <span class="n">fieldtype</span><span class="p">,</span>
                              <span class="n">coord</span><span class="p">,</span> <span class="n">ts</span><span class="p">,</span> <span class="n">iteration</span> <span class="p">)</span></div>
@@ -479,7 +480,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.4.0',
+            VERSION:'0.5.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
