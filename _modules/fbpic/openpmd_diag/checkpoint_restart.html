@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fbpic.openpmd_diag.checkpoint_restart &mdash; FBPIC 0.5.0 documentation</title>
+  <title>fbpic.openpmd_diag.checkpoint_restart &mdash; FBPIC 0.5.3 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="FBPIC 0.5.0 documentation" href="../../../index.html"/>
+    <link rel="top" title="FBPIC 0.5.3 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -65,7 +65,7 @@
             
             
               <div class="version">
-                0.5.0
+                0.5.3
               </div>
             
           
@@ -271,7 +271,8 @@
     <span class="c1"># Select the iteration, and its index</span>
     <span class="k">if</span> <span class="n">iteration</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">iteration</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">iterations</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-    <span class="n">i_iteration</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">iterations</span><span class="o">.</span><span class="n">index</span><span class="p">(</span> <span class="n">iteration</span> <span class="p">)</span>
+    <span class="c1"># Find the index of the closest iteration</span>
+    <span class="n">i_iteration</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span> <span class="nb">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">iterations</span><span class="p">)</span> <span class="o">-</span> <span class="n">iteration</span><span class="p">)</span> <span class="p">)</span>
 
     <span class="c1"># Modify parameters of the simulation</span>
     <span class="n">sim</span><span class="o">.</span><span class="n">iteration</span> <span class="o">=</span> <span class="n">iteration</span>
@@ -480,7 +481,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.5.0',
+            VERSION:'0.5.3',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
