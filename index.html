@@ -167,17 +167,25 @@ physics. It is especially well-suited for physical simulations of <strong>laser-
 <p>The distinctive feature of FBPIC, compared to <em>most</em> other PIC codes, is to use
 a <strong>spectral cylindrical representation.</strong> This makes the code both <strong>fast</strong>
 and <strong>accurate</strong>, for situations with <strong>close-to-cylindrical
-symmetry</strong>. Partly because of this representation, the code is
-<strong>dispersion-free in all directions</strong>, and avoids some <strong>major interpolation
-artifacts</strong> that other PIC codes may have. For a brief overview of the
+symmetry</strong>. For a brief overview of the
 algorithm, its advantages and limitations, see the section <a class="reference internal" href="overview.html"><span class="doc">Overview of the code</span></a>.</p>
-<p>FBPIC can run on CPU (with multi-threading) or GPU. For large
+<p>In addition, FBPIC implements several <strong>useful features for laser-plasma acceleration</strong>, including:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Moving window</li>
+<li>Calculation of <strong>space-charge fields</strong> at the beginning of the simulation</li>
+<li>Intrinsic <strong>mitigation of Numerical Cherenkov Radiation</strong> (NCR) from relativistic bunches</li>
+<li><strong>Field ionization</strong> module (ADK model)</li>
+<li>Support for <strong>boosted-frame simulations</strong> (including on-the-fly conversion of simulation results to the lab frame, and suppression of the Numerical Cherenkov Instability)</li>
+</ul>
+</div></blockquote>
+<p>FBPIC can run on <strong>multi-core CPU</strong> (with multi-threading) or <strong>GPU</strong>. For large
 simulations, running the code on GPU can be much faster than on CPU.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">This is an Alpha release, and some parts of the code are not yet fully
-functional. In particular, for <strong>multi</strong>-CPU and <strong>multi</strong>-GPU runs
-(using MPI), the code is not yet production-ready.</p>
+<p class="last">Running simulations with <strong>multiple</strong> CPU nodes or <strong>multiple</strong> GPUs
+(using <strong>MPI</strong>) is currently functional, but not yet officially supported.
+Use this feature with caution for now.</p>
 </div>
 <div class="section" id="contents-of-the-documentation">
 <h2>Contents of the documentation<a class="headerlink" href="#contents-of-the-documentation" title="Permalink to this headline">¶</a></h2>
