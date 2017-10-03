@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Laser-plasma utilities &mdash; FBPIC 0.5.3 documentation</title>
+  <title>Laser-plasma utilities &mdash; FBPIC 0.5.4 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="FBPIC 0.5.3 documentation" href="../index.html"/>
+    <link rel="top" title="FBPIC 0.5.4 documentation" href="../index.html"/>
         <link rel="up" title="API reference" href="api_reference.html"/>
         <link rel="next" title="Advanced use" href="../advanced/advanced.html"/>
         <link rel="prev" title="Checkpoints and restarts" href="checkpoint_restart.html"/> 
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                0.5.3
+                0.5.4
               </div>
             
           
@@ -240,7 +240,7 @@ of the antenna. If not provided, then the z0_antenna is set to zf.</li>
 <h2>Beam utilities<a class="headerlink" href="#beam-utilities" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="fbpic.lpa_utils.bunch.add_elec_bunch">
-<code class="descclassname">fbpic.lpa_utils.bunch.</code><code class="descname">add_elec_bunch</code><span class="sig-paren">(</span><em>sim</em>, <em>gamma0</em>, <em>n_e</em>, <em>p_zmin</em>, <em>p_zmax</em>, <em>p_rmin</em>, <em>p_rmax</em>, <em>p_nr=2</em>, <em>p_nz=2</em>, <em>p_nt=4</em>, <em>dens_func=None</em>, <em>boost=None</em>, <em>direction=’forward’</em>, <em>filter_currents=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/lpa_utils/bunch.html#add_elec_bunch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.bunch.add_elec_bunch" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">fbpic.lpa_utils.bunch.</code><code class="descname">add_elec_bunch</code><span class="sig-paren">(</span><em>sim</em>, <em>gamma0</em>, <em>n_e</em>, <em>p_zmin</em>, <em>p_zmax</em>, <em>p_rmin</em>, <em>p_rmax</em>, <em>p_nr=2</em>, <em>p_nz=2</em>, <em>p_nt=4</em>, <em>dens_func=None</em>, <em>boost=None</em>, <em>direction=’forward’</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/lpa_utils/bunch.html#add_elec_bunch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.bunch.add_elec_bunch" title="Permalink to this definition">¶</a></dt>
 <dd><p>Introduce a simple relativistic electron bunch in the simulation,
 along with its space charge field.</p>
 <p>Uniform particle distribution with weights according to density function.</p>
@@ -266,7 +266,6 @@ a 1d array containing the density <em>relative to n_e</em>
 (i.e. a number between 0 and 1) at the given positions.</li>
 <li><strong>boost</strong> (<em>a BoostConverter object</em><em>, </em><em>optional</em>) – A BoostConverter object defining the Lorentz boost of
 the simulation.</li>
-<li><strong>filter_currents</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to filter the currents in k space (True by default)</li>
 <li><strong>direction</strong> (<em>string</em><em>, </em><em>optional</em>) – Can be either “forward” or “backward”.
 Propagation direction of the beam.</li>
 </ul>
@@ -278,7 +277,7 @@ Propagation direction of the beam.</li>
 
 <dl class="function">
 <dt id="fbpic.lpa_utils.bunch.add_elec_bunch_gaussian">
-<code class="descclassname">fbpic.lpa_utils.bunch.</code><code class="descname">add_elec_bunch_gaussian</code><span class="sig-paren">(</span><em>sim</em>, <em>sig_r</em>, <em>sig_z</em>, <em>n_emit</em>, <em>gamma0</em>, <em>sig_gamma</em>, <em>Q</em>, <em>N</em>, <em>tf=0.0</em>, <em>zf=0.0</em>, <em>boost=None</em>, <em>filter_currents=True</em>, <em>save_beam=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/lpa_utils/bunch.html#add_elec_bunch_gaussian"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.bunch.add_elec_bunch_gaussian" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">fbpic.lpa_utils.bunch.</code><code class="descname">add_elec_bunch_gaussian</code><span class="sig-paren">(</span><em>sim</em>, <em>sig_r</em>, <em>sig_z</em>, <em>n_emit</em>, <em>gamma0</em>, <em>sig_gamma</em>, <em>Q</em>, <em>N</em>, <em>tf=0.0</em>, <em>zf=0.0</em>, <em>boost=None</em>, <em>save_beam=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/lpa_utils/bunch.html#add_elec_bunch_gaussian"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.bunch.add_elec_bunch_gaussian" title="Permalink to this definition">¶</a></dt>
 <dd><p>Introduce a relativistic Gaussian electron bunch in the simulation,
 along with its space charge field.</p>
 <p>The bunch is initialized with a normalized emittance <cite>n_emit</cite>,
@@ -302,7 +301,6 @@ Thus if <cite>tf</cite> is not 0, the bunch will be initially out of focus.
 <li><strong>tf</strong> (<em>float</em><em> (</em><em>in seconds</em><em>)</em><em>, </em><em>optional</em>) – Time at which the bunch reaches focus.</li>
 <li><strong>boost</strong> (<em>a BoostConverter object</em><em>, </em><em>optional</em>) – A BoostConverter object defining the Lorentz boost of
 the simulation.</li>
-<li><strong>filter_currents</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to filter the currents in k space (True by default)</li>
 <li><strong>save_beam</strong> (<em>string</em><em>, </em><em>optional</em>) – Saves the generated beam distribution as an .npz file “string”.npz</li>
 </ul>
 </td>
@@ -313,7 +311,7 @@ the simulation.</li>
 
 <dl class="function">
 <dt id="fbpic.lpa_utils.bunch.add_elec_bunch_from_arrays">
-<code class="descclassname">fbpic.lpa_utils.bunch.</code><code class="descname">add_elec_bunch_from_arrays</code><span class="sig-paren">(</span><em>sim</em>, <em>x</em>, <em>y</em>, <em>z</em>, <em>ux</em>, <em>uy</em>, <em>uz</em>, <em>w</em>, <em>boost=None</em>, <em>filter_currents=True</em>, <em>direction=’forward’</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/lpa_utils/bunch.html#add_elec_bunch_from_arrays"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.bunch.add_elec_bunch_from_arrays" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">fbpic.lpa_utils.bunch.</code><code class="descname">add_elec_bunch_from_arrays</code><span class="sig-paren">(</span><em>sim</em>, <em>x</em>, <em>y</em>, <em>z</em>, <em>ux</em>, <em>uy</em>, <em>uz</em>, <em>w</em>, <em>boost=None</em>, <em>direction=’forward’</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/lpa_utils/bunch.html#add_elec_bunch_from_arrays"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.bunch.add_elec_bunch_from_arrays" title="Permalink to this definition">¶</a></dt>
 <dd><p>Introduce a relativistic electron bunch in the simulation,
 along with its space charge field, loading particles from numpy arrays.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -328,7 +326,6 @@ along with its space charge field, loading particles from numpy arrays.</p>
 that each macroparticle corresponds to.</li>
 <li><strong>boost</strong> (<em>a BoostConverter object</em><em>, </em><em>optional</em>) – A BoostConverter object defining the Lorentz boost of
 the simulation.</li>
-<li><strong>filter_currents</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to filter the currents in k space (True by default)</li>
 <li><strong>direction</strong> (<em>string</em><em>, </em><em>optional</em>) – Can be either “forward” or “backward”.
 Propagation direction of the beam.</li>
 </ul>
@@ -339,8 +336,44 @@ Propagation direction of the beam.</li>
 </dd></dl>
 
 <dl class="function">
+<dt id="fbpic.lpa_utils.bunch.add_elec_bunch_openPMD">
+<code class="descclassname">fbpic.lpa_utils.bunch.</code><code class="descname">add_elec_bunch_openPMD</code><span class="sig-paren">(</span><em>sim</em>, <em>ts_path</em>, <em>z_off=0.0</em>, <em>species=None</em>, <em>select=None</em>, <em>iteration=None</em>, <em>boost=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/lpa_utils/bunch.html#add_elec_bunch_openPMD"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.bunch.add_elec_bunch_openPMD" title="Permalink to this definition">¶</a></dt>
+<dd><p>Introduce a relativistic electron bunch in the simulation,
+along with its space charge field, loading particles from an openPMD
+timeseries.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>sim</strong> (<em>a Simulation object</em>) – The structure that contains the simulation.</li>
+<li><strong>ts_path</strong> (<em>string</em>) – The path to the directory where the openPMD files are.
+For the moment, only HDF5 files are supported. There should be
+one file per iteration, and the name of the files should end
+with the iteration number, followed by ‘.h5’ (e.g. data0005000.h5)</li>
+<li><strong>z_off</strong> (<em>float</em><em> (</em><em>in meters</em><em>)</em>) – Shift the particle positions in z by z_off. By default the initialized
+phasespace is centered at z=0.</li>
+<li><strong>species</strong> (<em>string</em>) – A string indicating the name of the species
+This is optional if there is only one species</li>
+<li><strong>select</strong> (<em>dict</em><em>, </em><em>optional</em>) – Either None or a dictionary of rules
+to select the particles, of the form
+‘x’ : [-4., 10.]   (Particles having x between -4 and 10 microns)
+‘ux’ : [-0.1, 0.1] (Particles having ux between -0.1 and 0.1 mc)
+‘uz’ : [5., None]  (Particles with uz above 5 mc)</li>
+<li><strong>iteration</strong> (<em>integer</em><em> (</em><em>optional</em><em>)</em>) – The iteration number of the openPMD file from which to extract the
+particles.</li>
+<li><strong>boost</strong> (<em>a BoostConverter object</em><em>, </em><em>optional</em>) – A BoostConverter object defining the Lorentz boost of
+the simulation.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="fbpic.lpa_utils.bunch.add_elec_bunch_file">
-<code class="descclassname">fbpic.lpa_utils.bunch.</code><code class="descname">add_elec_bunch_file</code><span class="sig-paren">(</span><em>sim</em>, <em>filename</em>, <em>Q_tot</em>, <em>z_off=0.0</em>, <em>boost=None</em>, <em>filter_currents=True</em>, <em>direction=’forward’</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/lpa_utils/bunch.html#add_elec_bunch_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.bunch.add_elec_bunch_file" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">fbpic.lpa_utils.bunch.</code><code class="descname">add_elec_bunch_file</code><span class="sig-paren">(</span><em>sim</em>, <em>filename</em>, <em>Q_tot</em>, <em>z_off=0.0</em>, <em>boost=None</em>, <em>direction=’forward’</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/lpa_utils/bunch.html#add_elec_bunch_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.bunch.add_elec_bunch_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Introduce a relativistic electron bunch in the simulation,
 along with its space charge field, loading particles from text file.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -356,7 +389,6 @@ x [m]  y [m]  z [m]  ux [unitless]  uy [unitless]  uz [unitless]</li>
 <li><strong>z_off</strong> (<em>float</em><em> (</em><em>in meters</em><em>)</em>) – Shift the particle positions in z by z_off</li>
 <li><strong>boost</strong> (<em>a BoostConverter object</em><em>, </em><em>optional</em>) – A BoostConverter object defining the Lorentz boost of
 the simulation.</li>
-<li><strong>filter_currents</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to filter the currents in k space (True by default)</li>
 <li><strong>direction</strong> (<em>string</em><em>, </em><em>optional</em>) – Can be either “forward” or “backward”.
 Propagation direction of the beam.</li>
 </ul>
@@ -473,7 +505,7 @@ a field of 1 Tesla and a period of 1 cm :</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.5.3',
+            VERSION:'0.5.4',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

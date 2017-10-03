@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fbpic.lpa_utils.bunch &mdash; FBPIC 0.5.3 documentation</title>
+  <title>fbpic.lpa_utils.bunch &mdash; FBPIC 0.5.4 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="FBPIC 0.5.3 documentation" href="../../../index.html"/>
+    <link rel="top" title="FBPIC 0.5.4 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -65,7 +65,7 @@
             
             
               <div class="version">
-                0.5.3
+                0.5.4
               </div>
             
           
@@ -169,11 +169,12 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">scipy.constants</span> <span class="k">import</span> <span class="n">m_e</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">epsilon_0</span><span class="p">,</span> <span class="n">mu_0</span>
 <span class="kn">from</span> <span class="nn">fbpic.main</span> <span class="k">import</span> <span class="n">adapt_to_grid</span>
+<span class="kn">from</span> <span class="nn">fbpic.fields</span> <span class="k">import</span> <span class="n">Fields</span>
 <span class="kn">from</span> <span class="nn">fbpic.particles</span> <span class="k">import</span> <span class="n">Particles</span>
 
 <div class="viewcode-block" id="add_elec_bunch"><a class="viewcode-back" href="../../../api_reference/lpa_utilities.html#fbpic.lpa_utils.bunch.add_elec_bunch">[docs]</a><span class="k">def</span> <span class="nf">add_elec_bunch</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">gamma0</span><span class="p">,</span> <span class="n">n_e</span><span class="p">,</span> <span class="n">p_zmin</span><span class="p">,</span> <span class="n">p_zmax</span><span class="p">,</span> <span class="n">p_rmin</span><span class="p">,</span> <span class="n">p_rmax</span><span class="p">,</span>
                 <span class="n">p_nr</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">p_nz</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">p_nt</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">dens_func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">boost</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;forward&#39;</span><span class="p">,</span> <span class="n">filter_currents</span><span class="o">=</span><span class="kc">True</span> <span class="p">)</span> <span class="p">:</span>
+                <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;forward&#39;</span> <span class="p">)</span> <span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Introduce a simple relativistic electron bunch in the simulation,</span>
 <span class="sd">    along with its space charge field.</span>
@@ -223,9 +224,6 @@
 <span class="sd">        A BoostConverter object defining the Lorentz boost of</span>
 <span class="sd">        the simulation.</span>
 
-<span class="sd">    filter_currents : bool, optional</span>
-<span class="sd">        Whether to filter the currents in k space (True by default)</span>
-
 <span class="sd">    direction : string, optional</span>
 <span class="sd">        Can be either &quot;forward&quot; or &quot;backward&quot;.</span>
 <span class="sd">        Propagation direction of the beam.</span>
@@ -267,12 +265,10 @@
     <span class="n">sim</span><span class="o">.</span><span class="n">ptcl</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">relat_elec</span> <span class="p">)</span>
 
     <span class="c1"># Get the corresponding space-charge fields</span>
-    <span class="n">get_space_charge_fields</span><span class="p">(</span> <span class="n">sim</span><span class="o">.</span><span class="n">fld</span><span class="p">,</span> <span class="p">[</span><span class="n">relat_elec</span><span class="p">],</span> <span class="n">gamma0</span><span class="p">,</span>
-                             <span class="n">filter_currents</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">)</span></div>
+    <span class="n">get_space_charge_fields</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">relat_elec</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="add_elec_bunch_gaussian"><a class="viewcode-back" href="../../../api_reference/lpa_utilities.html#fbpic.lpa_utils.bunch.add_elec_bunch_gaussian">[docs]</a><span class="k">def</span> <span class="nf">add_elec_bunch_gaussian</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">sig_r</span><span class="p">,</span> <span class="n">sig_z</span><span class="p">,</span> <span class="n">n_emit</span><span class="p">,</span> <span class="n">gamma0</span><span class="p">,</span> <span class="n">sig_gamma</span><span class="p">,</span>
-                        <span class="n">Q</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">tf</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">zf</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">boost</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                        <span class="n">filter_currents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">save_beam</span><span class="o">=</span><span class="kc">None</span> <span class="p">):</span>
+                        <span class="n">Q</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">tf</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">zf</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">boost</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">save_beam</span><span class="o">=</span><span class="kc">None</span> <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Introduce a relativistic Gaussian electron bunch in the simulation,</span>
 <span class="sd">    along with its space charge field.</span>
@@ -318,9 +314,6 @@
 <span class="sd">        A BoostConverter object defining the Lorentz boost of</span>
 <span class="sd">        the simulation.</span>
 
-<span class="sd">    filter_currents : bool, optional</span>
-<span class="sd">        Whether to filter the currents in k space (True by default)</span>
-
 <span class="sd">    save_beam : string, optional</span>
 <span class="sd">        Saves the generated beam distribution as an .npz file &quot;string&quot;.npz</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -363,12 +356,11 @@
             <span class="n">inv_gamma</span><span class="o">=</span><span class="n">inv_gamma</span><span class="p">,</span> <span class="n">w</span><span class="o">=</span><span class="n">w</span><span class="p">)</span>
 
     <span class="c1"># Add the electrons to the simulation</span>
-    <span class="n">add_elec_bunch_from_arrays</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">ux</span><span class="p">,</span> <span class="n">uy</span><span class="p">,</span> <span class="n">uz</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span>
-        <span class="n">boost</span><span class="o">=</span><span class="n">boost</span><span class="p">,</span> <span class="n">filter_currents</span><span class="o">=</span><span class="n">filter_currents</span> <span class="p">)</span></div>
+    <span class="n">add_elec_bunch_from_arrays</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">ux</span><span class="p">,</span> <span class="n">uy</span><span class="p">,</span> <span class="n">uz</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">boost</span><span class="o">=</span><span class="n">boost</span> <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="add_elec_bunch_file"><a class="viewcode-back" href="../../../api_reference/lpa_utilities.html#fbpic.lpa_utils.bunch.add_elec_bunch_file">[docs]</a><span class="k">def</span> <span class="nf">add_elec_bunch_file</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">Q_tot</span><span class="p">,</span> <span class="n">z_off</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">boost</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                    <span class="n">filter_currents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;forward&#39;</span> <span class="p">):</span>
+                        <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;forward&#39;</span> <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Introduce a relativistic electron bunch in the simulation,</span>
 <span class="sd">    along with its space charge field, loading particles from text file.</span>
@@ -393,9 +385,6 @@
 <span class="sd">        A BoostConverter object defining the Lorentz boost of</span>
 <span class="sd">        the simulation.</span>
 
-<span class="sd">    filter_currents : bool, optional</span>
-<span class="sd">        Whether to filter the currents in k space (True by default)</span>
-
 <span class="sd">    direction : string, optional</span>
 <span class="sd">        Can be either &quot;forward&quot; or &quot;backward&quot;.</span>
 <span class="sd">        Propagation direction of the beam.</span>
@@ -417,11 +406,11 @@
 
     <span class="c1"># Add the electrons to the simulation</span>
     <span class="n">add_elec_bunch_from_arrays</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">ux</span><span class="p">,</span> <span class="n">uy</span><span class="p">,</span> <span class="n">uz</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span>
-        <span class="n">boost</span><span class="o">=</span><span class="n">boost</span><span class="p">,</span> <span class="n">filter_currents</span><span class="o">=</span><span class="n">filter_currents</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">direction</span> <span class="p">)</span></div>
+        <span class="n">boost</span><span class="o">=</span><span class="n">boost</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">direction</span> <span class="p">)</span></div>
 
 
-<span class="k">def</span> <span class="nf">add_elec_bunch_openPMD</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">ts_path</span><span class="p">,</span> <span class="n">z_off</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">species</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                            <span class="n">iteration</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">boost</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filter_currents</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="add_elec_bunch_openPMD"><a class="viewcode-back" href="../../../api_reference/lpa_utilities.html#fbpic.lpa_utils.bunch.add_elec_bunch_openPMD">[docs]</a><span class="k">def</span> <span class="nf">add_elec_bunch_openPMD</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">ts_path</span><span class="p">,</span> <span class="n">z_off</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">species</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                            <span class="n">iteration</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">boost</span><span class="o">=</span><span class="kc">None</span> <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Introduce a relativistic electron bunch in the simulation,</span>
 <span class="sd">    along with its space charge field, loading particles from an openPMD</span>
@@ -460,9 +449,6 @@
 <span class="sd">    boost : a BoostConverter object, optional</span>
 <span class="sd">        A BoostConverter object defining the Lorentz boost of</span>
 <span class="sd">        the simulation.</span>
-
-<span class="sd">    filter_currents : bool, optional</span>
-<span class="sd">        Whether to filter the currents in k space (True by default)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Import openPMD viewer</span>
     <span class="k">try</span><span class="p">:</span>
@@ -485,12 +471,11 @@
     <span class="n">z</span> <span class="o">=</span> <span class="n">z</span> <span class="o">-</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="n">z</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">amin</span><span class="p">(</span><span class="n">z</span><span class="p">))</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">z_off</span>
 
     <span class="c1"># Add the electrons to the simulation, and calculate the space charge</span>
-    <span class="n">add_elec_bunch_from_arrays</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">ux</span><span class="p">,</span> <span class="n">uy</span><span class="p">,</span> <span class="n">uz</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span>
-                                <span class="n">boost</span><span class="o">=</span><span class="n">boost</span><span class="p">,</span> <span class="n">filter_currents</span><span class="o">=</span><span class="n">filter_currents</span><span class="p">)</span>
+    <span class="n">add_elec_bunch_from_arrays</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">ux</span><span class="p">,</span> <span class="n">uy</span><span class="p">,</span> <span class="n">uz</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">boost</span><span class="o">=</span><span class="n">boost</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="add_elec_bunch_from_arrays"><a class="viewcode-back" href="../../../api_reference/lpa_utilities.html#fbpic.lpa_utils.bunch.add_elec_bunch_from_arrays">[docs]</a><span class="k">def</span> <span class="nf">add_elec_bunch_from_arrays</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">ux</span><span class="p">,</span> <span class="n">uy</span><span class="p">,</span> <span class="n">uz</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span>
-                    <span class="n">boost</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filter_currents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;forward&#39;</span> <span class="p">):</span>
+                    <span class="n">boost</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;forward&#39;</span> <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Introduce a relativistic electron bunch in the simulation,</span>
 <span class="sd">    along with its space charge field, loading particles from numpy arrays.</span>
@@ -513,9 +498,6 @@
 <span class="sd">    boost : a BoostConverter object, optional</span>
 <span class="sd">        A BoostConverter object defining the Lorentz boost of</span>
 <span class="sd">        the simulation.</span>
-
-<span class="sd">    filter_currents : bool, optional</span>
-<span class="sd">        Whether to filter the currents in k space (True by default)</span>
 
 <span class="sd">    direction : string, optional</span>
 <span class="sd">        Can be either &quot;forward&quot; or &quot;backward&quot;.</span>
@@ -564,80 +546,105 @@
     <span class="n">sim</span><span class="o">.</span><span class="n">ptcl</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">relat_elec</span> <span class="p">)</span>
 
     <span class="c1"># Get the corresponding space-charge fields</span>
-    <span class="c1"># include a larger tolerance of the deviation of inv_gamma from 1./gamma0</span>
-    <span class="c1"># to allow for energy spread</span>
-    <span class="n">gamma0</span> <span class="o">=</span> <span class="mf">1.</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">relat_elec</span><span class="o">.</span><span class="n">inv_gamma</span><span class="p">)</span>
-    <span class="n">get_space_charge_fields</span><span class="p">(</span> <span class="n">sim</span><span class="o">.</span><span class="n">fld</span><span class="p">,</span> <span class="p">[</span><span class="n">relat_elec</span><span class="p">],</span> <span class="n">gamma0</span><span class="p">,</span>
-      <span class="n">filter_currents</span><span class="o">=</span><span class="n">filter_currents</span><span class="p">,</span> <span class="n">check_gaminv</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">)</span></div>
+    <span class="n">get_space_charge_fields</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">relat_elec</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">)</span></div>
 
-<span class="k">def</span> <span class="nf">get_space_charge_fields</span><span class="p">(</span> <span class="n">fld</span><span class="p">,</span> <span class="n">ptcl</span><span class="p">,</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">filter_currents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                             <span class="n">check_gaminv</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;forward&#39;</span> <span class="p">)</span> <span class="p">:</span>
+<span class="k">def</span> <span class="nf">get_space_charge_fields</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">ptcl</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;forward&#39;</span><span class="p">)</span> <span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Calculate the space charge field on the grid</span>
+<span class="sd">    Add the space charge field from `ptcl` the interpolation grid</span>
 
-<span class="sd">    This assumes that all the particles being passed have</span>
-<span class="sd">    the same gamma factor.</span>
+<span class="sd">    This assumes that all the particles being passed have the same gamma.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    fld : a Fields object</span>
-<span class="sd">        Contains the values of the fields</span>
+<span class="sd">    sim : a Simulation object</span>
+<span class="sd">        Contains the values of the fields, and the MPI communicator</span>
 
-<span class="sd">    ptcl : a list of Particles object</span>
-<span class="sd">        (one element per species)</span>
+<span class="sd">    ptcl : a Particles object</span>
 <span class="sd">        The list of the species which are relativistic and</span>
 <span class="sd">        will produce a space charge field. (Do not pass the</span>
 <span class="sd">        particles which are at rest.)</span>
-
-<span class="sd">    gamma : float</span>
-<span class="sd">        The Lorentz factor of the particles</span>
-
-<span class="sd">    filter_currents : bool, optional</span>
-<span class="sd">       Whether to filter the currents (in k space by default)</span>
-
-<span class="sd">    check_gaminv : bool, optional</span>
-<span class="sd">        Explicitly check that all particles have the same</span>
-<span class="sd">        gamma factor (assumed by the model)</span>
 
 <span class="sd">    direction : string, optional</span>
 <span class="sd">        Can be either &quot;forward&quot; or &quot;backward&quot;.</span>
 <span class="sd">        Propagation direction of the beam.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># Check that all the particles have the right gamma</span>
-    <span class="k">if</span> <span class="n">check_gaminv</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">species</span> <span class="ow">in</span> <span class="n">ptcl</span> <span class="p">:</span>
-            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span> <span class="n">species</span><span class="o">.</span><span class="n">inv_gamma</span><span class="p">,</span> <span class="mf">1.</span><span class="o">/</span><span class="n">gamma</span> <span class="p">)</span> <span class="o">==</span> <span class="kc">False</span> <span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The particles in ptcl do not have &quot;</span>
-                            <span class="s2">&quot;a Lorentz factor matching gamma. Please check &quot;</span>
-                            <span class="s2">&quot;that they have been properly initialized.&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Calculating initial space charge field...&quot;</span><span class="p">)</span>
 
-    <span class="c1"># Project the charge and currents onto the grid</span>
-    <span class="n">fld</span><span class="o">.</span><span class="n">erase</span><span class="p">(</span><span class="s1">&#39;rho&#39;</span><span class="p">)</span>
-    <span class="n">fld</span><span class="o">.</span><span class="n">erase</span><span class="p">(</span><span class="s1">&#39;J&#39;</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">species</span> <span class="ow">in</span> <span class="n">ptcl</span> <span class="p">:</span>
-        <span class="n">species</span><span class="o">.</span><span class="n">deposit</span><span class="p">(</span> <span class="n">fld</span><span class="p">,</span> <span class="s1">&#39;rho&#39;</span> <span class="p">)</span>
-        <span class="n">species</span><span class="o">.</span><span class="n">deposit</span><span class="p">(</span> <span class="n">fld</span><span class="p">,</span> <span class="s1">&#39;J&#39;</span> <span class="p">)</span>
-    <span class="n">fld</span><span class="o">.</span><span class="n">divide_by_volume</span><span class="p">(</span><span class="s1">&#39;rho&#39;</span><span class="p">)</span>
-    <span class="n">fld</span><span class="o">.</span><span class="n">divide_by_volume</span><span class="p">(</span><span class="s1">&#39;J&#39;</span><span class="p">)</span>
-    <span class="c1"># Convert to the spectral grid</span>
-    <span class="n">fld</span><span class="o">.</span><span class="n">interp2spect</span><span class="p">(</span><span class="s1">&#39;rho_next&#39;</span><span class="p">)</span>
-    <span class="n">fld</span><span class="o">.</span><span class="n">interp2spect</span><span class="p">(</span><span class="s1">&#39;J&#39;</span><span class="p">)</span>
-    <span class="c1"># Filter the currents</span>
-    <span class="k">if</span> <span class="n">filter_currents</span> <span class="p">:</span>
-        <span class="n">fld</span><span class="o">.</span><span class="n">filter_spect</span><span class="p">(</span><span class="s1">&#39;rho_next&#39;</span><span class="p">)</span>
-        <span class="n">fld</span><span class="o">.</span><span class="n">filter_spect</span><span class="p">(</span><span class="s1">&#39;J&#39;</span><span class="p">)</span>
+    <span class="c1"># Calculate the mean gamma by summing on each subdomain</span>
+    <span class="n">gamma_sum_local</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="n">ptcl</span><span class="o">.</span><span class="n">inv_gamma</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">sim</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">mpi_comm</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">gamma</span> <span class="o">=</span> <span class="n">gamma_sum_local</span><span class="o">/</span><span class="n">ptcl</span><span class="o">.</span><span class="n">Ntot</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">gamma_sum</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">mpi_comm</span><span class="o">.</span><span class="n">allreduce</span><span class="p">(</span><span class="n">gamma_sum_local</span><span class="p">)</span>
+        <span class="n">Ntot</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">mpi_comm</span><span class="o">.</span><span class="n">allreduce</span><span class="p">(</span><span class="n">ptcl</span><span class="o">.</span><span class="n">Ntot</span><span class="p">)</span>
+        <span class="n">gamma</span> <span class="o">=</span> <span class="n">gamma_sum</span><span class="o">/</span><span class="n">Ntot</span>
 
-    <span class="c1"># Get the space charge field in spectral space</span>
-    <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">fld</span><span class="o">.</span><span class="n">Nm</span><span class="p">)</span> <span class="p">:</span>
-        <span class="n">get_space_charge_spect</span><span class="p">(</span> <span class="n">fld</span><span class="o">.</span><span class="n">spect</span><span class="p">[</span><span class="n">m</span><span class="p">],</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">direction</span> <span class="p">)</span>
+    <span class="c1"># Project the charge and currents onto the local subdomain</span>
+    <span class="n">sim</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">erase</span><span class="p">(</span><span class="s1">&#39;rho&#39;</span><span class="p">)</span>
+    <span class="n">sim</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">erase</span><span class="p">(</span><span class="s1">&#39;J&#39;</span><span class="p">)</span>
+    <span class="n">ptcl</span><span class="o">.</span><span class="n">deposit</span><span class="p">(</span> <span class="n">sim</span><span class="o">.</span><span class="n">fld</span><span class="p">,</span> <span class="s1">&#39;rho&#39;</span> <span class="p">)</span>
+    <span class="n">ptcl</span><span class="o">.</span><span class="n">deposit</span><span class="p">(</span> <span class="n">sim</span><span class="o">.</span><span class="n">fld</span><span class="p">,</span> <span class="s1">&#39;J&#39;</span> <span class="p">)</span>
+    <span class="n">sim</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">divide_by_volume</span><span class="p">(</span><span class="s1">&#39;rho&#39;</span><span class="p">)</span>
+    <span class="n">sim</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">divide_by_volume</span><span class="p">(</span><span class="s1">&#39;J&#39;</span><span class="p">)</span>
+    <span class="c1"># Exchange guard cells</span>
+    <span class="n">sim</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">exchange_fields</span><span class="p">(</span> <span class="n">sim</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">,</span> <span class="s1">&#39;rho&#39;</span><span class="p">,</span> <span class="s1">&#39;add&#39;</span> <span class="p">)</span>
+    <span class="n">sim</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">exchange_fields</span><span class="p">(</span> <span class="n">sim</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">,</span> <span class="s1">&#39;J&#39;</span><span class="p">,</span> <span class="s1">&#39;add&#39;</span><span class="p">)</span>
 
-    <span class="c1"># Convert to the interpolation grid</span>
-    <span class="n">fld</span><span class="o">.</span><span class="n">spect2interp</span><span class="p">(</span> <span class="s1">&#39;E&#39;</span> <span class="p">)</span>
-    <span class="n">fld</span><span class="o">.</span><span class="n">spect2interp</span><span class="p">(</span> <span class="s1">&#39;B&#39;</span> <span class="p">)</span>
+    <span class="c1"># Create a global field object across all subdomains, and copy the sources</span>
+    <span class="c1"># (Space-charge calculation is a global operation)</span>
+    <span class="c1"># Note: in the single-proc case, this is also useful in order not to</span>
+    <span class="c1"># erase the pre-existing E and B field in sim.fld</span>
+    <span class="n">global_Nz</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">Nz</span>
+    <span class="n">global_zmin</span><span class="p">,</span> <span class="n">global_zmax</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">get_zmin_zmax</span><span class="p">(</span><span class="n">sim</span><span class="o">.</span><span class="n">fld</span><span class="p">,</span> <span class="n">local</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">global_fld</span> <span class="o">=</span> <span class="n">Fields</span><span class="p">(</span> <span class="n">global_Nz</span><span class="p">,</span> <span class="n">global_zmax</span><span class="p">,</span>
+            <span class="n">sim</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">Nr</span><span class="p">,</span> <span class="n">sim</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">rmax</span><span class="p">,</span> <span class="n">sim</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">Nm</span><span class="p">,</span> <span class="n">sim</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">dt</span><span class="p">,</span>
+            <span class="n">zmin</span><span class="o">=</span><span class="n">global_zmin</span><span class="p">,</span> <span class="n">n_order</span><span class="o">=</span><span class="n">sim</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">n_order</span><span class="p">,</span> <span class="n">use_cuda</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="c1"># Gather the sources on the interpolation grid of global_fld</span>
+    <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">sim</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">Nm</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;Jr&#39;</span><span class="p">,</span> <span class="s1">&#39;Jt&#39;</span><span class="p">,</span> <span class="s1">&#39;Jz&#39;</span><span class="p">,</span> <span class="s1">&#39;rho&#39;</span><span class="p">]:</span>
+            <span class="n">local_array</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span> <span class="n">sim</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">[</span><span class="n">m</span><span class="p">],</span> <span class="n">field</span> <span class="p">)</span>
+            <span class="n">gathered_array</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">gather_grid_array</span><span class="p">(</span> <span class="n">local_array</span> <span class="p">)</span>
+            <span class="nb">setattr</span><span class="p">(</span> <span class="n">global_fld</span><span class="o">.</span><span class="n">interp</span><span class="p">[</span><span class="n">m</span><span class="p">],</span> <span class="n">field</span><span class="p">,</span> <span class="n">gathered_array</span> <span class="p">)</span>
 
-    <span class="c1"># Move the charge density to rho_prev</span>
-    <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">fld</span><span class="o">.</span><span class="n">Nm</span><span class="p">)</span> <span class="p">:</span>
-        <span class="n">fld</span><span class="o">.</span><span class="n">spect</span><span class="p">[</span><span class="n">m</span><span class="p">]</span><span class="o">.</span><span class="n">push_rho</span><span class="p">()</span>
+    <span class="c1"># Calculate the space-charge fields on the global grid</span>
+    <span class="c1"># (For a multi-proc simulation: only performed by the first proc)</span>
+    <span class="k">if</span> <span class="n">sim</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">rank</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="c1"># - Convert the sources to spectral space</span>
+        <span class="n">global_fld</span><span class="o">.</span><span class="n">interp2spect</span><span class="p">(</span><span class="s1">&#39;rho_prev&#39;</span><span class="p">)</span>
+        <span class="n">global_fld</span><span class="o">.</span><span class="n">interp2spect</span><span class="p">(</span><span class="s1">&#39;J&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">sim</span><span class="o">.</span><span class="n">filter_currents</span><span class="p">:</span>
+            <span class="n">global_fld</span><span class="o">.</span><span class="n">filter_spect</span><span class="p">(</span><span class="s1">&#39;rho_prev&#39;</span><span class="p">)</span>
+            <span class="n">global_fld</span><span class="o">.</span><span class="n">filter_spect</span><span class="p">(</span><span class="s1">&#39;J&#39;</span><span class="p">)</span>
+        <span class="c1"># - Get the space charge fields in spectral space</span>
+        <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">global_fld</span><span class="o">.</span><span class="n">Nm</span><span class="p">)</span> <span class="p">:</span>
+            <span class="n">get_space_charge_spect</span><span class="p">(</span> <span class="n">global_fld</span><span class="o">.</span><span class="n">spect</span><span class="p">[</span><span class="n">m</span><span class="p">],</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">direction</span> <span class="p">)</span>
+        <span class="c1"># - Convert the fields back to real space</span>
+        <span class="n">global_fld</span><span class="o">.</span><span class="n">spect2interp</span><span class="p">(</span> <span class="s1">&#39;E&#39;</span> <span class="p">)</span>
+        <span class="n">global_fld</span><span class="o">.</span><span class="n">spect2interp</span><span class="p">(</span> <span class="s1">&#39;B&#39;</span> <span class="p">)</span>
+
+    <span class="c1"># Communicate the results from proc 0 to the other procs</span>
+    <span class="c1"># and add it to the interpolation grid of sim.fld.</span>
+    <span class="c1"># - First find the indices at which the fields should be added</span>
+    <span class="n">i_min_local</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">n_guard</span>
+    <span class="k">if</span> <span class="n">sim</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">left_proc</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">i_min_local</span> <span class="o">+=</span> <span class="n">sim</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">n_damp</span>
+    <span class="n">i_max_local</span> <span class="o">=</span> <span class="n">i_min_local</span> <span class="o">+</span> <span class="n">sim</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">Nz_domain</span>
+    <span class="c1"># - Then loop over modes and fields</span>
+    <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">sim</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">Nm</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;Er&#39;</span><span class="p">,</span> <span class="s1">&#39;Et&#39;</span><span class="p">,</span> <span class="s1">&#39;Ez&#39;</span><span class="p">,</span> <span class="s1">&#39;Br&#39;</span><span class="p">,</span> <span class="s1">&#39;Bt&#39;</span><span class="p">,</span> <span class="s1">&#39;Bz&#39;</span><span class="p">]:</span>
+            <span class="c1"># Get the local result from proc 0</span>
+            <span class="n">global_array</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span> <span class="n">global_fld</span><span class="o">.</span><span class="n">interp</span><span class="p">[</span><span class="n">m</span><span class="p">],</span> <span class="n">field</span> <span class="p">)</span>
+            <span class="n">local_array</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">scatter_grid_array</span><span class="p">(</span> <span class="n">global_array</span> <span class="p">)</span>
+            <span class="c1"># Add it to the fields of sim.fld</span>
+            <span class="n">local_field</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span> <span class="n">sim</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">[</span><span class="n">m</span><span class="p">],</span> <span class="n">field</span> <span class="p">)</span>
+            <span class="n">local_field</span><span class="p">[</span> <span class="n">i_min_local</span><span class="p">:</span><span class="n">i_max_local</span><span class="p">,</span> <span class="p">:</span> <span class="p">]</span> <span class="o">+=</span> <span class="n">local_array</span>
+
+    <span class="c1"># For consistency and diagnostics, redeposit the charge and current</span>
+    <span class="c1"># of the full simulation (since the last step erased these quantities)</span>
+    <span class="n">sim</span><span class="o">.</span><span class="n">deposit</span><span class="p">(</span><span class="s1">&#39;rho_prev&#39;</span><span class="p">)</span>
+    <span class="n">sim</span><span class="o">.</span><span class="n">deposit</span><span class="p">(</span><span class="s1">&#39;J&#39;</span><span class="p">,</span> <span class="n">exchange_J</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Done.&quot;</span><span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">get_space_charge_spect</span><span class="p">(</span> <span class="n">spect</span><span class="p">,</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;forward&#39;</span> <span class="p">)</span> <span class="p">:</span>
@@ -674,7 +681,7 @@
     <span class="n">inv_K2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span> <span class="n">K2</span> <span class="o">!=</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.</span><span class="o">/</span><span class="n">K2_corrected</span><span class="p">,</span> <span class="mf">0.</span> <span class="p">)</span>
 
     <span class="c1"># Get the potentials</span>
-    <span class="n">phi</span> <span class="o">=</span> <span class="n">spect</span><span class="o">.</span><span class="n">rho_next</span><span class="p">[:,:]</span><span class="o">*</span><span class="n">inv_K2</span><span class="p">[:,:]</span><span class="o">/</span><span class="n">epsilon_0</span>
+    <span class="n">phi</span> <span class="o">=</span> <span class="n">spect</span><span class="o">.</span><span class="n">rho_prev</span><span class="p">[:,:]</span><span class="o">*</span><span class="n">inv_K2</span><span class="p">[:,:]</span><span class="o">/</span><span class="n">epsilon_0</span>
     <span class="n">Ap</span> <span class="o">=</span> <span class="n">spect</span><span class="o">.</span><span class="n">Jp</span><span class="p">[:,:]</span><span class="o">*</span><span class="n">inv_K2</span><span class="p">[:,:]</span><span class="o">*</span><span class="n">mu_0</span>
     <span class="n">Am</span> <span class="o">=</span> <span class="n">spect</span><span class="o">.</span><span class="n">Jm</span><span class="p">[:,:]</span><span class="o">*</span><span class="n">inv_K2</span><span class="p">[:,:]</span><span class="o">*</span><span class="n">mu_0</span>
     <span class="n">Az</span> <span class="o">=</span> <span class="n">spect</span><span class="o">.</span><span class="n">Jz</span><span class="p">[:,:]</span><span class="o">*</span><span class="n">inv_K2</span><span class="p">[:,:]</span><span class="o">*</span><span class="n">mu_0</span>
@@ -724,7 +731,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.5.3',
+            VERSION:'0.5.4',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
