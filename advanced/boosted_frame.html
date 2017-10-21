@@ -1,0 +1,389 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Running boosted-frame simulations &mdash; FBPIC 0.5.4 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="FBPIC 0.5.4 documentation" href="../index.html"/>
+        <link rel="up" title="Advanced use" href="advanced.html"/>
+        <link rel="prev" title="Performing parameter scans in parallel" href="parameter_scans.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> FBPIC
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.5.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview of the code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how_to_run.html">How to run the code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api_reference/api_reference.html">API reference</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="advanced.html">Advanced use</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="profiling.html">Profiling the code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parameter_scans.html">Performing parameter scans in parallel</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Running boosted-frame simulations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#principle-of-the-boosted-frame-technique-for-lwfa">Principle of the boosted-frame technique (for LWFA)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#converting-input-parameters-from-the-lab-frame-to-the-boosted-frame">Converting input parameters from the lab frame to the boosted frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#converting-simulation-results-from-the-boosted-frame-to-the-lab-frame">Converting simulation results from the boosted frame to the lab frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#avoiding-the-numerical-cherenkov-instability-nci">Avoiding the Numerical Cherenkov Instability (NCI)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">FBPIC</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="advanced.html">Advanced use</a> &raquo;</li>
+        
+      <li>Running boosted-frame simulations</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/advanced/boosted_frame.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="running-boosted-frame-simulations">
+<h1>Running boosted-frame simulations<a class="headerlink" href="#running-boosted-frame-simulations" title="Permalink to this headline">¶</a></h1>
+<p>This page gives a quick overview of <strong>boosted-frame simulations</strong>, a technique
+which can speed up certain types of PIC simulations by orders of magnitude.</p>
+<p>After explaining the principle of this technique
+(in the case of laser-wakefield acceleration, or LWFA), this page discusses
+how to handle three important aspects of boosted-frame simulations with FBPIC:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Converting the input parameters from the lab frame to the boosted frame</li>
+<li>Converting simulation results from the boosted frame to the lab frame</li>
+<li>Avoiding the numerical Cherenkov instability (NCI)</li>
+</ul>
+</div></blockquote>
+<div class="section" id="principle-of-the-boosted-frame-technique-for-lwfa">
+<h2>Principle of the boosted-frame technique (for LWFA)<a class="headerlink" href="#principle-of-the-boosted-frame-technique-for-lwfa" title="Permalink to this headline">¶</a></h2>
+<p>Instead of running the simulation in the <strong>frame of the laboratory</strong>
+(or <em>lab frame</em> for short), this technique
+consists in running the simulation in a <strong>different Lorentz frame</strong>, which moves
+in the same direction as the laser (the <em>boosted frame</em>).
+The boosted frame is characterized by its Lorentz factor <span class="math">\(\gamma_b\)</span>.</p>
+<p>When performing this Lorentz transformation, the changes in space-time are
+computationally favorable:</p>
+<blockquote>
+<div><ul class="simple">
+<li><dl class="first docutils">
+<dt>In the boosted frame, the laser is stretched and has a lower frequency.</dt>
+<dd>This allows the PIC loop to use a larger time step and cell size (in <span class="math">\(z\)</span>)
+than in the lab frame, while still resolving the laser.
+(More precisely, <span class="math">\(\Delta z_{boosted} \approx 2\gamma_b \Delta z_{lab}\)</span> and
+<span class="math">\(\Delta t_{boosted} \approx 2\gamma_b \Delta t_{lab}\)</span>)</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>In the boosted frame, the plasma is shorter and moves relativistically towards the laser.</dt>
+<dd>This implies that the time needed for the laser to propagate through
+the plasma is shorter than in the lab frame, and that similarly the simulation will be shorter.</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+<p>These changes in space-time are represented below.</p>
+<img alt="../_images/Lab_vs_boosted.png" src="../_images/Lab_vs_boosted.png" />
+<p>On the whole (taking into account the longer timestep and shorter propagation time),
+the number of required PIC iterations is reduced in the boosted frame:</p>
+<div class="math">
+\[N_{iterations, boosted} = \frac{1}{2\gamma_{boost}^2} N_{iterations, lab}\]</div>
+<p>which can speed up the simulation by orders of magnitude.
+For more details on the theory of boosted-frame simulations, see the <a class="reference external" href="https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.98.130405">original
+paper on this technique</a>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In the boosted frame, the plasma has a <strong>higher density</strong>
+(<span class="math">\(n_{boosted} = \gamma_b n_{lab}\)</span>). Because
+of this, and because of the larger cell size, <strong>each plasma macroparticle typically
+represents more physical particles</strong> in the boosted frame than in the lab frame
+(at least when keeping the same number of macroparticles per cell).
+This implies that simulating e.g. self-injection in the boosted frame will
+result in less macroparticles in the injected beam than in the lab frame,
+and therefore less statistics when evaluating e.g. the beam emittance and charge.</p>
+</div>
+</div>
+<div class="section" id="converting-input-parameters-from-the-lab-frame-to-the-boosted-frame">
+<h2>Converting input parameters from the lab frame to the boosted frame<a class="headerlink" href="#converting-input-parameters-from-the-lab-frame-to-the-boosted-frame" title="Permalink to this headline">¶</a></h2>
+<p>When running a simulation in the boosted frame, all the parameters (e.g.
+laser wavelength, plasma density, etc.) <strong>needed to be converted</strong> from their known
+value in the lab frame to their corresponding value in the boosted frame.</p>
+<p>Fortunately, <strong>most functions and classes in FBPIC can perform this conversion
+automatically</strong>, so that the user only needs to pass the lab-frame values,
+along with the value of <span class="math">\(\gamma_b\)</span>. For instance, the <a class="reference internal" href="../api_reference/simulation.html#fbpic.main.Simulation" title="fbpic.main.Simulation"><code class="xref py py-class docutils literal"><span class="pre">fbpic.main.Simulation</span></code></a> class
+will automatically convert the timestep and box size from typical lab-frame values
+to the corresponding boosted-frame values.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You will still need to adjust, by hand, the number of PIC iterations
+(which is typically lower in the boosted frame than in the lab frame, as explained above).</p>
+</div>
+<p>For each function or class that you use, please look at the corresponding
+documentation in the section <a class="reference internal" href="../api_reference/api_reference.html"><span class="doc">API reference</span></a> to see if it supports
+automatic parameter conversion. If it is not the case, you can instead use the
+<a class="reference internal" href="../api_reference/boost_converter.html#fbpic.lpa_utils.boosted_frame.BoostConverter" title="fbpic.lpa_utils.boosted_frame.BoostConverter"><code class="xref py py-class docutils literal"><span class="pre">fbpic.lpa_utils.boosted_frame.BoostConverter</span></code></a>, which implements the Lorentz transform
+formulas for the most common physical quantities.</p>
+<p>You can see an example of these different methods for parameter conversion
+in the boosted-frame example script of the section <a class="reference internal" href="../how_to_run.html"><span class="doc">How to run the code</span></a>.</p>
+</div>
+<div class="section" id="converting-simulation-results-from-the-boosted-frame-to-the-lab-frame">
+<h2>Converting simulation results from the boosted frame to the lab frame<a class="headerlink" href="#converting-simulation-results-from-the-boosted-frame-to-the-lab-frame" title="Permalink to this headline">¶</a></h2>
+<p>Although the simulation runs in the boosted frame, it is desirable to have
+the results in the lab frame, since this is usually easier to interpret.</p>
+<p>FBPIC implements <strong>on-the-fly conversion</strong> of the results,
+and can thus output the fields and macroparticles directly
+in the lab frame. See the documentation of the classes
+<a class="reference internal" href="../api_reference/diagnostics.html#fbpic.openpmd_diag.BoostedFieldDiagnostic" title="fbpic.openpmd_diag.BoostedFieldDiagnostic"><code class="xref py py-class docutils literal"><span class="pre">fbpic.openpmd_diag.BoostedFieldDiagnostic</span></code></a> and
+<a class="reference internal" href="../api_reference/diagnostics.html#fbpic.openpmd_diag.BoostedParticleDiagnostic" title="fbpic.openpmd_diag.BoostedParticleDiagnostic"><code class="xref py py-class docutils literal"><span class="pre">fbpic.openpmd_diag.BoostedParticleDiagnostic</span></code></a> in order to use this feature.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">When using the regular classes <a class="reference internal" href="../api_reference/diagnostics.html#fbpic.openpmd_diag.FieldDiagnostic" title="fbpic.openpmd_diag.FieldDiagnostic"><code class="xref py py-class docutils literal"><span class="pre">fbpic.openpmd_diag.FieldDiagnostic</span></code></a>,
+and <a class="reference internal" href="../api_reference/diagnostics.html#fbpic.openpmd_diag.ParticleDiagnostic" title="fbpic.openpmd_diag.ParticleDiagnostic"><code class="xref py py-class docutils literal"><span class="pre">fbpic.openpmd_diag.ParticleDiagnostic</span></code></a>, the corresponding
+diagnostics will contain the fields and macroparticles in the boosted frame.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>By default, the converted diagnostics (i.e. in the lab frame) are stored in the
+folder <code class="docutils literal"><span class="pre">lab_diags</span></code>, while the raw diagnostics (i.e. in the boosted frame) are
+stored in the folder <code class="docutils literal"><span class="pre">diags</span></code>.</p>
+<p class="last">Because of non-simultaneity between Lorentz frames, the files in <code class="docutils literal"><span class="pre">lab_diags</span></code>
+will be <strong>filled progressively with data</strong>, from the right-hand side of
+the simulation box to its left-hand side, as the simulation runs.
+If the chosen number of PIC iterations is insufficient, then some of these
+files may be incomplete. (This typically shows up as the fields being zero
+in the left-hand side of the box.)</p>
+</div>
+</div>
+<div class="section" id="avoiding-the-numerical-cherenkov-instability-nci">
+<h2>Avoiding the Numerical Cherenkov Instability (NCI)<a class="headerlink" href="#avoiding-the-numerical-cherenkov-instability-nci" title="Permalink to this headline">¶</a></h2>
+<p>When running simulations in the boosted frame, a <strong>numerical instability</strong> (known
+as the Numerical Cherenkov Instability, or NCI) can potentially affect the simulation
+and degrade its results.</p>
+<p>FBPIC suppresses this instability by using the <strong>Galilean technique</strong>. (See
+the original papers <a class="reference external" href="http://aip.scitation.org/doi/full/10.1063/1.4964770">here</a>
+and <a class="reference external" href="https://journals.aps.org/pre/abstract/10.1103/PhysRevE.94.053305">here</a>
+for more information on this technique.) In order to use this suppression algorithm,
+the user simply needs to set the argument <code class="docutils literal"><span class="pre">v_comoving</span></code> of the <a class="reference internal" href="../api_reference/simulation.html#fbpic.main.Simulation" title="fbpic.main.Simulation"><code class="xref py py-class docutils literal"><span class="pre">fbpic.main.Simulation</span></code></a>
+class to a velocity close to:</p>
+<div class="math">
+\[v_{comoving} = -c \sqrt{1 - \frac{1}{\gamma_b^2}}\]</div>
+<p>(Again, see the example in the section <a class="reference internal" href="../how_to_run.html"><span class="doc">How to run the code</span></a>)</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p>The suppression of the NCI is only effective in the case where</p>
+<div class="math">
+\[c\Delta t_{boosted} &lt; \Delta r_{boosted}\]</div>
+<p>or in terms of corresponding lab-frame quantities:</p>
+<div class="math">
+\[c\Delta t_{lab} &lt; \frac{\Delta r_{lab}}{2\gamma_b}\]</div>
+<p class="last">In the case where the above condition is not met, there is, to our
+knowledge, no existing solution to suppress the NCI. Note that FBPIC does
+not check whether the above condition is met in a given simulation ;
+instead the user is responsible for ensuring this.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="parameter_scans.html" class="btn btn-neutral" title="Performing parameter scans in parallel" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, FBPIC contributors.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.5.4',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

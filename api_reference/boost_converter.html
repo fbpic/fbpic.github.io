@@ -1,0 +1,456 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Conversion to boosted-frame &mdash; FBPIC 0.5.4 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="FBPIC 0.5.4 documentation" href="../index.html"/>
+        <link rel="up" title="API reference" href="api_reference.html"/>
+        <link rel="next" title="Advanced use" href="../advanced/advanced.html"/>
+        <link rel="prev" title="Laser-plasma utilities" href="lpa_utilities.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> FBPIC
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.5.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview of the code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how_to_run.html">How to run the code</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="api_reference.html">API reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="simulation.html">The Simulation class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="diagnostics.html">The openPMD diagnostics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="checkpoint_restart.html">Checkpoints and restarts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lpa_utilities.html">Laser-plasma utilities</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Conversion to boosted-frame</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/advanced.html">Advanced use</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">FBPIC</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="api_reference.html">API reference</a> &raquo;</li>
+        
+      <li>Conversion to boosted-frame</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/api_reference/boost_converter.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="conversion-to-boosted-frame">
+<h1>Conversion to boosted-frame<a class="headerlink" href="#conversion-to-boosted-frame" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="fbpic.lpa_utils.boosted_frame.BoostConverter">
+<em class="property">class </em><code class="descclassname">fbpic.lpa_utils.boosted_frame.</code><code class="descname">BoostConverter</code><span class="sig-paren">(</span><em>gamma0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/lpa_utils/boosted_frame.html#BoostConverter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.boosted_frame.BoostConverter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the object by calculating the velocity of the
+boosted frame.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>gamma0</strong> (<em>float</em>) – Lorentz factor of the boosted frame</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="fbpic.lpa_utils.boosted_frame.BoostConverter.boost_particles">
+<code class="descname">boost_particles</code><span class="sig-paren">(</span><em>particles</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/lpa_utils/boosted_frame.html#BoostConverter.boost_particles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.boosted_frame.BoostConverter.boost_particles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transforms particles to the boosted frame and propagates
+them to a fixed time t_boost = 0. without taking any electromagnetic
+effects into account. (This is useful for the initialization
+of a bunch distribution in the boosted frame.)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>particles</strong> (<em>a Particles object</em>) – A Particles object that contains the particles in the lab frame.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="fbpic.lpa_utils.boosted_frame.BoostConverter.copropag_density">
+<code class="descname">copropag_density</code><span class="sig-paren">(</span><em>lab_frame_vars</em>, <em>beta_object=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/lpa_utils/boosted_frame.html#BoostConverter.copropag_density"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.boosted_frame.BoostConverter.copropag_density" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a list of densities that correspond to copropagating objects
+(e.g. an electron bunch) from the lab frame to the boosted frame, i.e:
+n’ = n * [ gamma0*(1 - beta_object*beta0) ]</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>lab_frame_vars</strong> (<em>list of floats</em>) – A list containing several densities to be converted</li>
+<li><strong>beta_object</strong> (<em>float</em><em>, </em><em>optional</em>) – The normalized velocity of the object whose
+density is being converted</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">A list with the same number of elements, with the converted quantities</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="fbpic.lpa_utils.boosted_frame.BoostConverter.copropag_length">
+<code class="descname">copropag_length</code><span class="sig-paren">(</span><em>lab_frame_vars</em>, <em>beta_object=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/lpa_utils/boosted_frame.html#BoostConverter.copropag_length"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.boosted_frame.BoostConverter.copropag_length" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a list of lengths that correspond to copropagating objects
+(e.g. the laser) from the lab frame to the boosted frame, i.e:
+L’ = L / [ gamma0*(1 - beta_object*beta0) ]</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>lab_frame_vars</strong> (<em>list of floats</em>) – A list containing several length to be converted</li>
+<li><strong>beta_object</strong> (<em>float</em><em>, </em><em>optional</em>) – The normalized velocity of the object whose
+length is being converted</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">A list with the same number of elements, with the converted quantities</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="fbpic.lpa_utils.boosted_frame.BoostConverter.gamma">
+<code class="descname">gamma</code><span class="sig-paren">(</span><em>lab_frame_vars</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/lpa_utils/boosted_frame.html#BoostConverter.gamma"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.boosted_frame.BoostConverter.gamma" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a list of Lorentz factors from the lab frame to the
+boosted frame:
+gamma’ = gamma0 * ( gamma - beta0 * sqrt( gamma**2 - 1 ) )</p>
+<p>Warning: The above formula assumes that the corresponding
+particle has no transverse motion at all.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>lab_frame_vars</strong> (<em>list of floats</em>) – A list containing several Lorentz factors to be converted</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">A list with the same number of elements, with the converted quantities</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="fbpic.lpa_utils.boosted_frame.BoostConverter.longitudinal_momentum">
+<code class="descname">longitudinal_momentum</code><span class="sig-paren">(</span><em>lab_frame_vars</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/lpa_utils/boosted_frame.html#BoostConverter.longitudinal_momentum"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.boosted_frame.BoostConverter.longitudinal_momentum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a list of momenta from the lab frame to the boosted frame:
+u_z’ = gamma0 * ( u_z - sqrt(1 + u_z**2) * beta0 )</p>
+<p>Warning: The above formula assumes that the corresponding
+particle has no transverse motion at all.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>lab_frame_vars</strong> (<em>list of floats</em>) – A list containing several momenta to be converted</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">A list with the same number of elements, with the converted quantities</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="fbpic.lpa_utils.boosted_frame.BoostConverter.static_density">
+<code class="descname">static_density</code><span class="sig-paren">(</span><em>lab_frame_vars</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/lpa_utils/boosted_frame.html#BoostConverter.static_density"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.boosted_frame.BoostConverter.static_density" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a list of densities that correspond to static objects
+(e.g. the plasma) from the lab frame to the boosted frame, i.e:
+n’ = n * gamma0</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>lab_frame_vars</strong> (<em>list of floats</em>) – A list containing several length to be converted</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">A list with the same number of elements, with the converted quantities</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="fbpic.lpa_utils.boosted_frame.BoostConverter.static_length">
+<code class="descname">static_length</code><span class="sig-paren">(</span><em>lab_frame_vars</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/lpa_utils/boosted_frame.html#BoostConverter.static_length"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.boosted_frame.BoostConverter.static_length" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a list of lengths that correspond to static objects
+(e.g. the plasma) from the lab frame to the boosted frame, i.e:
+L’ = L / gamma0</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>lab_frame_vars</strong> (<em>list of floats</em>) – A list containing several length to be converted</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">A list with same number of elements, with the converted quantities</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="fbpic.lpa_utils.boosted_frame.BoostConverter.velocity">
+<code class="descname">velocity</code><span class="sig-paren">(</span><em>lab_frame_vars</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/lpa_utils/boosted_frame.html#BoostConverter.velocity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.boosted_frame.BoostConverter.velocity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a list of velocities from the lab frame to the boosted frame:
+v’ = ( v - c * beta0 )/( 1 - beta0*v/c )</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>lab_frame_vars</strong> (<em>list of floats</em>) – A list containing several velocities to be converted</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">A list with the same number of elements, with the converted quantities</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="fbpic.lpa_utils.boosted_frame.BoostConverter.wavenumber">
+<code class="descname">wavenumber</code><span class="sig-paren">(</span><em>lab_frame_vars</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/lpa_utils/boosted_frame.html#BoostConverter.wavenumber"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.boosted_frame.BoostConverter.wavenumber" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a list of wavenumbers from the lab frame to the boosted frame:
+k’ = k / ( gamma0 ( 1 + beta0 ) )</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>lab_frame_vars</strong> (<em>list of floats</em>) – A list containing several wavenumbers to be converted</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">A list with the same number of elements, with the converted quantities</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../advanced/advanced.html" class="btn btn-neutral float-right" title="Advanced use" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="lpa_utilities.html" class="btn btn-neutral" title="Laser-plasma utilities" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, FBPIC contributors.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.5.4',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
