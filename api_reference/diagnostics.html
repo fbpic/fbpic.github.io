@@ -112,6 +112,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="checkpoint_restart.html">Checkpoints and restarts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lpa_utilities.html">Laser-plasma utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="boost_converter.html">Manuel conversion to boosted-frame</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../advanced/advanced.html">Advanced use</a></li>
@@ -195,7 +196,7 @@ adding or removing a corresponding diagnostic object in the list of diagnostics 
 <h3>Field diagnostic<a class="headerlink" href="#field-diagnostic" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="fbpic.openpmd_diag.FieldDiagnostic">
-<em class="property">class </em><code class="descclassname">fbpic.openpmd_diag.</code><code class="descname">FieldDiagnostic</code><span class="sig-paren">(</span><em>period, fldobject, comm=None, fieldtypes=[‘rho’, ‘E’, ‘B’, ‘J’], write_dir=None, iteration_min=0, iteration_max=inf</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/openpmd_diag/field_diag.html#FieldDiagnostic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.openpmd_diag.FieldDiagnostic" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">fbpic.openpmd_diag.</code><code class="descname">FieldDiagnostic</code><span class="sig-paren">(</span><em>period, fldobject, comm=None, fieldtypes=['rho', 'E', 'B', 'J'], write_dir=None, iteration_min=0, iteration_max=inf</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/openpmd_diag/field_diag.html#FieldDiagnostic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.openpmd_diag.FieldDiagnostic" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize the field diagnostic.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -230,7 +231,7 @@ of the current working directory.</li>
 <h3>Particle diagnostic<a class="headerlink" href="#particle-diagnostic" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="fbpic.openpmd_diag.ParticleDiagnostic">
-<em class="property">class </em><code class="descclassname">fbpic.openpmd_diag.</code><code class="descname">ParticleDiagnostic</code><span class="sig-paren">(</span><em>period, species={‘electrons’: None}, comm=None, particle_data=[‘position’, ‘momentum’, ‘weighting’], select=None, write_dir=None, iteration_min=0, iteration_max=inf</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/openpmd_diag/particle_diag.html#ParticleDiagnostic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.openpmd_diag.ParticleDiagnostic" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">fbpic.openpmd_diag.</code><code class="descname">ParticleDiagnostic</code><span class="sig-paren">(</span><em>period, species={'electrons': None}, comm=None, particle_data=['position', 'momentum', 'weighting'], select=None, write_dir=None, iteration_min=0, iteration_max=inf</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/openpmd_diag/particle_diag.html#ParticleDiagnostic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.openpmd_diag.ParticleDiagnostic" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize the particle diagnostics.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -278,7 +279,7 @@ during a boosted-frame simulation.</p>
 <h3>Field diagnostic<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="fbpic.openpmd_diag.BoostedFieldDiagnostic">
-<em class="property">class </em><code class="descclassname">fbpic.openpmd_diag.</code><code class="descname">BoostedFieldDiagnostic</code><span class="sig-paren">(</span><em>zmin_lab, zmax_lab, v_lab, dt_snapshots_lab, Ntot_snapshots_lab, gamma_boost, period, fldobject, comm=None, fieldtypes=[‘E’, ‘B’], write_dir=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/openpmd_diag/boosted_field_diag.html#BoostedFieldDiagnostic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.openpmd_diag.BoostedFieldDiagnostic" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">fbpic.openpmd_diag.</code><code class="descname">BoostedFieldDiagnostic</code><span class="sig-paren">(</span><em>zmin_lab, zmax_lab, v_lab, dt_snapshots_lab, Ntot_snapshots_lab, gamma_boost, period, fldobject, comm=None, fieldtypes=['E', 'B'], write_dir=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/openpmd_diag/boosted_field_diag.html#BoostedFieldDiagnostic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.openpmd_diag.BoostedFieldDiagnostic" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize diagnostics that retrieve the data in the lab frame,
 as a series of snapshot (one file per snapshot),
 within a virtual moving window defined by zmin_lab, zmax_lab, v_lab.</p>
@@ -320,7 +321,7 @@ are then brought from spectral to real space, at each iteration.</li>
 <h3>Particle diagnostic<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="fbpic.openpmd_diag.BoostedParticleDiagnostic">
-<em class="property">class </em><code class="descclassname">fbpic.openpmd_diag.</code><code class="descname">BoostedParticleDiagnostic</code><span class="sig-paren">(</span><em>zmin_lab, zmax_lab, v_lab, dt_snapshots_lab, Ntot_snapshots_lab, gamma_boost, period, fldobject, particle_data=[‘position’, ‘momentum’, ‘weighting’], select=None, write_dir=None, species={‘electrons’: None}, comm=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/openpmd_diag/boosted_particle_diag.html#BoostedParticleDiagnostic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.openpmd_diag.BoostedParticleDiagnostic" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">fbpic.openpmd_diag.</code><code class="descname">BoostedParticleDiagnostic</code><span class="sig-paren">(</span><em>zmin_lab, zmax_lab, v_lab, dt_snapshots_lab, Ntot_snapshots_lab, gamma_boost, period, fldobject, particle_data=['position', 'momentum', 'weighting'], select=None, write_dir=None, species={'electrons': None}, comm=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/openpmd_diag/boosted_particle_diag.html#BoostedParticleDiagnostic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.openpmd_diag.BoostedParticleDiagnostic" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize diagnostics that retrieve the data in the lab frame,
 as a series of snapshot (one file per snapshot),
 within a virtual moving window defined by zmin_lab, zmax_lab, v_lab.</p>
@@ -408,7 +409,7 @@ extract some information about the grid</li>
       <script type="text/javascript" src="../_static/jquery.js"></script>
       <script type="text/javascript" src="../_static/underscore.js"></script>
       <script type="text/javascript" src="../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

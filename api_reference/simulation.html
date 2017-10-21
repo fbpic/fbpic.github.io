@@ -100,6 +100,7 @@
 <li class="toctree-l2"><a class="reference internal" href="diagnostics.html">The openPMD diagnostics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="checkpoint_restart.html">Checkpoints and restarts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lpa_utilities.html">Laser-plasma utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="boost_converter.html">Manuel conversion to boosted-frame</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../advanced/advanced.html">Advanced use</a></li>
@@ -183,7 +184,7 @@ the simulation data, and has the high-level methods to perform the PIC cycle.</p
 </div></blockquote>
 <dl class="class">
 <dt id="fbpic.main.Simulation">
-<em class="property">class </em><code class="descclassname">fbpic.main.</code><code class="descname">Simulation</code><span class="sig-paren">(</span><em>Nz</em>, <em>zmax</em>, <em>Nr</em>, <em>rmax</em>, <em>Nm</em>, <em>dt</em>, <em>p_zmin</em>, <em>p_zmax</em>, <em>p_rmin</em>, <em>p_rmax</em>, <em>p_nz</em>, <em>p_nr</em>, <em>p_nt</em>, <em>n_e</em>, <em>zmin=0.0</em>, <em>n_order=-1</em>, <em>dens_func=None</em>, <em>filter_currents=True</em>, <em>v_comoving=None</em>, <em>use_galilean=False</em>, <em>initialize_ions=False</em>, <em>use_cuda=False</em>, <em>n_guard=None</em>, <em>n_damp=30</em>, <em>exchange_period=None</em>, <em>boundaries=’periodic’</em>, <em>gamma_boost=None</em>, <em>use_all_mpi_ranks=True</em>, <em>particle_shape=’linear’</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/main.html#Simulation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.main.Simulation" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">fbpic.main.</code><code class="descname">Simulation</code><span class="sig-paren">(</span><em>Nz</em>, <em>zmax</em>, <em>Nr</em>, <em>rmax</em>, <em>Nm</em>, <em>dt</em>, <em>p_zmin</em>, <em>p_zmax</em>, <em>p_rmin</em>, <em>p_rmax</em>, <em>p_nz</em>, <em>p_nr</em>, <em>p_nt</em>, <em>n_e</em>, <em>zmin=0.0</em>, <em>n_order=-1</em>, <em>dens_func=None</em>, <em>filter_currents=True</em>, <em>v_comoving=None</em>, <em>use_galilean=False</em>, <em>initialize_ions=False</em>, <em>use_cuda=False</em>, <em>n_guard=None</em>, <em>n_damp=30</em>, <em>exchange_period=None</em>, <em>boundaries='periodic'</em>, <em>gamma_boost=None</em>, <em>continuous_injection=True</em>, <em>use_all_mpi_ranks=True</em>, <em>particle_shape='linear'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/main.html#Simulation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.main.Simulation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initializes a simulation, by creating the following structures:</p>
 <ul class="simple">
 <li>the <cite>Fields</cite> object, which contains the field data on the grids</li>
@@ -395,7 +396,7 @@ field push or not. (requires initialize_ions = True)</li>
       <script type="text/javascript" src="../_static/jquery.js"></script>
       <script type="text/javascript" src="../_static/underscore.js"></script>
       <script type="text/javascript" src="../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 
