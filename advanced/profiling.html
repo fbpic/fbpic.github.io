@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Profiling the code &mdash; FBPIC 0.5.4 documentation</title>
+  <title>Profiling the code &mdash; FBPIC 0.6.0 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="FBPIC 0.5.4 documentation" href="../index.html"/>
+    <link rel="top" title="FBPIC 0.6.0 documentation" href="../index.html"/>
         <link rel="up" title="Advanced use" href="advanced.html"/>
         <link rel="next" title="Performing parameter scans in parallel" href="parameter_scans.html"/>
         <link rel="prev" title="Advanced use" href="advanced.html"/> 
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                0.5.4
+                0.6.0
               </div>
             
           
@@ -98,16 +98,17 @@
 <li class="toctree-l1"><a class="reference internal" href="../api_reference/api_reference.html">API reference</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="advanced.html">Advanced use</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Profiling the code</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#quick-text-based-profiling">Quick text-based profiling</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#on-cpu">On CPU</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#on-gpu">On GPU</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#profiling-the-code-executed-on-cpu">Profiling the code executed on CPU</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#getting-the-results-in-a-simple-text-file">Getting the results in a simple text file</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#using-a-visual-profiler">Using a visual profiler</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#using-a-visual-profiler">Using a visual profiler</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#id1">On CPU</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id2">On GPU</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#profiling-the-code-executed-on-gpu">Profiling the code executed on GPU</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">Getting the results in a simple text file</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id2">Using a visual profiler</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="#profiling-mpi-simulations-cpu-side-only">Profiling MPI simulations (CPU-side only)</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="parameter_scans.html">Performing parameter scans in parallel</a></li>
@@ -183,12 +184,12 @@
 <h1>Profiling the code<a class="headerlink" href="#profiling-the-code" title="Permalink to this headline">¶</a></h1>
 <p>Profiling the code consists in finding which parts of the algorithm <strong>dominate
 the computational time</strong>, for your particular simulation setup.</p>
-<div class="section" id="quick-text-based-profiling">
-<h2>Quick text-based profiling<a class="headerlink" href="#quick-text-based-profiling" title="Permalink to this headline">¶</a></h2>
-<p>The tools below allow to dump timing statistics into a simple text file, so
-as to quickly profile the execution of a simulation.</p>
-<div class="section" id="on-cpu">
-<h3>On CPU<a class="headerlink" href="#on-cpu" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="profiling-the-code-executed-on-cpu">
+<h2>Profiling the code executed on CPU<a class="headerlink" href="#profiling-the-code-executed-on-cpu" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="getting-the-results-in-a-simple-text-file">
+<h3>Getting the results in a simple text file<a class="headerlink" href="#getting-the-results-in-a-simple-text-file" title="Permalink to this headline">¶</a></h3>
+<p>Dumping the profiling results in a text file allows you
+to quickly profile the execution of a simulation.</p>
 <p>Run the code with
 <a class="reference external" href="http://docs.python.org/2/library/profile.html">cProfile</a> :</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">cProfile</span> <span class="o">-</span><span class="n">s</span> <span class="n">time</span> <span class="n">fbpic_script</span><span class="o">.</span><span class="n">py</span> <span class="o">&gt;</span> <span class="n">cpu</span><span class="o">.</span><span class="n">log</span>
@@ -196,8 +197,25 @@ as to quickly profile the execution of a simulation.</p>
 </div>
 <p>and then open the file <code class="docutils literal"><span class="pre">cpu.log</span></code> with a text editor.</p>
 </div>
-<div class="section" id="on-gpu">
-<h3>On GPU<a class="headerlink" href="#on-gpu" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="using-a-visual-profiler">
+<h3>Using a visual profiler<a class="headerlink" href="#using-a-visual-profiler" title="Permalink to this headline">¶</a></h3>
+<p>For a more detailed analysis, you can use a visual profiler (i.e. profilers with
+a graphical user interface).</p>
+<p>Run the code with
+<a class="reference external" href="http://docs.python.org/2/library/profile.html">cProfile</a>, using binary output:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">cProfile</span> <span class="o">-</span><span class="n">o</span> <span class="n">cpu</span><span class="o">.</span><span class="n">prof</span> <span class="n">fbpic_script</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<p>and then open the file <code class="docutils literal"><span class="pre">cpu.prof</span></code> with <a class="reference external" href="https://jiffyclub.github.io/snakeviz/">snakeviz</a></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">snakeviz</span> <span class="n">cpu</span><span class="o">.</span><span class="n">prof</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="profiling-the-code-executed-on-gpu">
+<h2>Profiling the code executed on GPU<a class="headerlink" href="#profiling-the-code-executed-on-gpu" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id1">
+<h3>Getting the results in a simple text file<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <p>Run the code with
 <a class="reference external" href="http://docs.nvidia.com/cuda/profiler-users-guide/index.html#nvprof-overview">nvprof</a> :</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">nvprof</span> <span class="o">--</span><span class="n">log</span><span class="o">-</span><span class="n">file</span> <span class="n">gpu</span><span class="o">.</span><span class="n">log</span> <span class="n">python</span> <span class="n">fbpic_script</span><span class="o">.</span><span class="n">py</span>
@@ -211,25 +229,8 @@ as to quickly profile the execution of a simulation.</p>
 and host-side (i.e. CPU-side) code.
 Then open the files <code class="docutils literal"><span class="pre">gpu.log</span></code> and/or <code class="docutils literal"><span class="pre">cpu.log</span></code> with a text editor.</p>
 </div>
-</div>
-<div class="section" id="using-a-visual-profiler">
-<h2>Using a visual profiler<a class="headerlink" href="#using-a-visual-profiler" title="Permalink to this headline">¶</a></h2>
-<p>For a more detailed analysis, you can use visual profilers (i.e. profilers with
-a graphical user interface).</p>
-<div class="section" id="id1">
-<h3>On CPU<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
-<p>Run the code with
-<a class="reference external" href="http://docs.python.org/2/library/profile.html">cProfile</a>, using binary output:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">cProfile</span> <span class="o">-</span><span class="n">o</span> <span class="n">cpu</span><span class="o">.</span><span class="n">prof</span> <span class="n">fbpic_script</span><span class="o">.</span><span class="n">py</span>
-</pre></div>
-</div>
-<p>and then open the file <code class="docutils literal"><span class="pre">cpu.prof</span></code> with <a class="reference external" href="https://jiffyclub.github.io/snakeviz/">snakeviz</a></p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">snakeviz</span> <span class="n">cpu</span><span class="o">.</span><span class="n">prof</span>
-</pre></div>
-</div>
-</div>
 <div class="section" id="id2">
-<h3>On GPU<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<h3>Using a visual profiler<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
 <p>Run the code with
 <a class="reference external" href="http://docs.nvidia.com/cuda/profiler-users-guide/index.html#nvprof-overview">nvprof</a>,
 using binary output:</p>
@@ -260,6 +261,59 @@ become very large. Therefore we recommend to profile the code only
 on a small number of PIC iterations (&lt;1000).</p>
 </div>
 </div>
+</div>
+<div class="section" id="profiling-mpi-simulations-cpu-side-only">
+<h2>Profiling MPI simulations (CPU-side only)<a class="headerlink" href="#profiling-mpi-simulations-cpu-side-only" title="Permalink to this headline">¶</a></h2>
+<p>One way to profile MPI simulations is to write <strong>one file per MPI rank</strong>. In
+this case, each file will contain only the profiling data of the corresponding
+MPI process.</p>
+<p>There is no simple way to create one file per MPI rank, from the command line.
+Instead, you need to <strong>modify your FBPIC script</strong>, in the following way:</p>
+<ul>
+<li><p class="first">Add the following lines at the beginning of the file:</p>
+<blockquote>
+<div><div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">cProfile</span><span class="o">,</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">mpi4py.MPI</span> <span class="k">import</span> <span class="n">COMM_WORLD</span> <span class="k">as</span> <span class="n">comm</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first">Replace the line:</p>
+<blockquote>
+<div><div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">sim</span><span class="o">.</span><span class="n">step</span><span class="p">(</span> <span class="n">N_step</span> <span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>by the following set of lines:</p>
+<blockquote>
+<div><div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># First step: do not profile (includes just-in-time compilation)</span>
+<span class="n">sim</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Profile the next N_step</span>
+<span class="n">pr</span> <span class="o">=</span> <span class="n">cProfile</span><span class="o">.</span><span class="n">Profile</span><span class="p">()</span>
+<span class="n">pr</span><span class="o">.</span><span class="n">enable</span><span class="p">()</span>
+<span class="n">sim</span><span class="o">.</span><span class="n">step</span><span class="p">(</span> <span class="n">N_step</span> <span class="p">)</span>
+<span class="n">pr</span><span class="o">.</span><span class="n">disable</span><span class="p">()</span>
+
+<span class="c1"># Dump results:</span>
+<span class="c1"># - for binary dump</span>
+<span class="n">pr</span><span class="o">.</span><span class="n">dump_stats</span><span class="p">(</span><span class="s1">&#39;cpu_</span><span class="si">%d</span><span class="s1">.prof&#39;</span> <span class="o">%</span><span class="n">comm</span><span class="o">.</span><span class="n">rank</span><span class="p">)</span>
+<span class="c1"># - for text dump</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span> <span class="s1">&#39;cpu_</span><span class="si">%d</span><span class="s1">.txt&#39;</span> <span class="o">%</span><span class="n">comm</span><span class="o">.</span><span class="n">rank</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">output_file</span><span class="p">:</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span> <span class="o">=</span> <span class="n">output_file</span>
+    <span class="n">pr</span><span class="o">.</span><span class="n">print_stats</span><span class="p">(</span> <span class="n">sort</span><span class="o">=</span><span class="s1">&#39;time&#39;</span> <span class="p">)</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">__stdout__</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ul>
+<p>Then run your FBPIC script with MPI as usual, e.g. with 4 MPI ranks:</p>
+<blockquote>
+<div><div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mpirun</span> <span class="o">-</span><span class="n">np</span> <span class="mi">4</span> <span class="n">python</span> <span class="n">fbpic_script</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+</div></blockquote>
 </div>
 </div>
 
@@ -307,7 +361,7 @@ on a small number of PIC iterations (&lt;1000).</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.5.4',
+            VERSION:'0.6.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
@@ -317,7 +371,7 @@ on a small number of PIC iterations (&lt;1000).</p>
       <script type="text/javascript" src="../_static/jquery.js"></script>
       <script type="text/javascript" src="../_static/underscore.js"></script>
       <script type="text/javascript" src="../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Laser-plasma utilities &mdash; FBPIC 0.5.4 documentation</title>
+  <title>Laser-plasma utilities &mdash; FBPIC 0.6.0 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="FBPIC 0.5.4 documentation" href="../index.html"/>
+    <link rel="top" title="FBPIC 0.6.0 documentation" href="../index.html"/>
         <link rel="up" title="API reference" href="api_reference.html"/>
         <link rel="next" title="Conversion to boosted-frame" href="boost_converter.html"/>
         <link rel="prev" title="Checkpoints and restarts" href="checkpoint_restart.html"/> 
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                0.5.4
+                0.6.0
               </div>
             
           
@@ -188,7 +188,7 @@
 <h2>Laser utility<a class="headerlink" href="#laser-utility" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="fbpic.lpa_utils.laser.add_laser">
-<code class="descclassname">fbpic.lpa_utils.laser.</code><code class="descname">add_laser</code><span class="sig-paren">(</span><em>sim</em>, <em>a0</em>, <em>w0</em>, <em>ctau</em>, <em>z0</em>, <em>zf=None</em>, <em>lambda0=8e-07</em>, <em>cep_phase=0.0</em>, <em>phi2_chirp=0.0</em>, <em>theta_pol=0.0</em>, <em>gamma_boost=None</em>, <em>method=’direct’</em>, <em>fw_propagating=True</em>, <em>update_spectral=True</em>, <em>z0_antenna=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/lpa_utils/laser/laser.html#add_laser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.laser.add_laser" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">fbpic.lpa_utils.laser.</code><code class="descname">add_laser</code><span class="sig-paren">(</span><em>sim</em>, <em>a0</em>, <em>w0</em>, <em>ctau</em>, <em>z0</em>, <em>zf=None</em>, <em>lambda0=8e-07</em>, <em>cep_phase=0.0</em>, <em>phi2_chirp=0.0</em>, <em>theta_pol=0.0</em>, <em>gamma_boost=None</em>, <em>method='direct'</em>, <em>fw_propagating=True</em>, <em>update_spectral=True</em>, <em>z0_antenna=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/lpa_utils/laser/laser.html#add_laser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.laser.add_laser" title="Permalink to this definition">¶</a></dt>
 <dd><p>Introduce a linearly-polarized, Gaussian laser in the simulation</p>
 <p>The laser is either added directly to the interpolation grid initially
 (method=`direct`) or it is progressively emitted by an antenna
@@ -241,7 +241,7 @@ of the antenna. If not provided, then the z0_antenna is set to zf.</li>
 <h2>Beam utilities<a class="headerlink" href="#beam-utilities" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="fbpic.lpa_utils.bunch.add_elec_bunch">
-<code class="descclassname">fbpic.lpa_utils.bunch.</code><code class="descname">add_elec_bunch</code><span class="sig-paren">(</span><em>sim</em>, <em>gamma0</em>, <em>n_e</em>, <em>p_zmin</em>, <em>p_zmax</em>, <em>p_rmin</em>, <em>p_rmax</em>, <em>p_nr=2</em>, <em>p_nz=2</em>, <em>p_nt=4</em>, <em>dens_func=None</em>, <em>boost=None</em>, <em>direction=’forward’</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/lpa_utils/bunch.html#add_elec_bunch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.bunch.add_elec_bunch" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">fbpic.lpa_utils.bunch.</code><code class="descname">add_elec_bunch</code><span class="sig-paren">(</span><em>sim</em>, <em>gamma0</em>, <em>n_e</em>, <em>p_zmin</em>, <em>p_zmax</em>, <em>p_rmin</em>, <em>p_rmax</em>, <em>p_nr=2</em>, <em>p_nz=2</em>, <em>p_nt=4</em>, <em>dens_func=None</em>, <em>boost=None</em>, <em>direction='forward'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/lpa_utils/bunch.html#add_elec_bunch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.bunch.add_elec_bunch" title="Permalink to this definition">¶</a></dt>
 <dd><p>Introduce a simple relativistic electron bunch in the simulation,
 along with its space charge field.</p>
 <p>Uniform particle distribution with weights according to density function.</p>
@@ -312,7 +312,7 @@ the simulation.</li>
 
 <dl class="function">
 <dt id="fbpic.lpa_utils.bunch.add_elec_bunch_from_arrays">
-<code class="descclassname">fbpic.lpa_utils.bunch.</code><code class="descname">add_elec_bunch_from_arrays</code><span class="sig-paren">(</span><em>sim</em>, <em>x</em>, <em>y</em>, <em>z</em>, <em>ux</em>, <em>uy</em>, <em>uz</em>, <em>w</em>, <em>boost=None</em>, <em>direction=’forward’</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/lpa_utils/bunch.html#add_elec_bunch_from_arrays"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.bunch.add_elec_bunch_from_arrays" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">fbpic.lpa_utils.bunch.</code><code class="descname">add_elec_bunch_from_arrays</code><span class="sig-paren">(</span><em>sim</em>, <em>x</em>, <em>y</em>, <em>z</em>, <em>ux</em>, <em>uy</em>, <em>uz</em>, <em>w</em>, <em>boost=None</em>, <em>direction='forward'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/lpa_utils/bunch.html#add_elec_bunch_from_arrays"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.bunch.add_elec_bunch_from_arrays" title="Permalink to this definition">¶</a></dt>
 <dd><p>Introduce a relativistic electron bunch in the simulation,
 along with its space charge field, loading particles from numpy arrays.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -374,7 +374,7 @@ the simulation.</li>
 
 <dl class="function">
 <dt id="fbpic.lpa_utils.bunch.add_elec_bunch_file">
-<code class="descclassname">fbpic.lpa_utils.bunch.</code><code class="descname">add_elec_bunch_file</code><span class="sig-paren">(</span><em>sim</em>, <em>filename</em>, <em>Q_tot</em>, <em>z_off=0.0</em>, <em>boost=None</em>, <em>direction=’forward’</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/lpa_utils/bunch.html#add_elec_bunch_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.bunch.add_elec_bunch_file" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">fbpic.lpa_utils.bunch.</code><code class="descname">add_elec_bunch_file</code><span class="sig-paren">(</span><em>sim</em>, <em>filename</em>, <em>Q_tot</em>, <em>z_off=0.0</em>, <em>boost=None</em>, <em>direction='forward'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/lpa_utils/bunch.html#add_elec_bunch_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.bunch.add_elec_bunch_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Introduce a relativistic electron bunch in the simulation,
 along with its space charge field, loading particles from text file.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -506,7 +506,7 @@ a field of 1 Tesla and a period of 1 cm :</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.5.4',
+            VERSION:'0.6.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
@@ -516,7 +516,7 @@ a field of 1 Tesla and a period of 1 cm :</p>
       <script type="text/javascript" src="../_static/jquery.js"></script>
       <script type="text/javascript" src="../_static/underscore.js"></script>
       <script type="text/javascript" src="../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

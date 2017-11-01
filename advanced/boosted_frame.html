@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Running boosted-frame simulations &mdash; FBPIC 0.5.4 documentation</title>
+  <title>Running boosted-frame simulations &mdash; FBPIC 0.6.0 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="FBPIC 0.5.4 documentation" href="../index.html"/>
+    <link rel="top" title="FBPIC 0.6.0 documentation" href="../index.html"/>
         <link rel="up" title="Advanced use" href="advanced.html"/>
         <link rel="prev" title="Performing parameter scans in parallel" href="parameter_scans.html"/> 
 
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.5.4
+                0.6.0
               </div>
             
           
@@ -188,7 +188,7 @@ how to handle three important aspects of boosted-frame simulations with FBPIC:</
 </div></blockquote>
 <div class="section" id="principle-of-the-boosted-frame-technique-for-lwfa">
 <h2>Principle of the boosted-frame technique (for LWFA)<a class="headerlink" href="#principle-of-the-boosted-frame-technique-for-lwfa" title="Permalink to this headline">¶</a></h2>
-<p>Instead of running the simulation in the <strong>frame of the laboratory</strong>
+<p>Instead of running the simulation in the <strong>reference frame of the laboratory</strong>
 (or <em>lab frame</em> for short), this technique
 consists in running the simulation in a <strong>different Lorentz frame</strong>, which moves
 in the same direction as the laser (the <em>boosted frame</em>).
@@ -196,19 +196,21 @@ The boosted frame is characterized by its Lorentz factor <span class="math">\(\g
 <p>When performing this Lorentz transformation, the changes in space-time are
 computationally favorable:</p>
 <blockquote>
-<div><ul class="simple">
+<div><ul>
 <li><dl class="first docutils">
 <dt>In the boosted frame, the laser is stretched and has a lower frequency.</dt>
-<dd>This allows the PIC loop to use a larger time step and cell size (in <span class="math">\(z\)</span>)
+<dd><p class="first last">This allows the PIC loop to use a larger time step and cell size (in <span class="math">\(z\)</span>)
 than in the lab frame, while still resolving the laser.
 (More precisely, <span class="math">\(\Delta z_{boosted} \approx 2\gamma_b \Delta z_{lab}\)</span> and
-<span class="math">\(\Delta t_{boosted} \approx 2\gamma_b \Delta t_{lab}\)</span>)</dd>
+<span class="math">\(\Delta t_{boosted} \approx 2\gamma_b \Delta t_{lab}\)</span>)</p>
+</dd>
 </dl>
 </li>
 <li><dl class="first docutils">
 <dt>In the boosted frame, the plasma is shorter and moves relativistically towards the laser.</dt>
-<dd>This implies that the time needed for the laser to propagate through
-the plasma is shorter than in the lab frame, and that similarly the simulation will be shorter.</dd>
+<dd><p class="first last">This implies that the time needed for the laser to propagate through
+the plasma is shorter than in the lab frame, and that similarly the simulation will be shorter.</p>
+</dd>
 </dl>
 </li>
 </ul>
@@ -224,14 +226,17 @@ For more details on the theory of boosted-frame simulations, see the <a class="r
 paper on this technique</a>.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">In the boosted frame, the plasma has a <strong>higher density</strong>
+<p>In the boosted frame, the plasma has a <strong>higher density</strong>
 (<span class="math">\(n_{boosted} = \gamma_b n_{lab}\)</span>). Because
 of this, and because of the larger cell size, <strong>each plasma macroparticle typically
 represents more physical particles</strong> in the boosted frame than in the lab frame
-(at least when keeping the same number of macroparticles per cell).
-This implies that simulating e.g. self-injection in the boosted frame will
+(at least when keeping the same number of macroparticles per cell).</p>
+<p class="last">This implies that simulating <strong>self-injection</strong> in the boosted frame will
 result in less macroparticles in the injected beam than in the lab frame,
-and therefore less statistics when evaluating e.g. the beam emittance and charge.</p>
+and therefore <strong>less statistics</strong> when evaluating e.g. the beam emittance and charge.
+In extreme cases (when the number of physical particles per macroparticle is
+comparable to the total number of self-injected particles),
+self-injection may not occur at all in the boosted-frame simulation.</p>
 </div>
 </div>
 <div class="section" id="converting-input-parameters-from-the-lab-frame-to-the-boosted-frame">
@@ -357,7 +362,7 @@ instead the user is responsible for ensuring this.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.5.4',
+            VERSION:'0.6.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
@@ -367,7 +372,7 @@ instead the user is responsible for ensuring this.</p>
       <script type="text/javascript" src="../_static/jquery.js"></script>
       <script type="text/javascript" src="../_static/underscore.js"></script>
       <script type="text/javascript" src="../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 
