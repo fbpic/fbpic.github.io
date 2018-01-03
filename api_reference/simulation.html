@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>The Simulation class &mdash; FBPIC 0.6.0 documentation</title>
+  <title>The Simulation class &mdash; FBPIC 0.7.0 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="FBPIC 0.6.0 documentation" href="../index.html"/>
+    <link rel="top" title="FBPIC 0.7.0 documentation" href="../index.html"/>
         <link rel="up" title="API reference" href="api_reference.html"/>
         <link rel="next" title="The openPMD diagnostics" href="diagnostics.html"/>
         <link rel="prev" title="API reference" href="api_reference.html"/> 
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                0.6.0
+                0.7.0
               </div>
             
           
@@ -184,7 +184,7 @@ the simulation data, and has the high-level methods to perform the PIC cycle.</p
 </div></blockquote>
 <dl class="class">
 <dt id="fbpic.main.Simulation">
-<em class="property">class </em><code class="descclassname">fbpic.main.</code><code class="descname">Simulation</code><span class="sig-paren">(</span><em>Nz</em>, <em>zmax</em>, <em>Nr</em>, <em>rmax</em>, <em>Nm</em>, <em>dt</em>, <em>p_zmin</em>, <em>p_zmax</em>, <em>p_rmin</em>, <em>p_rmax</em>, <em>p_nz</em>, <em>p_nr</em>, <em>p_nt</em>, <em>n_e</em>, <em>zmin=0.0</em>, <em>n_order=-1</em>, <em>dens_func=None</em>, <em>filter_currents=True</em>, <em>v_comoving=None</em>, <em>use_galilean=True</em>, <em>initialize_ions=False</em>, <em>use_cuda=False</em>, <em>n_guard=None</em>, <em>n_damp=30</em>, <em>exchange_period=None</em>, <em>boundaries='periodic'</em>, <em>gamma_boost=None</em>, <em>use_all_mpi_ranks=True</em>, <em>particle_shape='linear'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/main.html#Simulation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.main.Simulation" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">fbpic.main.</code><code class="descname">Simulation</code><span class="sig-paren">(</span><em>Nz</em>, <em>zmax</em>, <em>Nr</em>, <em>rmax</em>, <em>Nm</em>, <em>dt</em>, <em>p_zmin</em>, <em>p_zmax</em>, <em>p_rmin</em>, <em>p_rmax</em>, <em>p_nz</em>, <em>p_nr</em>, <em>p_nt</em>, <em>n_e</em>, <em>zmin=0.0</em>, <em>n_order=-1</em>, <em>dens_func=None</em>, <em>filter_currents=True</em>, <em>v_comoving=None</em>, <em>use_galilean=True</em>, <em>initialize_ions=False</em>, <em>use_cuda=False</em>, <em>n_guard=None</em>, <em>n_damp=30</em>, <em>exchange_period=None</em>, <em>boundaries='periodic'</em>, <em>gamma_boost=None</em>, <em>use_all_mpi_ranks=True</em>, <em>particle_shape='linear'</em>, <em>verbose_level=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/main.html#Simulation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.main.Simulation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initializes a simulation, by creating the following structures:</p>
 <ul class="simple">
 <li>the <cite>Fields</cite> object, which contains the field data on the grids</li>
@@ -213,12 +213,14 @@ cell)</li>
 <li><strong>p_nr</strong> (<em>int</em>) – The number of macroparticles per cell along the r direction</li>
 <li><strong>p_nt</strong> (<em>int</em>) – The number of macroparticles along the theta direction</li>
 <li><strong>n_e</strong> (<em>float</em><em> (</em><em>in particles per m^3</em><em>)</em>) – Peak density of the electrons</li>
-<li><strong>n_order</strong> (<em>int</em><em>, </em><em>optional</em>) – The order of the stencil for the z derivatives.
-Use -1 for infinite order, otherwise use a positive, even
-number. In this case, the stencil extends up to approx.
-2*n_order cells on each side. (A finite order stencil
-is required to have a localized field push that allows
-to do simulations in parallel on multiple MPI ranks)</li>
+<li><strong>n_order</strong> (<em>int</em><em>, </em><em>optional</em>) – The order of the stencil for z derivatives in the Maxwell solver.
+Use -1 for infinite order, i.e. for exact dispersion relation in
+all direction (adviced for single-GPU/single-CPU simulation).
+Use a positive number (and multiple of 2) for a finite-order stencil
+(required for multi-GPU/multi-CPU with MPI). A large <cite>n_order</cite> leads
+to more overhead in MPI communications, but also to a more accurate
+dispersion relation for electromagnetic waves. (Typically,
+<cite>n_order = 32</cite> is a good trade-off.) See <a class="reference external" href="https://arxiv.org/abs/1611.05712">this article</a> for more information.</li>
 <li><strong>zmin</strong> (<em>float</em><em>, </em><em>optional</em>) – The position of the edge of the simulation box.
 (More precisely, the position of the edge of the first cell)</li>
 <li><strong>dens_func</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function of the form:
@@ -279,6 +281,11 @@ parameters and output folder depend on the MPI rank.</li>
 <li><strong>particle_shape</strong> (<em>str</em><em>, </em><em>optional</em>) – Set the particle shape for the charge/current deposition.
 Possible values are ‘cubic’, ‘linear’. (‘cubic’ corresponds to
 third order shapes and ‘linear’ to first order shapes).</li>
+<li><strong>verbose_level</strong> (<em>int</em><em>, </em><em>optional</em>) – Print information about the simulation setup after
+initialization of the Simulation class.
+0 - Print no information
+1 (Default) - Print basic information
+2 - Print detailed information</li>
 </ul>
 </td>
 </tr>
@@ -386,7 +393,7 @@ field push or not. (requires initialize_ions = True)</li>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.6.0',
+            VERSION:'0.7.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Running boosted-frame simulations &mdash; FBPIC 0.6.0 documentation</title>
+  <title>Running boosted-frame simulations &mdash; FBPIC 0.7.0 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="FBPIC 0.6.0 documentation" href="../index.html"/>
+    <link rel="top" title="FBPIC 0.7.0 documentation" href="../index.html"/>
         <link rel="up" title="Advanced use" href="advanced.html"/>
         <link rel="prev" title="Performing parameter scans in parallel" href="parameter_scans.html"/> 
 
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.6.0
+                0.7.0
               </div>
             
           
@@ -196,21 +196,19 @@ The boosted frame is characterized by its Lorentz factor <span class="math">\(\g
 <p>When performing this Lorentz transformation, the changes in space-time are
 computationally favorable:</p>
 <blockquote>
-<div><ul>
+<div><ul class="simple">
 <li><dl class="first docutils">
 <dt>In the boosted frame, the laser is stretched and has a lower frequency.</dt>
-<dd><p class="first last">This allows the PIC loop to use a larger time step and cell size (in <span class="math">\(z\)</span>)
+<dd>This allows the PIC loop to use a larger time step and cell size (in <span class="math">\(z\)</span>)
 than in the lab frame, while still resolving the laser.
 (More precisely, <span class="math">\(\Delta z_{boosted} \approx 2\gamma_b \Delta z_{lab}\)</span> and
-<span class="math">\(\Delta t_{boosted} \approx 2\gamma_b \Delta t_{lab}\)</span>)</p>
-</dd>
+<span class="math">\(\Delta t_{boosted} \approx 2\gamma_b \Delta t_{lab}\)</span>)</dd>
 </dl>
 </li>
 <li><dl class="first docutils">
 <dt>In the boosted frame, the plasma is shorter and moves relativistically towards the laser.</dt>
-<dd><p class="first last">This implies that the time needed for the laser to propagate through
-the plasma is shorter than in the lab frame, and that similarly the simulation will be shorter.</p>
-</dd>
+<dd>This implies that the time needed for the laser to propagate through
+the plasma is shorter than in the lab frame, and that similarly the simulation will be shorter.</dd>
 </dl>
 </li>
 </ul>
@@ -362,7 +360,7 @@ instead the user is responsible for ensuring this.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.6.0',
+            VERSION:'0.7.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
