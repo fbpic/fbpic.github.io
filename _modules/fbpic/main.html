@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fbpic.main &mdash; FBPIC 0.7.0 documentation</title>
+  <title>fbpic.main &mdash; FBPIC 0.7.1 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="FBPIC 0.7.0 documentation" href="../../index.html"/>
+    <link rel="top" title="FBPIC 0.7.1 documentation" href="../../index.html"/>
         <link rel="up" title="Module code" href="../index.html"/> 
 
   
@@ -65,7 +65,7 @@
             
             
               <div class="version">
-                0.7.0
+                0.7.1
               </div>
             
           
@@ -596,7 +596,7 @@
             <span class="c1"># i.e. when the particles&#39; velocity and position are synchronized</span>
             <span class="c1"># (e.g. ionization, Compton scattering, ...)</span>
             <span class="k">for</span> <span class="n">species</span> <span class="ow">in</span> <span class="n">ptcl</span><span class="p">:</span>
-                <span class="n">species</span><span class="o">.</span><span class="n">handle_elementary_processes</span><span class="p">()</span>
+                <span class="n">species</span><span class="o">.</span><span class="n">handle_elementary_processes</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="p">)</span>
 
             <span class="c1"># Push the particles&#39; positions to t = (n+1) dt</span>
             <span class="k">if</span> <span class="n">move_positions</span><span class="p">:</span>
@@ -889,7 +889,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.7.0',
+            VERSION:'0.7.1',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

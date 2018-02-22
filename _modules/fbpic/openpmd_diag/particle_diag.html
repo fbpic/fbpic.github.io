@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fbpic.openpmd_diag.particle_diag &mdash; FBPIC 0.7.0 documentation</title>
+  <title>fbpic.openpmd_diag.particle_diag &mdash; FBPIC 0.7.1 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="FBPIC 0.7.0 documentation" href="../../../index.html"/>
+    <link rel="top" title="FBPIC 0.7.1 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -65,7 +65,7 @@
             
             
               <div class="version">
-                0.7.0
+                0.7.1
               </div>
             
           
@@ -611,10 +611,11 @@
         <span class="n">quantity_one_proc</span> <span class="o">=</span> <span class="n">quantity_one_proc</span><span class="p">[</span> <span class="n">select_array</span> <span class="p">]</span>
 
         <span class="c1"># If this is the momentum, multiply by the proper factor</span>
-        <span class="k">if</span> <span class="n">quantity</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;ux&#39;</span><span class="p">,</span> <span class="s1">&#39;uy&#39;</span><span class="p">,</span> <span class="s1">&#39;uz&#39;</span><span class="p">]</span> <span class="p">:</span>
-            <span class="n">scale_factor</span> <span class="o">=</span> <span class="n">species</span><span class="o">.</span><span class="n">m</span> <span class="o">*</span> <span class="n">constants</span><span class="o">.</span><span class="n">c</span>
-            <span class="n">quantity_one_proc</span> <span class="o">*=</span> <span class="n">scale_factor</span>
-
+        <span class="c1"># (only for species that have a mass)</span>
+        <span class="k">if</span> <span class="n">quantity</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;ux&#39;</span><span class="p">,</span> <span class="s1">&#39;uy&#39;</span><span class="p">,</span> <span class="s1">&#39;uz&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">species</span><span class="o">.</span><span class="n">m</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+                <span class="n">scale_factor</span> <span class="o">=</span> <span class="n">species</span><span class="o">.</span><span class="n">m</span> <span class="o">*</span> <span class="n">constants</span><span class="o">.</span><span class="n">c</span>
+                <span class="n">quantity_one_proc</span> <span class="o">*=</span> <span class="n">scale_factor</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">quantity_all_proc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">gather_ptcl_array</span><span class="p">(</span>
                 <span class="n">quantity_one_proc</span><span class="p">,</span> <span class="n">n_rank</span><span class="p">,</span> <span class="n">Ntot</span> <span class="p">)</span>
@@ -659,7 +660,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.7.0',
+            VERSION:'0.7.1',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
