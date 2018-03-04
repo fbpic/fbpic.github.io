@@ -1,0 +1,420 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Beam initialization &mdash; FBPIC 0.8.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="FBPIC 0.8.0 documentation" href="../../index.html"/>
+        <link rel="up" title="Laser-plasma utilities" href="lpa_utilities.html"/>
+        <link rel="next" title="External fields" href="external_fields.html"/>
+        <link rel="prev" title="Laser initialization" href="laser.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> FBPIC
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.8.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../overview.html">Overview of the code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../how_to_run.html">How to run the code</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api_reference.html">API reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../simulation.html">The Simulation class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../diagnostics.html">The openPMD diagnostics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../checkpoint_restart.html">Checkpoints and restarts</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="lpa_utilities.html">Laser-plasma utilities</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="laser.html">Laser initialization</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Beam initialization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="external_fields.html">External fields</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../boost_converter.html">Conversion to boosted-frame</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../advanced/advanced.html">Advanced use</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">FBPIC</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../api_reference.html">API reference</a> &raquo;</li>
+        
+          <li><a href="lpa_utilities.html">Laser-plasma utilities</a> &raquo;</li>
+        
+      <li>Beam initialization</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/api_reference/lpa_utilities/beam.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="beam-initialization">
+<h1>Beam initialization<a class="headerlink" href="#beam-initialization" title="Permalink to this headline">¶</a></h1>
+<p>The functions below allow to <strong>initialize a relativistic electron beam</strong>
+with various distributions in space (e.g. Gaussian, flat-top, from a file,
+etc.). In each case, the <strong>self-consistent space-charge fields</strong> are
+automatically calculated by the code, and added to the simulation.</p>
+<dl class="function">
+<dt id="fbpic.lpa_utils.bunch.add_elec_bunch">
+<code class="descclassname">fbpic.lpa_utils.bunch.</code><code class="descname">add_elec_bunch</code><span class="sig-paren">(</span><em>sim</em>, <em>gamma0</em>, <em>n_e</em>, <em>p_zmin</em>, <em>p_zmax</em>, <em>p_rmin</em>, <em>p_rmax</em>, <em>p_nr=2</em>, <em>p_nz=2</em>, <em>p_nt=4</em>, <em>dens_func=None</em>, <em>boost=None</em>, <em>direction='forward'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fbpic/lpa_utils/bunch.html#add_elec_bunch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.bunch.add_elec_bunch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Introduce a simple relativistic electron bunch in the simulation,
+along with its space charge field.</p>
+<p>Uniform particle distribution with weights according to density function.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>sim</strong> (<em>a Simulation object</em>) – The structure that contains the simulation.</li>
+<li><strong>gamma0</strong> (<em>float</em>) – The Lorentz factor of the electrons</li>
+<li><strong>n_e</strong> (<em>float</em><em> (</em><em>in particles per m^3</em><em>)</em>) – Density of the electron bunch</li>
+<li><strong>p_zmin</strong> (<em>float</em><em> (</em><em>in meters</em><em>)</em>) – The minimal z position above which the particles are initialized</li>
+<li><strong>p_zmax</strong> (<em>float</em><em> (</em><em>in meters</em><em>)</em>) – The maximal z position below which the particles are initialized</li>
+<li><strong>p_rmin</strong> (<em>float</em><em> (</em><em>in meters</em><em>)</em>) – The minimal r position above which the particles are initialized</li>
+<li><strong>p_rmax</strong> (<em>float</em><em> (</em><em>in meters</em><em>)</em>) – The maximal r position below which the particles are initialized</li>
+<li><strong>p_nz</strong> (<em>int</em>) – Number of macroparticles per cell along the z directions</li>
+<li><strong>p_nr</strong> (<em>int</em>) – Number of macroparticles per cell along the r directions</li>
+<li><strong>p_nt</strong> (<em>int</em>) – Number of macroparticles along the theta direction</li>
+<li><strong>dens_func</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function of the form :
+<cite>def dens_func( z, r ) …</cite>
+where <cite>z</cite> and <cite>r</cite> are 1d arrays, and which returns
+a 1d array containing the density <em>relative to n_e</em>
+(i.e. a number between 0 and 1) at the given positions.</li>
+<li><strong>boost</strong> (<em>a BoostConverter object</em><em>, </em><em>optional</em>) – A BoostConverter object defining the Lorentz boost of
+the simulation.</li>
+<li><strong>direction</strong> (<em>string</em><em>, </em><em>optional</em>) – Can be either “forward” or “backward”.
+Propagation direction of the beam.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="fbpic.lpa_utils.bunch.add_elec_bunch_gaussian">
+<code class="descclassname">fbpic.lpa_utils.bunch.</code><code class="descname">add_elec_bunch_gaussian</code><span class="sig-paren">(</span><em>sim</em>, <em>sig_r</em>, <em>sig_z</em>, <em>n_emit</em>, <em>gamma0</em>, <em>sig_gamma</em>, <em>Q</em>, <em>N</em>, <em>tf=0.0</em>, <em>zf=0.0</em>, <em>boost=None</em>, <em>save_beam=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fbpic/lpa_utils/bunch.html#add_elec_bunch_gaussian"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.bunch.add_elec_bunch_gaussian" title="Permalink to this definition">¶</a></dt>
+<dd><p>Introduce a relativistic Gaussian electron bunch in the simulation,
+along with its space charge field.</p>
+<p>The bunch is initialized with a normalized emittance <cite>n_emit</cite>,
+in such a way that it will be focused at time <cite>tf</cite>, at the position <cite>zf</cite>.
+Thus if <cite>tf</cite> is not 0, the bunch will be initially out of focus.
+(This does not take space charge effects into account.)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>sim</strong> (<em>a Simulation object</em>) – The structure that contains the simulation.</li>
+<li><strong>sig_r</strong> (<em>float</em><em> (</em><em>in meters</em><em>)</em>) – The transverse RMS bunch size.</li>
+<li><strong>sig_z</strong> (<em>float</em><em> (</em><em>in meters</em><em>)</em>) – The longitudinal RMS bunch size.</li>
+<li><strong>n_emit</strong> (<em>float</em><em> (</em><em>in meters</em><em>)</em>) – The normalized emittance of the bunch.</li>
+<li><strong>gamma0</strong> (<em>float</em>) – The Lorentz factor of the electrons.</li>
+<li><strong>sig_gamma</strong> (<em>float</em>) – The absolute energy spread of the bunch.</li>
+<li><strong>Q</strong> (<em>float</em><em> (</em><em>in Coulomb</em><em>)</em>) – The total charge of the bunch (should be a positive number)</li>
+<li><strong>N</strong> (<em>int</em>) – The number of particles the bunch should consist of.</li>
+<li><strong>zf</strong> (<em>float</em><em> (</em><em>in meters</em><em>)</em><em>, </em><em>optional</em>) – Position of the focus.</li>
+<li><strong>tf</strong> (<em>float</em><em> (</em><em>in seconds</em><em>)</em><em>, </em><em>optional</em>) – Time at which the bunch reaches focus.</li>
+<li><strong>boost</strong> (<em>a BoostConverter object</em><em>, </em><em>optional</em>) – A BoostConverter object defining the Lorentz boost of
+the simulation.</li>
+<li><strong>save_beam</strong> (<em>string</em><em>, </em><em>optional</em>) – Saves the generated beam distribution as an .npz file “string”.npz</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="fbpic.lpa_utils.bunch.add_elec_bunch_from_arrays">
+<code class="descclassname">fbpic.lpa_utils.bunch.</code><code class="descname">add_elec_bunch_from_arrays</code><span class="sig-paren">(</span><em>sim</em>, <em>x</em>, <em>y</em>, <em>z</em>, <em>ux</em>, <em>uy</em>, <em>uz</em>, <em>w</em>, <em>boost=None</em>, <em>direction='forward'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fbpic/lpa_utils/bunch.html#add_elec_bunch_from_arrays"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.bunch.add_elec_bunch_from_arrays" title="Permalink to this definition">¶</a></dt>
+<dd><p>Introduce a relativistic electron bunch in the simulation,
+along with its space charge field, loading particles from numpy arrays.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>sim</strong> (<em>a Simulation object</em>) – The structure that contains the simulation.</li>
+<li><strong>y</strong><strong>, </strong><strong>z</strong> (<em>x</em><em>,</em>) – The positions of the particles in x, y, z in meters</li>
+<li><strong>uy</strong><strong>, </strong><strong>uz</strong> (<em>ux</em><em>,</em>) – The dimensionless momenta of the particles in each direction</li>
+<li><strong>w</strong> (<em>1d array of length</em><em> (</em><em>N_macroparticles</em><em>,</em><em>)</em>) – The weight of the particles, i.e. the number of physical particles
+that each macroparticle corresponds to.</li>
+<li><strong>boost</strong> (<em>a BoostConverter object</em><em>, </em><em>optional</em>) – A BoostConverter object defining the Lorentz boost of
+the simulation.</li>
+<li><strong>direction</strong> (<em>string</em><em>, </em><em>optional</em>) – Can be either “forward” or “backward”.
+Propagation direction of the beam.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="fbpic.lpa_utils.bunch.add_elec_bunch_openPMD">
+<code class="descclassname">fbpic.lpa_utils.bunch.</code><code class="descname">add_elec_bunch_openPMD</code><span class="sig-paren">(</span><em>sim</em>, <em>ts_path</em>, <em>z_off=0.0</em>, <em>species=None</em>, <em>select=None</em>, <em>iteration=None</em>, <em>boost=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fbpic/lpa_utils/bunch.html#add_elec_bunch_openPMD"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.bunch.add_elec_bunch_openPMD" title="Permalink to this definition">¶</a></dt>
+<dd><p>Introduce a relativistic electron bunch in the simulation,
+along with its space charge field, loading particles from an openPMD
+timeseries.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>sim</strong> (<em>a Simulation object</em>) – The structure that contains the simulation.</li>
+<li><strong>ts_path</strong> (<em>string</em>) – The path to the directory where the openPMD files are.
+For the moment, only HDF5 files are supported. There should be
+one file per iteration, and the name of the files should end
+with the iteration number, followed by ‘.h5’ (e.g. data0005000.h5)</li>
+<li><strong>z_off</strong> (<em>float</em><em> (</em><em>in meters</em><em>)</em>) – Shift the particle positions in z by z_off. By default the initialized
+phasespace is centered at z=0.</li>
+<li><strong>species</strong> (<em>string</em>) – A string indicating the name of the species
+This is optional if there is only one species</li>
+<li><strong>select</strong> (<em>dict</em><em>, </em><em>optional</em>) – Either None or a dictionary of rules
+to select the particles, of the form
+‘x’ : [-4., 10.]   (Particles having x between -4 and 10 microns)
+‘ux’ : [-0.1, 0.1] (Particles having ux between -0.1 and 0.1 mc)
+‘uz’ : [5., None]  (Particles with uz above 5 mc)</li>
+<li><strong>iteration</strong> (<em>integer</em><em> (</em><em>optional</em><em>)</em>) – The iteration number of the openPMD file from which to extract the
+particles.</li>
+<li><strong>boost</strong> (<em>a BoostConverter object</em><em>, </em><em>optional</em>) – A BoostConverter object defining the Lorentz boost of
+the simulation.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="fbpic.lpa_utils.bunch.add_elec_bunch_file">
+<code class="descclassname">fbpic.lpa_utils.bunch.</code><code class="descname">add_elec_bunch_file</code><span class="sig-paren">(</span><em>sim</em>, <em>filename</em>, <em>Q_tot</em>, <em>z_off=0.0</em>, <em>boost=None</em>, <em>direction='forward'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fbpic/lpa_utils/bunch.html#add_elec_bunch_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.bunch.add_elec_bunch_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Introduce a relativistic electron bunch in the simulation,
+along with its space charge field, loading particles from text file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>sim</strong> (<em>a Simulation object</em>) – The structure that contains the simulation.</li>
+<li><strong>filename</strong> (<em>string</em>) – the file containing the particle phase space in seven columns
+all float, no header
+x [m]  y [m]  z [m]  ux [unitless]  uy [unitless]  uz [unitless]</li>
+<li><strong>Q_tot</strong> (<em>float</em><em> (</em><em>in Coulomb</em><em>)</em>) – Total charge in bunch (should be a positive number)</li>
+<li><strong>z_off</strong> (<em>float</em><em> (</em><em>in meters</em><em>)</em>) – Shift the particle positions in z by z_off</li>
+<li><strong>boost</strong> (<em>a BoostConverter object</em><em>, </em><em>optional</em>) – A BoostConverter object defining the Lorentz boost of
+the simulation.</li>
+<li><strong>direction</strong> (<em>string</em><em>, </em><em>optional</em>) – Can be either “forward” or “backward”.
+Propagation direction of the beam.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="external_fields.html" class="btn btn-neutral float-right" title="External fields" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="laser.html" class="btn btn-neutral" title="Laser initialization" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, FBPIC contributors.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.8.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

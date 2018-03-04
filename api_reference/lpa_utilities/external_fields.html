@@ -1,0 +1,322 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>External fields &mdash; FBPIC 0.8.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="FBPIC 0.8.0 documentation" href="../../index.html"/>
+        <link rel="up" title="Laser-plasma utilities" href="lpa_utilities.html"/>
+        <link rel="next" title="Conversion to boosted-frame" href="../boost_converter.html"/>
+        <link rel="prev" title="Beam initialization" href="beam.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> FBPIC
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.8.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../overview.html">Overview of the code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../how_to_run.html">How to run the code</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api_reference.html">API reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../simulation.html">The Simulation class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../diagnostics.html">The openPMD diagnostics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../checkpoint_restart.html">Checkpoints and restarts</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="lpa_utilities.html">Laser-plasma utilities</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="laser.html">Laser initialization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="beam.html">Beam initialization</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">External fields</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../boost_converter.html">Conversion to boosted-frame</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../advanced/advanced.html">Advanced use</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">FBPIC</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../api_reference.html">API reference</a> &raquo;</li>
+        
+          <li><a href="lpa_utilities.html">Laser-plasma utilities</a> &raquo;</li>
+        
+      <li>External fields</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/api_reference/lpa_utilities/external_fields.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="external-fields">
+<h1>External fields<a class="headerlink" href="#external-fields" title="Permalink to this headline">¶</a></h1>
+<p><strong>External fields</strong> are fields which are applied to the particles at each
+timestep and are <strong>specified by the user</strong>, instead of being self-consistently
+evolved by the simulation.</p>
+<dl class="class">
+<dt id="fbpic.lpa_utils.external_fields.ExternalField">
+<em class="property">class </em><code class="descclassname">fbpic.lpa_utils.external_fields.</code><code class="descname">ExternalField</code><span class="sig-paren">(</span><em>field_func</em>, <em>fieldtype</em>, <em>amplitude</em>, <em>length_scale</em>, <em>species=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fbpic/lpa_utils/external_fields.html#ExternalField"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.external_fields.ExternalField" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize an ExternalField object, so that the function
+<cite>field_func</cite> is called at each time step on the field <cite>fieldtype</cite></p>
+<p>This object should be added to the list <cite>external_fields</cite>,
+which is an attribute of the Simulation object, so that the
+fields are applied at each timestep. (See the example below)</p>
+<p>The function <cite>field_func</cite> is automatically converted to a GPU
+function if needed, by using numba’s ufunc feature.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>field_func</strong> (<em>callable</em>) – <p>Function of the form <cite>field_func( F, x, y, z, t, amplitude,
+length_scale )</cite> and which returns the modified field F’</p>
+<p>This function will be called at each timestep, with:</p>
+<ul>
+<li>F: 1d array of shape (N_ptcl,), containing the field
+designated by fieldtype, gathered on the particles</li>
+<li>x, y, z: 1d arrays of shape (N_ptcl), containing the
+positions of the particles</li>
+<li>t: float, the time in the simulation</li>
+<li>amplitude and length_scale: floats that can be used within
+the function expression</li>
+</ul>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">In the PIC loop, this function is called after
+the field gathering. Thus this function can potentially
+overwrite the fields that were gathered on the grid. To avoid
+this, use “return(F + external_field) ” inside the definition
+of <cite>field_func</cite> instead of “return(external_field)”</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Inside the definition of <cite>field_func</cite> please use
+the <cite>math</cite> module for mathematical functions, instead of numpy.
+This will allow the function to be compiled for GPU.</p>
+</div>
+</li>
+<li><strong>fieldtype</strong> (<em>string</em>) – Specifies on which field <cite>field_func</cite> will be applied.
+Either ‘Ex’, ‘Ey’, ‘Ez’, ‘Bx’, ‘By’, ‘Bz’</li>
+<li><strong>species</strong> (<em>a Particles object</em><em>, </em><em>optionals</em>) – The species on which the external field has to be applied.
+If no species is specified, the external field is applied
+to all particles.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Example</p>
+<p>In order to define a magnetic undulator, polarized along y, with
+a field of 1 Tesla and a period of 1 cm :</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">field_func</span><span class="p">(</span> <span class="n">F</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">t</span> <span class="p">,</span> <span class="n">amplitude</span><span class="p">,</span> <span class="n">length_scale</span> <span class="p">):</span>
+    <span class="k">return</span><span class="p">(</span> <span class="n">F</span> <span class="o">+</span> <span class="n">amplitude</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">z</span><span class="o">/</span><span class="n">length_scale</span> <span class="p">)</span> <span class="p">)</span>
+
+<span class="n">sim</span><span class="o">.</span><span class="n">external_fields</span> <span class="o">=</span> <span class="p">[</span> <span class="n">ExternalField</span><span class="p">(</span> <span class="n">field_func</span><span class="p">,</span> <span class="s1">&#39;By&#39;</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">1.e-2</span> <span class="p">)</span> <span class="p">]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../boost_converter.html" class="btn btn-neutral float-right" title="Conversion to boosted-frame" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="beam.html" class="btn btn-neutral" title="Beam initialization" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, FBPIC contributors.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.8.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

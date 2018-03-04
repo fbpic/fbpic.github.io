@@ -1,0 +1,602 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Laser initialization &mdash; FBPIC 0.8.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="FBPIC 0.8.0 documentation" href="../../index.html"/>
+        <link rel="up" title="Laser-plasma utilities" href="lpa_utilities.html"/>
+        <link rel="next" title="Beam initialization" href="beam.html"/>
+        <link rel="prev" title="Laser-plasma utilities" href="lpa_utilities.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> FBPIC
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.8.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../overview.html">Overview of the code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../how_to_run.html">How to run the code</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api_reference.html">API reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../simulation.html">The Simulation class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../diagnostics.html">The openPMD diagnostics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../checkpoint_restart.html">Checkpoints and restarts</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="lpa_utilities.html">Laser-plasma utilities</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Laser initialization</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#generic-function-for-arbitrary-laser-profile">Generic function for arbitrary laser profile</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#laser-profiles">Laser profiles</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#compact-function-for-a-gaussian-pulse">Compact function for a Gaussian pulse</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="beam.html">Beam initialization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="external_fields.html">External fields</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../boost_converter.html">Conversion to boosted-frame</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../advanced/advanced.html">Advanced use</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">FBPIC</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../api_reference.html">API reference</a> &raquo;</li>
+        
+          <li><a href="lpa_utilities.html">Laser-plasma utilities</a> &raquo;</li>
+        
+      <li>Laser initialization</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/api_reference/lpa_utilities/laser.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="laser-initialization">
+<h1>Laser initialization<a class="headerlink" href="#laser-initialization" title="Permalink to this headline">¶</a></h1>
+<p>There are two functions that allow to introduce a laser pulse in an FBPIC simulation:</p>
+<ul class="simple">
+<li>The generic function <code class="docutils literal"><span class="pre">add_laser_pulse</span></code>, which can introduce an arbitrary laser profile.</li>
+<li>The compact function <code class="docutils literal"><span class="pre">add_laser</span></code>, which can only introduce a Gaussian profile.</li>
+</ul>
+<p>The generic function is presented first here. This page also explains how
+to define laser profiles in FBPIC. Finally the compact function is described
+at the end of this page.</p>
+<p>Both of the above functions support two types of methods, in order to introduce
+the laser in the simulation box:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>The <code class="docutils literal"><span class="pre">direct</span></code> method:</dt>
+<dd><p class="first">In this case, the entire laser pulse is initialized in the simulation box,
+immediately when the function is called.</p>
+<div class="last admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">When using this method, FBPIC will always initialize the laser field
+on the grid in a <strong>self-consistent manner</strong> (e.g. such that the equations
+<span class="math">\(\boldsymbol{\nabla} \cdot \boldsymbol{E} = 0\)</span>
+and <span class="math">\(\boldsymbol{\nabla} \cdot \boldsymbol{B} = 0\)</span>
+are automatically satisfied, for the added laser field).</p>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>The <code class="docutils literal"><span class="pre">antenna</span></code> method:</dt>
+<dd><p class="first">In this case, the laser pulse is progressively emitted by a virtual antenna
+during the simulation. This can be advantageous when the simulation box is
+too small to contain the initial laser pulse entirely.</p>
+<div class="last admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Due to the details of its implementation, the laser antenna always
+emits <strong>two laser pulses</strong> that propagate in opposite directions (one
+on each side of the plane of the antenna). One of these two pulses
+is usually unwanted. However, when using a moving window that follows
+the only pulse of interest, the other (unwanted) pulse rapidly exits
+the simulation box.</p>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<div class="section" id="generic-function-for-arbitrary-laser-profile">
+<h2>Generic function for arbitrary laser profile<a class="headerlink" href="#generic-function-for-arbitrary-laser-profile" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="fbpic.lpa_utils.laser.add_laser_pulse">
+<code class="descclassname">fbpic.lpa_utils.laser.</code><code class="descname">add_laser_pulse</code><span class="sig-paren">(</span><em>sim</em>, <em>laser_profile</em>, <em>gamma_boost=None</em>, <em>method='direct'</em>, <em>z0_antenna=None</em>, <em>fw_propagating=True</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fbpic/lpa_utils/laser/laser.html#add_laser_pulse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.laser.add_laser_pulse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Introduce a laser pulse in the simulation.</p>
+<p>The laser is either added directly to the interpolation grid initially
+(method= <code class="docutils literal"><span class="pre">direct</span></code>) or it is progressively emitted by an antenna
+(method= <code class="docutils literal"><span class="pre">antenna</span></code>).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>sim</strong> (<em>a Simulation object</em>) – The structure that contains the simulation.</li>
+<li><strong>laser_profile</strong> (<em>a valid laser profile object</em>) – Laser profiles can be imported from <code class="docutils literal"><span class="pre">fbpic.lpa_utils.laser</span></code></li>
+<li><strong>gamma_boost</strong> (<em>float</em><em>, </em><em>optional</em>) – When initializing the laser in a boosted frame, set the value of
+<code class="docutils literal"><span class="pre">gamma_boost</span></code> to the corresponding Lorentz factor.
+In this case, <code class="docutils literal"><span class="pre">laser_profile</span></code> should be initialized with all its
+physical quantities (wavelength, etc…) given in the lab frame,
+and the function <code class="docutils literal"><span class="pre">add_laser_pulse</span></code> will automatically convert
+these properties to their boosted-frame value.</li>
+<li><strong>method</strong> (<em>string</em><em>, </em><em>optional</em>) – Whether to initialize the laser directly in the box
+(method= <code class="docutils literal"><span class="pre">direct</span></code>) or through a laser antenna (method= <code class="docutils literal"><span class="pre">antenna</span></code>).
+Default: <code class="docutils literal"><span class="pre">direct</span></code></li>
+<li><strong>fw_propagating</strong> (<em>bool</em><em>, </em><em>optional</em>) – Only for the <code class="docutils literal"><span class="pre">direct</span></code> method: Whether the laser is propagating
+in the forward or backward direction.</li>
+<li><strong>z0_antenna</strong> (<em>float</em><em>, </em><em>optional</em><em> (</em><em>meters</em><em>)</em>) – Required for the <code class="docutils literal"><span class="pre">antenna</span></code> method: initial position
+(in the lab frame) of the antenna.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Example</p>
+<p>In order to initialize a Laguerre-Gauss profile with a waist of
+5 microns and a duration of 30 femtoseconds, centered at <span class="math">\(z=3\)</span>
+microns initially:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fbpic.lpa_utils.laser</span> <span class="k">import</span> <span class="n">add_laser_pulse</span><span class="p">,</span> <span class="n">LaguerreGaussLaser</span>
+
+<span class="n">profile</span> <span class="o">=</span> <span class="n">LaguerreGaussLaser</span><span class="p">(</span><span class="n">a0</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">waist</span><span class="o">=</span><span class="mf">5.e-6</span><span class="p">,</span> <span class="n">tau</span><span class="o">=</span><span class="mf">30.e-15</span><span class="p">,</span> <span class="n">z0</span><span class="o">=</span><span class="mf">3.e-6</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="n">add_laser_pulse</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">profile</span> <span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="laser-profiles">
+<h2>Laser profiles<a class="headerlink" href="#laser-profiles" title="Permalink to this headline">¶</a></h2>
+<p>This section lists the available laser profiles in FBPIC. Note that you can
+also combine these laser profiles (by summing them), or even create your
+own custom laser profiles (see the end of this section).</p>
+<div class="section" id="gaussian-profile">
+<h3>Gaussian profile<a class="headerlink" href="#gaussian-profile" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="fbpic.lpa_utils.laser.GaussianLaser">
+<em class="property">class </em><code class="descclassname">fbpic.lpa_utils.laser.</code><code class="descname">GaussianLaser</code><span class="sig-paren">(</span><em>a0</em>, <em>waist</em>, <em>tau</em>, <em>z0</em>, <em>zf=None</em>, <em>theta_pol=0.0</em>, <em>lambda0=8e-07</em>, <em>cep_phase=0.0</em>, <em>phi2_chirp=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fbpic/lpa_utils/laser/laser_profiles.html#GaussianLaser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.laser.GaussianLaser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define a linearly-polarized Gaussian laser profile.</p>
+<p>More precisely, the electric field <strong>near the focal plane</strong>
+is given by:</p>
+<div class="math">
+\[E(\boldsymbol{x},t) = a_0\times E_0\,
+\exp\left( -\frac{r^2}{w_0^2} - \frac{(z-z_0-ct)^2}{c^2\tau^2} \right)
+\cos[ k_0( z - z_0 - ct ) - \phi_{cep} ]\]</div>
+<p>where <span class="math">\(k_0 = 2\pi/\lambda_0\)</span> is the wavevector and where
+<span class="math">\(E_0 = m_e c^2 k_0 / q_e\)</span> is the field amplitude for <span class="math">\(a_0=1\)</span>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The additional terms that arise <strong>far from the focal plane</strong>
+(Gouy phase, wavefront curvature, …) are not included in the above
+formula for simplicity, but are of course taken into account by
+the code, when initializing the laser pulse away from the focal plane.</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>a0</strong> (<em>float</em><em> (</em><em>dimensionless</em><em>)</em>) – The peak normalized vector potential at the focal plane, defined
+as <span class="math">\(a_0\)</span> in the above formula.</li>
+<li><strong>waist</strong> (<em>float</em><em> (</em><em>in meter</em><em>)</em>) – Laser waist at the focal plane, defined as <span class="math">\(w_0\)</span> in the
+above formula.</li>
+<li><strong>tau</strong> (<em>float</em><em> (</em><em>in second</em><em>)</em>) – The duration of the laser (in the lab frame),
+defined as <span class="math">\(\tau\)</span> in the above formula.</li>
+<li><strong>z0</strong> (<em>float</em><em> (</em><em>in meter</em><em>)</em>) – The initial position of the centroid of the laser
+(in the lab frame), defined as <span class="math">\(z_0\)</span> in the above formula.</li>
+<li><strong>zf</strong> (<em>float</em><em> (</em><em>in meter</em><em>)</em><em>, </em><em>optional</em>) – The position of the focal plane (in the lab frame).
+If <code class="docutils literal"><span class="pre">zf</span></code> is not provided, the code assumes that <code class="docutils literal"><span class="pre">zf=z0</span></code>, i.e.
+that the laser pulse is at the focal plane initially.</li>
+<li><strong>theta_pol</strong> (<em>float</em><em> (</em><em>in radian</em><em>)</em><em>, </em><em>optional</em>) – The angle of polarization with respect to the x axis.</li>
+<li><strong>lambda0</strong> (<em>float</em><em> (</em><em>in meter</em><em>)</em><em>, </em><em>optional</em>) – The wavelength of the laser (in the lab frame), defined as
+<span class="math">\(\lambda_0\)</span> in the above formula.
+Default: 0.8 microns (Ti:Sapph laser).</li>
+<li><strong>cep_phase</strong> (<em>float</em><em> (</em><em>in radian</em><em>)</em><em>, </em><em>optional</em>) – The Carrier Enveloppe Phase (CEP), defined as <span class="math">\(\phi_{cep}\)</span>
+in the above formula (i.e. the phase of the laser
+oscillation, at the position where the laser enveloppe is maximum)</li>
+<li><strong>phi2_chirp</strong> (<em>float</em><em> (</em><em>in second^2</em><em>)</em>) – The amount of temporal chirp, at focus (in the lab frame)
+Namely, a wave packet centered on the frequency
+<span class="math">\((\omega_0 + \delta \omega)\)</span> will reach its peak intensity
+at <span class="math">\(z(\delta \omega) = z_0 - c \phi^{(2)} \, \delta \omega\)</span>.
+Thus, a positive <span class="math">\(\phi^{(2)}\)</span> corresponds to positive chirp,
+i.e. red part of the spectrum in the front of the pulse and blue
+part of the spectrum in the back.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="laguerre-gauss-profile">
+<h3>Laguerre-Gauss profile<a class="headerlink" href="#laguerre-gauss-profile" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="fbpic.lpa_utils.laser.LaguerreGaussLaser">
+<em class="property">class </em><code class="descclassname">fbpic.lpa_utils.laser.</code><code class="descname">LaguerreGaussLaser</code><span class="sig-paren">(</span><em>p</em>, <em>m</em>, <em>a0</em>, <em>waist</em>, <em>tau</em>, <em>z0</em>, <em>zf=None</em>, <em>theta_pol=0.0</em>, <em>lambda0=8e-07</em>, <em>cep_phase=0.0</em>, <em>theta0=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fbpic/lpa_utils/laser/laser_profiles.html#LaguerreGaussLaser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.laser.LaguerreGaussLaser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define a linearly-polarized Laguerre-Gauss laser profile.</p>
+<p>More precisely, the electric field <strong>near the focal plane</strong>
+is given by:</p>
+<div class="math">
+\[ \begin{align}\begin{aligned}E(\boldsymbol{x},t) = a_0\times E_0 \, f(r, \theta) \,
+\exp\left( -\frac{r^2}{w_0^2} - \frac{(z-z_0-ct)^2}{c^2\tau^2}
+\right) \cos[ k_0( z - z_0 - ct ) - \phi_{cep} ]\\\mathrm{with} \qquad f(r, \theta) =
+\sqrt{\frac{p!(2-\delta_{m,0})}{(m+p)!}}
+\left( \frac{\sqrt{2}r}{w_0} \right)^m
+L^m_p\left( \frac{2 r^2}{w_0^2} \right)
+\cos[ m(\theta - \theta_0)]\end{aligned}\end{align} \]</div>
+<p>where <span class="math">\(L^m_p\)</span> is a Laguerre polynomial,
+<span class="math">\(k_0 = 2\pi/\lambda_0\)</span> is the wavevector and where
+<span class="math">\(E_0 = m_e c^2 k_0 / q_e\)</span>.</p>
+<p>(For more info, see
+<a class="reference external" href="https://www.osapublishing.org/books/bookshelf/lasers.cfm">Siegman, Lasers (1986)</a>,
+Chapter 16: Wave optics and Gaussian beams)</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The additional terms that arise <strong>far from the focal plane</strong>
+(Gouy phase, wavefront curvature, …) are not included in the above
+formula for simplicity, but are of course taken into account by
+the code, when initializing the laser pulse away from the focal plane.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The above formula depends on a parameter <span class="math">\(m\)</span>
+(see documentation below). In order to be properly resolved by
+the simulation, a Laguerre-Gauss profile with a given <span class="math">\(m\)</span>
+requires the azimuthal modes from <span class="math">\(0\)</span> to <span class="math">\(m+1\)</span>.
+(i.e. the number of required azimuthal modes is <code class="docutils literal"><span class="pre">Nm=m+2</span></code>)</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>p</strong> (<em>int</em>) – The order of the Laguerre polynomial. (Increasing <code class="docutils literal"><span class="pre">p</span></code> increases
+the number of “rings” in the radial intensity profile of the laser.)</li>
+<li><strong>m</strong> (<em>int</em>) – The azimuthal order of the pulse.
+(In the transverse plane, the field of the pulse varies as
+<span class="math">\(\cos[m(\theta-\theta_0)]\)</span>.)</li>
+<li><strong>a0</strong> (<em>float</em><em> (</em><em>dimensionless</em><em>)</em>) – The amplitude of the pulse, defined so that the total
+energy of the pulse is the same as that of a Gaussian pulse
+with the same <span class="math">\(a_0\)</span>, <span class="math">\(w_0\)</span> and <span class="math">\(\tau\)</span>.
+(i.e. The energy of the pulse is independent of <code class="docutils literal"><span class="pre">p</span></code> and <code class="docutils literal"><span class="pre">m</span></code>.)</li>
+<li><strong>waist</strong> (<em>float</em><em> (</em><em>in meter</em><em>)</em>) – Laser waist at the focal plane, defined as <span class="math">\(w_0\)</span> in the
+above formula.</li>
+<li><strong>tau</strong> (<em>float</em><em> (</em><em>in second</em><em>)</em>) – The duration of the laser (in the lab frame),
+defined as <span class="math">\(\tau\)</span> in the above formula.</li>
+<li><strong>z0</strong> (<em>float</em><em> (</em><em>in meter</em><em>)</em>) – The initial position of the centroid of the laser
+(in the lab frame), defined as <span class="math">\(z_0\)</span> in the above formula.</li>
+<li><strong>zf</strong> (<em>float</em><em> (</em><em>in meter</em><em>)</em><em>, </em><em>optional</em>) – The position of the focal plane (in the lab frame).
+If <code class="docutils literal"><span class="pre">zf</span></code> is not provided, the code assumes that <code class="docutils literal"><span class="pre">zf=z0</span></code>, i.e.
+that the laser pulse is at the focal plane initially.</li>
+<li><strong>theta_pol</strong> (<em>float</em><em> (</em><em>in radian</em><em>)</em><em>, </em><em>optional</em>) – The angle of polarization with respect to the x axis.</li>
+<li><strong>lambda0</strong> (<em>float</em><em> (</em><em>in meter</em><em>)</em><em>, </em><em>optional</em>) – The wavelength of the laser (in the lab frame), defined as
+<span class="math">\(\lambda_0\)</span> in the above formula.
+Default: 0.8 microns (Ti:Sapph laser).</li>
+<li><strong>cep_phase</strong> (<em>float</em><em> (</em><em>in radian</em><em>)</em><em>, </em><em>optional</em>) – The Carrier Enveloppe Phase (CEP), defined as <span class="math">\(\phi_{cep}\)</span>
+in the above formula (i.e. the phase of the laser
+oscillation, at the position where the laser enveloppe is maximum)</li>
+<li><strong>theta0</strong> (<em>float</em><em> (</em><em>in radian</em><em>)</em><em>, </em><em>optional</em>) – The azimuthal position of (one of) the maxima of intensity, in the
+transverse plane.
+(In the transverse plane, the field of the pulse varies as
+<span class="math">\(\cos[m(\theta-\theta_0)]\)</span>.)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="combining-summing-laser-profiles">
+<h3>Combining (summing) laser profiles<a class="headerlink" href="#combining-summing-laser-profiles" title="Permalink to this headline">¶</a></h3>
+<p>Laser profiles can be combined by <strong>summing them together</strong>, so as to create
+new laser profiles.</p>
+<p>For instance, one might want to use a <strong>circularly-polarized
+laser pulse</strong>, but FBPIC only provides linearly-polarized laser profiles.
+However, it turns out that a circularly-polarized pulse can be decomposed
+as the sum of two linearly-polarized pulses, with orthogonal polarization
+and a <span class="math">\(\pi/2\)</span> phase shift. In FBPIC, this can be done in the following
+way:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">from</span> <span class="nn">fbpic.lpa_utils.laser</span> <span class="k">import</span> <span class="n">add_laser_pulse</span><span class="p">,</span> <span class="n">GaussianLaser</span>
+<span class="n">w0</span> <span class="o">=</span> <span class="mf">5.e-6</span><span class="p">;</span> <span class="n">z0</span> <span class="o">=</span> <span class="mf">3.e-6</span><span class="p">;</span> <span class="n">tau</span> <span class="o">=</span> <span class="mf">30.e-15</span><span class="p">;</span> <span class="n">a0</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="n">linear_profile1</span> <span class="o">=</span> <span class="n">GaussianLaser</span><span class="p">(</span> <span class="n">a0</span><span class="o">/</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">waist</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">z0</span><span class="p">,</span>
+                            <span class="n">theta_pol</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">cep_phase</span><span class="o">=</span><span class="mf">0.</span> <span class="p">)</span>
+<span class="n">linear_profile2</span> <span class="o">=</span> <span class="n">GaussianLaser</span><span class="p">(</span> <span class="n">a0</span><span class="o">/</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">waist</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">z0</span><span class="p">,</span>
+                            <span class="n">theta_pol</span><span class="o">=</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">cep_phase</span><span class="o">=</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span> <span class="p">)</span>
+
+<span class="n">circular_profile</span> <span class="o">=</span> <span class="n">linear_profile1</span> <span class="o">+</span> <span class="n">linear_profile2</span>
+<span class="n">add_laser_pulse</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">circular_profile</span> <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="creating-your-own-custom-laser-profile">
+<h3>Creating your own custom laser profile<a class="headerlink" href="#creating-your-own-custom-laser-profile" title="Permalink to this headline">¶</a></h3>
+<p>If you have some experience with Python programming, you can also define
+your own laser profile, inside your input script. To do so, you can have a
+look at how the existing laser profiles that are implemented <a class="reference external" href="https://github.com/fbpic/fbpic/blob/dev/fbpic/lpa_utils/laser/laser_profiles.py">here</a>.</p>
+</div>
+</div>
+<div class="section" id="compact-function-for-a-gaussian-pulse">
+<h2>Compact function for a Gaussian pulse<a class="headerlink" href="#compact-function-for-a-gaussian-pulse" title="Permalink to this headline">¶</a></h2>
+<p>Using this function is equivalent to using the more generic <code class="docutils literal"><span class="pre">add_laser_pulse</span></code>
+function, with a <code class="docutils literal"><span class="pre">GaussianLaser</span></code> profile.</p>
+<dl class="function">
+<dt id="fbpic.lpa_utils.laser.add_laser">
+<code class="descclassname">fbpic.lpa_utils.laser.</code><code class="descname">add_laser</code><span class="sig-paren">(</span><em>sim</em>, <em>a0</em>, <em>w0</em>, <em>ctau</em>, <em>z0</em>, <em>zf=None</em>, <em>lambda0=8e-07</em>, <em>cep_phase=0.0</em>, <em>phi2_chirp=0.0</em>, <em>theta_pol=0.0</em>, <em>gamma_boost=None</em>, <em>method='direct'</em>, <em>fw_propagating=True</em>, <em>update_spectral=True</em>, <em>z0_antenna=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fbpic/lpa_utils/laser/laser.html#add_laser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.laser.add_laser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Introduce a linearly-polarized, Gaussian laser in the simulation.</p>
+<p>More precisely, the electric field <strong>near the focal plane</strong>
+is given by:</p>
+<div class="math">
+\[E(\boldsymbol{x},t) = a_0\times E_0\,
+\exp\left( -\frac{r^2}{w_0^2} - \frac{(z-z_0-ct)^2}{c^2\tau^2} \right)
+\cos[ k_0( z - z_0 - ct ) - \phi_{cep} ]\]</div>
+<p>where <span class="math">\(k_0 = 2\pi/\lambda_0\)</span> is the wavevector and where
+<span class="math">\(E_0 = m_e c^2 k_0 / q_e\)</span> is the field amplitude for <span class="math">\(a_0=1\)</span>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The additional terms that arise <strong>far from the focal plane</strong>
+(Gouy phase, wavefront curvature, …) are not included in the above
+formula for simplicity, but are of course taken into account by
+the code, when initializing the laser pulse away from the focal plane.</p>
+</div>
+<p>The laser is either added directly to the interpolation grid initially
+(method= <code class="docutils literal"><span class="pre">direct</span></code>) or it is progressively emitted by an antenna
+(method= <code class="docutils literal"><span class="pre">antenna</span></code>).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>sim</strong> (<em>a Simulation object</em>) – The structure that contains the simulation.</li>
+<li><strong>a0</strong> (<em>float</em><em> (</em><em>dimensionless</em><em>)</em>) – The peak normalized vector potential at the focal plane, defined
+as <span class="math">\(a_0\)</span> in the above formula.</li>
+<li><strong>w0</strong> (<em>float</em><em> (</em><em>in meter</em><em>)</em>) – Laser waist at the focal plane, defined as <span class="math">\(w_0\)</span> in the
+above formula.</li>
+<li><strong>ctau</strong> (<em>float</em><em> (</em><em>in meter</em><em>)</em>) – The duration of the laser (in the lab frame),
+defined as <span class="math">\(c\tau\)</span> in the above formula.</li>
+<li><strong>z0</strong> (<em>float</em><em> (</em><em>in meter</em><em>)</em>) – The initial position of the centroid of the laser
+(in the lab frame), defined as <span class="math">\(z_0\)</span> in the above formula.</li>
+<li><strong>zf</strong> (<em>float</em><em> (</em><em>in meter</em><em>)</em><em>, </em><em>optional</em>) – The position of the focal plane (in the lab frame).
+If <code class="docutils literal"><span class="pre">zf</span></code> is not provided, the code assumes that <code class="docutils literal"><span class="pre">zf=z0</span></code>, i.e.
+that the laser pulse is at the focal plane initially.</li>
+<li><strong>theta_pol</strong> (<em>float</em><em> (</em><em>in radian</em><em>)</em><em>, </em><em>optional</em>) – The angle of polarization with respect to the x axis.</li>
+<li><strong>lambda0</strong> (<em>float</em><em> (</em><em>in meter</em><em>)</em><em>, </em><em>optional</em>) – The wavelength of the laser (in the lab frame), defined as
+<span class="math">\(\lambda_0\)</span> in the above formula.</li>
+<li><strong>cep_phase</strong> (<em>float</em><em> (</em><em>in radian</em><em>)</em><em>, </em><em>optional</em>) – The Carrier Enveloppe Phase (CEP), defined as <span class="math">\(\phi_{cep}\)</span>
+in the above formula (i.e. the phase of the laser
+oscillation, at the position where the laser enveloppe is maximum)</li>
+<li><strong>phi2_chirp</strong> (<em>float</em><em> (</em><em>in second^2</em><em>)</em>) – The amount of temporal chirp, at focus (in the lab frame)
+Namely, a wave packet centered on the frequency
+<span class="math">\((\omega_0 + \delta \omega)\)</span> will reach its peak intensity
+at <span class="math">\(z(\delta \omega) = z_0 - c \phi^{(2)} \, \delta \omega\)</span>.
+Thus, a positive <span class="math">\(\phi^{(2)}\)</span> corresponds to positive chirp,
+i.e. red part of the spectrum in the front of the pulse and blue
+part of the spectrum in the back.</li>
+<li><strong>gamma_boost</strong> (<em>float</em><em>, </em><em>optional</em>) – When initializing the laser in a boosted frame, set the value of
+<cite>gamma_boost</cite> to the corresponding Lorentz factor. All the other
+quantities (ctau, zf, etc.) are to be given in the lab frame.</li>
+<li><strong>method</strong> (<em>string</em><em>, </em><em>optional</em>) – Whether to initialize the laser directly in the box (method=`direct`)
+or through a laser antenna (method=`antenna`)</li>
+<li><strong>fw_propagating</strong> (<em>bool</em><em>, </em><em>optional</em>) – Only for the <cite>direct</cite> method: Wether the laser is propagating in the
+forward or backward direction.</li>
+<li><strong>update_spectral</strong> (<em>bool</em><em>, </em><em>optional</em>) – Only for the <cite>direct</cite> method: Wether to update the fields in spectral
+space after modifying the fields on the interpolation grid.</li>
+<li><strong>z0_antenna</strong> (<em>float</em><em>, </em><em>optional</em><em> (</em><em>meters</em><em>)</em>) – Only for the <cite>antenna</cite> method: initial position (in the lab frame)
+of the antenna. If not provided, then the z0_antenna is set to zf.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="beam.html" class="btn btn-neutral float-right" title="Beam initialization" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="lpa_utilities.html" class="btn btn-neutral" title="Laser-plasma utilities" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, FBPIC contributors.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.8.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
