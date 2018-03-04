@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fbpic.lpa_utils.external_fields &mdash; FBPIC 0.7.1 documentation</title>
+  <title>fbpic.lpa_utils.external_fields &mdash; FBPIC 0.8.0 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="FBPIC 0.7.1 documentation" href="../../../index.html"/>
+    <link rel="top" title="FBPIC 0.8.0 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -65,7 +65,7 @@
             
             
               <div class="version">
-                0.7.1
+                0.8.0
               </div>
             
           
@@ -167,7 +167,7 @@
 <span class="c1"># Check if CUDA is available, then import CUDA functions</span>
 <span class="kn">from</span> <span class="nn">fbpic.utils.cuda</span> <span class="k">import</span> <span class="n">cuda_installed</span>
 
-<div class="viewcode-block" id="ExternalField"><a class="viewcode-back" href="../../../api_reference/lpa_utilities.html#fbpic.lpa_utils.external_fields.ExternalField">[docs]</a><span class="k">class</span> <span class="nc">ExternalField</span><span class="p">(</span> <span class="nb">object</span> <span class="p">):</span>
+<div class="viewcode-block" id="ExternalField"><a class="viewcode-back" href="../../../api_reference/lpa_utilities/external_fields.html#fbpic.lpa_utils.external_fields.ExternalField">[docs]</a><span class="k">class</span> <span class="nc">ExternalField</span><span class="p">(</span> <span class="nb">object</span> <span class="p">):</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field_func</span><span class="p">,</span> <span class="n">fieldtype</span><span class="p">,</span> <span class="n">amplitude</span><span class="p">,</span>
                  <span class="n">length_scale</span><span class="p">,</span> <span class="n">species</span><span class="o">=</span><span class="kc">None</span> <span class="p">):</span>
@@ -198,15 +198,17 @@
 <span class="sd">            - amplitude and length_scale: floats that can be used within</span>
 <span class="sd">              the function expression</span>
 
-<span class="sd">            **WARNING:** In the PIC loop, this function is called after</span>
-<span class="sd">            the field gathering. Thus this function can potentially</span>
-<span class="sd">            overwrite the fields that were gathered on the grid.</span>
-<span class="sd">            To avoid this, use &quot;return(F + external_field) &quot; inside</span>
-<span class="sd">            the definition of `field_func` instead of &quot;return(external_field)&quot;</span>
+<span class="sd">            .. warning::</span>
+<span class="sd">                In the PIC loop, this function is called after</span>
+<span class="sd">                the field gathering. Thus this function can potentially</span>
+<span class="sd">                overwrite the fields that were gathered on the grid. To avoid </span>
+<span class="sd">                this, use &quot;return(F + external_field) &quot; inside the definition </span>
+<span class="sd">                of `field_func` instead of &quot;return(external_field)&quot;</span>
 
-<span class="sd">            **WARNING:** Inside the definition of `field_func` please use</span>
-<span class="sd">            the `math` module for mathematical functions, instead of numpy.</span>
-<span class="sd">            This will allow the function to be compiled for GPU.</span>
+<span class="sd">            .. warning::</span>
+<span class="sd">                Inside the definition of `field_func` please use</span>
+<span class="sd">                the `math` module for mathematical functions, instead of numpy.</span>
+<span class="sd">                This will allow the function to be compiled for GPU.</span>
 
 <span class="sd">        fieldtype: string</span>
 <span class="sd">            Specifies on which field `field_func` will be applied.</span>
@@ -222,10 +224,12 @@
 <span class="sd">        In order to define a magnetic undulator, polarized along y, with</span>
 <span class="sd">        a field of 1 Tesla and a period of 1 cm :</span>
 
-<span class="sd">        &gt;&gt;&gt; def field_func( F, x, y, z, t , amplitude, length_scale ):</span>
+<span class="sd">        ::</span>
+
+<span class="sd">            def field_func( F, x, y, z, t , amplitude, length_scale ):</span>
 <span class="sd">                return( F + amplitude * math.cos( 2*np.pi*z/length_scale ) )</span>
-<span class="sd">        &gt;&gt;&gt; sim.external_fields = [</span>
-<span class="sd">                ExternalField( field_func, &#39;By&#39;, 1., 1.e-2 ) ]</span>
+
+<span class="sd">            sim.external_fields = [ ExternalField( field_func, &#39;By&#39;, 1., 1.e-2 ) ]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Check that fieldtype is a correct field</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">fieldtype</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;Ex&#39;</span><span class="p">,</span> <span class="s1">&#39;Ey&#39;</span><span class="p">,</span> <span class="s1">&#39;Ez&#39;</span><span class="p">,</span> <span class="s1">&#39;Bx&#39;</span><span class="p">,</span> <span class="s1">&#39;By&#39;</span><span class="p">,</span> <span class="s1">&#39;Bz&#39;</span><span class="p">])</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
@@ -319,7 +323,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.7.1',
+            VERSION:'0.8.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

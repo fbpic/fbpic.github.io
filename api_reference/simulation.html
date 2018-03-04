@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>The Simulation class &mdash; FBPIC 0.7.1 documentation</title>
+  <title>The Simulation class &mdash; FBPIC 0.8.0 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="FBPIC 0.7.1 documentation" href="../index.html"/>
+    <link rel="top" title="FBPIC 0.8.0 documentation" href="../index.html"/>
         <link rel="up" title="API reference" href="api_reference.html"/>
         <link rel="next" title="The openPMD diagnostics" href="diagnostics.html"/>
         <link rel="prev" title="API reference" href="api_reference.html"/> 
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                0.7.1
+                0.8.0
               </div>
             
           
@@ -99,7 +99,7 @@
 <li class="toctree-l2 current"><a class="current reference internal" href="#">The Simulation class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="diagnostics.html">The openPMD diagnostics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="checkpoint_restart.html">Checkpoints and restarts</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lpa_utilities.html">Laser-plasma utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lpa_utilities/lpa_utilities.html">Laser-plasma utilities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="boost_converter.html">Conversion to boosted-frame</a></li>
 </ul>
 </li>
@@ -203,7 +203,8 @@ the simulation data, and has the high-level methods to perform the PIC cycle.</p
 <li><strong>rmax</strong> (<em>float</em>) – The position of the edge of the simulation in r
 (More precisely, the position of the edge of the last
 cell)</li>
-<li><strong>Nm</strong> (<em>int</em>) – The number of azimuthal modes taken into account</li>
+<li><strong>Nm</strong> (<em>int</em>) – The number of azimuthal modes taken into account. (The simulation
+uses the modes from <cite>m=0</cite> to <cite>m=(Nm-1)</cite>.)</li>
 <li><strong>dt</strong> (<em>float</em>) – The timestep of the simulation</li>
 <li><strong>p_zmin</strong> (<em>float</em>) – The minimal z position above which the particles are initialized</li>
 <li><strong>p_zmax</strong> (<em>float</em>) – The maximal z position below which the particles are initialized</li>
@@ -393,7 +394,7 @@ field push or not. (requires initialize_ions = True)</li>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.7.1',
+            VERSION:'0.8.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

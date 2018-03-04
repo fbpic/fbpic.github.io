@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fbpic.main &mdash; FBPIC 0.7.1 documentation</title>
+  <title>fbpic.main &mdash; FBPIC 0.8.0 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="FBPIC 0.7.1 documentation" href="../../index.html"/>
+    <link rel="top" title="FBPIC 0.8.0 documentation" href="../../index.html"/>
         <link rel="up" title="Module code" href="../index.html"/> 
 
   
@@ -65,7 +65,7 @@
             
             
               <div class="version">
-                0.7.1
+                0.8.0
               </div>
             
           
@@ -233,7 +233,8 @@
 <span class="sd">            cell)</span>
 
 <span class="sd">        Nm: int</span>
-<span class="sd">            The number of azimuthal modes taken into account</span>
+<span class="sd">            The number of azimuthal modes taken into account. (The simulation</span>
+<span class="sd">            uses the modes from `m=0` to `m=(Nm-1)`.)</span>
 
 <span class="sd">        dt: float</span>
 <span class="sd">            The timestep of the simulation</span>
@@ -485,12 +486,14 @@
         <span class="c1"># Shortcuts</span>
         <span class="n">ptcl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ptcl</span>
         <span class="n">fld</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fld</span>
-        <span class="c1"># Sanity check</span>
-        <span class="c1"># (This is because the guard cells of rho are never exchanged.)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">use_true_rho</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;use_true_rho cannot be used in multi-proc mode.&#39;</span><span class="p">)</span>
+        <span class="c1"># Add a few safeguards</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">correct_divE</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;correct_divE cannot be used in multi-proc mode.&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">use_true_rho</span> <span class="ow">and</span> <span class="n">correct_currents</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;`use_true_rho` cannot be used together &#39;</span>
+                            <span class="s1">&#39;with `correct_currents` in multi-proc mode.&#39;</span><span class="p">)</span>
+            <span class="c1"># This is because use_true_rho requires the guard cells of</span>
+            <span class="c1"># rho to be exchanged while correct_currents requires the opposite.</span>
 
         <span class="c1"># Initialize variables to measure the time taken by the simulation</span>
         <span class="k">if</span> <span class="n">show_progress</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">rank</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
@@ -542,9 +545,8 @@
 
                 <span class="c1"># Reproject the charge on the interpolation grid</span>
                 <span class="c1"># (Since particles have been removed / added to the simulation;</span>
-                <span class="c1"># otherwise rho_prev is obtained from the previous iteration.</span>
-                <span class="c1"># Note that the guard cells of rho are never exchanged.)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">deposit</span><span class="p">(</span><span class="s1">&#39;rho_prev&#39;</span><span class="p">,</span> <span class="n">exchange</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                <span class="c1"># otherwise rho_prev is obtained from the previous iteration.)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">deposit</span><span class="p">(</span><span class="s1">&#39;rho_prev&#39;</span><span class="p">,</span> <span class="n">exchange</span><span class="o">=</span><span class="p">(</span><span class="n">use_true_rho</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">))</span>
 
             <span class="c1"># For the field diagnostics of the first step: deposit J</span>
             <span class="c1"># (Note however that this is not the *corrected* current)</span>
@@ -610,10 +612,10 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">shift_galilean_boundaries</span><span class="p">()</span>
 
             <span class="c1"># Get the charge density at t = (n+1) dt</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">deposit</span><span class="p">(</span><span class="s1">&#39;rho_next&#39;</span><span class="p">,</span> <span class="n">exchange</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">deposit</span><span class="p">(</span><span class="s1">&#39;rho_next&#39;</span><span class="p">,</span> <span class="n">exchange</span><span class="o">=</span><span class="p">(</span><span class="n">use_true_rho</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">))</span>
             <span class="c1"># Correct the currents (requires rho at t = (n+1) dt )</span>
             <span class="k">if</span> <span class="n">correct_currents</span><span class="p">:</span>
-                <span class="n">fld</span><span class="o">.</span><span class="n">correct_currents</span><span class="p">()</span>
+                <span class="n">fld</span><span class="o">.</span><span class="n">correct_currents</span><span class="p">(</span> <span class="n">check_exchanges</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="p">)</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
                     <span class="c1"># Exchange the guard cells of corrected J between domains</span>
                     <span class="c1"># (If correct_currents is False, the exchange of J</span>
@@ -621,10 +623,10 @@
                     <span class="n">fld</span><span class="o">.</span><span class="n">spect2partial_interp</span><span class="p">(</span><span class="s1">&#39;J&#39;</span><span class="p">)</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">exchange_fields</span><span class="p">(</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">,</span> <span class="s1">&#39;J&#39;</span><span class="p">,</span> <span class="s1">&#39;add&#39;</span><span class="p">)</span>
                     <span class="n">fld</span><span class="o">.</span><span class="n">partial_interp2spect</span><span class="p">(</span><span class="s1">&#39;J&#39;</span><span class="p">)</span>
-                    <span class="n">fld</span><span class="o">.</span><span class="n">exchanged_source</span><span class="p">[</span><span class="s1">&#39;J&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="n">fld</span><span class="o">.</span><span class="n">exchanged_source</span><span class="p">[</span><span class="s1">&#39;J&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
 
             <span class="c1"># Push the fields E and B on the spectral grid to t = (n+1) dt</span>
-            <span class="n">fld</span><span class="o">.</span><span class="n">push</span><span class="p">(</span> <span class="n">use_true_rho</span> <span class="p">)</span>
+            <span class="n">fld</span><span class="o">.</span><span class="n">push</span><span class="p">(</span> <span class="n">use_true_rho</span><span class="p">,</span> <span class="n">check_exchanges</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="p">)</span>
             <span class="k">if</span> <span class="n">correct_divE</span><span class="p">:</span>
                 <span class="n">fld</span><span class="o">.</span><span class="n">correct_divE</span><span class="p">()</span>
             <span class="c1"># Move the grids if needed</span>
@@ -736,7 +738,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter_currents</span><span class="p">:</span>
             <span class="n">fld</span><span class="o">.</span><span class="n">filter_spect</span><span class="p">(</span> <span class="n">fieldtype</span> <span class="p">)</span>
         <span class="c1"># Set the flag to indicate whether these fields have been exchanged</span>
-        <span class="n">fld</span><span class="o">.</span><span class="n">exchanged_source</span><span class="p">[</span> <span class="n">fieldtype</span> <span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">exchange</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">fld</span><span class="o">.</span><span class="n">exchanged_source</span><span class="p">[</span> <span class="n">fieldtype</span> <span class="p">]</span> <span class="o">=</span> <span class="n">exchange</span>
 
     <span class="k">def</span> <span class="nf">shift_galilean_boundaries</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -757,7 +759,6 @@
         <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">Nm</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">[</span><span class="n">m</span><span class="p">]</span><span class="o">.</span><span class="n">zmin</span> <span class="o">+=</span> <span class="n">shift_distance</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">[</span><span class="n">m</span><span class="p">]</span><span class="o">.</span><span class="n">zmax</span> <span class="o">+=</span> <span class="n">shift_distance</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">[</span><span class="n">m</span><span class="p">]</span><span class="o">.</span><span class="n">z</span> <span class="o">+=</span> <span class="n">shift_distance</span>
 
 
 <div class="viewcode-block" id="Simulation.set_moving_window"><a class="viewcode-back" href="../../api_reference/simulation.html#fbpic.main.Simulation.set_moving_window">[docs]</a>    <span class="k">def</span> <span class="nf">set_moving_window</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="o">=</span><span class="n">c</span><span class="p">,</span> <span class="n">ux_m</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">uy_m</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">uz_m</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
@@ -889,7 +890,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.7.1',
+            VERSION:'0.8.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

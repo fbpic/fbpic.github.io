@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Overview of the code &mdash; FBPIC 0.7.1 documentation</title>
+  <title>Overview of the code &mdash; FBPIC 0.8.0 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="FBPIC 0.7.1 documentation" href="index.html"/>
+    <link rel="top" title="FBPIC 0.8.0 documentation" href="index.html"/>
         <link rel="next" title="Installation" href="install/installation.html"/>
         <link rel="prev" title="FBPIC documentation" href="index.html"/> 
 
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.7.1
+                0.8.0
               </div>
             
           
@@ -223,12 +223,15 @@ decomposition, see the <a class="reference external" href="http://www.sciencedir
 code Calder Circ.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p>In practice, FBPIC currently only uses <strong>two modes</strong> (<span class="math">\(m=0\)</span> and
-<span class="math">\(m=1\)</span>). This is generally sufficient to model e.g. laser-wakefield
-acceleration with a round laser spot.</p>
-<p class="last">The fact that only two 2D grids are used, instead of a full 3D grid,
-implies that the code uses <strong>vastly less memory</strong>, and runs <strong>faster by
-orders of magnitude</strong>.</p>
+<p>The user chooses the number of azimuthal modes used in an FBPIC simulation.
+Thus, you should make sure that you choose <strong>enough modes</strong> to resolve the
+physics at stake (e.g. typically 2 modes for idealized laser-wakefield
+acceleration).</p>
+<p class="last">The fact that only a few 2D grids are used (one per azimuthal mode),
+instead of a full 3D grid, implies that the code uses <strong>vastly less memory</strong>,
+and runs <strong>faster by orders of magnitude</strong> compared to a 3D Cartesian code.
+Nonetheless, the computational cost of an FBPIC simulation does of course
+<strong>increase with the number of azimuthal modes</strong> used.</p>
 </div>
 <p>As suggested in the above image, the macroparticles deposit their
 charge and current on each radial grid, and gather the sum of the
@@ -347,7 +350,7 @@ of FBPIC).</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.7.1',
+            VERSION:'0.8.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
