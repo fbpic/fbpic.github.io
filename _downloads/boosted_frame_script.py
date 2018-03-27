@@ -5,9 +5,7 @@ laser-wakefield acceleration using FBPIC.
 Usage
 -----
 - Modify the parameters below to suit your needs
-- Type "python -i boosted_frame_script.py" in a terminal
-- When the simulation finishes, the python session will *not* quit.
-    Therefore the simulation can be continued by running sim.step()
+- Type "python boosted_frame_script.py" in a terminal
 
 Help
 ----
@@ -149,7 +147,7 @@ track_bunch = False  # Whether to tag and track the particles of the bunch
 # Carrying out the simulation
 # ---------------------------
 # NB: The code below is only executed when running the script,
-# (`python -i boosted_frame_sim.py`), but not when importing it.
+# (`python boosted_frame_sim.py`), but not when importing it.
 if __name__ == '__main__':
 
     # Initialize the simulation object
@@ -170,7 +168,7 @@ if __name__ == '__main__':
            zf=zfoc, gamma_boost=gamma_boost )
 
     # Configure the moving window
-    sim.set_moving_window( v=v_window, gamma_boost=gamma_boost )
+    sim.set_moving_window( v=v_window )
 
     # Add a field diagnostic
     sim.diags = [ FieldDiagnostic(diag_period, sim.fld, sim.comm ),

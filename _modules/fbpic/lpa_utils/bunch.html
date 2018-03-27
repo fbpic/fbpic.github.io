@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fbpic.lpa_utils.bunch &mdash; FBPIC 0.8.0 documentation</title>
+  <title>fbpic.lpa_utils.bunch &mdash; FBPIC 0.9.0 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="FBPIC 0.8.0 documentation" href="../../../index.html"/>
+    <link rel="top" title="FBPIC 0.9.0 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -65,7 +65,7 @@
             
             
               <div class="version">
-                0.8.0
+                0.9.0
               </div>
             
           
@@ -168,13 +168,14 @@
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">scipy.constants</span> <span class="k">import</span> <span class="n">m_e</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">epsilon_0</span><span class="p">,</span> <span class="n">mu_0</span>
-<span class="kn">from</span> <span class="nn">fbpic.main</span> <span class="k">import</span> <span class="n">adapt_to_grid</span>
 <span class="kn">from</span> <span class="nn">fbpic.fields</span> <span class="k">import</span> <span class="n">Fields</span>
-<span class="kn">from</span> <span class="nn">fbpic.particles</span> <span class="k">import</span> <span class="n">Particles</span>
+<span class="kn">from</span> <span class="nn">fbpic.particles.elementary_process.cuda_numba_utils</span> <span class="k">import</span> \
+    <span class="n">reallocate_and_copy_old</span>
+<span class="kn">from</span> <span class="nn">fbpic.particles.injection</span> <span class="k">import</span> <span class="n">BallisticBeforePlane</span>
 
 <div class="viewcode-block" id="add_elec_bunch"><a class="viewcode-back" href="../../../api_reference/lpa_utilities/beam.html#fbpic.lpa_utils.bunch.add_elec_bunch">[docs]</a><span class="k">def</span> <span class="nf">add_elec_bunch</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">gamma0</span><span class="p">,</span> <span class="n">n_e</span><span class="p">,</span> <span class="n">p_zmin</span><span class="p">,</span> <span class="n">p_zmax</span><span class="p">,</span> <span class="n">p_rmin</span><span class="p">,</span> <span class="n">p_rmax</span><span class="p">,</span>
                 <span class="n">p_nr</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">p_nz</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">p_nt</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">dens_func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">boost</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;forward&#39;</span> <span class="p">)</span> <span class="p">:</span>
+                <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;forward&#39;</span><span class="p">,</span> <span class="n">z_injection_plane</span><span class="o">=</span><span class="kc">None</span> <span class="p">)</span> <span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Introduce a simple relativistic electron bunch in the simulation,</span>
 <span class="sd">    along with its space charge field.</span>
@@ -227,48 +228,36 @@
 <span class="sd">    direction : string, optional</span>
 <span class="sd">        Can be either &quot;forward&quot; or &quot;backward&quot;.</span>
 <span class="sd">        Propagation direction of the beam.</span>
+
+<span class="sd">    z_injection_plane: float (in meters) or None</span>
+<span class="sd">        When `z_injection_plane` is not None, then particles have a ballistic</span>
+<span class="sd">        motion for z&lt;z_injection_plane. This is sometimes useful in</span>
+<span class="sd">        boosted-frame simulations.</span>
+<span class="sd">        `z_injection_plane` is always given in the lab frame.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="c1"># Convert parameters to boosted frame</span>
-    <span class="k">if</span> <span class="n">boost</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">beta0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span> <span class="mf">1.</span> <span class="o">-</span> <span class="mf">1.</span><span class="o">/</span><span class="n">gamma0</span><span class="o">**</span><span class="mi">2</span> <span class="p">)</span>
-        <span class="n">p_zmin</span><span class="p">,</span> <span class="n">p_zmax</span> <span class="o">=</span> <span class="n">boost</span><span class="o">.</span><span class="n">copropag_length</span><span class="p">(</span>
-            <span class="p">[</span> <span class="n">p_zmin</span><span class="p">,</span> <span class="n">p_zmax</span> <span class="p">],</span> <span class="n">beta_object</span><span class="o">=</span><span class="n">beta0</span> <span class="p">)</span>
-        <span class="n">n_e</span><span class="p">,</span> <span class="o">=</span> <span class="n">boost</span><span class="o">.</span><span class="n">copropag_density</span><span class="p">(</span> <span class="p">[</span><span class="n">n_e</span><span class="p">],</span> <span class="n">beta_object</span><span class="o">=</span><span class="n">beta0</span> <span class="p">)</span>
-        <span class="n">gamma0</span><span class="p">,</span> <span class="o">=</span> <span class="n">boost</span><span class="o">.</span><span class="n">gamma</span><span class="p">(</span> <span class="p">[</span><span class="n">gamma0</span><span class="p">]</span> <span class="p">)</span>
-
-    <span class="c1"># Modify the input parameters p_zmin, p_zmax, r_zmin, r_zmax, so that</span>
-    <span class="c1"># they fall exactly on the grid, and infer the number of particles</span>
-    <span class="n">p_zmin</span><span class="p">,</span> <span class="n">p_zmax</span><span class="p">,</span> <span class="n">Npz</span> <span class="o">=</span> <span class="n">adapt_to_grid</span><span class="p">(</span> <span class="n">sim</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">z</span><span class="p">,</span>
-                                <span class="n">p_zmin</span><span class="p">,</span> <span class="n">p_zmax</span><span class="p">,</span> <span class="n">p_nz</span> <span class="p">)</span>
-    <span class="n">p_rmin</span><span class="p">,</span> <span class="n">p_rmax</span><span class="p">,</span> <span class="n">Npr</span> <span class="o">=</span> <span class="n">adapt_to_grid</span><span class="p">(</span> <span class="n">sim</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">r</span><span class="p">,</span>
-                                <span class="n">p_rmin</span><span class="p">,</span> <span class="n">p_rmax</span><span class="p">,</span> <span class="n">p_nr</span> <span class="p">)</span>
-
-    <span class="c1"># Create the electrons</span>
-    <span class="n">relat_elec</span> <span class="o">=</span> <span class="n">Particles</span><span class="p">(</span> <span class="n">q</span><span class="o">=-</span><span class="n">e</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="n">m_e</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n_e</span><span class="p">,</span>
-                            <span class="n">Npz</span><span class="o">=</span><span class="n">Npz</span><span class="p">,</span> <span class="n">zmin</span><span class="o">=</span><span class="n">p_zmin</span><span class="p">,</span> <span class="n">zmax</span><span class="o">=</span><span class="n">p_zmax</span><span class="p">,</span>
-                            <span class="n">Npr</span><span class="o">=</span><span class="n">Npr</span><span class="p">,</span> <span class="n">rmin</span><span class="o">=</span><span class="n">p_rmin</span><span class="p">,</span> <span class="n">rmax</span><span class="o">=</span><span class="n">p_rmax</span><span class="p">,</span>
-                            <span class="n">Nptheta</span><span class="o">=</span><span class="n">p_nt</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">sim</span><span class="o">.</span><span class="n">dt</span><span class="p">,</span>
-                            <span class="n">continuous_injection</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                            <span class="n">dens_func</span><span class="o">=</span><span class="n">dens_func</span><span class="p">,</span> <span class="n">use_cuda</span><span class="o">=</span><span class="n">sim</span><span class="o">.</span><span class="n">use_cuda</span><span class="p">,</span>
-                            <span class="n">grid_shape</span><span class="o">=</span><span class="n">sim</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">Ez</span><span class="o">.</span><span class="n">shape</span> <span class="p">)</span>
-
-    <span class="c1"># Give them the right velocity</span>
-    <span class="n">relat_elec</span><span class="o">.</span><span class="n">inv_gamma</span><span class="p">[:]</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="n">gamma0</span>
-    <span class="n">relat_elec</span><span class="o">.</span><span class="n">uz</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span> <span class="n">gamma0</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span><span class="mf">1.</span><span class="p">)</span>
-
-    <span class="c1"># Electron beam moving in the background direction</span>
+    <span class="c1"># Calculate the electron momentum</span>
+    <span class="n">uz_m</span> <span class="o">=</span> <span class="p">(</span> <span class="n">gamma0</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="mf">1.</span> <span class="p">)</span><span class="o">**</span><span class="mf">0.5</span>
     <span class="k">if</span> <span class="n">direction</span> <span class="o">==</span> <span class="s1">&#39;backward&#39;</span><span class="p">:</span>
-        <span class="n">relat_elec</span><span class="o">.</span><span class="n">uz</span><span class="p">[:]</span> <span class="o">*=</span> <span class="o">-</span><span class="mf">1.</span>
+        <span class="n">uz_m</span> <span class="o">*=</span> <span class="o">-</span><span class="mf">1.</span>
+    <span class="c1"># Create the electron species</span>
+    <span class="n">relat_elec</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">add_new_species</span><span class="p">(</span> <span class="n">q</span><span class="o">=-</span><span class="n">e</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="n">m_e</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n_e</span><span class="p">,</span>
+                            <span class="n">p_nz</span><span class="o">=</span><span class="n">p_nz</span><span class="p">,</span> <span class="n">p_nr</span><span class="o">=</span><span class="n">p_nr</span><span class="p">,</span> <span class="n">p_nt</span><span class="o">=</span><span class="n">p_nt</span><span class="p">,</span>
+                            <span class="n">p_zmin</span><span class="o">=</span><span class="n">p_zmin</span><span class="p">,</span> <span class="n">p_zmax</span><span class="o">=</span><span class="n">p_zmax</span><span class="p">,</span>
+                            <span class="n">p_rmin</span><span class="o">=</span><span class="n">p_rmin</span><span class="p">,</span> <span class="n">p_rmax</span><span class="o">=</span><span class="n">p_rmax</span><span class="p">,</span>
+                            <span class="n">continuous_injection</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">dens_func</span><span class="o">=</span><span class="n">dens_func</span><span class="p">,</span> <span class="n">uz_m</span><span class="o">=</span><span class="n">uz_m</span> <span class="p">)</span>
 
-    <span class="c1"># Add them to the particles of the simulation</span>
-    <span class="n">sim</span><span class="o">.</span><span class="n">ptcl</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">relat_elec</span> <span class="p">)</span>
+    <span class="c1"># Initialize the injection plane for the particles</span>
+    <span class="k">if</span> <span class="n">z_injection_plane</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="n">relat_elec</span><span class="o">.</span><span class="n">injector</span> <span class="ow">is</span> <span class="kc">None</span> <span class="c1">#Don&#39;t overwrite a previous injector</span>
+        <span class="n">relat_elec</span><span class="o">.</span><span class="n">injector</span> <span class="o">=</span> <span class="n">BallisticBeforePlane</span><span class="p">(</span> <span class="n">z_injection_plane</span><span class="p">,</span> <span class="n">boost</span> <span class="p">)</span>
 
     <span class="c1"># Get the corresponding space-charge fields</span>
-    <span class="n">get_space_charge_fields</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">relat_elec</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">)</span></div>
+    <span class="n">get_space_charge_fields</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">relat_elec</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">direction</span> <span class="p">)</span></div>
 
-<div class="viewcode-block" id="add_elec_bunch_gaussian"><a class="viewcode-back" href="../../../api_reference/lpa_utilities/beam.html#fbpic.lpa_utils.bunch.add_elec_bunch_gaussian">[docs]</a><span class="k">def</span> <span class="nf">add_elec_bunch_gaussian</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">sig_r</span><span class="p">,</span> <span class="n">sig_z</span><span class="p">,</span> <span class="n">n_emit</span><span class="p">,</span> <span class="n">gamma0</span><span class="p">,</span> <span class="n">sig_gamma</span><span class="p">,</span>
-                        <span class="n">Q</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">tf</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">zf</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">boost</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">save_beam</span><span class="o">=</span><span class="kc">None</span> <span class="p">):</span>
+<div class="viewcode-block" id="add_elec_bunch_gaussian"><a class="viewcode-back" href="../../../api_reference/lpa_utilities/beam.html#fbpic.lpa_utils.bunch.add_elec_bunch_gaussian">[docs]</a><span class="k">def</span> <span class="nf">add_elec_bunch_gaussian</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">sig_r</span><span class="p">,</span> <span class="n">sig_z</span><span class="p">,</span> <span class="n">n_emit</span><span class="p">,</span> <span class="n">gamma0</span><span class="p">,</span>
+                        <span class="n">sig_gamma</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">tf</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">zf</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">boost</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                        <span class="n">save_beam</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">z_injection_plane</span><span class="o">=</span><span class="kc">None</span> <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Introduce a relativistic Gaussian electron bunch in the simulation,</span>
 <span class="sd">    along with its space charge field.</span>
@@ -316,6 +305,12 @@
 
 <span class="sd">    save_beam : string, optional</span>
 <span class="sd">        Saves the generated beam distribution as an .npz file &quot;string&quot;.npz</span>
+
+<span class="sd">    z_injection_plane: float (in meters) or None</span>
+<span class="sd">        When `z_injection_plane` is not None, then particles have a ballistic</span>
+<span class="sd">        motion for z&lt;z_injection_plane. This is sometimes useful in</span>
+<span class="sd">        boosted-frame simulations.</span>
+<span class="sd">        `z_injection_plane` is always given in the lab frame.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Get Gaussian particle distribution in x,y,z</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">sig_r</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
@@ -356,11 +351,12 @@
             <span class="n">inv_gamma</span><span class="o">=</span><span class="n">inv_gamma</span><span class="p">,</span> <span class="n">w</span><span class="o">=</span><span class="n">w</span><span class="p">)</span>
 
     <span class="c1"># Add the electrons to the simulation</span>
-    <span class="n">add_elec_bunch_from_arrays</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">ux</span><span class="p">,</span> <span class="n">uy</span><span class="p">,</span> <span class="n">uz</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">boost</span><span class="o">=</span><span class="n">boost</span> <span class="p">)</span></div>
+    <span class="n">add_elec_bunch_from_arrays</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">ux</span><span class="p">,</span> <span class="n">uy</span><span class="p">,</span> <span class="n">uz</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span>
+                <span class="n">boost</span><span class="o">=</span><span class="n">boost</span><span class="p">,</span> <span class="n">z_injection_plane</span><span class="o">=</span><span class="n">z_injection_plane</span> <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="add_elec_bunch_file"><a class="viewcode-back" href="../../../api_reference/lpa_utilities/beam.html#fbpic.lpa_utils.bunch.add_elec_bunch_file">[docs]</a><span class="k">def</span> <span class="nf">add_elec_bunch_file</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">Q_tot</span><span class="p">,</span> <span class="n">z_off</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">boost</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                        <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;forward&#39;</span> <span class="p">):</span>
+                        <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;forward&#39;</span><span class="p">,</span> <span class="n">z_injection_plane</span><span class="o">=</span><span class="kc">None</span> <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Introduce a relativistic electron bunch in the simulation,</span>
 <span class="sd">    along with its space charge field, loading particles from text file.</span>
@@ -388,6 +384,12 @@
 <span class="sd">    direction : string, optional</span>
 <span class="sd">        Can be either &quot;forward&quot; or &quot;backward&quot;.</span>
 <span class="sd">        Propagation direction of the beam.</span>
+
+<span class="sd">    z_injection_plane: float (in meters) or None</span>
+<span class="sd">        When `z_injection_plane` is not None, then particles have a ballistic</span>
+<span class="sd">        motion for z&lt;z_injection_plane. This is sometimes useful in</span>
+<span class="sd">        boosted-frame simulations.</span>
+<span class="sd">        `z_injection_plane` is always given in the lab frame.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Load particle data to numpy array</span>
     <span class="n">particle_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
@@ -406,11 +408,11 @@
 
     <span class="c1"># Add the electrons to the simulation</span>
     <span class="n">add_elec_bunch_from_arrays</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">ux</span><span class="p">,</span> <span class="n">uy</span><span class="p">,</span> <span class="n">uz</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span>
-        <span class="n">boost</span><span class="o">=</span><span class="n">boost</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">direction</span> <span class="p">)</span></div>
+        <span class="n">boost</span><span class="o">=</span><span class="n">boost</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">,</span> <span class="n">z_injection_plane</span><span class="o">=</span><span class="n">z_injection_plane</span> <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="add_elec_bunch_openPMD"><a class="viewcode-back" href="../../../api_reference/lpa_utilities/beam.html#fbpic.lpa_utils.bunch.add_elec_bunch_openPMD">[docs]</a><span class="k">def</span> <span class="nf">add_elec_bunch_openPMD</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">ts_path</span><span class="p">,</span> <span class="n">z_off</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">species</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                            <span class="n">iteration</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">boost</span><span class="o">=</span><span class="kc">None</span> <span class="p">):</span>
+                        <span class="n">iteration</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">boost</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">z_injection_plane</span><span class="o">=</span><span class="kc">None</span> <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Introduce a relativistic electron bunch in the simulation,</span>
 <span class="sd">    along with its space charge field, loading particles from an openPMD</span>
@@ -449,6 +451,12 @@
 <span class="sd">    boost : a BoostConverter object, optional</span>
 <span class="sd">        A BoostConverter object defining the Lorentz boost of</span>
 <span class="sd">        the simulation.</span>
+
+<span class="sd">    z_injection_plane: float (in meters) or None</span>
+<span class="sd">        When `z_injection_plane` is not None, then particles have a ballistic</span>
+<span class="sd">        motion for z&lt;z_injection_plane. This is sometimes useful in</span>
+<span class="sd">        boosted-frame simulations.</span>
+<span class="sd">        `z_injection_plane` is always given in the lab frame.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Import openPMD viewer</span>
     <span class="k">try</span><span class="p">:</span>
@@ -468,14 +476,15 @@
     <span class="n">y</span> <span class="o">*=</span> <span class="mf">1.e-6</span>
     <span class="n">z</span> <span class="o">*=</span> <span class="mf">1.e-6</span>
     <span class="c1"># Shift the center of the phasespace to z_off</span>
-    <span class="n">z</span> <span class="o">=</span> <span class="n">z</span> <span class="o">-</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="n">z</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">amin</span><span class="p">(</span><span class="n">z</span><span class="p">))</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">z_off</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">z</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="n">w</span><span class="p">)</span> <span class="o">+</span> <span class="n">z_off</span>
 
     <span class="c1"># Add the electrons to the simulation, and calculate the space charge</span>
-    <span class="n">add_elec_bunch_from_arrays</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">ux</span><span class="p">,</span> <span class="n">uy</span><span class="p">,</span> <span class="n">uz</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">boost</span><span class="o">=</span><span class="n">boost</span><span class="p">)</span></div>
+    <span class="n">add_elec_bunch_from_arrays</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">ux</span><span class="p">,</span> <span class="n">uy</span><span class="p">,</span> <span class="n">uz</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span>
+                            <span class="n">boost</span><span class="o">=</span><span class="n">boost</span><span class="p">,</span> <span class="n">z_injection_plane</span><span class="o">=</span><span class="n">z_injection_plane</span> <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="add_elec_bunch_from_arrays"><a class="viewcode-back" href="../../../api_reference/lpa_utilities/beam.html#fbpic.lpa_utils.bunch.add_elec_bunch_from_arrays">[docs]</a><span class="k">def</span> <span class="nf">add_elec_bunch_from_arrays</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">ux</span><span class="p">,</span> <span class="n">uy</span><span class="p">,</span> <span class="n">uz</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span>
-                    <span class="n">boost</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;forward&#39;</span> <span class="p">):</span>
+                    <span class="n">boost</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;forward&#39;</span><span class="p">,</span> <span class="n">z_injection_plane</span><span class="o">=</span><span class="kc">None</span> <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Introduce a relativistic electron bunch in the simulation,</span>
 <span class="sd">    along with its space charge field, loading particles from numpy arrays.</span>
@@ -502,7 +511,19 @@
 <span class="sd">    direction : string, optional</span>
 <span class="sd">        Can be either &quot;forward&quot; or &quot;backward&quot;.</span>
 <span class="sd">        Propagation direction of the beam.</span>
+
+<span class="sd">    z_injection_plane: float (in meters) or None</span>
+<span class="sd">        When `z_injection_plane` is not None, then particles have a ballistic</span>
+<span class="sd">        motion for z&lt;z_injection_plane. This is sometimes useful in</span>
+<span class="sd">        boosted-frame simulations.</span>
+<span class="sd">        `z_injection_plane` is always given in the lab frame.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">inv_gamma</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span> <span class="mf">1.</span> <span class="o">+</span> <span class="n">ux</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">uy</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">uz</span><span class="o">**</span><span class="mi">2</span> <span class="p">)</span>
+    <span class="c1"># Convert the particles to the boosted-frame</span>
+    <span class="k">if</span> <span class="n">boost</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">ux</span><span class="p">,</span> <span class="n">uy</span><span class="p">,</span> <span class="n">uz</span><span class="p">,</span> <span class="n">inv_gamma</span> <span class="o">=</span> <span class="n">boost</span><span class="o">.</span><span class="n">boost_particle_arrays</span><span class="p">(</span>
+                                        <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">ux</span><span class="p">,</span> <span class="n">uy</span><span class="p">,</span> <span class="n">uz</span><span class="p">,</span> <span class="n">inv_gamma</span> <span class="p">)</span>
+
     <span class="c1"># Select the particles that are in the local subdomain</span>
     <span class="n">zmin</span><span class="p">,</span> <span class="n">zmax</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">get_zmin_zmax</span><span class="p">(</span>
         <span class="n">local</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">with_damp</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">with_guard</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">rank</span><span class="o">=</span><span class="n">sim</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">rank</span> <span class="p">)</span>
@@ -514,40 +535,33 @@
     <span class="n">uy</span> <span class="o">=</span> <span class="n">uy</span><span class="p">[</span><span class="n">selected</span><span class="p">]</span>
     <span class="n">uz</span> <span class="o">=</span> <span class="n">uz</span><span class="p">[</span><span class="n">selected</span><span class="p">]</span>
     <span class="n">w</span> <span class="o">=</span> <span class="n">w</span><span class="p">[</span><span class="n">selected</span><span class="p">]</span>
+    <span class="n">inv_gamma</span> <span class="o">=</span> <span class="n">inv_gamma</span><span class="p">[</span><span class="n">selected</span><span class="p">]</span>
 
-    <span class="c1"># Extract the number of macroparticles</span>
-    <span class="n">N_part</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="c1"># Create electron species with no macroparticles</span>
+    <span class="n">relat_elec</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">add_new_species</span><span class="p">(</span> <span class="n">q</span><span class="o">=-</span><span class="n">e</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="n">m_e</span> <span class="p">)</span>
 
-    <span class="c1"># Create dummy electrons with the correct number of particles</span>
-    <span class="n">relat_elec</span> <span class="o">=</span> <span class="n">Particles</span><span class="p">(</span> <span class="n">q</span><span class="o">=-</span><span class="n">e</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="n">m_e</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span>
-                        <span class="n">Npz</span><span class="o">=</span><span class="n">N_part</span><span class="p">,</span> <span class="n">zmin</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">zmax</span><span class="o">=</span><span class="mf">2.</span><span class="p">,</span>
-                        <span class="n">Npr</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rmin</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">rmax</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span>
-                        <span class="n">Nptheta</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">sim</span><span class="o">.</span><span class="n">dt</span><span class="p">,</span>
-                        <span class="n">continuous_injection</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                        <span class="n">dens_func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">use_cuda</span><span class="o">=</span><span class="n">sim</span><span class="o">.</span><span class="n">use_cuda</span><span class="p">,</span>
-                        <span class="n">grid_shape</span><span class="o">=</span><span class="n">sim</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">Ez</span><span class="o">.</span><span class="n">shape</span> <span class="p">)</span>
+    <span class="c1"># Reallocate empty arrays with the right number of electrons</span>
+    <span class="n">Ntot</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">reallocate_and_copy_old</span><span class="p">(</span> <span class="n">relat_elec</span><span class="p">,</span> <span class="n">relat_elec</span><span class="o">.</span><span class="n">use_cuda</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">Ntot</span> <span class="p">)</span>
 
-    <span class="c1"># Replace dummy particle parameters with the provided arrays</span>
+    <span class="c1"># Fill the empty particle arrays with the right values</span>
     <span class="n">relat_elec</span><span class="o">.</span><span class="n">x</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[:]</span>
     <span class="n">relat_elec</span><span class="o">.</span><span class="n">y</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">y</span><span class="p">[:]</span>
     <span class="n">relat_elec</span><span class="o">.</span><span class="n">z</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">z</span><span class="p">[:]</span>
     <span class="n">relat_elec</span><span class="o">.</span><span class="n">ux</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">ux</span><span class="p">[:]</span>
     <span class="n">relat_elec</span><span class="o">.</span><span class="n">uy</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">uy</span><span class="p">[:]</span>
     <span class="n">relat_elec</span><span class="o">.</span><span class="n">uz</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">uz</span><span class="p">[:]</span>
-    <span class="n">relat_elec</span><span class="o">.</span><span class="n">inv_gamma</span><span class="p">[:]</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span> \
-        <span class="mf">1.</span> <span class="o">+</span> <span class="n">relat_elec</span><span class="o">.</span><span class="n">ux</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">relat_elec</span><span class="o">.</span><span class="n">uy</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">relat_elec</span><span class="o">.</span><span class="n">uz</span><span class="o">**</span><span class="mi">2</span> <span class="p">)</span>
+    <span class="n">relat_elec</span><span class="o">.</span><span class="n">inv_gamma</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">inv_gamma</span><span class="p">[:]</span>
     <span class="n">relat_elec</span><span class="o">.</span><span class="n">w</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">w</span><span class="p">[:]</span>
 
-    <span class="c1"># Transform particle distribution in</span>
-    <span class="c1"># the Lorentz boosted frame, if gamma_boost != 1.</span>
-    <span class="k">if</span> <span class="n">boost</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">boost</span><span class="o">.</span><span class="n">boost_particles</span><span class="p">(</span> <span class="n">relat_elec</span> <span class="p">)</span>
-
-    <span class="c1"># Add them to the particles of the simulation</span>
-    <span class="n">sim</span><span class="o">.</span><span class="n">ptcl</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">relat_elec</span> <span class="p">)</span>
+    <span class="c1"># Initialize the injection plane for the particles</span>
+    <span class="k">if</span> <span class="n">z_injection_plane</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="n">relat_elec</span><span class="o">.</span><span class="n">injector</span> <span class="ow">is</span> <span class="kc">None</span> <span class="c1">#Don&#39;t overwrite a previous injector</span>
+        <span class="n">relat_elec</span><span class="o">.</span><span class="n">injector</span> <span class="o">=</span> <span class="n">BallisticBeforePlane</span><span class="p">(</span> <span class="n">z_injection_plane</span><span class="p">,</span> <span class="n">boost</span> <span class="p">)</span>
 
     <span class="c1"># Get the corresponding space-charge fields</span>
-    <span class="n">get_space_charge_fields</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">relat_elec</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">)</span></div>
+    <span class="n">get_space_charge_fields</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">relat_elec</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">direction</span> <span class="p">)</span></div>
+
 
 <span class="k">def</span> <span class="nf">get_space_charge_fields</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">ptcl</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;forward&#39;</span><span class="p">)</span> <span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -732,7 +746,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.8.0',
+            VERSION:'0.9.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

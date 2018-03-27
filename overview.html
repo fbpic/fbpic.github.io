@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Overview of the code &mdash; FBPIC 0.8.0 documentation</title>
+  <title>Overview of the code &mdash; FBPIC 0.9.0 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="FBPIC 0.8.0 documentation" href="index.html"/>
+    <link rel="top" title="FBPIC 0.9.0 documentation" href="index.html"/>
         <link rel="next" title="Installation" href="install/installation.html"/>
         <link rel="prev" title="FBPIC documentation" href="index.html"/> 
 
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.8.0
+                0.9.0
               </div>
             
           
@@ -202,20 +202,20 @@ macroparticles in blue and the grid for the fields in red.</p>
 <img alt="_images/3d_vs_cylindrical.png" src="_images/3d_vs_cylindrical.png" />
 <p>The above image is only a schematic view. In fact, instead of using a <strong>3D
 Cartesian grid</strong>, FBPIC (and other PIC codes such as <a class="reference external" href="http://www.sciencedirect.com/science/article/pii/S0021999108005950">Calder Circ</a>)
-use <strong>a set of 2D radial grids</strong>, as represented below. Each 2D radial grid represents <strong>an azimuthal mode</strong> (labeled by an integer <span class="math">\(m\)</span>):</p>
+use <strong>a set of 2D radial grids</strong>, as represented below. Each 2D radial grid represents <strong>an azimuthal mode</strong> (labeled by an integer <span class="math notranslate">\(m\)</span>):</p>
 <img alt="_images/cylindrical_grid.png" src="_images/cylindrical_grid.png" />
 <ul class="simple">
-<li>The grid for <span class="math">\(m=0\)</span> represents the fields that are <strong>independent of</strong>
-<span class="math">\(\theta\)</span>. (In idealized laser-wakefield acceleration, this is
+<li>The grid for <span class="math notranslate">\(m=0\)</span> represents the fields that are <strong>independent of</strong>
+<span class="math notranslate">\(\theta\)</span>. (In idealized laser-wakefield acceleration, this is
 for instance the case for the wakefield.)</li>
-<li>The grid for <span class="math">\(m=1\)</span> represents the fields that <strong>vary
-proportionally to</strong> <span class="math">\(\cos(\theta)\)</span> and <span class="math">\(\sin(\theta)\)</span>. (In
+<li>The grid for <span class="math notranslate">\(m=1\)</span> represents the fields that <strong>vary
+proportionally to</strong> <span class="math notranslate">\(\cos(\theta)\)</span> and <span class="math notranslate">\(\sin(\theta)\)</span>. (In
 idealized laser-wakefield acceleration, this is the case of a
 linearly-polarized laser field, when expressed in cylindrical coordinates,
-as <span class="math">\(E_r\)</span> and <span class="math">\(E_{\theta}\)</span>.)</li>
-<li>The grids for higher values of <span class="math">\(m\)</span> represent the fields that
-<strong>vary proportionally to</strong> <span class="math">\(\cos(m\theta)\)</span> and
-<span class="math">\(\sin(m\theta)\)</span>. These modes take into account
+as <span class="math notranslate">\(E_r\)</span> and <span class="math notranslate">\(E_{\theta}\)</span>.)</li>
+<li>The grids for higher values of <span class="math notranslate">\(m\)</span> represent the fields that
+<strong>vary proportionally to</strong> <span class="math notranslate">\(\cos(m\theta)\)</span> and
+<span class="math notranslate">\(\sin(m\theta)\)</span>. These modes take into account
 further departures from the cylindrical symmetry.</li>
 </ul>
 <p>For more details on the cylindrical representation with azimuthal
@@ -275,20 +275,20 @@ of FBPIC (arxiv version <a class="reference external" href="https://arxiv.org/ab
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">Thanks to the above algorithm, the field solver in
-FBPIC has <strong>no Courant limit</strong>, and thus the timestep <span class="math">\(\Delta t\)</span> can be
-chosen freely. In practice, it is common to choose <span class="math">\(\Delta t =
-\Delta z/c\)</span> where <span class="math">\(\Delta z\)</span> in the resolution along <span class="math">\(z\)</span>.</p>
+FBPIC has <strong>no Courant limit</strong>, and thus the timestep <span class="math notranslate">\(\Delta t\)</span> can be
+chosen freely. In practice, it is common to choose <span class="math notranslate">\(\Delta t =
+\Delta z/c\)</span> where <span class="math notranslate">\(\Delta z\)</span> in the resolution along <span class="math notranslate">\(z\)</span>.</p>
 </div>
 <p>This means that, at each timestep, FBPIC transforms the fields to
 spectral space, advances them in time, and transforms them back to real
 space. Because of the cylindrical geometry, the spectral
-transformations consist of a <strong>Fourier transform</strong> along <span class="math">\(z\)</span>
-and a <strong>Hankel transform</strong> along <span class="math">\(r\)</span>.</p>
+transformations consist of a <strong>Fourier transform</strong> along <span class="math notranslate">\(z\)</span>
+and a <strong>Hankel transform</strong> along <span class="math notranslate">\(r\)</span>.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">While the computational cost of the Fourier transform scales as
-<span class="math">\(N_z \log(N_z)\)</span>, the cost of the Hankel transform scales as <span class="math">\(N_r^2\)</span>. Thus, be aware that, when
-using a large number of gridpoints along <span class="math">\(r\)</span> (<span class="math">\(N_r\sim 1000\)</span>),
+<span class="math notranslate">\(N_z \log(N_z)\)</span>, the cost of the Hankel transform scales as <span class="math notranslate">\(N_r^2\)</span>. Thus, be aware that, when
+using a large number of gridpoints along <span class="math notranslate">\(r\)</span> (<span class="math notranslate">\(N_r\sim 1000\)</span>),
 the Hankel transforms may dominate the computational time.</p>
 </div>
 </div>
@@ -350,7 +350,7 @@ of FBPIC).</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.8.0',
+            VERSION:'0.9.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

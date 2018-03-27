@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fbpic.openpmd_diag.checkpoint_restart &mdash; FBPIC 0.8.0 documentation</title>
+  <title>fbpic.openpmd_diag.checkpoint_restart &mdash; FBPIC 0.9.0 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="FBPIC 0.8.0 documentation" href="../../../index.html"/>
+    <link rel="top" title="FBPIC 0.9.0 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -65,7 +65,7 @@
             
             
               <div class="version">
-                0.8.0
+                0.9.0
               </div>
             
           
@@ -384,9 +384,9 @@
     <span class="c1"># Get the new positions of the bounds of the simulation</span>
     <span class="c1"># (and check that the box keeps the same length)</span>
     <span class="n">length_old</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">zmax</span> <span class="o">-</span> <span class="n">grid</span><span class="o">.</span><span class="n">zmin</span>
-    <span class="n">dz</span> <span class="o">=</span> <span class="n">length_old</span><span class="o">/</span><span class="n">grid</span><span class="o">.</span><span class="n">Nz</span>
-    <span class="n">grid</span><span class="o">.</span><span class="n">zmin</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">zmin</span>
-    <span class="n">grid</span><span class="o">.</span><span class="n">zmax</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">zmax</span><span class="o">+</span><span class="n">dz</span>
+    <span class="n">dz</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">dz</span>
+    <span class="n">grid</span><span class="o">.</span><span class="n">zmin</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">zmin</span> <span class="o">-</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">dz</span>
+    <span class="n">grid</span><span class="o">.</span><span class="n">zmax</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">zmax</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">dz</span>
     <span class="n">length_new</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">zmax</span> <span class="o">-</span> <span class="n">grid</span><span class="o">.</span><span class="n">zmin</span>
     <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span> <span class="n">length_old</span><span class="p">,</span> <span class="n">length_new</span> <span class="p">)</span>
 
@@ -433,6 +433,10 @@
         <span class="n">pid</span><span class="p">,</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">get_particle</span><span class="p">(</span> <span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">],</span> <span class="n">iteration</span><span class="o">=</span><span class="n">iteration</span><span class="p">,</span> <span class="n">species</span><span class="o">=</span><span class="n">name</span> <span class="p">)</span>
         <span class="n">species</span><span class="o">.</span><span class="n">track</span><span class="p">(</span> <span class="n">comm</span> <span class="p">)</span>
         <span class="n">species</span><span class="o">.</span><span class="n">tracker</span><span class="o">.</span><span class="n">overwrite_ids</span><span class="p">(</span> <span class="n">pid</span><span class="p">,</span> <span class="n">comm</span> <span class="p">)</span>
+
+    <span class="c1"># Reset the injection positions (for continuous injection)</span>
+    <span class="k">if</span> <span class="n">species</span><span class="o">.</span><span class="n">continuous_injection</span><span class="p">:</span>
+        <span class="n">species</span><span class="o">.</span><span class="n">injector</span><span class="o">.</span><span class="n">reset_injection_positions</span><span class="p">()</span>
 
     <span class="c1"># As a safe-guard, check that the loaded data is in float64</span>
     <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">,</span> <span class="s1">&#39;ux&#39;</span><span class="p">,</span> <span class="s1">&#39;uy&#39;</span><span class="p">,</span> <span class="s1">&#39;uz&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="s1">&#39;inv_gamma&#39;</span> <span class="p">]:</span>
@@ -487,7 +491,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.8.0',
+            VERSION:'0.9.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

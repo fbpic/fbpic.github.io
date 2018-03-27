@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Conversion to boosted-frame &mdash; FBPIC 0.8.0 documentation</title>
+  <title>Conversion to boosted-frame &mdash; FBPIC 0.9.0 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="FBPIC 0.8.0 documentation" href="../index.html"/>
+    <link rel="top" title="FBPIC 0.9.0 documentation" href="../index.html"/>
         <link rel="up" title="API reference" href="api_reference.html"/>
         <link rel="next" title="Advanced use" href="../advanced/advanced.html"/>
         <link rel="prev" title="External fields" href="lpa_utilities/external_fields.html"/> 
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                0.8.0
+                0.9.0
               </div>
             
           
@@ -97,6 +97,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../how_to_run.html">How to run the code</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="api_reference.html">API reference</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="simulation.html">The Simulation class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="particles.html">The Particles class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="diagnostics.html">The openPMD diagnostics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="checkpoint_restart.html">Checkpoints and restarts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lpa_utilities/lpa_utilities.html">Laser-plasma utilities</a></li>
@@ -185,8 +186,8 @@ boosted frame.</p>
 </tbody>
 </table>
 <dl class="method">
-<dt id="fbpic.lpa_utils.boosted_frame.BoostConverter.boost_particles">
-<code class="descname">boost_particles</code><span class="sig-paren">(</span><em>particles</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/lpa_utils/boosted_frame.html#BoostConverter.boost_particles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.boosted_frame.BoostConverter.boost_particles" title="Permalink to this definition">¶</a></dt>
+<dt id="fbpic.lpa_utils.boosted_frame.BoostConverter.boost_particle_arrays">
+<code class="descname">boost_particle_arrays</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>z</em>, <em>ux</em>, <em>uy</em>, <em>uz</em>, <em>inv_gamma</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/lpa_utils/boosted_frame.html#BoostConverter.boost_particle_arrays"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.boosted_frame.BoostConverter.boost_particle_arrays" title="Permalink to this definition">¶</a></dt>
 <dd><p>Transforms particles to the boosted frame and propagates
 them to a fixed time t_boost = 0. without taking any electromagnetic
 effects into account. (This is useful for the initialization
@@ -195,7 +196,21 @@ of a bunch distribution in the boosted frame.)</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>particles</strong> (<em>a Particles object</em>) – A Particles object that contains the particles in the lab frame.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>y</strong><strong>, </strong><strong>z</strong> (<em>x</em><em>,</em>) – The position of the particles in the lab frame
+(One element per macroparticle)</li>
+<li><strong>uy</strong><strong>, </strong><strong>uz</strong> (<em>ux</em><em>,</em>) – The momenta of the particles
+(One element per macroparticle)</li>
+<li><strong>inv_gamma</strong> (<em>1darray of floats</em><em> (</em><em>dimensionless</em><em>)</em>) – The inverse of the Lorentz factor
+(One element per macroparticle)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">The same arrays (in the same order) but in the boosted frame</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -424,7 +439,7 @@ k’ = k / ( gamma0 ( 1 + beta0 ) )</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.8.0',
+            VERSION:'0.9.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>External fields &mdash; FBPIC 0.8.0 documentation</title>
+  <title>External fields &mdash; FBPIC 0.9.0 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="FBPIC 0.8.0 documentation" href="../../index.html"/>
+    <link rel="top" title="FBPIC 0.9.0 documentation" href="../../index.html"/>
         <link rel="up" title="Laser-plasma utilities" href="lpa_utilities.html"/>
         <link rel="next" title="Conversion to boosted-frame" href="../boost_converter.html"/>
         <link rel="prev" title="Beam initialization" href="beam.html"/> 
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                0.8.0
+                0.9.0
               </div>
             
           
@@ -97,6 +97,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../how_to_run.html">How to run the code</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../api_reference.html">API reference</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../simulation.html">The Simulation class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../particles.html">The Particles class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../diagnostics.html">The openPMD diagnostics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../checkpoint_restart.html">Checkpoints and restarts</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="lpa_utilities.html">Laser-plasma utilities</a><ul class="current">
@@ -236,7 +237,7 @@ to all particles.</li>
 <p class="rubric">Example</p>
 <p>In order to define a magnetic undulator, polarized along y, with
 a field of 1 Tesla and a period of 1 cm :</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">field_func</span><span class="p">(</span> <span class="n">F</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">t</span> <span class="p">,</span> <span class="n">amplitude</span><span class="p">,</span> <span class="n">length_scale</span> <span class="p">):</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">field_func</span><span class="p">(</span> <span class="n">F</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">t</span> <span class="p">,</span> <span class="n">amplitude</span><span class="p">,</span> <span class="n">length_scale</span> <span class="p">):</span>
     <span class="k">return</span><span class="p">(</span> <span class="n">F</span> <span class="o">+</span> <span class="n">amplitude</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">z</span><span class="o">/</span><span class="n">length_scale</span> <span class="p">)</span> <span class="p">)</span>
 
 <span class="n">sim</span><span class="o">.</span><span class="n">external_fields</span> <span class="o">=</span> <span class="p">[</span> <span class="n">ExternalField</span><span class="p">(</span> <span class="n">field_func</span><span class="p">,</span> <span class="s1">&#39;By&#39;</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">1.e-2</span> <span class="p">)</span> <span class="p">]</span>
@@ -290,7 +291,7 @@ a field of 1 Tesla and a period of 1 cm :</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.8.0',
+            VERSION:'0.9.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

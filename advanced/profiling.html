@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Profiling the code &mdash; FBPIC 0.8.0 documentation</title>
+  <title>Profiling the code &mdash; FBPIC 0.9.0 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="FBPIC 0.8.0 documentation" href="../index.html"/>
+    <link rel="top" title="FBPIC 0.9.0 documentation" href="../index.html"/>
         <link rel="up" title="Advanced use" href="advanced.html"/>
         <link rel="next" title="Performing parameter scans in parallel" href="parameter_scans.html"/>
         <link rel="prev" title="Advanced use" href="advanced.html"/> 
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                0.8.0
+                0.9.0
               </div>
             
           
@@ -192,10 +192,10 @@ the computational time</strong>, for your particular simulation setup.</p>
 to quickly profile the execution of a simulation.</p>
 <p>Run the code with
 <a class="reference external" href="http://docs.python.org/2/library/profile.html">cProfile</a> :</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">cProfile</span> <span class="o">-</span><span class="n">s</span> <span class="n">time</span> <span class="n">fbpic_script</span><span class="o">.</span><span class="n">py</span> <span class="o">&gt;</span> <span class="n">cpu</span><span class="o">.</span><span class="n">log</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">cProfile</span> <span class="o">-</span><span class="n">s</span> <span class="n">time</span> <span class="n">fbpic_script</span><span class="o">.</span><span class="n">py</span> <span class="o">&gt;</span> <span class="n">cpu</span><span class="o">.</span><span class="n">log</span>
 </pre></div>
 </div>
-<p>and then open the file <code class="docutils literal"><span class="pre">cpu.log</span></code> with a text editor.</p>
+<p>and then open the file <code class="docutils literal notranslate"><span class="pre">cpu.log</span></code> with a text editor.</p>
 </div>
 <div class="section" id="using-a-visual-profiler">
 <h3>Using a visual profiler<a class="headerlink" href="#using-a-visual-profiler" title="Permalink to this headline">¶</a></h3>
@@ -203,11 +203,11 @@ to quickly profile the execution of a simulation.</p>
 a graphical user interface).</p>
 <p>Run the code with
 <a class="reference external" href="http://docs.python.org/2/library/profile.html">cProfile</a>, using binary output:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">cProfile</span> <span class="o">-</span><span class="n">o</span> <span class="n">cpu</span><span class="o">.</span><span class="n">prof</span> <span class="n">fbpic_script</span><span class="o">.</span><span class="n">py</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">cProfile</span> <span class="o">-</span><span class="n">o</span> <span class="n">cpu</span><span class="o">.</span><span class="n">prof</span> <span class="n">fbpic_script</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
-<p>and then open the file <code class="docutils literal"><span class="pre">cpu.prof</span></code> with <a class="reference external" href="https://jiffyclub.github.io/snakeviz/">snakeviz</a></p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">snakeviz</span> <span class="n">cpu</span><span class="o">.</span><span class="n">prof</span>
+<p>and then open the file <code class="docutils literal notranslate"><span class="pre">cpu.prof</span></code> with <a class="reference external" href="https://jiffyclub.github.io/snakeviz/">snakeviz</a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">snakeviz</span> <span class="n">cpu</span><span class="o">.</span><span class="n">prof</span>
 </pre></div>
 </div>
 </div>
@@ -218,31 +218,31 @@ a graphical user interface).</p>
 <h3>Getting the results in a simple text file<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <p>Run the code with
 <a class="reference external" href="http://docs.nvidia.com/cuda/profiler-users-guide/index.html#nvprof-overview">nvprof</a> :</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">nvprof</span> <span class="o">--</span><span class="n">log</span><span class="o">-</span><span class="n">file</span> <span class="n">gpu</span><span class="o">.</span><span class="n">log</span> <span class="n">python</span> <span class="n">fbpic_script</span><span class="o">.</span><span class="n">py</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">nvprof</span> <span class="o">--</span><span class="n">log</span><span class="o">-</span><span class="n">file</span> <span class="n">gpu</span><span class="o">.</span><span class="n">log</span> <span class="n">python</span> <span class="n">fbpic_script</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
 <p>in order to profile the device-side (i.e. GPU-side) code alone, or</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">nvprof</span> <span class="o">--</span><span class="n">log</span><span class="o">-</span><span class="n">file</span> <span class="n">gpu</span><span class="o">.</span><span class="n">log</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">cProfile</span> <span class="o">-</span><span class="n">s</span> <span class="n">time</span> <span class="n">fbpic_script</span><span class="o">.</span><span class="n">py</span> <span class="o">&gt;</span> <span class="n">cpu</span><span class="o">.</span><span class="n">log</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">nvprof</span> <span class="o">--</span><span class="n">log</span><span class="o">-</span><span class="n">file</span> <span class="n">gpu</span><span class="o">.</span><span class="n">log</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">cProfile</span> <span class="o">-</span><span class="n">s</span> <span class="n">time</span> <span class="n">fbpic_script</span><span class="o">.</span><span class="n">py</span> <span class="o">&gt;</span> <span class="n">cpu</span><span class="o">.</span><span class="n">log</span>
 </pre></div>
 </div>
 <p>in order to simultaneously profile the device-side (i.e. GPU-side)
 and host-side (i.e. CPU-side) code.
-Then open the files <code class="docutils literal"><span class="pre">gpu.log</span></code> and/or <code class="docutils literal"><span class="pre">cpu.log</span></code> with a text editor.</p>
+Then open the files <code class="docutils literal notranslate"><span class="pre">gpu.log</span></code> and/or <code class="docutils literal notranslate"><span class="pre">cpu.log</span></code> with a text editor.</p>
 </div>
 <div class="section" id="id2">
 <h3>Using a visual profiler<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
 <p>Run the code with
 <a class="reference external" href="http://docs.nvidia.com/cuda/profiler-users-guide/index.html#nvprof-overview">nvprof</a>,
 using binary output:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">nvprof</span> <span class="o">-</span><span class="n">o</span> <span class="n">gpu</span><span class="o">.</span><span class="n">prof</span> <span class="n">python</span> <span class="n">fbpic_script</span><span class="o">.</span><span class="n">py</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">nvprof</span> <span class="o">-</span><span class="n">o</span> <span class="n">gpu</span><span class="o">.</span><span class="n">prof</span> <span class="n">python</span> <span class="n">fbpic_script</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
 <p>and then launch
 <a class="reference external" href="http://docs.nvidia.com/cuda/profiler-users-guide/index.html#visual">nvvp</a>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">nvvp</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">nvvp</span>
 </pre></div>
 </div>
-<p>And click <code class="docutils literal"><span class="pre">File</span> <span class="pre">&gt;</span> <span class="pre">Open</span></code>, in order to select the file <code class="docutils literal"><span class="pre">gpu.prof</span></code>.</p>
+<p>And click <code class="docutils literal notranslate"><span class="pre">File</span> <span class="pre">&gt;</span> <span class="pre">Open</span></code>, in order to select the file <code class="docutils literal notranslate"><span class="pre">gpu.prof</span></code>.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p>You do not need to run <strong>snakeviz</strong> or <strong>nvvp</strong> on the same machine on
@@ -272,7 +272,7 @@ Instead, you need to <strong>modify your FBPIC script</strong>, in the following
 <ul>
 <li><p class="first">Add the following lines at the beginning of the file:</p>
 <blockquote>
-<div><div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">cProfile</span><span class="o">,</span> <span class="nn">sys</span>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">cProfile</span><span class="o">,</span> <span class="nn">sys</span>
 <span class="kn">from</span> <span class="nn">mpi4py.MPI</span> <span class="k">import</span> <span class="n">COMM_WORLD</span> <span class="k">as</span> <span class="n">comm</span>
 </pre></div>
 </div>
@@ -280,13 +280,13 @@ Instead, you need to <strong>modify your FBPIC script</strong>, in the following
 </li>
 <li><p class="first">Replace the line:</p>
 <blockquote>
-<div><div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">sim</span><span class="o">.</span><span class="n">step</span><span class="p">(</span> <span class="n">N_step</span> <span class="p">)</span>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sim</span><span class="o">.</span><span class="n">step</span><span class="p">(</span> <span class="n">N_step</span> <span class="p">)</span>
 </pre></div>
 </div>
 </div></blockquote>
 <p>by the following set of lines:</p>
 <blockquote>
-<div><div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># First step: do not profile (includes just-in-time compilation)</span>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># First step: do not profile (includes just-in-time compilation)</span>
 <span class="n">sim</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="c1"># Profile the next N_step</span>
@@ -310,7 +310,7 @@ Instead, you need to <strong>modify your FBPIC script</strong>, in the following
 </ul>
 <p>Then run your FBPIC script with MPI as usual, e.g. with 4 MPI ranks:</p>
 <blockquote>
-<div><div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mpirun</span> <span class="o">-</span><span class="n">np</span> <span class="mi">4</span> <span class="n">python</span> <span class="n">fbpic_script</span><span class="o">.</span><span class="n">py</span>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mpirun</span> <span class="o">-</span><span class="n">np</span> <span class="mi">4</span> <span class="n">python</span> <span class="n">fbpic_script</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
 </div></blockquote>
@@ -361,7 +361,7 @@ Instead, you need to <strong>modify your FBPIC script</strong>, in the following
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.8.0',
+            VERSION:'0.9.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

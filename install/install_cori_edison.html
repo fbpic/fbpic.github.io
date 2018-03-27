@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Installation on Cori and Edison (NERSC) &mdash; FBPIC 0.8.0 documentation</title>
+  <title>Installation on Cori and Edison (NERSC) &mdash; FBPIC 0.9.0 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="FBPIC 0.8.0 documentation" href="../index.html"/>
+    <link rel="top" title="FBPIC 0.9.0 documentation" href="../index.html"/>
         <link rel="up" title="Installation" href="installation.html"/>
         <link rel="next" title="How to run the code" href="../how_to_run.html"/>
         <link rel="prev" title="Installation on Lawrencium (LBNL)" href="install_lawrencium.html"/> 
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                0.8.0
+                0.9.0
               </div>
             
           
@@ -201,17 +201,17 @@ when running FBPIC on Cori.</p>
 <p>In order to install FBPIC, follow the steps below:</p>
 <ul>
 <li><p class="first">Set your environment to use the Anaconda distribution:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">module</span> <span class="n">load</span> <span class="n">python</span><span class="o">/</span><span class="mf">2.7</span><span class="o">-</span><span class="n">anaconda</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">module</span> <span class="n">load</span> <span class="n">python</span><span class="o">/</span><span class="mf">2.7</span><span class="o">-</span><span class="n">anaconda</span>
 </pre></div>
 </div>
 </li>
 <li><p class="first">Install the missing dependencies of FBPIC</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">upgrade</span> <span class="n">numba</span> <span class="n">llvmlite</span> <span class="o">--</span><span class="n">user</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">upgrade</span> <span class="n">numba</span> <span class="n">llvmlite</span> <span class="o">--</span><span class="n">user</span>
 </pre></div>
 </div>
 </li>
 <li><p class="first">Install FBPIC</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">fbpic</span> <span class="o">--</span><span class="n">user</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">fbpic</span> <span class="o">--</span><span class="n">user</span>
 </pre></div>
 </div>
 </li>
@@ -221,33 +221,33 @@ when running FBPIC on Cori.</p>
 <h2>Running simulations<a class="headerlink" href="#running-simulations" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="preparing-a-new-simulation">
 <h3>Preparing a new simulation<a class="headerlink" href="#preparing-a-new-simulation" title="Permalink to this headline">¶</a></h3>
-<p>It is adviced to use the directory <code class="docutils literal"><span class="pre">$SCRATCH</span></code> for faster I/O.</p>
+<p>It is adviced to use the directory <code class="docutils literal notranslate"><span class="pre">$SCRATCH</span></code> for faster I/O.</p>
 <p>In order to prepare a new simulation, create a new subdirectory within
 the above-mentioned directory, and copy your input script there.</p>
 </div>
 <div class="section" id="interactive-jobs">
 <h3>Interactive jobs<a class="headerlink" href="#interactive-jobs" title="Permalink to this headline">¶</a></h3>
 <p>In order to request a Haswell node on Cori, use the following command.
-(For Edison, simply remove the <code class="docutils literal"><span class="pre">-C</span> <span class="pre">haswell</span></code> option.)</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">salloc</span> <span class="o">--</span><span class="n">time</span><span class="o">=</span><span class="mi">00</span><span class="p">:</span><span class="mi">30</span><span class="p">:</span><span class="mi">00</span> <span class="o">--</span><span class="n">nodes</span><span class="o">=</span><span class="mi">1</span> <span class="o">--</span><span class="n">partition</span> <span class="n">debug</span>  <span class="o">-</span><span class="n">C</span> <span class="n">haswell</span>
+(For Edison, simply remove the <code class="docutils literal notranslate"><span class="pre">-C</span> <span class="pre">haswell</span></code> option.)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">salloc</span> <span class="o">--</span><span class="n">time</span><span class="o">=</span><span class="mi">00</span><span class="p">:</span><span class="mi">30</span><span class="p">:</span><span class="mi">00</span> <span class="o">--</span><span class="n">nodes</span><span class="o">=</span><span class="mi">1</span> <span class="o">--</span><span class="n">partition</span> <span class="n">debug</span>  <span class="o">-</span><span class="n">C</span> <span class="n">haswell</span>
 </pre></div>
 </div>
 <p>Once the job has started, you will directly be logged into the node. Then
-<code class="docutils literal"><span class="pre">cd</span></code> to the directory where you prepared your input script and type</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">module</span> <span class="n">load</span> <span class="n">python</span><span class="o">/</span><span class="mf">2.7</span><span class="o">-</span><span class="n">anaconda</span>
+<code class="docutils literal notranslate"><span class="pre">cd</span></code> to the directory where you prepared your input script and type</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">module</span> <span class="n">load</span> <span class="n">python</span><span class="o">/</span><span class="mf">2.7</span><span class="o">-</span><span class="n">anaconda</span>
 <span class="n">python</span> <span class="o">&lt;</span><span class="n">fbpic_script</span><span class="o">.</span><span class="n">py</span><span class="o">&gt;</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="batch-job">
 <h3>Batch job<a class="headerlink" href="#batch-job" title="Permalink to this headline">¶</a></h3>
-<p>Create a new file named <code class="docutils literal"><span class="pre">submission_file</span></code> in the same directory as
+<p>Create a new file named <code class="docutils literal notranslate"><span class="pre">submission_file</span></code> in the same directory as
 your input script (typically this directory is a subdirectory of
-<code class="docutils literal"><span class="pre">$SCRATCH</span></code>). Within this new file, copy the following text,
+<code class="docutils literal notranslate"><span class="pre">$SCRATCH</span></code>). Within this new file, copy the following text,
 and replace the bracketed text by the proper values.
-(The line <code class="docutils literal"><span class="pre">#SBATCH</span> <span class="pre">-C</span> <span class="pre">haswell</span></code> is specific to Cori. When running on
+(The line <code class="docutils literal notranslate"><span class="pre">#SBATCH</span> <span class="pre">-C</span> <span class="pre">haswell</span></code> is specific to Cori. When running on
 Edison, simply remove this line.)</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
 <span class="c1">#SBATCH -J my_job</span>
 <span class="c1">#SBATCH --partition=regular</span>
 <span class="c1">#SBATCH -C haswell</span>
@@ -263,25 +263,25 @@ Edison, simply remove this line.)</p>
 </div>
 <p>Then run:</p>
 <blockquote>
-<div><div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">sbatch</span> <span class="n">submission_file</span>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sbatch</span> <span class="n">submission_file</span>
 </pre></div>
 </div>
 </div></blockquote>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p>In order to have a favorable scaling, it is recommended to use 2 MPI ranks
-per node (i.e. <code class="docutils literal"><span class="pre">&lt;n_mpi&gt;</span> <span class="pre">=</span> <span class="pre">2</span> <span class="pre">*</span> <span class="pre">&lt;n_nodes&gt;</span></code>), and to use the following values:</p>
+per node (i.e. <code class="docutils literal notranslate"><span class="pre">&lt;n_mpi&gt;</span> <span class="pre">=</span> <span class="pre">2</span> <span class="pre">*</span> <span class="pre">&lt;n_nodes&gt;</span></code>), and to use the following values:</p>
 <ul class="last">
 <li><p class="first">For Cori:</p>
 <blockquote>
-<div><p><code class="docutils literal"><span class="pre">&lt;n_threads&gt;</span> <span class="pre">=</span> <span class="pre">16</span></code></p>
-<p><code class="docutils literal"><span class="pre">&lt;n_logical_cores_per_mpi&gt;</span> <span class="pre">=</span> <span class="pre">32</span></code></p>
+<div><p><code class="docutils literal notranslate"><span class="pre">&lt;n_threads&gt;</span> <span class="pre">=</span> <span class="pre">16</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">&lt;n_logical_cores_per_mpi&gt;</span> <span class="pre">=</span> <span class="pre">32</span></code></p>
 </div></blockquote>
 </li>
 <li><p class="first">For Edison:</p>
 <blockquote>
-<div><p><code class="docutils literal"><span class="pre">&lt;n_threads&gt;</span> <span class="pre">=</span> <span class="pre">12</span></code></p>
-<p><code class="docutils literal"><span class="pre">&lt;n_logical_cores_per_mpi&gt;</span> <span class="pre">=</span> <span class="pre">24</span></code></p>
+<div><p><code class="docutils literal notranslate"><span class="pre">&lt;n_threads&gt;</span> <span class="pre">=</span> <span class="pre">12</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">&lt;n_logical_cores_per_mpi&gt;</span> <span class="pre">=</span> <span class="pre">24</span></code></p>
 </div></blockquote>
 </li>
 </ul>
@@ -292,7 +292,7 @@ per node (i.e. <code class="docutils literal"><span class="pre">&lt;n_mpi&gt;</s
 <p>Cori provides access to the cluster via Jupyter, at
 <a class="reference external" href="https://jupyter-dev.nersc.gov">https://jupyter-dev.nersc.gov</a>.
 Once you logged in and opened a Jupyter notebook, you can type in a cell:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>!pip install openPMD-viewer --user
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>!pip install openPMD-viewer --user
 </pre></div>
 </div>
 <p>in order to install <a class="reference external" href="https://github.com/openPMD/openPMD-viewer">openPMD-viewer</a>.</p>
@@ -344,7 +344,7 @@ Once you logged in and opened a Jupyter notebook, you can type in a cell:</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.8.0',
+            VERSION:'0.9.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

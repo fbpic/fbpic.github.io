@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Installation on JURECA (JSC) &mdash; FBPIC 0.8.0 documentation</title>
+  <title>Installation on JURECA (JSC) &mdash; FBPIC 0.9.0 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="FBPIC 0.8.0 documentation" href="../index.html"/>
+    <link rel="top" title="FBPIC 0.9.0 documentation" href="../index.html"/>
         <link rel="up" title="Installation" href="installation.html"/>
         <link rel="next" title="Installation on Lawrencium (LBNL)" href="install_lawrencium.html"/>
         <link rel="prev" title="Installation on Titan (OLCF)" href="install_titan.html"/> 
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                0.8.0
+                0.9.0
               </div>
             
           
@@ -190,8 +190,8 @@ is a supercomputer at the <a class="reference external" href="http://www.fz-juel
 <h2>Loading the cluster modules<a class="headerlink" href="#loading-the-cluster-modules" title="Permalink to this headline">¶</a></h2>
 <p>On the JURECA cluster, the correct modules to use a fast CUDA-aware MPI
 distribution need to be loaded.</p>
-<p>Therefore, the <code class="docutils literal"><span class="pre">.bashrc</span></code> should contain the following:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">module</span> <span class="n">load</span> <span class="n">Intel</span>
+<p>Therefore, the <code class="docutils literal notranslate"><span class="pre">.bashrc</span></code> should contain the following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">module</span> <span class="n">load</span> <span class="n">Intel</span>
 <span class="n">module</span> <span class="n">load</span> <span class="n">ParaStationMPI</span>
 <span class="n">module</span> <span class="n">load</span> <span class="n">CUDA</span>
 <span class="n">module</span> <span class="n">load</span> <span class="n">HDF5</span>
@@ -204,31 +204,31 @@ distribution need to be loaded.</p>
 <div class="section" id="installation-of-anaconda">
 <h2>Installation of Anaconda<a class="headerlink" href="#installation-of-anaconda" title="Permalink to this headline">¶</a></h2>
 <p>In order to download and install <a class="reference external" href="https://www.continuum.io/downloads">Anaconda</a>, type:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">wget</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">repo</span><span class="o">.</span><span class="n">continuum</span><span class="o">.</span><span class="n">io</span><span class="o">/</span><span class="n">archive</span><span class="o">/</span><span class="n">Anaconda2</span><span class="o">-</span><span class="mf">4.2</span><span class="o">.</span><span class="mi">0</span><span class="o">-</span><span class="n">Linux</span><span class="o">-</span><span class="n">x86_64</span><span class="o">.</span><span class="n">sh</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wget</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">repo</span><span class="o">.</span><span class="n">continuum</span><span class="o">.</span><span class="n">io</span><span class="o">/</span><span class="n">archive</span><span class="o">/</span><span class="n">Anaconda2</span><span class="o">-</span><span class="mf">4.2</span><span class="o">.</span><span class="mi">0</span><span class="o">-</span><span class="n">Linux</span><span class="o">-</span><span class="n">x86_64</span><span class="o">.</span><span class="n">sh</span>
 <span class="n">bash</span> <span class="n">Anaconda2</span><span class="o">-</span><span class="mf">4.2</span><span class="o">.</span><span class="mi">0</span><span class="o">-</span><span class="n">Linux</span><span class="o">-</span><span class="n">x86_64</span><span class="o">.</span><span class="n">sh</span>
 </pre></div>
 </div>
 <p>Then install the dependencies of FBPIC:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">numba</span> <span class="n">mkl</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">numba</span> <span class="n">mkl</span>
 <span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">numba</span> <span class="n">pyculib</span>
 </pre></div>
 </div>
 <p>It is important that the following packages are <strong>NOT</strong> installed
-directly with Anaconda: <code class="docutils literal"><span class="pre">mpich</span></code>, <code class="docutils literal"><span class="pre">mpi4py</span></code>, <code class="docutils literal"><span class="pre">hdf5</span></code> and <code class="docutils literal"><span class="pre">h5py</span></code></p>
-<p>One can check if the correct MPI is linked by opening a <code class="docutils literal"><span class="pre">python</span></code> shell
+directly with Anaconda: <code class="docutils literal notranslate"><span class="pre">mpich</span></code>, <code class="docutils literal notranslate"><span class="pre">mpi4py</span></code>, <code class="docutils literal notranslate"><span class="pre">hdf5</span></code> and <code class="docutils literal notranslate"><span class="pre">h5py</span></code></p>
+<p>One can check if the correct MPI is linked by opening a <code class="docutils literal notranslate"><span class="pre">python</span></code> shell
 and checking:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mpi4py</span> <span class="k">import</span> <span class="n">MPI</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mpi4py</span> <span class="k">import</span> <span class="n">MPI</span>
 <span class="n">MPI</span><span class="o">.</span><span class="n">Get_library_version</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>Note that the <code class="docutils literal"><span class="pre">PATH</span></code> and <code class="docutils literal"><span class="pre">PYTHONPATH</span></code> environment variables have to be set
-after the <code class="docutils literal"><span class="pre">module</span> <span class="pre">loads</span> <span class="pre">...</span></code> in your <code class="docutils literal"><span class="pre">.bashrc</span></code> to work with the conda environment.</p>
+<p>Note that the <code class="docutils literal notranslate"><span class="pre">PATH</span></code> and <code class="docutils literal notranslate"><span class="pre">PYTHONPATH</span></code> environment variables have to be set
+after the <code class="docutils literal notranslate"><span class="pre">module</span> <span class="pre">loads</span> <span class="pre">...</span></code> in your <code class="docutils literal notranslate"><span class="pre">.bashrc</span></code> to work with the conda environment.</p>
 </div>
 <div class="section" id="installation-of-fbpic">
 <h2>Installation of FBPIC<a class="headerlink" href="#installation-of-fbpic" title="Permalink to this headline">¶</a></h2>
-<p>Finally, clone FBPIC using <code class="docutils literal"><span class="pre">git</span></code>, <code class="docutils literal"><span class="pre">cd</span></code> into the folder <code class="docutils literal"><span class="pre">fbpic/</span></code>
+<p>Finally, clone FBPIC using <code class="docutils literal notranslate"><span class="pre">git</span></code>, <code class="docutils literal notranslate"><span class="pre">cd</span></code> into the folder <code class="docutils literal notranslate"><span class="pre">fbpic/</span></code>
 and type</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
 </pre></div>
 </div>
 </div>
@@ -238,20 +238,20 @@ and type</p>
 <strong>interactive</strong> jobs on JURECA. For the usage of normal jobs, one can
 use the similar commands in a job script. More information can be found
 here:</p>
-<p><code class="docutils literal"><span class="pre">http://www.fz-juelich.de/ias/jsc/EN/Expertise/Supercomputers/JURECA/UserInfo/UserInfo_node.html</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">http://www.fz-juelich.de/ias/jsc/EN/Expertise/Supercomputers/JURECA/UserInfo/UserInfo_node.html</span></code></p>
 <p><strong>Allocation of ressources</strong></p>
 <p><strong>CPU:</strong> CPU nodes consist of 24 cores. Allocation of two nodes for 60
 minutes:</p>
-<p><code class="docutils literal"><span class="pre">salloc</span> <span class="pre">--nodes=2</span> <span class="pre">--time=00:60:00</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">salloc</span> <span class="pre">--nodes=2</span> <span class="pre">--time=00:60:00</span></code></p>
 <p><strong>GPU:</strong> GPU nodes consist of 2 Nvidia K80 Devices, i.e. 4 GPUs.
 Allocation of 4 GPUs (2 nodes) for 60 minutes:</p>
-<p><code class="docutils literal"><span class="pre">salloc</span> <span class="pre">--nodes=2</span> <span class="pre">--partition=gpus</span> <span class="pre">--time=00:60:00</span> <span class="pre">--gres=gpu:4</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">salloc</span> <span class="pre">--nodes=2</span> <span class="pre">--partition=gpus</span> <span class="pre">--time=00:60:00</span> <span class="pre">--gres=gpu:4</span></code></p>
 <p><strong>Starting an interactive run</strong></p>
 <p>The following command starts an interactive run (run_file.py) with 8
-tasks (e.g. 8 GPUs). <code class="docutils literal"><span class="pre">--pty</span></code> activates continuous console output and
-<code class="docutils literal"><span class="pre">--forward-x</span></code>enables X-forwarding if the connection to JURECA was
-established with <code class="docutils literal"><span class="pre">ssh</span> <span class="pre">-Y</span> <span class="pre">username&#64;jureca.fz-juelich.de</span></code>.</p>
-<p><code class="docutils literal"><span class="pre">srun</span> <span class="pre">--ntasks=8</span> <span class="pre">--forward-x</span> <span class="pre">--pty</span> <span class="pre">python</span> <span class="pre">run_file.py</span></code></p>
+tasks (e.g. 8 GPUs). <code class="docutils literal notranslate"><span class="pre">--pty</span></code> activates continuous console output and
+<code class="docutils literal notranslate"><span class="pre">--forward-x</span></code>enables X-forwarding if the connection to JURECA was
+established with <code class="docutils literal notranslate"><span class="pre">ssh</span> <span class="pre">-Y</span> <span class="pre">username&#64;jureca.fz-juelich.de</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">srun</span> <span class="pre">--ntasks=8</span> <span class="pre">--forward-x</span> <span class="pre">--pty</span> <span class="pre">python</span> <span class="pre">run_file.py</span></code></p>
 </div>
 </div>
 
@@ -299,7 +299,7 @@ established with <code class="docutils literal"><span class="pre">ssh</span> <sp
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.8.0',
+            VERSION:'0.9.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

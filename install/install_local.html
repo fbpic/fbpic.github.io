@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Installation on a local computer &mdash; FBPIC 0.8.0 documentation</title>
+  <title>Installation on a local computer &mdash; FBPIC 0.9.0 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="FBPIC 0.8.0 documentation" href="../index.html"/>
+    <link rel="top" title="FBPIC 0.9.0 documentation" href="../index.html"/>
         <link rel="up" title="Installation" href="installation.html"/>
         <link rel="next" title="Installation on Titan (OLCF)" href="install_titan.html"/>
         <link rel="prev" title="Installation" href="installation.html"/> 
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                0.8.0
+                0.9.0
               </div>
             
           
@@ -184,26 +184,26 @@ Python. If Anaconda is not your default Python distribution, download and instal
 <p><strong>Installation steps</strong>:</p>
 <ul>
 <li><p class="first">Install the dependencies of FBPIC. This can be done in two lines:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">numba</span> <span class="n">scipy</span> <span class="n">h5py</span> <span class="n">mkl</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">numba</span> <span class="n">scipy</span> <span class="n">h5py</span> <span class="n">mkl</span>
 <span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">mpi4py</span>
 </pre></div>
 </div>
 </li>
-<li><p class="first">Install <code class="docutils literal"><span class="pre">fbpic</span></code></p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">fbpic</span>
+<li><p class="first">Install <code class="docutils literal notranslate"><span class="pre">fbpic</span></code></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">fbpic</span>
 </pre></div>
 </div>
-<p>Alternatively, instead of using <code class="docutils literal"><span class="pre">pip</span></code>, you can also install FBPIC
-from the souces, by cloning the <a class="reference external" href="https://github.com/fbpic/fbpic">code from Github</a>, and typing <code class="docutils literal"><span class="pre">python</span> <span class="pre">setup.py</span>
+<p>Alternatively, instead of using <code class="docutils literal notranslate"><span class="pre">pip</span></code>, you can also install FBPIC
+from the souces, by cloning the <a class="reference external" href="https://github.com/fbpic/fbpic">code from Github</a>, and typing <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">setup.py</span>
 <span class="pre">install</span></code>.</p>
 </li>
 <li><p class="first"><strong>Optional:</strong> In order to be able to run the code on a GPU:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">numba</span> <span class="n">pyculib</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">numba</span> <span class="n">pyculib</span>
 </pre></div>
 </div>
 </li>
 <li><p class="first"><strong>Optional:</strong> In order to run on a CPU which is <strong>not</strong> an Intel model, you need to install <cite>pyfftw</cite>, in order to replace the MKL FFT:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">pyfftw</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">pyfftw</span>
 </pre></div>
 </div>
 </li>
@@ -211,11 +211,11 @@ from the souces, by cloning the <a class="reference external" href="https://gith
 </div>
 <div class="section" id="potential-issues">
 <h2>Potential issues<a class="headerlink" href="#potential-issues" title="Permalink to this headline">¶</a></h2>
-<p>On Mac OSX, the package <code class="docutils literal"><span class="pre">mpi4py</span></code> can sometimes cause
+<p>On Mac OSX, the package <code class="docutils literal notranslate"><span class="pre">mpi4py</span></code> can sometimes cause
 issues. If you observe that the code crashes with an
-MPI-related error, try installing <code class="docutils literal"><span class="pre">mpi4py</span></code> using MacPorts and
-<code class="docutils literal"><span class="pre">pip</span></code>. To do so, first install <a class="reference external" href="https://www.macports.org/">MacPorts</a>. Then execute the following commands:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">uninstall</span> <span class="n">mpi4py</span>
+MPI-related error, try installing <code class="docutils literal notranslate"><span class="pre">mpi4py</span></code> using MacPorts and
+<code class="docutils literal notranslate"><span class="pre">pip</span></code>. To do so, first install <a class="reference external" href="https://www.macports.org/">MacPorts</a>. Then execute the following commands:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">uninstall</span> <span class="n">mpi4py</span>
 <span class="n">sudo</span> <span class="n">port</span> <span class="n">install</span> <span class="n">openmpi</span><span class="o">-</span><span class="n">gcc48</span>
 <span class="n">sudo</span> <span class="n">port</span> <span class="n">select</span> <span class="o">--</span><span class="nb">set</span> <span class="n">mpi</span> <span class="n">openmpi</span><span class="o">-</span><span class="n">gcc48</span><span class="o">-</span><span class="n">fortran</span>
 <span class="n">pip</span> <span class="n">install</span> <span class="n">mpi4py</span>
@@ -272,7 +272,7 @@ MPI-related error, try installing <code class="docutils literal"><span class="pr
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.8.0',
+            VERSION:'0.9.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
