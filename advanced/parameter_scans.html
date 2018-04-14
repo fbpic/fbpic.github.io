@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Performing parameter scans in parallel &mdash; FBPIC 0.9.0 documentation</title>
+  <title>Performing parameter scans in parallel &mdash; FBPIC 0.9.1 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="FBPIC 0.9.0 documentation" href="../index.html"/>
+    <link rel="top" title="FBPIC 0.9.1 documentation" href="../index.html"/>
         <link rel="up" title="Advanced use" href="advanced.html"/>
         <link rel="next" title="Running boosted-frame simulations" href="boosted_frame.html"/>
         <link rel="prev" title="Profiling the code" href="profiling.html"/> 
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                0.9.0
+                0.9.1
               </div>
             
           
@@ -179,7 +179,9 @@ the same GPU, while the other GPUs will be left idle.</p>
 <p>Therefore, FBPIC provides the possibility to launch these different simulations
 as a single command with <code class="docutils literal notranslate"><span class="pre">mpirun</span></code>, whereby each MPI rank will perform a separate
 PIC simulation, and FBPIC will make sure that each simulation runs on a separate
-GPU.</p>
+GPU. This feature is activated by setting <code class="docutils literal notranslate"><span class="pre">use_all_mpi_ranks=False</span></code> in the
+<a class="reference internal" href="../api_reference/simulation.html#fbpic.main.Simulation" title="fbpic.main.Simulation"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Simulation</span></code></a> object, in order to instruct FBPIC to use only one MPI rank per
+simulation instead of <em>all</em> MPI ranks for a single simulation.</p>
 <p>Here is an example on how to structure the input script and specify the parameter
 to be varied between the separate simulations:
 <a class="reference download internal" href="../_downloads/parametric_script.py" download=""><code class="xref download docutils literal notranslate"><span class="pre">parametric_script.py</span></code></a></p>
@@ -229,7 +231,7 @@ to be varied between the separate simulations:
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.9.0',
+            VERSION:'0.9.1',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

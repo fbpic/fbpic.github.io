@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>The Simulation class &mdash; FBPIC 0.9.0 documentation</title>
+  <title>The Simulation class &mdash; FBPIC 0.9.1 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="FBPIC 0.9.0 documentation" href="../index.html"/>
+    <link rel="top" title="FBPIC 0.9.1 documentation" href="../index.html"/>
         <link rel="up" title="API reference" href="api_reference.html"/>
         <link rel="next" title="The Particles class" href="particles.html"/>
         <link rel="prev" title="API reference" href="api_reference.html"/> 
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                0.9.0
+                0.9.1
               </div>
             
           
@@ -181,10 +181,14 @@ species, and its method <a class="reference internal" href="#fbpic.main.Simulati
 <dt id="fbpic.main.Simulation">
 <em class="property">class </em><code class="descclassname">fbpic.main.</code><code class="descname">Simulation</code><span class="sig-paren">(</span><em>Nz</em>, <em>zmax</em>, <em>Nr</em>, <em>rmax</em>, <em>Nm</em>, <em>dt</em>, <em>p_zmin=-inf</em>, <em>p_zmax=inf</em>, <em>p_rmin=0</em>, <em>p_rmax=inf</em>, <em>p_nz=None</em>, <em>p_nr=None</em>, <em>p_nt=None</em>, <em>n_e=None</em>, <em>zmin=0.0</em>, <em>n_order=-1</em>, <em>dens_func=None</em>, <em>filter_currents=True</em>, <em>v_comoving=None</em>, <em>use_galilean=True</em>, <em>initialize_ions=False</em>, <em>use_cuda=False</em>, <em>n_guard=None</em>, <em>n_damp=64</em>, <em>exchange_period=None</em>, <em>current_correction='curl-free'</em>, <em>boundaries='periodic'</em>, <em>gamma_boost=None</em>, <em>use_all_mpi_ranks=True</em>, <em>particle_shape='linear'</em>, <em>verbose_level=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/main.html#Simulation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.main.Simulation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initializes a simulation.</p>
-<p>By default the simulation contains:
-- an electron species
-- (if <code class="docutils literal notranslate"><span class="pre">initialize_ions</span></code> is True) an ion species (Hydrogen 1+)
-These species are stored in the attribute <code class="docutils literal notranslate"><span class="pre">ptcl</span></code> of <code class="docutils literal notranslate"><span class="pre">Simulation</span></code>
+<p>By default the simulation contains:</p>
+<blockquote>
+<div><ul class="simple">
+<li>an electron species</li>
+<li>(if <code class="docutils literal notranslate"><span class="pre">initialize_ions</span></code> is True) an ion species (Hydrogen 1+)</li>
+</ul>
+</div></blockquote>
+<p>These species are stored in the attribute <code class="docutils literal notranslate"><span class="pre">ptcl</span></code> of <code class="docutils literal notranslate"><span class="pre">Simulation</span></code>
 (which is a Python list, containing the different species).</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -297,6 +301,13 @@ within this species (in an evenly-spaced manner).</p>
 as been passed to the <cite>Simulation</cite> object), all quantities that
 are explicitly mentioned to be in the lab frame below are
 automatically converted to the boosted frame.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">For the arguments below, it is recommended to have at least
+<code class="docutils literal notranslate"><span class="pre">p_nt</span> <span class="pre">=</span> <span class="pre">4*Nm</span></code>, i.e. the required number of macroparticles
+along <cite>theta</cite> (in order for the simulation to be properly resolved)
+increases with the number of azimuthal modes used.</p>
+</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -433,7 +444,7 @@ field push or not. (requires initialize_ions = True)</li>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.9.0',
+            VERSION:'0.9.1',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

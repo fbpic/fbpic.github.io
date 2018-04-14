@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Running boosted-frame simulations &mdash; FBPIC 0.9.0 documentation</title>
+  <title>Running boosted-frame simulations &mdash; FBPIC 0.9.1 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="FBPIC 0.9.0 documentation" href="../index.html"/>
+    <link rel="top" title="FBPIC 0.9.1 documentation" href="../index.html"/>
         <link rel="up" title="Advanced use" href="advanced.html"/>
         <link rel="prev" title="Performing parameter scans in parallel" href="parameter_scans.html"/> 
 
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.9.0
+                0.9.1
               </div>
             
           
@@ -229,12 +229,32 @@ paper on this technique</a>.</p>
 of this, and because of the larger cell size, <strong>each plasma macroparticle typically
 represents more physical particles</strong> in the boosted frame than in the lab frame
 (at least when keeping the same number of macroparticles per cell).</p>
-<p class="last">This implies that simulating <strong>self-injection</strong> in the boosted frame will
+<p>This implies that simulating <strong>self-injection</strong> in the boosted frame will
 result in less macroparticles in the injected beam than in the lab frame,
 and therefore <strong>less statistics</strong> when evaluating e.g. the beam emittance and charge.
 In extreme cases (when the number of physical particles per macroparticle is
 comparable to the total number of self-injected particles),
 self-injection may not occur at all in the boosted-frame simulation.</p>
+<p class="last">More generally, for simulations involving injection, it is good practice
+to occasionally compare the results with different <span class="math notranslate">\(\gamma_b\)</span>,
+in order to make sure that the simulation is properly converged.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p>In lab-frame simulations, the ions are essentially motionless and the
+current <span class="math notranslate">\(\boldsymbol{j}\)</span> that they produce is negligeable compared to
+that of the electrons. For this reason (and because the PIC algorithm
+essentially only uses the current <span class="math notranslate">\(\boldsymbol{j}\)</span> in order to update the
+fields: see <a class="reference internal" href="../overview.html"><span class="doc">Overview of the code</span></a>), the ions are often omitted from the simulation,
+in order to save computational time. (And in fact, the argument
+<code class="docutils literal notranslate"><span class="pre">initialize_ions</span></code> in the <a class="reference internal" href="../api_reference/simulation.html#fbpic.main.Simulation" title="fbpic.main.Simulation"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Simulation</span></code></a> object is set to
+<code class="docutils literal notranslate"><span class="pre">False</span></code> by default.)</p>
+<p class="last">However, this is no longer valid in boosted-frame simulation, because
+in this case the ions move with relativistic speed and do produce a
+non-negligible current <span class="math notranslate">\(\boldsymbol{j}\)</span>. Therefore, <strong>in boosted-frame
+simulations, the ions are required</strong>. Make sure to include them, either
+by setting the flag <code class="docutils literal notranslate"><span class="pre">initialize_ions=True</span></code> in the <a class="reference internal" href="../api_reference/simulation.html#fbpic.main.Simulation" title="fbpic.main.Simulation"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Simulation</span></code></a>
+object, or by adding them separately with <a class="reference internal" href="../api_reference/simulation.html#fbpic.main.Simulation.add_new_species" title="fbpic.main.Simulation.add_new_species"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">add_new_species</span></code></a>.</p>
 </div>
 </div>
 <div class="section" id="converting-input-parameters-from-the-lab-frame-to-the-boosted-frame">
@@ -360,7 +380,7 @@ instead the user is responsible for ensuring this.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.9.0',
+            VERSION:'0.9.1',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fbpic.openpmd_diag.checkpoint_restart &mdash; FBPIC 0.9.0 documentation</title>
+  <title>fbpic.openpmd_diag.checkpoint_restart &mdash; FBPIC 0.9.1 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="FBPIC 0.9.0 documentation" href="../../../index.html"/>
+    <link rel="top" title="FBPIC 0.9.1 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -65,7 +65,7 @@
             
             
               <div class="version">
-                0.9.0
+                0.9.1
               </div>
             
           
@@ -170,6 +170,7 @@
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy.constants</span> <span class="k">import</span> <span class="n">e</span>
 <span class="kn">from</span> <span class="nn">.field_diag</span> <span class="k">import</span> <span class="n">FieldDiagnostic</span>
 <span class="kn">from</span> <span class="nn">.particle_diag</span> <span class="k">import</span> <span class="n">ParticleDiagnostic</span>
 <span class="kn">from</span> <span class="nn">fbpic.utils.mpi</span> <span class="k">import</span> <span class="n">comm</span>
@@ -434,6 +435,16 @@
         <span class="n">species</span><span class="o">.</span><span class="n">track</span><span class="p">(</span> <span class="n">comm</span> <span class="p">)</span>
         <span class="n">species</span><span class="o">.</span><span class="n">tracker</span><span class="o">.</span><span class="n">overwrite_ids</span><span class="p">(</span> <span class="n">pid</span><span class="p">,</span> <span class="n">comm</span> <span class="p">)</span>
 
+    <span class="c1"># If the species is ionizable, set the proper arrays</span>
+    <span class="k">if</span> <span class="n">species</span><span class="o">.</span><span class="n">ionizer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Reallocate the ionization_level, and reset it with the right value</span>
+        <span class="n">species</span><span class="o">.</span><span class="n">ionizer</span><span class="o">.</span><span class="n">ionization_level</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span> <span class="n">Ntot</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint64</span> <span class="p">)</span>
+        <span class="n">q</span><span class="p">,</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">get_particle</span><span class="p">(</span> <span class="p">[</span><span class="s1">&#39;charge&#39;</span><span class="p">],</span> <span class="n">iteration</span><span class="o">=</span><span class="n">iteration</span><span class="p">,</span> <span class="n">species</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">species</span><span class="o">.</span><span class="n">ionizer</span><span class="o">.</span><span class="n">ionization_level</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span> <span class="n">q</span><span class="o">/</span><span class="n">e</span> <span class="p">)</span> <span class="p">)</span>
+        <span class="c1"># Set the auxiliary array</span>
+        <span class="n">species</span><span class="o">.</span><span class="n">ionizer</span><span class="o">.</span><span class="n">w_times_level</span> <span class="o">=</span> \
+                    <span class="n">species</span><span class="o">.</span><span class="n">w</span> <span class="o">*</span> <span class="n">species</span><span class="o">.</span><span class="n">ionizer</span><span class="o">.</span><span class="n">ionization_level</span>
+
     <span class="c1"># Reset the injection positions (for continuous injection)</span>
     <span class="k">if</span> <span class="n">species</span><span class="o">.</span><span class="n">continuous_injection</span><span class="p">:</span>
         <span class="n">species</span><span class="o">.</span><span class="n">injector</span><span class="o">.</span><span class="n">reset_injection_positions</span><span class="p">()</span>
@@ -491,7 +502,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.9.0',
+            VERSION:'0.9.1',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

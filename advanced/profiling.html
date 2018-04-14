@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Profiling the code &mdash; FBPIC 0.9.0 documentation</title>
+  <title>Profiling the code &mdash; FBPIC 0.9.1 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="FBPIC 0.9.0 documentation" href="../index.html"/>
+    <link rel="top" title="FBPIC 0.9.1 documentation" href="../index.html"/>
         <link rel="up" title="Advanced use" href="advanced.html"/>
         <link rel="next" title="Performing parameter scans in parallel" href="parameter_scans.html"/>
         <link rel="prev" title="Advanced use" href="advanced.html"/> 
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                0.9.0
+                0.9.1
               </div>
             
           
@@ -108,7 +108,11 @@
 <li class="toctree-l4"><a class="reference internal" href="#id2">Using a visual profiler</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#profiling-mpi-simulations-cpu-side-only">Profiling MPI simulations (CPU-side only)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#profiling-mpi-simulations">Profiling MPI simulations</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#profiling-the-cpu-code">Profiling the CPU code</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#profiling-the-gpu-code">Profiling the GPU code</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="parameter_scans.html">Performing parameter scans in parallel</a></li>
@@ -262,13 +266,15 @@ on a small number of PIC iterations (&lt;1000).</p>
 </div>
 </div>
 </div>
-<div class="section" id="profiling-mpi-simulations-cpu-side-only">
-<h2>Profiling MPI simulations (CPU-side only)<a class="headerlink" href="#profiling-mpi-simulations-cpu-side-only" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="profiling-mpi-simulations">
+<h2>Profiling MPI simulations<a class="headerlink" href="#profiling-mpi-simulations" title="Permalink to this headline">¶</a></h2>
 <p>One way to profile MPI simulations is to write <strong>one file per MPI rank</strong>. In
 this case, each file will contain only the profiling data of the corresponding
 MPI process.</p>
-<p>There is no simple way to create one file per MPI rank, from the command line.
-Instead, you need to <strong>modify your FBPIC script</strong>, in the following way:</p>
+<div class="section" id="profiling-the-cpu-code">
+<h3>Profiling the CPU code<a class="headerlink" href="#profiling-the-cpu-code" title="Permalink to this headline">¶</a></h3>
+<p>One way to create one file per MPI rank is to <strong>modify your FBPIC script</strong>,
+in the following way:</p>
 <ul>
 <li><p class="first">Add the following lines at the beginning of the file:</p>
 <blockquote>
@@ -314,6 +320,27 @@ Instead, you need to <strong>modify your FBPIC script</strong>, in the following
 </pre></div>
 </div>
 </div></blockquote>
+</div>
+<div class="section" id="profiling-the-gpu-code">
+<h3>Profiling the GPU code<a class="headerlink" href="#profiling-the-gpu-code" title="Permalink to this headline">¶</a></h3>
+<p>Use the following command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mpirun</span> <span class="o">-</span><span class="n">np</span> <span class="mi">2</span> <span class="n">nvprof</span> <span class="o">-</span><span class="n">o</span> <span class="n">gpu_</span><span class="o">%</span><span class="n">q</span><span class="p">{</span><span class="o">&lt;</span><span class="n">RANK</span><span class="o">&gt;</span><span class="p">}</span><span class="o">.</span><span class="n">prof</span> <span class="n">python</span> <span class="n">fbpic_script</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<p>where <code class="docutils literal notranslate"><span class="pre">&lt;RANK&gt;</span></code> should be replaced by the following name depending on
+your MPI distribution:</p>
+<blockquote>
+<div><ul class="simple">
+<li>For openmpi: <code class="docutils literal notranslate"><span class="pre">OMPI_COMM_WORLD_RANK</span></code></li>
+<li>For mpich: <code class="docutils literal notranslate"><span class="pre">PMI_RANK</span></code></li>
+</ul>
+</div></blockquote>
+<p>(If you are unsure which name to use, type <code class="docutils literal notranslate"><span class="pre">mpirun</span> <span class="pre">-np</span> <span class="pre">2</span> <span class="pre">printenv</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">RANK</span></code>.)</p>
+<p><code class="docutils literal notranslate"><span class="pre">nvprof</span></code> will then create one profile file per MPI rank. You can load these
+files on the same timeline within <code class="docutils literal notranslate"><span class="pre">nvvp</span></code> by clicking
+<code class="docutils literal notranslate"><span class="pre">File</span> <span class="pre">&gt;</span> <span class="pre">Import</span> <span class="pre">&gt;</span> <span class="pre">Nvprof</span> <span class="pre">&gt;</span> <span class="pre">Multiple</span> <span class="pre">processes</span> <span class="pre">&gt;</span> <span class="pre">Browse</span></code>. For more information,
+see <a class="reference external" href="https://devblogs.nvidia.com/cuda-pro-tip-profiling-mpi-applications/">this page</a>.</p>
+</div>
 </div>
 </div>
 
@@ -361,7 +388,7 @@ Instead, you need to <strong>modify your FBPIC script</strong>, in the following
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.9.0',
+            VERSION:'0.9.1',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

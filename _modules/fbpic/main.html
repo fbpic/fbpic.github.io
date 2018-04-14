@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fbpic.main &mdash; FBPIC 0.9.0 documentation</title>
+  <title>fbpic.main &mdash; FBPIC 0.9.1 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="FBPIC 0.9.0 documentation" href="../../index.html"/>
+    <link rel="top" title="FBPIC 0.9.1 documentation" href="../../index.html"/>
         <link rel="up" title="Module code" href="../index.html"/> 
 
   
@@ -65,7 +65,7 @@
             
             
               <div class="version">
-                0.9.0
+                0.9.1
               </div>
             
           
@@ -218,8 +218,10 @@
 <span class="sd">        Initializes a simulation.</span>
 
 <span class="sd">        By default the simulation contains:</span>
-<span class="sd">        - an electron species</span>
-<span class="sd">        - (if ``initialize_ions`` is True) an ion species (Hydrogen 1+)</span>
+
+<span class="sd">            - an electron species</span>
+<span class="sd">            - (if ``initialize_ions`` is True) an ion species (Hydrogen 1+)</span>
+
 <span class="sd">        These species are stored in the attribute ``ptcl`` of ``Simulation``</span>
 <span class="sd">        (which is a Python list, containing the different species).</span>
 
@@ -381,8 +383,8 @@
 
         <span class="c1"># Initialize the boundary communicator</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">comm</span> <span class="o">=</span> <span class="n">BoundaryCommunicator</span><span class="p">(</span> <span class="n">Nz</span><span class="p">,</span> <span class="n">zmin</span><span class="p">,</span> <span class="n">zmax</span><span class="p">,</span> <span class="n">Nr</span><span class="p">,</span> <span class="n">rmax</span><span class="p">,</span> <span class="n">Nm</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span>
-            <span class="n">boundaries</span><span class="p">,</span> <span class="n">n_order</span><span class="p">,</span> <span class="n">n_guard</span><span class="p">,</span> <span class="n">n_damp</span><span class="p">,</span> <span class="n">exchange_period</span><span class="p">,</span>
-            <span class="n">use_all_mpi_ranks</span> <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">v_comoving</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_galilean</span><span class="p">,</span> <span class="n">boundaries</span><span class="p">,</span> <span class="n">n_order</span><span class="p">,</span>
+            <span class="n">n_guard</span><span class="p">,</span> <span class="n">n_damp</span><span class="p">,</span> <span class="n">exchange_period</span><span class="p">,</span> <span class="n">use_all_mpi_ranks</span> <span class="p">)</span>
         <span class="c1"># Modify domain region</span>
         <span class="n">zmin</span><span class="p">,</span> <span class="n">zmax</span><span class="p">,</span> <span class="n">Nz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">divide_into_domain</span><span class="p">()</span>
         <span class="c1"># Initialize the field structure</span>
@@ -391,7 +393,9 @@
                     <span class="n">v_comoving</span><span class="o">=</span><span class="n">v_comoving</span><span class="p">,</span>
                     <span class="n">use_galilean</span><span class="o">=</span><span class="n">use_galilean</span><span class="p">,</span>
                     <span class="n">current_correction</span><span class="o">=</span><span class="n">current_correction</span><span class="p">,</span>
-                    <span class="n">use_cuda</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">use_cuda</span> <span class="p">)</span>
+                    <span class="n">use_cuda</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">use_cuda</span><span class="p">,</span>
+                    <span class="c1"># Only create threading buffers when running on CPU</span>
+                    <span class="n">create_threading_buffers</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">use_cuda</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">)</span> <span class="p">)</span>
 
         <span class="c1"># Initialize the electrons and the ions</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">grid_shape</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">Ez</span><span class="o">.</span><span class="n">shape</span>
@@ -693,6 +697,8 @@
             <span class="c1"># Deposit the charge of the virtual particles in the antenna</span>
             <span class="k">for</span> <span class="n">antenna</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">laser_antennas</span><span class="p">:</span>
                 <span class="n">antenna</span><span class="o">.</span><span class="n">deposit</span><span class="p">(</span> <span class="n">fld</span><span class="p">,</span> <span class="s1">&#39;rho&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span> <span class="p">)</span>
+            <span class="c1"># Sum contribution from each CPU threads (skipped on GPU)</span>
+            <span class="n">fld</span><span class="o">.</span><span class="n">sum_reduce_deposition_array</span><span class="p">(</span><span class="s1">&#39;rho&#39;</span><span class="p">)</span>
             <span class="c1"># Divide by cell volume</span>
             <span class="n">fld</span><span class="o">.</span><span class="n">divide_by_volume</span><span class="p">(</span><span class="s1">&#39;rho&#39;</span><span class="p">)</span>
             <span class="c1"># Exchange guard cells if requested by the user</span>
@@ -708,6 +714,8 @@
             <span class="c1"># Deposit the current of the virtual particles in the antenna</span>
             <span class="k">for</span> <span class="n">antenna</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">laser_antennas</span><span class="p">:</span>
                 <span class="n">antenna</span><span class="o">.</span><span class="n">deposit</span><span class="p">(</span> <span class="n">fld</span><span class="p">,</span> <span class="s1">&#39;J&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span> <span class="p">)</span>
+            <span class="c1"># Sum contribution from each CPU threads (skipped on GPU)</span>
+            <span class="n">fld</span><span class="o">.</span><span class="n">sum_reduce_deposition_array</span><span class="p">(</span><span class="s1">&#39;J&#39;</span><span class="p">)</span>
             <span class="c1"># Divide by cell volume</span>
             <span class="n">fld</span><span class="o">.</span><span class="n">divide_by_volume</span><span class="p">(</span><span class="s1">&#39;J&#39;</span><span class="p">)</span>
             <span class="c1"># Exchange guard cells if requested by the user</span>
@@ -808,6 +816,13 @@
 <span class="sd">        as been passed to the `Simulation` object), all quantities that</span>
 <span class="sd">        are explicitly mentioned to be in the lab frame below are</span>
 <span class="sd">        automatically converted to the boosted frame.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            For the arguments below, it is recommended to have at least</span>
+<span class="sd">            ``p_nt = 4*Nm``, i.e. the required number of macroparticles</span>
+<span class="sd">            along `theta` (in order for the simulation to be properly resolved)</span>
+<span class="sd">            increases with the number of azimuthal modes used.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1041,7 +1056,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.9.0',
+            VERSION:'0.9.1',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
