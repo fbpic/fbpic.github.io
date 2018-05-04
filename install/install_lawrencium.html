@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Installation on Lawrencium (LBNL) &mdash; FBPIC 0.9.1 documentation</title>
+  <title>Installation on Lawrencium (LBNL) &mdash; FBPIC 0.9.2 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="FBPIC 0.9.1 documentation" href="../index.html"/>
+    <link rel="top" title="FBPIC 0.9.2 documentation" href="../index.html"/>
         <link rel="up" title="Installation" href="installation.html"/>
         <link rel="next" title="Installation on Cori and Edison (NERSC)" href="install_cori_edison.html"/>
         <link rel="prev" title="Installation on JURECA (JSC)" href="install_jureca.html"/> 
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                0.9.1
+                0.9.2
               </div>
             
           
@@ -195,7 +195,7 @@ is a local cluster at the <a class="reference external" href="http://www.lbl.gov
 <h2>Connecting to Lawrencium<a class="headerlink" href="#connecting-to-lawrencium" title="Permalink to this headline">¶</a></h2>
 <p>Lawrencium uses a one-time password (OTP) system. Before being able to
 connect to Lawrencium via ssh, you need to configure an OTP Token, using
-<a class="reference external" href="https://commons.lbl.gov/display/itfaq/Installing+and+Configuring+the+OTP+Token">these
+<a class="reference external" href="https://sites.google.com/a/lbl.gov/high-performance-computing-services-group/getting-started/new-user-information">these
 instructions</a>.</p>
 <p>Once your OTP token is configured, you can connect by using</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ssh</span> <span class="o">&lt;</span><span class="n">username</span><span class="o">&gt;</span><span class="nd">@lrc</span><span class="o">-</span><span class="n">login</span><span class="o">.</span><span class="n">lbl</span><span class="o">.</span><span class="n">gov</span>
@@ -233,7 +233,7 @@ below:</p>
 <li><p class="first">Install the dependencies of <code class="docutils literal notranslate"><span class="pre">fbpic</span></code></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">numba</span> <span class="n">scipy</span> <span class="n">h5py</span> <span class="n">mkl</span>
 <span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">mpi4py</span>
-<span class="n">conda</span> <span class="n">install</span> <span class="n">pyculib</span>
+<span class="n">conda</span> <span class="n">install</span> <span class="n">cudatoolkit</span><span class="o">=</span><span class="mi">8</span> <span class="n">pyculib</span>
 </pre></div>
 </div>
 </li>
@@ -280,7 +280,7 @@ following text (and replace the bracketed text by the proper values).</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
 <span class="c1">#SBATCH -J my_job</span>
 <span class="c1">#SBATCH --partition=lr_manycore</span>
-<span class="c1">#SBATCH --constraint lr_kepler</span>
+<span class="c1">#SBATCH --constraint &lt;gpuConstraint&gt;</span>
 <span class="c1">#SBATCH --time &lt;requestedTime&gt;</span>
 <span class="c1">#SBATCH --nodes 1</span>
 <span class="c1">#SBATCH --qos lr_normal</span>
@@ -288,6 +288,16 @@ following text (and replace the bracketed text by the proper values).</p>
 <span class="n">python</span> <span class="o">&lt;</span><span class="n">fbpic_script</span><span class="o">.</span><span class="n">py</span><span class="o">&gt;</span>
 </pre></div>
 </div>
+<p>where <code class="docutils literal notranslate"><span class="pre">`&lt;gpuConstraint&gt;</span></code> should be either:</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">lr_k20</span></code> for a node with a single K20 GPU</li>
+<li><code class="docutils literal notranslate"><span class="pre">lr_k80</span></code> for a node with four K80 GPUs</li>
+<li><code class="docutils literal notranslate"><span class="pre">lr_pascal</span></code> for a node with four GTX 1080Ti GPUs</li>
+</ul>
+</div></blockquote>
+<p>for more information on the available nodes, see
+<a class="reference external" href="https://sites.google.com/a/lbl.gov/high-performance-computing-services-group/lbnl-supercluster/lawrencium">this page</a>.</p>
 <p>Then run:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sbatch</span> <span class="n">submission_file</span>
 </pre></div>
@@ -362,7 +372,7 @@ computer.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.9.1',
+            VERSION:'0.9.2',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
