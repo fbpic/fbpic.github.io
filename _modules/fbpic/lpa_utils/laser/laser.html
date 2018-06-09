@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fbpic.lpa_utils.laser.laser &mdash; FBPIC 0.9.2 documentation</title>
+  <title>fbpic.lpa_utils.laser.laser &mdash; FBPIC 0.9.3 documentation</title>
   
 
   
@@ -24,26 +24,17 @@
 
   
 
-  
-  
-    <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="index" title="Index"
-              href="../../../../genindex.html"/>
-        <link rel="search" title="Search" href="../../../../search.html"/>
-    <link rel="top" title="FBPIC 0.9.2 documentation" href="../../../../index.html"/>
-        <link rel="up" title="Module code" href="../../../index.html"/> 
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
 
   
   <script src="../../../../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
@@ -65,7 +56,7 @@
             
             
               <div class="version">
-                0.9.2
+                0.9.3
               </div>
             
           
@@ -106,7 +97,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+      <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../../../index.html">FBPIC</a>
@@ -114,9 +105,10 @@
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
 
@@ -146,8 +138,6 @@
     
       <li class="wy-breadcrumbs-aside">
         
-            
-        
       </li>
     
   </ul>
@@ -173,7 +163,7 @@
 <span class="kn">from</span> <span class="nn">.antenna_injection</span> <span class="k">import</span> <span class="n">LaserAntenna</span>
 
 <div class="viewcode-block" id="add_laser_pulse"><a class="viewcode-back" href="../../../../api_reference/lpa_utilities/laser.html#fbpic.lpa_utils.laser.add_laser_pulse">[docs]</a><span class="k">def</span> <span class="nf">add_laser_pulse</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">laser_profile</span><span class="p">,</span> <span class="n">gamma_boost</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                    <span class="n">method</span><span class="o">=</span><span class="s1">&#39;direct&#39;</span><span class="p">,</span> <span class="n">z0_antenna</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fw_propagating</span><span class="o">=</span><span class="kc">True</span> <span class="p">):</span>
+                <span class="n">method</span><span class="o">=</span><span class="s1">&#39;direct&#39;</span><span class="p">,</span> <span class="n">z0_antenna</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">v_antenna</span><span class="o">=</span><span class="mf">0.</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Introduce a laser pulse in the simulation.</span>
 
@@ -202,13 +192,13 @@
 <span class="sd">        (method= ``direct``) or through a laser antenna (method= ``antenna``).</span>
 <span class="sd">        Default: ``direct``</span>
 
-<span class="sd">    fw_propagating: bool, optional</span>
-<span class="sd">       Only for the ``direct`` method: Whether the laser is propagating</span>
-<span class="sd">       in the forward or backward direction.</span>
-
 <span class="sd">    z0_antenna: float, optional (meters)</span>
 <span class="sd">       Required for the ``antenna`` method: initial position</span>
 <span class="sd">       (in the lab frame) of the antenna.</span>
+
+<span class="sd">    v_antenna: float, optional (meters per second)</span>
+<span class="sd">       Only used for the ``antenna`` method: velocity of the antenna</span>
+<span class="sd">       (in the lab frame)</span>
 
 <span class="sd">    Example</span>
 <span class="sd">    -------</span>
@@ -225,15 +215,19 @@
 <span class="sd">        add_laser_pulse( sim, profile )</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Prepare the boosted frame converter</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">gamma_boost</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">fw_propagating</span><span class="o">==</span><span class="kc">True</span><span class="p">):</span>
-        <span class="n">boost</span> <span class="o">=</span> <span class="n">BoostConverter</span><span class="p">(</span> <span class="n">gamma_boost</span> <span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">gamma_boost</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">gamma_boost</span> <span class="o">!=</span> <span class="mf">1.</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">laser_profile</span><span class="o">.</span><span class="n">propag_direction</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">boost</span> <span class="o">=</span> <span class="n">BoostConverter</span><span class="p">(</span> <span class="n">gamma_boost</span> <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;For now, backward-propagating lasers &#39;</span>
+                         <span class="s1">&#39;cannot be used in the boosted-frame.&#39;</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">boost</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="c1"># Handle the introduction method of the laser</span>
     <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;direct&#39;</span><span class="p">:</span>
         <span class="c1"># Directly add the laser to the interpolation object</span>
-        <span class="n">add_laser_direct</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">laser_profile</span><span class="p">,</span> <span class="n">fw_propagating</span><span class="p">,</span> <span class="n">boost</span> <span class="p">)</span>
+        <span class="n">add_laser_direct</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">laser_profile</span><span class="p">,</span> <span class="n">boost</span> <span class="p">)</span>
 
     <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;antenna&#39;</span><span class="p">:</span>
         <span class="c1"># Add a laser antenna to the simulation object</span>
@@ -243,7 +237,8 @@
         <span class="n">Nr</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">Nr</span>
         <span class="n">Nm</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">Nm</span>
         <span class="n">sim</span><span class="o">.</span><span class="n">laser_antennas</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-            <span class="n">LaserAntenna</span><span class="p">(</span> <span class="n">laser_profile</span><span class="p">,</span> <span class="n">z0_antenna</span><span class="p">,</span> <span class="n">dr</span><span class="p">,</span> <span class="n">Nr</span><span class="p">,</span> <span class="n">Nm</span><span class="p">,</span> <span class="n">boost</span> <span class="p">))</span>
+            <span class="n">LaserAntenna</span><span class="p">(</span> <span class="n">laser_profile</span><span class="p">,</span> <span class="n">z0_antenna</span><span class="p">,</span> <span class="n">v_antenna</span><span class="p">,</span>
+                            <span class="n">dr</span><span class="p">,</span> <span class="n">Nr</span><span class="p">,</span> <span class="n">Nm</span><span class="p">,</span> <span class="n">boost</span> <span class="p">)</span> <span class="p">)</span>
 
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Unknown laser method: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span><span class="n">method</span><span class="p">)</span></div>
@@ -254,7 +249,8 @@
 <div class="viewcode-block" id="add_laser"><a class="viewcode-back" href="../../../../api_reference/lpa_utilities/laser.html#fbpic.lpa_utils.laser.add_laser">[docs]</a><span class="k">def</span> <span class="nf">add_laser</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">a0</span><span class="p">,</span> <span class="n">w0</span><span class="p">,</span> <span class="n">ctau</span><span class="p">,</span> <span class="n">z0</span><span class="p">,</span> <span class="n">zf</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lambda0</span><span class="o">=</span><span class="mf">0.8e-6</span><span class="p">,</span>
                <span class="n">cep_phase</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">phi2_chirp</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">theta_pol</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
                <span class="n">gamma_boost</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;direct&#39;</span><span class="p">,</span>
-               <span class="n">fw_propagating</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">update_spectral</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">z0_antenna</span><span class="o">=</span><span class="kc">None</span> <span class="p">):</span>
+               <span class="n">fw_propagating</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">update_spectral</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+               <span class="n">z0_antenna</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">v_antenna</span><span class="o">=</span><span class="mf">0.</span> <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Introduce a linearly-polarized, Gaussian laser in the simulation.</span>
 
@@ -338,8 +334,7 @@
 <span class="sd">        or through a laser antenna (method=`antenna`)</span>
 
 <span class="sd">    fw_propagating: bool, optional</span>
-<span class="sd">       Only for the `direct` method: Wether the laser is propagating in the</span>
-<span class="sd">       forward or backward direction.</span>
+<span class="sd">       Whether the laser is propagating in the forward or backward direction.</span>
 
 <span class="sd">    update_spectral: bool, optional</span>
 <span class="sd">       Only for the `direct` method: Wether to update the fields in spectral</span>
@@ -348,21 +343,30 @@
 <span class="sd">    z0_antenna: float, optional (meters)</span>
 <span class="sd">       Only for the `antenna` method: initial position (in the lab frame)</span>
 <span class="sd">       of the antenna. If not provided, then the z0_antenna is set to zf.</span>
+
+<span class="sd">    v_antenna: float, optional (meters per second)</span>
+<span class="sd">       Only used for the ``antenna`` method: velocity of the antenna</span>
+<span class="sd">       (in the lab frame)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Pick the propagation direction</span>
+    <span class="k">if</span> <span class="n">fw_propagating</span><span class="p">:</span>
+        <span class="n">propagation_direction</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">propagation_direction</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+
     <span class="c1"># Create a Gaussian laser profile</span>
     <span class="n">laser_profile</span> <span class="o">=</span> <span class="n">GaussianLaser</span><span class="p">(</span> <span class="n">a0</span><span class="p">,</span> <span class="n">waist</span><span class="o">=</span><span class="n">w0</span><span class="p">,</span> <span class="n">tau</span><span class="o">=</span><span class="n">ctau</span><span class="o">/</span><span class="n">c</span><span class="p">,</span> <span class="n">z0</span><span class="o">=</span><span class="n">z0</span><span class="p">,</span>
         <span class="n">zf</span><span class="o">=</span><span class="n">zf</span><span class="p">,</span> <span class="n">theta_pol</span><span class="o">=</span><span class="n">theta_pol</span><span class="p">,</span> <span class="n">lambda0</span><span class="o">=</span><span class="n">lambda0</span><span class="p">,</span>
-        <span class="n">cep_phase</span><span class="o">=</span><span class="n">cep_phase</span><span class="p">,</span> <span class="n">phi2_chirp</span><span class="o">=</span><span class="n">phi2_chirp</span> <span class="p">)</span>
+        <span class="n">cep_phase</span><span class="o">=</span><span class="n">cep_phase</span><span class="p">,</span> <span class="n">phi2_chirp</span><span class="o">=</span><span class="n">phi2_chirp</span><span class="p">,</span>
+        <span class="n">propagation_direction</span><span class="o">=</span><span class="n">propagation_direction</span> <span class="p">)</span>
 
     <span class="c1"># Add it to the simulation</span>
     <span class="n">add_laser_pulse</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">laser_profile</span><span class="p">,</span> <span class="n">gamma_boost</span><span class="o">=</span><span class="n">gamma_boost</span><span class="p">,</span>
-        <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="n">z0_antenna</span><span class="o">=</span><span class="n">z0_antenna</span><span class="p">,</span> <span class="n">fw_propagating</span><span class="o">=</span><span class="n">fw_propagating</span> <span class="p">)</span></div>
+        <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="n">z0_antenna</span><span class="o">=</span><span class="n">z0_antenna</span><span class="p">,</span> <span class="n">v_antenna</span><span class="o">=</span><span class="n">v_antenna</span> <span class="p">)</span></div>
 </pre></div>
 
            </div>
-           <div class="articleComments">
-            
-           </div>
+           
           </div>
           <footer>
   
@@ -375,7 +379,7 @@
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -393,7 +397,8 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../../',
-            VERSION:'0.9.2',
+            VERSION:'0.9.3',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
@@ -407,19 +412,13 @@
 
   
 
-  
-  
-    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
-  
+  <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Laguerre-Gauss profile &mdash; FBPIC 0.9.2 documentation</title>
+  <title>Laguerre-Gauss profile &mdash; FBPIC 0.9.3 documentation</title>
   
 
   
@@ -24,28 +24,19 @@
 
   
 
-  
-  
-    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="index" title="Index"
-              href="../../../genindex.html"/>
-        <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="FBPIC 0.9.2 documentation" href="../../../index.html"/>
-        <link rel="up" title="Laser initialization" href="../laser.html"/>
-        <link rel="next" title="Donut-like Laguerre-Gauss profile" href="donut_laguerre.html"/>
-        <link rel="prev" title="Gaussian profile" href="gaussian.html"/> 
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Donut-like Laguerre-Gauss profile" href="donut_laguerre.html" />
+    <link rel="prev" title="Gaussian profile" href="gaussian.html" /> 
 
   
   <script src="../../../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
@@ -67,7 +58,7 @@
             
             
               <div class="version">
-                0.9.2
+                0.9.3
               </div>
             
           
@@ -126,7 +117,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+      <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../../index.html">FBPIC</a>
@@ -134,9 +125,10 @@
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
 
@@ -188,15 +180,15 @@
 <h1>Laguerre-Gauss profile<a class="headerlink" href="#laguerre-gauss-profile" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="fbpic.lpa_utils.laser.LaguerreGaussLaser">
-<em class="property">class </em><code class="descclassname">fbpic.lpa_utils.laser.</code><code class="descname">LaguerreGaussLaser</code><span class="sig-paren">(</span><em>p</em>, <em>m</em>, <em>a0</em>, <em>waist</em>, <em>tau</em>, <em>z0</em>, <em>zf=None</em>, <em>theta_pol=0.0</em>, <em>lambda0=8e-07</em>, <em>cep_phase=0.0</em>, <em>theta0=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/fbpic/lpa_utils/laser/laser_profiles.html#LaguerreGaussLaser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.laser.LaguerreGaussLaser" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">fbpic.lpa_utils.laser.</code><code class="descname">LaguerreGaussLaser</code><span class="sig-paren">(</span><em>p</em>, <em>m</em>, <em>a0</em>, <em>waist</em>, <em>tau</em>, <em>z0</em>, <em>zf=None</em>, <em>theta_pol=0.0</em>, <em>lambda0=8e-07</em>, <em>cep_phase=0.0</em>, <em>theta0=0.0</em>, <em>propagation_direction=1</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/fbpic/lpa_utils/laser/laser_profiles.html#LaguerreGaussLaser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.laser.LaguerreGaussLaser" title="Permalink to this definition">¶</a></dt>
 <dd><p>Define a linearly-polarized Laguerre-Gauss laser profile.</p>
 <p>Unlike the <a class="reference internal" href="donut_laguerre.html#fbpic.lpa_utils.laser.DonutLikeLaguerreGaussLaser" title="fbpic.lpa_utils.laser.DonutLikeLaguerreGaussLaser"><code class="xref any py py-class docutils literal notranslate"><span class="pre">DonutLikeLaguerreGaussLaser</span></code></a> profile, this
 profile has a phase which is independent of the azimuthal angle
-<span class="math notranslate">\(theta\)</span>, and an intensity profile which does depend on
-<span class="math notranslate">\(theta\)</span>.</p>
+<span class="math notranslate nohighlight">\(theta\)</span>, and an intensity profile which does depend on
+<span class="math notranslate nohighlight">\(theta\)</span>.</p>
 <p>More precisely, the electric field <strong>near the focal plane</strong>
 is given by:</p>
-<div class="math notranslate">
+<div class="math notranslate nohighlight">
 \[ \begin{align}\begin{aligned}E(\boldsymbol{x},t) = a_0\times E_0 \, f(r, \theta) \,
 \exp\left( -\frac{r^2}{w_0^2} - \frac{(z-z_0-ct)^2}{c^2\tau^2}
 \right) \cos[ k_0( z - z_0 - ct ) - \phi_{cep} ]\\\mathrm{with} \qquad f(r, \theta) =
@@ -204,9 +196,9 @@ is given by:</p>
 \left( \frac{\sqrt{2}r}{w_0} \right)^m
 L^m_p\left( \frac{2 r^2}{w_0^2} \right)
 \cos[ m(\theta - \theta_0)]\end{aligned}\end{align} \]</div>
-<p>where <span class="math notranslate">\(L^m_p\)</span> is a Laguerre polynomial,
-<span class="math notranslate">\(k_0 = 2\pi/\lambda_0\)</span> is the wavevector and where
-<span class="math notranslate">\(E_0 = m_e c^2 k_0 / q_e\)</span>.</p>
+<p>where <span class="math notranslate nohighlight">\(L^m_p\)</span> is a Laguerre polynomial,
+<span class="math notranslate nohighlight">\(k_0 = 2\pi/\lambda_0\)</span> is the wavevector and where
+<span class="math notranslate nohighlight">\(E_0 = m_e c^2 k_0 / q_e\)</span>.</p>
 <p>(For more info, see
 <a class="reference external" href="https://www.osapublishing.org/books/bookshelf/lasers.cfm">Siegman, Lasers (1986)</a>,
 Chapter 16: Wave optics and Gaussian beams)</p>
@@ -219,10 +211,10 @@ the code, when initializing the laser pulse away from the focal plane.</p>
 </div>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
-<p>The above formula depends on a parameter <span class="math notranslate">\(m\)</span>
+<p>The above formula depends on a parameter <span class="math notranslate nohighlight">\(m\)</span>
 (see documentation below). In order to be properly resolved by
-the simulation, a Laguerre-Gauss profile with a given <span class="math notranslate">\(m\)</span>
-requires the azimuthal modes from <span class="math notranslate">\(0\)</span> to <span class="math notranslate">\(m+1\)</span>.
+the simulation, a Laguerre-Gauss profile with a given <span class="math notranslate nohighlight">\(m\)</span>
+requires the azimuthal modes from <span class="math notranslate nohighlight">\(0\)</span> to <span class="math notranslate nohighlight">\(m+1\)</span>.
 (i.e. the number of required azimuthal modes is <code class="docutils literal notranslate"><span class="pre">Nm=m+2</span></code>)</p>
 <p class="last">The non-linear plasma response for this profile (e.g.
 wakefield driven by the ponderomotive force) may require
@@ -237,31 +229,34 @@ even more azimuthal modes.</p>
 the number of “rings” in the radial intensity profile of the laser.)</li>
 <li><strong>m</strong> (<em>int</em><em> (</em><em>positive</em><em>)</em>) – The azimuthal order of the pulse.
 (In the transverse plane, the field of the pulse varies as
-<span class="math notranslate">\(\cos[m(\theta-\theta_0)]\)</span>.)</li>
+<span class="math notranslate nohighlight">\(\cos[m(\theta-\theta_0)]\)</span>.)</li>
 <li><strong>a0</strong> (<em>float</em><em> (</em><em>dimensionless</em><em>)</em>) – The amplitude of the pulse, defined so that the total
 energy of the pulse is the same as that of a Gaussian pulse
-with the same <span class="math notranslate">\(a_0\)</span>, <span class="math notranslate">\(w_0\)</span> and <span class="math notranslate">\(\tau\)</span>.
+with the same <span class="math notranslate nohighlight">\(a_0\)</span>, <span class="math notranslate nohighlight">\(w_0\)</span> and <span class="math notranslate nohighlight">\(\tau\)</span>.
 (i.e. The energy of the pulse is independent of <code class="docutils literal notranslate"><span class="pre">p</span></code> and <code class="docutils literal notranslate"><span class="pre">m</span></code>.)</li>
-<li><strong>waist</strong> (<em>float</em><em> (</em><em>in meter</em><em>)</em>) – Laser waist at the focal plane, defined as <span class="math notranslate">\(w_0\)</span> in the
+<li><strong>waist</strong> (<em>float</em><em> (</em><em>in meter</em><em>)</em>) – Laser waist at the focal plane, defined as <span class="math notranslate nohighlight">\(w_0\)</span> in the
 above formula.</li>
 <li><strong>tau</strong> (<em>float</em><em> (</em><em>in second</em><em>)</em>) – The duration of the laser (in the lab frame),
-defined as <span class="math notranslate">\(\tau\)</span> in the above formula.</li>
+defined as <span class="math notranslate nohighlight">\(\tau\)</span> in the above formula.</li>
 <li><strong>z0</strong> (<em>float</em><em> (</em><em>in meter</em><em>)</em>) – The initial position of the centroid of the laser
-(in the lab frame), defined as <span class="math notranslate">\(z_0\)</span> in the above formula.</li>
+(in the lab frame), defined as <span class="math notranslate nohighlight">\(z_0\)</span> in the above formula.</li>
 <li><strong>zf</strong> (<em>float</em><em> (</em><em>in meter</em><em>)</em><em>, </em><em>optional</em>) – The position of the focal plane (in the lab frame).
 If <code class="docutils literal notranslate"><span class="pre">zf</span></code> is not provided, the code assumes that <code class="docutils literal notranslate"><span class="pre">zf=z0</span></code>, i.e.
 that the laser pulse is at the focal plane initially.</li>
 <li><strong>theta_pol</strong> (<em>float</em><em> (</em><em>in radian</em><em>)</em><em>, </em><em>optional</em>) – The angle of polarization with respect to the x axis.</li>
 <li><strong>lambda0</strong> (<em>float</em><em> (</em><em>in meter</em><em>)</em><em>, </em><em>optional</em>) – The wavelength of the laser (in the lab frame), defined as
-<span class="math notranslate">\(\lambda_0\)</span> in the above formula.
+<span class="math notranslate nohighlight">\(\lambda_0\)</span> in the above formula.
 Default: 0.8 microns (Ti:Sapph laser).</li>
-<li><strong>cep_phase</strong> (<em>float</em><em> (</em><em>in radian</em><em>)</em><em>, </em><em>optional</em>) – The Carrier Enveloppe Phase (CEP), defined as <span class="math notranslate">\(\phi_{cep}\)</span>
+<li><strong>cep_phase</strong> (<em>float</em><em> (</em><em>in radian</em><em>)</em><em>, </em><em>optional</em>) – The Carrier Enveloppe Phase (CEP), defined as <span class="math notranslate nohighlight">\(\phi_{cep}\)</span>
 in the above formula (i.e. the phase of the laser
 oscillation, at the position where the laser enveloppe is maximum)</li>
 <li><strong>theta0</strong> (<em>float</em><em> (</em><em>in radian</em><em>)</em><em>, </em><em>optional</em>) – The azimuthal position of (one of) the maxima of intensity, in the
 transverse plane.
 (In the transverse plane, the field of the pulse varies as
-<span class="math notranslate">\(\cos[m(\theta-\theta_0)]\)</span>.)</li>
+<span class="math notranslate nohighlight">\(\cos[m(\theta-\theta_0)]\)</span>.)</li>
+<li><strong>propagation_direction</strong> (<em>int</em><em>, </em><em>optional</em>) – Indicates in which direction the laser propagates.
+This should be either 1 (laser propagates towards positive z)
+or -1 (laser propagates towards negative z).</li>
 </ul>
 </td>
 </tr>
@@ -273,9 +268,7 @@ transverse plane.
 
 
            </div>
-           <div class="articleComments">
-            
-           </div>
+           
           </div>
           <footer>
   
@@ -297,7 +290,7 @@ transverse plane.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -315,7 +308,8 @@ transverse plane.
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.9.2',
+            VERSION:'0.9.3',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
@@ -329,19 +323,13 @@ transverse plane.
 
   
 
-  
-  
-    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
-  
+  <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

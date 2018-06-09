@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Flattened Gaussian profile &mdash; FBPIC 0.9.2 documentation</title>
+  <title>Flattened Gaussian profile &mdash; FBPIC 0.9.3 documentation</title>
   
 
   
@@ -24,28 +24,19 @@
 
   
 
-  
-  
-    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="index" title="Index"
-              href="../../../genindex.html"/>
-        <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="FBPIC 0.9.2 documentation" href="../../../index.html"/>
-        <link rel="up" title="Laser initialization" href="../laser.html"/>
-        <link rel="next" title="Beam initialization" href="../beam.html"/>
-        <link rel="prev" title="Donut-like Laguerre-Gauss profile" href="donut_laguerre.html"/> 
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Beam initialization" href="../beam.html" />
+    <link rel="prev" title="Donut-like Laguerre-Gauss profile" href="donut_laguerre.html" /> 
 
   
   <script src="../../../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
@@ -67,7 +58,7 @@
             
             
               <div class="version">
-                0.9.2
+                0.9.3
               </div>
             
           
@@ -126,7 +117,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+      <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../../index.html">FBPIC</a>
@@ -134,9 +125,10 @@
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
 
@@ -188,7 +180,7 @@
 <h1>Flattened Gaussian profile<a class="headerlink" href="#flattened-gaussian-profile" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="fbpic.lpa_utils.laser.FlattenedGaussianLaser">
-<em class="property">class </em><code class="descclassname">fbpic.lpa_utils.laser.</code><code class="descname">FlattenedGaussianLaser</code><span class="sig-paren">(</span><em>a0</em>, <em>w0</em>, <em>tau</em>, <em>z0</em>, <em>N=6</em>, <em>zf=None</em>, <em>theta_pol=0.0</em>, <em>lambda0=8e-07</em>, <em>cep_phase=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/fbpic/lpa_utils/laser/laser_profiles.html#FlattenedGaussianLaser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.laser.FlattenedGaussianLaser" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">fbpic.lpa_utils.laser.</code><code class="descname">FlattenedGaussianLaser</code><span class="sig-paren">(</span><em>a0</em>, <em>w0</em>, <em>tau</em>, <em>z0</em>, <em>N=6</em>, <em>zf=None</em>, <em>theta_pol=0.0</em>, <em>lambda0=8e-07</em>, <em>cep_phase=0.0</em>, <em>propagation_direction=1</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/fbpic/lpa_utils/laser/laser_profiles.html#FlattenedGaussianLaser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.laser.FlattenedGaussianLaser" title="Permalink to this definition">¶</a></dt>
 <dd><p>Define a linearly-polarized laser such that the transverse intensity
 profile is a flattened Gaussian <strong>far from focus</strong>, and a distribution
 with rings <strong>in the focal plane</strong>. (See <a class="reference external" href="http://doi.org/10.1080/09500349708232927">Santarsiero et al., J.
@@ -197,23 +189,23 @@ Modern Optics, 1997</a>)</p>
 flatness of the transverse profile <strong>far from focus</strong>,
 and increases the number of rings <strong>in the focal plane</strong>.</p>
 <p>More precisely, the expression <strong>in the focal plane</strong> uses the
-Laguerre polynomials <span class="math notranslate">\(L^0_n\)</span>, and reads:</p>
-<div class="math notranslate">
+Laguerre polynomials <span class="math notranslate nohighlight">\(L^0_n\)</span>, and reads:</p>
+<div class="math notranslate nohighlight">
 \[ \begin{align}\begin{aligned}E(\boldsymbol{x},t)\propto
 \exp\left(-\frac{r^2}{(N+1)w_0^2}\right)
 \sum_{n=0}^N c'_n L^0_n\left(\frac{2\,r^2}{(N+1)w_0^2}\right)\\\mathrm{with} \qquad c'_n = \sum_{m=n}^{N}\frac{1}{2^m}\binom{m}{n}\end{aligned}\end{align} \]</div>
 <ul class="simple">
-<li>For <span class="math notranslate">\(N=0\)</span>, this is a Gaussian profile: <span class="math notranslate">\(E\propto\exp\left(-\frac{r^2}{w_0^2}\right)\)</span>.</li>
-<li>For <span class="math notranslate">\(N\rightarrow\infty\)</span>, this is a Jinc profile: <span class="math notranslate">\(E\propto \frac{J_1(r/w_0)}{r/w_0}\)</span>.</li>
+<li>For <span class="math notranslate nohighlight">\(N=0\)</span>, this is a Gaussian profile: <span class="math notranslate nohighlight">\(E\propto\exp\left(-\frac{r^2}{w_0^2}\right)\)</span>.</li>
+<li>For <span class="math notranslate nohighlight">\(N\rightarrow\infty\)</span>, this is a Jinc profile: <span class="math notranslate nohighlight">\(E\propto \frac{J_1(r/w_0)}{r/w_0}\)</span>.</li>
 </ul>
 <p>The expression <strong>far from focus</strong> is</p>
-<div class="math notranslate">
+<div class="math notranslate nohighlight">
 \[ \begin{align}\begin{aligned}E(\boldsymbol{x},t)\propto
 \exp\left(-\frac{(N+1)r^2}{w(z)^2}\right)
 \sum_{n=0}^N \frac{1}{n!}\left(\frac{(N+1)\,r^2}{w(z)^2}\right)^n\\\mathrm{with} \qquad w(z) = \frac{\lambda_0}{\pi w_0}|z-z_{foc}|\end{aligned}\end{align} \]</div>
 <ul class="simple">
-<li>For <span class="math notranslate">\(N=0\)</span>, this is a Gaussian profile: <span class="math notranslate">\(E\propto\exp\left(-\frac{r^2}{w_(z)^2}\right)\)</span>.</li>
-<li>For <span class="math notranslate">\(N\rightarrow\infty\)</span>, this is a flat profile: <span class="math notranslate">\(E\propto \Theta(w(z)-r)\)</span>.</li>
+<li>For <span class="math notranslate nohighlight">\(N=0\)</span>, this is a Gaussian profile: <span class="math notranslate nohighlight">\(E\propto\exp\left(-\frac{r^2}{w_(z)^2}\right)\)</span>.</li>
+<li>For <span class="math notranslate nohighlight">\(N\rightarrow\infty\)</span>, this is a flat profile: <span class="math notranslate nohighlight">\(E\propto \Theta(w(z)-r)\)</span>.</li>
 </ul>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -221,7 +213,7 @@ Laguerre polynomials <span class="math notranslate">\(L^0_n\)</span>, and reads:
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>a0</strong> (<em>float</em><em> (</em><em>dimensionless</em><em>)</em>) – The peak normalized vector potential at the focal plane.</li>
-<li><strong>w0</strong> (<em>float</em><em> (</em><em>in meter</em><em>)</em>) – Laser spot size in the focal plane, defined as <span class="math notranslate">\(w_0\)</span> in the
+<li><strong>w0</strong> (<em>float</em><em> (</em><em>in meter</em><em>)</em>) – Laser spot size in the focal plane, defined as <span class="math notranslate nohighlight">\(w_0\)</span> in the
 above formula.</li>
 <li><strong>tau</strong> (<em>float</em><em> (</em><em>in second</em><em>)</em>) – The duration of the laser (in the lab frame)</li>
 <li><strong>z0</strong> (<em>float</em><em> (</em><em>in meter</em><em>)</em>) – The initial position of the centroid of the laser
@@ -237,6 +229,9 @@ that the laser pulse is at the focal plane initially.</li>
 Default: 0.8 microns (Ti:Sapph laser).</li>
 <li><strong>cep_phase</strong> (<em>float</em><em> (</em><em>in radian</em><em>)</em><em>, </em><em>optional</em>) – The Carrier Enveloppe Phase (CEP, i.e. the phase of the laser
 oscillation, at the position where the laser enveloppe is maximum)</li>
+<li><strong>propagation_direction</strong> (<em>int</em><em>, </em><em>optional</em>) – Indicates in which direction the laser propagates.
+This should be either 1 (laser propagates towards positive z)
+or -1 (laser propagates towards negative z).</li>
 </ul>
 </td>
 </tr>
@@ -248,9 +243,7 @@ oscillation, at the position where the laser enveloppe is maximum)</li>
 
 
            </div>
-           <div class="articleComments">
-            
-           </div>
+           
           </div>
           <footer>
   
@@ -272,7 +265,7 @@ oscillation, at the position where the laser enveloppe is maximum)</li>
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -290,7 +283,8 @@ oscillation, at the position where the laser enveloppe is maximum)</li>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.9.2',
+            VERSION:'0.9.3',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
@@ -304,19 +298,13 @@ oscillation, at the position where the laser enveloppe is maximum)</li>
 
   
 
-  
-  
-    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
-  
+  <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

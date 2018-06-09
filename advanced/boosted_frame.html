@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Running boosted-frame simulations &mdash; FBPIC 0.9.2 documentation</title>
+  <title>Running boosted-frame simulations &mdash; FBPIC 0.9.3 documentation</title>
   
 
   
@@ -24,27 +24,18 @@
 
   
 
-  
-  
-    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="index" title="Index"
-              href="../genindex.html"/>
-        <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="FBPIC 0.9.2 documentation" href="../index.html"/>
-        <link rel="up" title="Advanced use" href="advanced.html"/>
-        <link rel="prev" title="Performing parameter scans in parallel" href="parameter_scans.html"/> 
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Performing parameter scans in parallel" href="parameter_scans.html" /> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
@@ -66,7 +57,7 @@
             
             
               <div class="version">
-                0.9.2
+                0.9.3
               </div>
             
           
@@ -118,7 +109,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+      <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">FBPIC</a>
@@ -126,9 +117,10 @@
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
 
@@ -192,17 +184,17 @@ how to handle three important aspects of boosted-frame simulations with FBPIC:</
 (or <em>lab frame</em> for short), this technique
 consists in running the simulation in a <strong>different Lorentz frame</strong>, which moves
 in the same direction as the laser (the <em>boosted frame</em>).
-The boosted frame is characterized by its Lorentz factor <span class="math notranslate">\(\gamma_b\)</span>.</p>
+The boosted frame is characterized by its Lorentz factor <span class="math notranslate nohighlight">\(\gamma_b\)</span>.</p>
 <p>When performing this Lorentz transformation, the changes in space-time are
 computationally favorable:</p>
 <blockquote>
 <div><ul class="simple">
 <li><dl class="first docutils">
 <dt>In the boosted frame, the laser is stretched and has a lower frequency.</dt>
-<dd>This allows the PIC loop to use a larger time step and cell size (in <span class="math notranslate">\(z\)</span>)
+<dd>This allows the PIC loop to use a larger time step and cell size (in <span class="math notranslate nohighlight">\(z\)</span>)
 than in the lab frame, while still resolving the laser.
-(More precisely, <span class="math notranslate">\(\Delta z_{boosted} \approx 2\gamma_b \Delta z_{lab}\)</span> and
-<span class="math notranslate">\(\Delta t_{boosted} \approx 2\gamma_b \Delta t_{lab}\)</span>)</dd>
+(More precisely, <span class="math notranslate nohighlight">\(\Delta z_{boosted} \approx 2\gamma_b \Delta z_{lab}\)</span> and
+<span class="math notranslate nohighlight">\(\Delta t_{boosted} \approx 2\gamma_b \Delta t_{lab}\)</span>)</dd>
 </dl>
 </li>
 <li><dl class="first docutils">
@@ -217,7 +209,7 @@ the plasma is shorter than in the lab frame, and that similarly the simulation w
 <img alt="../_images/Lab_vs_boosted.png" src="../_images/Lab_vs_boosted.png" />
 <p>On the whole (taking into account the longer timestep and shorter propagation time),
 the number of required PIC iterations is reduced in the boosted frame:</p>
-<div class="math notranslate">
+<div class="math notranslate nohighlight">
 \[N_{iterations, boosted} = \frac{1}{2\gamma_{boost}^2} N_{iterations, lab}\]</div>
 <p>which can speed up the simulation by orders of magnitude.
 For more details on the theory of boosted-frame simulations, see the <a class="reference external" href="https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.98.130405">original
@@ -225,7 +217,7 @@ paper on this technique</a>.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p>In the boosted frame, the plasma has a <strong>higher density</strong>
-(<span class="math notranslate">\(n_{boosted} = \gamma_b n_{lab}\)</span>). Because
+(<span class="math notranslate nohighlight">\(n_{boosted} = \gamma_b n_{lab}\)</span>). Because
 of this, and because of the larger cell size, <strong>each plasma macroparticle typically
 represents more physical particles</strong> in the boosted frame than in the lab frame
 (at least when keeping the same number of macroparticles per cell).</p>
@@ -236,22 +228,22 @@ In extreme cases (when the number of physical particles per macroparticle is
 comparable to the total number of self-injected particles),
 self-injection may not occur at all in the boosted-frame simulation.</p>
 <p class="last">More generally, for simulations involving injection, it is good practice
-to occasionally compare the results with different <span class="math notranslate">\(\gamma_b\)</span>,
+to occasionally compare the results with different <span class="math notranslate nohighlight">\(\gamma_b\)</span>,
 in order to make sure that the simulation is properly converged.</p>
 </div>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
 <p>In lab-frame simulations, the ions are essentially motionless and the
-current <span class="math notranslate">\(\boldsymbol{j}\)</span> that they produce is negligeable compared to
+current <span class="math notranslate nohighlight">\(\boldsymbol{j}\)</span> that they produce is negligeable compared to
 that of the electrons. For this reason (and because the PIC algorithm
-essentially only uses the current <span class="math notranslate">\(\boldsymbol{j}\)</span> in order to update the
+essentially only uses the current <span class="math notranslate nohighlight">\(\boldsymbol{j}\)</span> in order to update the
 fields: see <a class="reference internal" href="../overview.html"><span class="doc">Overview of the code</span></a>), the ions are often omitted from the simulation,
 in order to save computational time. (And in fact, the argument
 <code class="docutils literal notranslate"><span class="pre">initialize_ions</span></code> in the <a class="reference internal" href="../api_reference/simulation.html#fbpic.main.Simulation" title="fbpic.main.Simulation"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Simulation</span></code></a> object is set to
 <code class="docutils literal notranslate"><span class="pre">False</span></code> by default.)</p>
 <p class="last">However, this is no longer valid in boosted-frame simulation, because
 in this case the ions move with relativistic speed and do produce a
-non-negligible current <span class="math notranslate">\(\boldsymbol{j}\)</span>. Therefore, <strong>in boosted-frame
+non-negligible current <span class="math notranslate nohighlight">\(\boldsymbol{j}\)</span>. Therefore, <strong>in boosted-frame
 simulations, the ions are required</strong>. Make sure to include them, either
 by setting the flag <code class="docutils literal notranslate"><span class="pre">initialize_ions=True</span></code> in the <a class="reference internal" href="../api_reference/simulation.html#fbpic.main.Simulation" title="fbpic.main.Simulation"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Simulation</span></code></a>
 object, or by adding them separately with <a class="reference internal" href="../api_reference/simulation.html#fbpic.main.Simulation.add_new_species" title="fbpic.main.Simulation.add_new_species"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">add_new_species</span></code></a>.</p>
@@ -264,7 +256,7 @@ laser wavelength, plasma density, etc.) <strong>needed to be converted</strong> 
 value in the lab frame to their corresponding value in the boosted frame.</p>
 <p>Fortunately, <strong>most functions and classes in FBPIC can perform this conversion
 automatically</strong>, so that the user only needs to pass the lab-frame values,
-along with the value of <span class="math notranslate">\(\gamma_b\)</span>. For instance, the <a class="reference internal" href="../api_reference/simulation.html#fbpic.main.Simulation" title="fbpic.main.Simulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">fbpic.main.Simulation</span></code></a> class
+along with the value of <span class="math notranslate nohighlight">\(\gamma_b\)</span>. For instance, the <a class="reference internal" href="../api_reference/simulation.html#fbpic.main.Simulation" title="fbpic.main.Simulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">fbpic.main.Simulation</span></code></a> class
 will automatically convert the timestep and box size from typical lab-frame values
 to the corresponding boosted-frame values.</p>
 <div class="admonition note">
@@ -319,16 +311,16 @@ and <a class="reference external" href="https://journals.aps.org/pre/abstract/10
 for more information on this technique.) In order to use this suppression algorithm,
 the user simply needs to set the argument <code class="docutils literal notranslate"><span class="pre">v_comoving</span></code> of the <a class="reference internal" href="../api_reference/simulation.html#fbpic.main.Simulation" title="fbpic.main.Simulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">fbpic.main.Simulation</span></code></a>
 class to a velocity close to:</p>
-<div class="math notranslate">
+<div class="math notranslate nohighlight">
 \[v_{comoving} = -c \sqrt{1 - \frac{1}{\gamma_b^2}}\]</div>
 <p>(Again, see the example in the section <a class="reference internal" href="../how_to_run.html"><span class="doc">How to run the code</span></a>)</p>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
 <p>The suppression of the NCI is only effective in the case where</p>
-<div class="math notranslate">
+<div class="math notranslate nohighlight">
 \[c\Delta t_{boosted} &lt; \Delta r_{boosted}\]</div>
 <p>or in terms of corresponding lab-frame quantities:</p>
-<div class="math notranslate">
+<div class="math notranslate nohighlight">
 \[c\Delta t_{lab} &lt; \frac{\Delta r_{lab}}{2\gamma_b}\]</div>
 <p class="last">In the case where the above condition is not met, there is, to our
 knowledge, no existing solution to suppress the NCI. Note that FBPIC does
@@ -340,9 +332,7 @@ instead the user is responsible for ensuring this.</p>
 
 
            </div>
-           <div class="articleComments">
-            
-           </div>
+           
           </div>
           <footer>
   
@@ -362,7 +352,7 @@ instead the user is responsible for ensuring this.</p>
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -380,7 +370,8 @@ instead the user is responsible for ensuring this.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.9.2',
+            VERSION:'0.9.3',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
@@ -394,19 +385,13 @@ instead the user is responsible for ensuring this.</p>
 
   
 
-  
-  
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-  
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>
