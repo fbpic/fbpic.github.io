@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>The Particles class &mdash; FBPIC 0.9.3 documentation</title>
+  <title>The Particles class &mdash; FBPIC 0.9.4 documentation</title>
   
 
   
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.9.3
+                0.9.4
               </div>
             
           
@@ -201,7 +201,7 @@ these IDs are written in the openPMD file)</p>
 
 <dl class="method">
 <dt id="fbpic.particles.fbpic.particles.Particles.Particles.make_ionizable">
-<code class="descclassname">Particles.</code><code class="descname">make_ionizable</code><span class="sig-paren">(</span><em>element</em>, <em>target_species</em>, <em>level_start=0</em><span class="sig-paren">)</span><a class="headerlink" href="#fbpic.particles.fbpic.particles.Particles.Particles.make_ionizable" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Particles.</code><code class="descname">make_ionizable</code><span class="sig-paren">(</span><em>element</em>, <em>target_species</em>, <em>level_start=0</em>, <em>level_max=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fbpic.particles.fbpic.particles.Particles.Particles.make_ionizable" title="Permalink to this definition">¶</a></dt>
 <dd><p>Make this species ionizable.</p>
 <p>The implemented ionization model is the <strong>ADK model</strong>
 (using the <strong>instantaneous</strong> electric field, i.e. <strong>without</strong> averaging
@@ -218,10 +218,20 @@ in lab-frame simulations as well as boosted-frame simulation.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>element</strong> (<em>string</em>) – The atomic symbol of the considered ionizable species
 (e.g. ‘He’, ‘N’ ;  do not use ‘Helium’ or ‘Nitrogen’)</li>
-<li><strong>target_species</strong> (<em>an fbpic.Particles object</em>) – Stores the electron macroparticles that are created in
-the ionization process.</li>
+<li><strong>target_species</strong> (a <cite>Particles</cite> object, or a dictionary of <cite>Particles</cite>) – Stores the electron macroparticles that are created in
+the ionization process. If a single <cite>Particles</cite> object is passed,
+then electrons from all ionization levels are stored into this
+object. If a dictionary is passed, then its keys should be integers
+(corresponding to the ionizable levels of <cite>element</cite>, starting
+at <cite>level_start</cite>), and its values should be <cite>Particles</cite> objects.
+In this case, the electrons from each distinct ionizable level
+will be stored into these separate objects. Note that using
+separate objects will typically require longer computing time.</li>
 <li><strong>level_start</strong> (<em>int</em>) – The ionization level at which the macroparticles are initially
 (e.g. 0 for initially neutral atoms)</li>
+<li><strong>level_max</strong> (<em>int</em><em>, </em><em>optional</em>) – If not None, defines the maximum ionization level that
+macroparticles can reach. Should not exceed the physical
+limit for the chosen element.</li>
 </ul>
 </td>
 </tr>
@@ -275,7 +285,7 @@ the ionization process.</li>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.9.3',
+            VERSION:'0.9.4',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

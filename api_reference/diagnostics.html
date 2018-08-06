@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>The openPMD diagnostics &mdash; FBPIC 0.9.3 documentation</title>
+  <title>The openPMD diagnostics &mdash; FBPIC 0.9.4 documentation</title>
   
 
   
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.9.3
+                0.9.4
               </div>
             
           
@@ -93,6 +93,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#regular-diagnostics">Regular diagnostics</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#field-diagnostic">Field diagnostic</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#particle-diagnostic">Particle diagnostic</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#particle-density-diagnostic">Particle density diagnostic</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#back-transformed-diagnostics-boosted-frame-simulations">Back-transformed diagnostics (boosted-frame simulations)</a><ul>
@@ -263,6 +264,37 @@ of the current working directory.</li>
 </dd></dl>
 
 </div>
+<div class="section" id="particle-density-diagnostic">
+<h3>Particle density diagnostic<a class="headerlink" href="#particle-density-diagnostic" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="fbpic.openpmd_diag.ParticleChargeDensityDiagnostic">
+<em class="property">class </em><code class="descclassname">fbpic.openpmd_diag.</code><code class="descname">ParticleChargeDensityDiagnostic</code><span class="sig-paren">(</span><em>period</em>, <em>sim</em>, <em>species={'electrons': None}</em>, <em>write_dir=None</em>, <em>iteration_min=0</em>, <em>iteration_max=inf</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/openpmd_diag/particle_density_diag.html#ParticleChargeDensityDiagnostic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.openpmd_diag.ParticleChargeDensityDiagnostic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes the charge density of the specified species in the
+openPMD file (one dataset per species)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>period</strong> (<em>int</em>) – The period of the diagnostics, in number of timesteps.
+(i.e. the diagnostics are written whenever the number
+of iterations is divisible by <cite>period</cite>)</li>
+<li><strong>sim</strong> (an fbpic <cite>Simulation</cite> object) – Contains the information of the simulation</li>
+<li><strong>species</strong> (<em>a dictionary of Particle objects</em>) – Similar to the corresponding object for <cite>ParticleDiagnostic</cite>
+Specifies the density of which species should be written</li>
+<li><strong>write_dir</strong> (<em>string</em><em>, </em><em>optional</em>) – The POSIX path to the directory where the results are
+to be written. If none is provided, this will be the path
+of the current working directory.</li>
+<li><strong>iteration_max</strong> (<em>iteration_min</em><em>,</em>) – The iterations between which data should be written
+(<cite>iteration_min</cite> is inclusive, <cite>iteration_max</cite> is exclusive)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
 </div>
 <div class="section" id="back-transformed-diagnostics-boosted-frame-simulations">
 <h2>Back-transformed diagnostics (boosted-frame simulations)<a class="headerlink" href="#back-transformed-diagnostics-boosted-frame-simulations" title="Permalink to this headline">¶</a></h2>
@@ -390,7 +422,7 @@ extract some information about the grid</li>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.9.3',
+            VERSION:'0.9.4',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

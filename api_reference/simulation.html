@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>The Simulation class &mdash; FBPIC 0.9.3 documentation</title>
+  <title>The Simulation class &mdash; FBPIC 0.9.4 documentation</title>
   
 
   
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.9.3
+                0.9.4
               </div>
             
           
@@ -186,7 +186,7 @@ species, and its method <a class="reference internal" href="#fbpic.main.Simulati
 <p class="first admonition-title">Note</p>
 <p class="last">For the arguments <cite>p_rmin</cite>, <cite>p_rmax</cite>, <cite>p_nz</cite>, <cite>p_nr</cite>, <cite>p_nt</cite>,
 <cite>n_e</cite>, and <cite>dens_func</cite>, see the docstring of the method
-<cite>add_new_species</cite>.</p>
+<cite>add_new_species</cite> (where <cite>n_e</cite> has been re-labeled as <cite>n</cite>).</p>
 </div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -282,7 +282,7 @@ initialization of the Simulation class.
 </table>
 <dl class="method">
 <dt id="fbpic.main.Simulation.add_new_species">
-<code class="descname">add_new_species</code><span class="sig-paren">(</span><em>q</em>, <em>m</em>, <em>n=None</em>, <em>dens_func=None</em>, <em>p_nz=None</em>, <em>p_nr=None</em>, <em>p_nt=None</em>, <em>p_zmin=-inf</em>, <em>p_zmax=inf</em>, <em>p_rmin=0</em>, <em>p_rmax=inf</em>, <em>uz_m=0.0</em>, <em>continuous_injection=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/main.html#Simulation.add_new_species"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.main.Simulation.add_new_species" title="Permalink to this definition">¶</a></dt>
+<code class="descname">add_new_species</code><span class="sig-paren">(</span><em>q</em>, <em>m</em>, <em>n=None</em>, <em>dens_func=None</em>, <em>p_nz=None</em>, <em>p_nr=None</em>, <em>p_nt=None</em>, <em>p_zmin=-inf</em>, <em>p_zmax=inf</em>, <em>p_rmin=0</em>, <em>p_rmax=inf</em>, <em>uz_m=0.0</em>, <em>ux_m=0.0</em>, <em>uy_m=0.0</em>, <em>uz_th=0.0</em>, <em>ux_th=0.0</em>, <em>uy_th=0.0</em>, <em>continuous_injection=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/main.html#Simulation.add_new_species"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.main.Simulation.add_new_species" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a new species (i.e. an instance of <cite>Particles</cite>) with
 charge <cite>q</cite> and mass <cite>m</cite>. Add it to the simulation (i.e. to the list
 <cite>Simulation.ptcl</cite>), and return it, so that the methods of the
@@ -326,8 +326,10 @@ a 1d array containing the density <em>relative to n</em>
 (in the lab frame). Default: 0</li>
 <li><strong>p_rmax</strong> (<em>floats</em><em> (</em><em>in meters</em><em>)</em><em>, </em><em>optional</em>) – The maximal r position below which the particles are initialized
 (in the lab frame). Default: upper edge of the simulation box.</li>
-<li><strong>uz_m</strong> (<em>float</em><em> (</em><em>dimensionless</em><em>)</em><em>, </em><em>optional</em>) – Normalized momentum (in the lab frame)
-of the injected particles in the z direction</li>
+<li><strong>ux_m</strong><strong>, </strong><strong>uy_m</strong> (<em>uz_m</em><em>,</em>) – Normalized mean momenta (in the lab frame)
+of the injected particles in each direction</li>
+<li><strong>ux_th</strong><strong>, </strong><strong>uy_th</strong> (<em>uz_th</em><em>,</em>) – Normalized thermal momenta (in the lab frame)
+in each direction</li>
 <li><strong>continuous_injection</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to continuously inject the particles,
 in the case of a moving window</li>
 </ul>
@@ -434,7 +436,7 @@ field push or not. (requires initialize_ions = True)</li>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.9.3',
+            VERSION:'0.9.4',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

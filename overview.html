@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Overview of the code &mdash; FBPIC 0.9.3 documentation</title>
+  <title>Overview of the code &mdash; FBPIC 0.9.4 documentation</title>
   
 
   
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.9.3
+                0.9.4
               </div>
             
           
@@ -219,7 +219,8 @@ code Calder Circ.</p>
 <p>The user chooses the number of azimuthal modes used in an FBPIC simulation.
 Thus, you should make sure that you choose <strong>enough modes</strong> to resolve the
 physics at stake (e.g. typically 2 modes for idealized laser-wakefield
-acceleration).</p>
+acceleration - although non-linear effects such as self-injection
+may sometimes require 3 modes).</p>
 <p class="last">The fact that only a few 2D grids are used (one per azimuthal mode),
 instead of a full 3D grid, implies that the code uses <strong>vastly less memory</strong>,
 and runs <strong>faster by orders of magnitude</strong> compared to a 3D Cartesian code.
@@ -341,7 +342,7 @@ of FBPIC).</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.9.3',
+            VERSION:'0.9.4',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

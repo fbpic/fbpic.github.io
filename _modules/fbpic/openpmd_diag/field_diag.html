@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fbpic.openpmd_diag.field_diag &mdash; FBPIC 0.9.3 documentation</title>
+  <title>fbpic.openpmd_diag.field_diag &mdash; FBPIC 0.9.4 documentation</title>
   
 
   
@@ -56,7 +56,7 @@
             
             
               <div class="version">
-                0.9.3
+                0.9.4
               </div>
             
           
@@ -408,13 +408,15 @@
             <span class="k">for</span> <span class="n">fieldtype</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fieldtypes</span><span class="p">:</span>
 
                 <span class="c1"># Scalar field</span>
-                <span class="k">if</span> <span class="n">fieldtype</span> <span class="o">==</span> <span class="s2">&quot;rho&quot;</span><span class="p">:</span>
+                <span class="c1"># e.g. &#39;rho&#39;, but also &#39;rho_electron&#39; in the case of</span>
+                <span class="c1"># the sub-class ParticleDensityDiagnostic</span>
+                <span class="k">if</span> <span class="n">fieldtype</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;rho&quot;</span><span class="p">):</span>
                     <span class="c1"># Setup the dataset</span>
                     <span class="n">dset</span> <span class="o">=</span> <span class="n">field_grp</span><span class="o">.</span><span class="n">require_dataset</span><span class="p">(</span>
-                        <span class="s2">&quot;rho&quot;</span><span class="p">,</span> <span class="n">data_shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;f8&#39;</span><span class="p">)</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">setup_openpmd_mesh_component</span><span class="p">(</span> <span class="n">dset</span><span class="p">,</span> <span class="s2">&quot;rho&quot;</span> <span class="p">)</span>
+                        <span class="n">fieldtype</span><span class="p">,</span> <span class="n">data_shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;f8&#39;</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">setup_openpmd_mesh_component</span><span class="p">(</span> <span class="n">dset</span><span class="p">,</span> <span class="n">fieldtype</span> <span class="p">)</span>
                     <span class="c1"># Setup the record to which it belongs</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">setup_openpmd_mesh_record</span><span class="p">(</span> <span class="n">dset</span><span class="p">,</span> <span class="s2">&quot;rho&quot;</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">zmin</span> <span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">setup_openpmd_mesh_record</span><span class="p">(</span> <span class="n">dset</span><span class="p">,</span> <span class="n">fieldtype</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">zmin</span> <span class="p">)</span>
 
                 <span class="c1"># Vector field</span>
                 <span class="k">elif</span> <span class="n">fieldtype</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;E&quot;</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="s2">&quot;J&quot;</span><span class="p">]:</span>
@@ -548,7 +550,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.9.3',
+            VERSION:'0.9.4',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fbpic.main &mdash; FBPIC 0.9.3 documentation</title>
+  <title>fbpic.main &mdash; FBPIC 0.9.4 documentation</title>
   
 
   
@@ -56,7 +56,7 @@
             
             
               <div class="version">
-                0.9.3
+                0.9.4
               </div>
             
           
@@ -219,7 +219,7 @@
 
 <span class="sd">            For the arguments `p_rmin`, `p_rmax`, `p_nz`, `p_nr`, `p_nt`,</span>
 <span class="sd">            `n_e`, and `dens_func`, see the docstring of the method</span>
-<span class="sd">            `add_new_species`.</span>
+<span class="sd">            `add_new_species` (where `n_e` has been re-labeled as `n`).</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -655,7 +655,8 @@
             <span class="n">progress_bar</span><span class="o">.</span><span class="n">print_summary</span><span class="p">()</span></div>
 
 
-    <span class="k">def</span> <span class="nf">deposit</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">fieldtype</span><span class="p">,</span> <span class="n">exchange</span><span class="o">=</span><span class="kc">False</span> <span class="p">):</span>
+    <span class="k">def</span> <span class="nf">deposit</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">fieldtype</span><span class="p">,</span> <span class="n">exchange</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">update_spectral</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">species_list</span><span class="o">=</span><span class="kc">None</span> <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Deposit the charge or the currents to the interpolation grid</span>
 <span class="sd">        and then to the spectral grid.</span>
@@ -672,20 +673,35 @@
 <span class="sd">            Whether to exchange guard cells via MPI before transforming</span>
 <span class="sd">            the fields to the spectral grid. (The corresponding flag in</span>
 <span class="sd">            fld.exchanged_source is set accordingly.)</span>
+
+<span class="sd">        update_spectral: bool</span>
+<span class="sd">            Whether to update the value of the deposited field in</span>
+<span class="sd">            spectral space.</span>
+
+<span class="sd">        species_list: list of `Particles` objects, or None</span>
+<span class="sd">            The species which that should deposit their charge/current.</span>
+<span class="sd">            If this is None, all species (and antennas) deposit.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Shortcut</span>
         <span class="n">fld</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fld</span>
+        <span class="c1"># If no species_list is provided, all species and antennas deposit</span>
+        <span class="k">if</span> <span class="n">species_list</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">species_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ptcl</span>
+            <span class="n">antennas_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">laser_antennas</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Otherwise only the specified species deposit</span>
+            <span class="n">antennas_list</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="c1"># Deposit charge or currents on the interpolation grid</span>
 
         <span class="c1"># Charge</span>
-        <span class="k">if</span> <span class="n">fieldtype</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;rho_prev&#39;</span><span class="p">,</span> <span class="s1">&#39;rho_next&#39;</span><span class="p">,</span> <span class="s1">&#39;rho_next_xy&#39;</span><span class="p">,</span> <span class="s1">&#39;rho_next_z&#39;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">fieldtype</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;rho&#39;</span><span class="p">):</span>  <span class="c1"># e.g. rho_next, rho_prev, etc.</span>
             <span class="n">fld</span><span class="o">.</span><span class="n">erase</span><span class="p">(</span><span class="s1">&#39;rho&#39;</span><span class="p">)</span>
             <span class="c1"># Deposit the particle charge</span>
-            <span class="k">for</span> <span class="n">species</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ptcl</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">species</span> <span class="ow">in</span> <span class="n">species_list</span><span class="p">:</span>
                 <span class="n">species</span><span class="o">.</span><span class="n">deposit</span><span class="p">(</span> <span class="n">fld</span><span class="p">,</span> <span class="s1">&#39;rho&#39;</span> <span class="p">)</span>
             <span class="c1"># Deposit the charge of the virtual particles in the antenna</span>
-            <span class="k">for</span> <span class="n">antenna</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">laser_antennas</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">antenna</span> <span class="ow">in</span> <span class="n">antennas_list</span><span class="p">:</span>
                 <span class="n">antenna</span><span class="o">.</span><span class="n">deposit</span><span class="p">(</span> <span class="n">fld</span><span class="p">,</span> <span class="s1">&#39;rho&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span> <span class="p">)</span>
             <span class="c1"># Sum contribution from each CPU threads (skipped on GPU)</span>
             <span class="n">fld</span><span class="o">.</span><span class="n">sum_reduce_deposition_array</span><span class="p">(</span><span class="s1">&#39;rho&#39;</span><span class="p">)</span>
@@ -699,10 +715,10 @@
         <span class="k">elif</span> <span class="n">fieldtype</span> <span class="o">==</span> <span class="s1">&#39;J&#39;</span><span class="p">:</span>
             <span class="n">fld</span><span class="o">.</span><span class="n">erase</span><span class="p">(</span><span class="s1">&#39;J&#39;</span><span class="p">)</span>
             <span class="c1"># Deposit the particle current</span>
-            <span class="k">for</span> <span class="n">species</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ptcl</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">species</span> <span class="ow">in</span> <span class="n">species_list</span><span class="p">:</span>
                 <span class="n">species</span><span class="o">.</span><span class="n">deposit</span><span class="p">(</span> <span class="n">fld</span><span class="p">,</span> <span class="s1">&#39;J&#39;</span> <span class="p">)</span>
             <span class="c1"># Deposit the current of the virtual particles in the antenna</span>
-            <span class="k">for</span> <span class="n">antenna</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">laser_antennas</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">antenna</span> <span class="ow">in</span> <span class="n">antennas_list</span><span class="p">:</span>
                 <span class="n">antenna</span><span class="o">.</span><span class="n">deposit</span><span class="p">(</span> <span class="n">fld</span><span class="p">,</span> <span class="s1">&#39;J&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span> <span class="p">)</span>
             <span class="c1"># Sum contribution from each CPU threads (skipped on GPU)</span>
             <span class="n">fld</span><span class="o">.</span><span class="n">sum_reduce_deposition_array</span><span class="p">(</span><span class="s1">&#39;J&#39;</span><span class="p">)</span>
@@ -711,16 +727,16 @@
             <span class="c1"># Exchange guard cells if requested by the user</span>
             <span class="k">if</span> <span class="n">exchange</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">exchange_fields</span><span class="p">(</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">,</span> <span class="s1">&#39;J&#39;</span><span class="p">,</span> <span class="s1">&#39;add&#39;</span><span class="p">)</span>
-
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Unknown fieldtype: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span><span class="n">fieldtype</span><span class="p">)</span>
 
         <span class="c1"># Get the charge or currents on the spectral grid</span>
-        <span class="n">fld</span><span class="o">.</span><span class="n">interp2spect</span><span class="p">(</span> <span class="n">fieldtype</span> <span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter_currents</span><span class="p">:</span>
-            <span class="n">fld</span><span class="o">.</span><span class="n">filter_spect</span><span class="p">(</span> <span class="n">fieldtype</span> <span class="p">)</span>
-        <span class="c1"># Set the flag to indicate whether these fields have been exchanged</span>
-        <span class="n">fld</span><span class="o">.</span><span class="n">exchanged_source</span><span class="p">[</span> <span class="n">fieldtype</span> <span class="p">]</span> <span class="o">=</span> <span class="n">exchange</span>
+        <span class="k">if</span> <span class="n">update_spectral</span><span class="p">:</span>
+            <span class="n">fld</span><span class="o">.</span><span class="n">interp2spect</span><span class="p">(</span> <span class="n">fieldtype</span> <span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter_currents</span><span class="p">:</span>
+                <span class="n">fld</span><span class="o">.</span><span class="n">filter_spect</span><span class="p">(</span> <span class="n">fieldtype</span> <span class="p">)</span>
+            <span class="c1"># Set the flag to indicate whether these fields have been exchanged</span>
+            <span class="n">fld</span><span class="o">.</span><span class="n">exchanged_source</span><span class="p">[</span> <span class="n">fieldtype</span> <span class="p">]</span> <span class="o">=</span> <span class="n">exchange</span>
 
     <span class="k">def</span> <span class="nf">cross_deposit</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">move_positions</span> <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -791,7 +807,9 @@
 <div class="viewcode-block" id="Simulation.add_new_species"><a class="viewcode-back" href="../../api_reference/simulation.html#fbpic.main.Simulation.add_new_species">[docs]</a>    <span class="k">def</span> <span class="nf">add_new_species</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dens_func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                             <span class="n">p_nz</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">p_nr</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">p_nt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                             <span class="n">p_zmin</span><span class="o">=-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="n">p_zmax</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>
-                            <span class="n">p_rmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">p_rmax</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="n">uz_m</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
+                            <span class="n">p_rmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">p_rmax</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>
+                            <span class="n">uz_m</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">ux_m</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">uy_m</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
+                            <span class="n">uz_th</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">ux_th</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">uy_th</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
                             <span class="n">continuous_injection</span><span class="o">=</span><span class="kc">True</span> <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create a new species (i.e. an instance of `Particles`) with</span>
@@ -854,9 +872,13 @@
 <span class="sd">            The maximal r position below which the particles are initialized</span>
 <span class="sd">            (in the lab frame). Default: upper edge of the simulation box.</span>
 
-<span class="sd">        uz_m: float (dimensionless), optional</span>
-<span class="sd">           Normalized momentum (in the lab frame)</span>
-<span class="sd">           of the injected particles in the z direction</span>
+<span class="sd">        uz_m, ux_m, uy_m: floats (dimensionless), optional</span>
+<span class="sd">           Normalized mean momenta (in the lab frame)</span>
+<span class="sd">           of the injected particles in each direction</span>
+
+<span class="sd">        uz_th, ux_th, uy_th: floats (dimensionless), optional</span>
+<span class="sd">           Normalized thermal momenta (in the lab frame)</span>
+<span class="sd">           in each direction</span>
 
 <span class="sd">        continuous_injection : bool, optional</span>
 <span class="sd">           Whether to continuously inject the particles,</span>
@@ -873,16 +895,37 @@
                 <span class="k">if</span> <span class="n">var</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                     <span class="s1">&#39;If the density `n` is passed to `add_new_species`,</span><span class="se">\n</span><span class="s1">&#39;</span>
-                    <span class="s1">&#39;then the arguments `p_nz`, `p_nr` and `p_nt` need&#39;</span>
+                    <span class="s1">&#39;then the arguments `p_nz`, `p_nr` and `p_nt` need &#39;</span>
                     <span class="s1">&#39;to be passed too.&#39;</span><span class="p">)</span>
 
             <span class="c1"># Automatically convert input quantities to the boosted frame</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">boost</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">beta0</span> <span class="o">=</span> <span class="n">uz_m</span><span class="o">/</span><span class="p">(</span> <span class="mf">1.</span><span class="o">+</span><span class="n">uz_m</span><span class="o">**</span><span class="mi">2</span> <span class="p">)</span><span class="o">**</span><span class="mf">0.5</span>
+                <span class="n">gamma_m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">1.</span> <span class="o">+</span> <span class="n">uz_m</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">ux_m</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">uy_m</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+                <span class="n">beta_m</span> <span class="o">=</span> <span class="n">uz_m</span><span class="o">/</span><span class="n">gamma_m</span>
+                <span class="c1"># Transform positions and density</span>
                 <span class="n">p_zmin</span><span class="p">,</span> <span class="n">p_zmax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">boost</span><span class="o">.</span><span class="n">copropag_length</span><span class="p">(</span>
-                    <span class="p">[</span> <span class="n">p_zmin</span><span class="p">,</span> <span class="n">p_zmax</span> <span class="p">],</span> <span class="n">beta_object</span><span class="o">=</span><span class="n">beta0</span> <span class="p">)</span>
-                <span class="n">n</span><span class="p">,</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">boost</span><span class="o">.</span><span class="n">copropag_density</span><span class="p">([</span> <span class="n">n</span> <span class="p">],</span> <span class="n">beta_object</span><span class="o">=</span><span class="n">beta0</span> <span class="p">)</span>
-                <span class="n">uz_m</span><span class="p">,</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">boost</span><span class="o">.</span><span class="n">longitudinal_momentum</span><span class="p">([</span> <span class="n">uz_m</span> <span class="p">])</span>
+                    <span class="p">[</span> <span class="n">p_zmin</span><span class="p">,</span> <span class="n">p_zmax</span> <span class="p">],</span> <span class="n">beta_object</span><span class="o">=</span><span class="n">beta_m</span> <span class="p">)</span>
+                <span class="n">n</span><span class="p">,</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">boost</span><span class="o">.</span><span class="n">copropag_density</span><span class="p">([</span> <span class="n">n</span> <span class="p">],</span> <span class="n">beta_object</span><span class="o">=</span><span class="n">beta_m</span> <span class="p">)</span>
+                <span class="c1"># Transform longitudinal thermal velocity</span>
+                <span class="c1"># The formulas below are approximate, and are obtained</span>
+                <span class="c1"># by perturbation of the Lorentz transform for uz</span>
+                <span class="k">if</span> <span class="n">uz_m</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">uz_th</span> <span class="o">&gt;</span> <span class="mf">0.1</span><span class="p">:</span>
+                        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                        <span class="s2">&quot;The thermal distribution is approximate in &quot;</span>
+                        <span class="s2">&quot;boosted-frame simulations, and may not be accurate &quot;</span>
+                        <span class="s2">&quot;enough for uz_th &gt; 0.1&quot;</span><span class="p">)</span>
+                    <span class="n">uz_th</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">boost</span><span class="o">.</span><span class="n">gamma0</span> <span class="o">*</span> <span class="n">uz_th</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">uz_th</span> <span class="o">&gt;</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="n">uz_m</span><span class="p">:</span>
+                        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                        <span class="s2">&quot;The thermal distribution is approximate in &quot;</span>
+                        <span class="s2">&quot;boosted-frame simulations, and may not be accurate &quot;</span>
+                        <span class="s2">&quot;enough for uz_th &gt; 0.1 * uz_m&quot;</span><span class="p">)</span>
+                    <span class="n">uz_th</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">boost</span><span class="o">.</span><span class="n">gamma0</span> <span class="o">*</span> \
+                            <span class="p">(</span><span class="mf">1.</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">boost</span><span class="o">.</span><span class="n">beta0</span><span class="o">*</span><span class="n">beta_m</span><span class="p">)</span> <span class="o">*</span> <span class="n">uz_th</span>
+                <span class="c1"># Finally transform the longitudinal momentum</span>
+                <span class="n">uz_m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">boost</span><span class="o">.</span><span class="n">gamma0</span><span class="o">*</span><span class="p">(</span> <span class="n">uz_m</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">boost</span><span class="o">.</span><span class="n">beta0</span><span class="o">*</span><span class="n">gamma_m</span> <span class="p">)</span>
 
             <span class="c1"># Modify input particle bounds, in order to only initialize the</span>
             <span class="c1"># particles in the local sub-domain</span>
@@ -901,6 +944,14 @@
             <span class="n">dz_particles</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">dz</span><span class="o">/</span><span class="n">p_nz</span>
 
         <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Check consistency of arguments</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">dens_func</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">p_nz</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> \
+                <span class="p">(</span><span class="n">p_nr</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">p_nt</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                    <span class="s1">&#39;It seems that you provided the arguments `dens_func`, &#39;</span>
+                    <span class="s1">&#39;`p_nz`, `p_nr` or `p_nz`</span><span class="se">\n</span><span class="s1">However no particle density &#39;</span>
+                    <span class="s1">&#39;(`n` or `n_e`) was given.</span><span class="se">\n</span><span class="s1">Therefore, no particles will&#39;</span>
+                    <span class="s1">&#39;be created.&#39;</span><span class="p">)</span>
             <span class="c1"># Convert arguments to acceptable arguments for `Particles`</span>
             <span class="c1"># but which will result in no macroparticles being injected</span>
             <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>
@@ -913,9 +964,11 @@
         <span class="n">new_species</span> <span class="o">=</span> <span class="n">Particles</span><span class="p">(</span> <span class="n">q</span><span class="o">=</span><span class="n">q</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">dens_func</span><span class="o">=</span><span class="n">dens_func</span><span class="p">,</span>
                         <span class="n">Npz</span><span class="o">=</span><span class="n">Npz</span><span class="p">,</span> <span class="n">zmin</span><span class="o">=</span><span class="n">p_zmin</span><span class="p">,</span> <span class="n">zmax</span><span class="o">=</span><span class="n">p_zmax</span><span class="p">,</span>
                         <span class="n">Npr</span><span class="o">=</span><span class="n">Npr</span><span class="p">,</span> <span class="n">rmin</span><span class="o">=</span><span class="n">p_rmin</span><span class="p">,</span> <span class="n">rmax</span><span class="o">=</span><span class="n">p_rmax</span><span class="p">,</span>
-                        <span class="n">Nptheta</span><span class="o">=</span><span class="n">p_nt</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">,</span> <span class="n">uz_m</span><span class="o">=</span><span class="n">uz_m</span><span class="p">,</span>
+                        <span class="n">Nptheta</span><span class="o">=</span><span class="n">p_nt</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">,</span>
                         <span class="n">particle_shape</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">particle_shape</span><span class="p">,</span>
                         <span class="n">use_cuda</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">use_cuda</span><span class="p">,</span> <span class="n">grid_shape</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">,</span>
+                        <span class="n">ux_m</span><span class="o">=</span><span class="n">ux_m</span><span class="p">,</span> <span class="n">uy_m</span><span class="o">=</span><span class="n">uy_m</span><span class="p">,</span> <span class="n">uz_m</span><span class="o">=</span><span class="n">uz_m</span><span class="p">,</span>
+                        <span class="n">ux_th</span><span class="o">=</span><span class="n">ux_th</span><span class="p">,</span> <span class="n">uy_th</span><span class="o">=</span><span class="n">uy_th</span><span class="p">,</span> <span class="n">uz_th</span><span class="o">=</span><span class="n">uz_th</span><span class="p">,</span>
                         <span class="n">continuous_injection</span><span class="o">=</span><span class="n">continuous_injection</span><span class="p">,</span>
                         <span class="n">dz_particles</span><span class="o">=</span><span class="n">dz_particles</span> <span class="p">)</span>
 
@@ -952,7 +1005,29 @@
                 <span class="ne">DeprecationWarning</span><span class="p">)</span>
 
         <span class="c1"># Attach the moving window to the boundary communicator</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">moving_win</span> <span class="o">=</span> <span class="n">MovingWindow</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="p">)</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">moving_win</span> <span class="o">=</span> <span class="n">MovingWindow</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">reverse_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convenience method to reverse the direction of electromagnetic waves</span>
+<span class="sd">        and particles propagation. Essentially this method inverses the signs of</span>
+<span class="sd">        magnetic fields and particles momenta.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Inverse the signs of magnetic fields in spectral and real space</span>
+        <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">Nm</span><span class="p">)</span> <span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">spect</span><span class="p">[</span><span class="n">m</span><span class="p">]</span><span class="o">.</span><span class="n">Bp</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">spect</span><span class="p">[</span><span class="n">m</span><span class="p">]</span><span class="o">.</span><span class="n">Bm</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">spect</span><span class="p">[</span><span class="n">m</span><span class="p">]</span><span class="o">.</span><span class="n">Bz</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">[</span><span class="n">m</span><span class="p">]</span><span class="o">.</span><span class="n">Br</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">[</span><span class="n">m</span><span class="p">]</span><span class="o">.</span><span class="n">Bt</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">[</span><span class="n">m</span><span class="p">]</span><span class="o">.</span><span class="n">Bz</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
+
+        <span class="c1"># Inverse the signs of particles momenta</span>
+        <span class="k">for</span> <span class="n">species</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ptcl</span><span class="p">:</span>
+            <span class="n">species</span><span class="o">.</span><span class="n">ux</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
+            <span class="n">species</span><span class="o">.</span><span class="n">uy</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
+            <span class="n">species</span><span class="o">.</span><span class="n">uz</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span></div>
 
 <span class="k">def</span> <span class="nf">adapt_to_grid</span><span class="p">(</span> <span class="n">x</span><span class="p">,</span> <span class="n">p_xmin</span><span class="p">,</span> <span class="n">p_xmax</span><span class="p">,</span> <span class="n">p_nx</span><span class="p">,</span> <span class="n">ncells_empty</span><span class="o">=</span><span class="mi">0</span> <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -1044,7 +1119,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.9.3',
+            VERSION:'0.9.4',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
