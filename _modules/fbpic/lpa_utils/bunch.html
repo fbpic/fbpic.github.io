@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fbpic.lpa_utils.bunch &mdash; FBPIC 0.9.4 documentation</title>
+  <title>fbpic.lpa_utils.bunch &mdash; FBPIC 0.9.5 documentation</title>
   
 
   
@@ -56,7 +56,7 @@
             
             
               <div class="version">
-                0.9.4
+                0.9.5
               </div>
             
           
@@ -278,7 +278,9 @@
 <span class="sd">        The absolute energy spread of the bunch.</span>
 
 <span class="sd">    Q : float (in Coulomb)</span>
-<span class="sd">        The total charge of the bunch (should be a positive number)</span>
+<span class="sd">        The total charge of the bunch (in absolute value)</span>
+<span class="sd">        (if a negative number is given, its absolute value will</span>
+<span class="sd">        automatically be taken)</span>
 
 <span class="sd">    N : int</span>
 <span class="sd">        The number of particles the bunch should consist of.</span>
@@ -326,7 +328,7 @@
     <span class="c1"># Get inverse gamma</span>
     <span class="n">inv_gamma</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="n">gamma</span>
     <span class="c1"># Get weight of each particle</span>
-    <span class="n">w</span> <span class="o">=</span> <span class="n">Q</span> <span class="o">/</span> <span class="p">(</span><span class="n">N</span><span class="o">*</span><span class="n">e</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">Q</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">N</span><span class="o">*</span><span class="n">e</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 
     <span class="c1"># Propagate distribution to an out-of-focus position tf.</span>
     <span class="c1"># (without taking space charge effects into account)</span>
@@ -706,7 +708,7 @@
 
     <span class="c1"># Deduce the B field</span>
     <span class="n">spect</span><span class="o">.</span><span class="n">Bp</span><span class="p">[:,:]</span> <span class="o">+=</span> <span class="o">-</span><span class="mf">0.5</span><span class="n">j</span><span class="o">*</span><span class="n">spect</span><span class="o">.</span><span class="n">kr</span> <span class="o">*</span> <span class="n">Az</span>
-    <span class="n">spect</span><span class="o">.</span><span class="n">Bm</span><span class="p">[:,:]</span> <span class="o">+=</span> <span class="o">-</span><span class="mf">0.5</span><span class="n">j</span><span class="o">*</span><span class="n">spect</span><span class="o">.</span><span class="n">kr</span> <span class="o">*</span> <span class="n">Az</span>    
+    <span class="n">spect</span><span class="o">.</span><span class="n">Bm</span><span class="p">[:,:]</span> <span class="o">+=</span> <span class="o">-</span><span class="mf">0.5</span><span class="n">j</span><span class="o">*</span><span class="n">spect</span><span class="o">.</span><span class="n">kr</span> <span class="o">*</span> <span class="n">Az</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">neglect_transverse_currents</span><span class="p">:</span>
         <span class="n">spect</span><span class="o">.</span><span class="n">Bp</span><span class="p">[:,:]</span> <span class="o">+=</span> <span class="n">spect</span><span class="o">.</span><span class="n">kz</span> <span class="o">*</span> <span class="n">Ap</span>
         <span class="n">spect</span><span class="o">.</span><span class="n">Bm</span><span class="p">[:,:]</span> <span class="o">-=</span> <span class="n">spect</span><span class="o">.</span><span class="n">kz</span> <span class="o">*</span> <span class="n">Am</span>
@@ -723,7 +725,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016, FBPIC contributors.
+        &copy; Copyright 2016, FBPIC contributors
 
     </p>
   </div>
@@ -742,21 +744,14 @@
 
   
 
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../../../',
-            VERSION:'0.9.4',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../../../_static/jquery.js"></script>
-      <script type="text/javascript" src="../../../_static/underscore.js"></script>
-      <script type="text/javascript" src="../../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
 
   
 

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Beam initialization &mdash; FBPIC 0.9.4 documentation</title>
+  <title>Beam initialization &mdash; FBPIC 0.9.5 documentation</title>
   
 
   
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.9.4
+                0.9.5
               </div>
             
           
@@ -236,7 +236,9 @@ Thus if <cite>tf</cite> is not 0, the bunch will be initially out of focus.
 <li><strong>n_emit</strong> (<em>float</em><em> (</em><em>in meters</em><em>)</em>) – The normalized emittance of the bunch.</li>
 <li><strong>gamma0</strong> (<em>float</em>) – The Lorentz factor of the electrons.</li>
 <li><strong>sig_gamma</strong> (<em>float</em>) – The absolute energy spread of the bunch.</li>
-<li><strong>Q</strong> (<em>float</em><em> (</em><em>in Coulomb</em><em>)</em>) – The total charge of the bunch (should be a positive number)</li>
+<li><strong>Q</strong> (<em>float</em><em> (</em><em>in Coulomb</em><em>)</em>) – The total charge of the bunch (in absolute value)
+(if a negative number is given, its absolute value will
+automatically be taken)</li>
 <li><strong>N</strong> (<em>int</em>) – The number of particles the bunch should consist of.</li>
 <li><strong>zf</strong> (<em>float</em><em> (</em><em>in meters</em><em>)</em><em>, </em><em>optional</em>) – Position of the focus.</li>
 <li><strong>tf</strong> (<em>float</em><em> (</em><em>in seconds</em><em>)</em><em>, </em><em>optional</em>) – Time at which the bunch reaches focus.</li>
@@ -377,7 +379,7 @@ boosted-frame simulations.
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016, FBPIC contributors.
+        &copy; Copyright 2016, FBPIC contributors
 
     </p>
   </div>
@@ -396,21 +398,14 @@ boosted-frame simulations.
 
   
 
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../../',
-            VERSION:'0.9.4',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../../_static/jquery.js"></script>
-      <script type="text/javascript" src="../../_static/underscore.js"></script>
-      <script type="text/javascript" src="../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
 
   
 
