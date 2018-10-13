@@ -29,7 +29,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="How to run the code" href="../how_to_run.html" />
-    <link rel="prev" title="Installation on Lawrencium (LBNL)" href="install_lawrencium.html" /> 
+    <link rel="prev" title="Installation on Comet (SDSC)" href="install_comet.html" /> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -89,6 +89,7 @@
 <li class="toctree-l2"><a class="reference internal" href="install_titan.html">Installation on Titan (OLCF)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="install_jureca.html">Installation on JURECA (JSC)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="install_lawrencium.html">Installation on Lawrencium (LBNL)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install_comet.html">Installation on Comet (SDSC)</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Installation on Cori and Edison (NERSC)</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#installation-of-fbpic-and-its-dependencies">Installation of FBPIC and its dependencies</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#running-simulations">Running simulations</a><ul>
@@ -198,7 +199,7 @@ when running FBPIC on Cori.</p>
 </div>
 </li>
 <li><p class="first">Install the missing dependencies of FBPIC</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">upgrade</span> <span class="n">numba</span> <span class="n">llvmlite</span> <span class="o">--</span><span class="n">user</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">upgrade</span> <span class="n">numba</span> <span class="n">llvmlite</span> <span class="n">tbb</span> <span class="o">--</span><span class="n">user</span>
 </pre></div>
 </div>
 </li>
@@ -247,6 +248,7 @@ Edison, simply remove this line.)</p>
 <span class="c1">#SBATCH --nodes &lt;n_nodes&gt;</span>
 
 <span class="n">module</span> <span class="n">load</span> <span class="n">python</span><span class="o">/</span><span class="mf">2.7</span><span class="o">-</span><span class="n">anaconda</span>
+<span class="n">export</span> <span class="n">NUMBA_THREADING_LAYER</span><span class="o">=</span><span class="n">tbb</span>
 <span class="n">export</span> <span class="n">NUMBA_NUM_THREADS</span><span class="o">=&lt;</span><span class="n">n_threads</span><span class="o">&gt;</span>
 <span class="n">export</span> <span class="n">MKL_NUM_THREADS</span><span class="o">=&lt;</span><span class="n">n_threads</span><span class="o">&gt;</span>
 
@@ -303,7 +305,7 @@ Once you logged in and opened a Jupyter notebook, you can type in a cell:</p>
         <a href="../how_to_run.html" class="btn btn-neutral float-right" title="How to run the code" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="install_lawrencium.html" class="btn btn-neutral" title="Installation on Lawrencium (LBNL)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="install_comet.html" class="btn btn-neutral" title="Installation on Comet (SDSC)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -312,7 +314,7 @@ Once you logged in and opened a Jupyter notebook, you can type in a cell:</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016, FBPIC contributors
+        &copy; Copyright 2016, FBPIC contributors.
 
     </p>
   </div>
@@ -331,14 +333,21 @@ Once you logged in and opened a Jupyter notebook, you can type in a cell:</p>
 
   
 
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.9.5',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 
