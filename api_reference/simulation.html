@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>The Simulation class &mdash; FBPIC 0.9.5 documentation</title>
+  <title>The Simulation class &mdash; FBPIC 0.10.0 documentation</title>
   
 
   
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.9.5
+                0.10.0
               </div>
             
           
@@ -93,6 +93,7 @@
 <li class="toctree-l2"><a class="reference internal" href="checkpoint_restart.html">Checkpoints and restarts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lpa_utilities/lpa_utilities.html">Laser-plasma utilities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="boost_converter.html">Conversion to boosted-frame</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smoothing.html">Field smoothing</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../advanced/advanced.html">Advanced use</a></li>
@@ -171,7 +172,7 @@ that performs the PIC cycle.</p>
 species, and its method <a class="reference internal" href="#fbpic.main.Simulation.set_moving_window" title="fbpic.main.Simulation.set_moving_window"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">set_moving_window</span></code></a> activates the moving window.</p>
 <dl class="class">
 <dt id="fbpic.main.Simulation">
-<em class="property">class </em><code class="descclassname">fbpic.main.</code><code class="descname">Simulation</code><span class="sig-paren">(</span><em>Nz</em>, <em>zmax</em>, <em>Nr</em>, <em>rmax</em>, <em>Nm</em>, <em>dt</em>, <em>p_zmin=-inf</em>, <em>p_zmax=inf</em>, <em>p_rmin=0</em>, <em>p_rmax=inf</em>, <em>p_nz=None</em>, <em>p_nr=None</em>, <em>p_nt=None</em>, <em>n_e=None</em>, <em>zmin=0.0</em>, <em>n_order=-1</em>, <em>dens_func=None</em>, <em>filter_currents=True</em>, <em>v_comoving=None</em>, <em>use_galilean=True</em>, <em>initialize_ions=False</em>, <em>use_cuda=False</em>, <em>n_guard=None</em>, <em>n_damp=64</em>, <em>exchange_period=None</em>, <em>current_correction='curl-free'</em>, <em>boundaries='periodic'</em>, <em>gamma_boost=None</em>, <em>use_all_mpi_ranks=True</em>, <em>particle_shape='linear'</em>, <em>verbose_level=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/main.html#Simulation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.main.Simulation" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">fbpic.main.</code><code class="descname">Simulation</code><span class="sig-paren">(</span><em>Nz</em>, <em>zmax</em>, <em>Nr</em>, <em>rmax</em>, <em>Nm</em>, <em>dt</em>, <em>p_zmin=-inf</em>, <em>p_zmax=inf</em>, <em>p_rmin=0</em>, <em>p_rmax=inf</em>, <em>p_nz=None</em>, <em>p_nr=None</em>, <em>p_nt=None</em>, <em>n_e=None</em>, <em>zmin=0.0</em>, <em>n_order=-1</em>, <em>dens_func=None</em>, <em>filter_currents=True</em>, <em>v_comoving=None</em>, <em>use_galilean=True</em>, <em>initialize_ions=False</em>, <em>use_cuda=False</em>, <em>n_guard=None</em>, <em>n_damp=64</em>, <em>exchange_period=None</em>, <em>current_correction='curl-free'</em>, <em>boundaries='periodic'</em>, <em>gamma_boost=None</em>, <em>use_all_mpi_ranks=True</em>, <em>particle_shape='linear'</em>, <em>verbose_level=1</em>, <em>smoother=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/main.html#Simulation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.main.Simulation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initializes a simulation.</p>
 <p>By default the simulation contains:</p>
 <blockquote>
@@ -231,22 +232,23 @@ or when using open boundaries. Defaults to None, which
 calculates the required guard cells for n_order
 automatically (approx 2*n_order). If no MPI is used and
 in the case of open boundaries with an infinite order stencil,
-n_guard defaults to 30, if not set otherwise.</li>
+n_guard defaults to 64, if not set otherwise.</li>
 <li><strong>n_damp</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of damping guard cells at the left and right of a
 simulation box if a moving window is attached. The guard
 region at these areas (left / right of moving window) is
-extended by n_damp (N=n_guard+n_damp) in order to smoothly
-damp the fields such that they do not wrap around.
+extended by n_damp in order to smoothly damp the fields such
+that they do not wrap around. Additionally, this region is
+extended by an injection area of size n_guard/2 automatically.
 (Defaults to 64)</li>
 <li><strong>exchange_period</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of iterations before which the particles are exchanged.
 If set to None, the maximum exchange period is calculated
 automatically: Within exchange_period timesteps, the
 particles should never be able to travel more than
-(n_guard - particle_shape order) cells. (Setting exchange_period
+(n_guard/2 - particle_shape order) cells. (Setting exchange_period
 to small values can substantially affect the performance)</li>
 <li><strong>boundaries</strong> (<em>string</em><em>, </em><em>optional</em>) – Indicates how to exchange the fields at the left and right
 boundaries of the global simulation box.
-Either ‘periodic’ or ‘open’</li>
+(Either ‘periodic’ or ‘open’)</li>
 <li><strong>current_correction</strong> (<em>string</em><em>, </em><em>optional</em>) – The method used in order to ensure that the continuity equation
 is satisfied. Either <cite>curl-free</cite> or <cite>cross-deposition</cite>.
 <cite>curl-free</cite> is faster but less local (should not be used with MPI).
@@ -275,6 +277,8 @@ initialization of the Simulation class.
 0 - Print no information
 1 (Default) - Print basic information
 2 - Print detailed information</li>
+<li><strong>smoother</strong> (an instance of <a class="reference internal" href="smoothing.html#fbpic.fields.smoothing.BinomialSmoother" title="fbpic.fields.smoothing.BinomialSmoother"><code class="xref any py py-class docutils literal notranslate"><span class="pre">BinomialSmoother</span></code></a>, optional) – Determines how the charge and currents are smoothed.
+(Default: one-pass binomial filter and no compensator.)</li>
 </ul>
 </td>
 </tr>
@@ -436,7 +440,7 @@ field push or not. (requires initialize_ions = True)</li>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.9.5',
+            VERSION:'0.10.0',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fbpic.openpmd_diag.checkpoint_restart &mdash; FBPIC 0.9.5 documentation</title>
+  <title>fbpic.openpmd_diag.checkpoint_restart &mdash; FBPIC 0.10.0 documentation</title>
   
 
   
@@ -56,7 +56,7 @@
             
             
               <div class="version">
-                0.9.5
+                0.10.0
               </div>
             
           
@@ -165,12 +165,12 @@
 <span class="kn">from</span> <span class="nn">.particle_diag</span> <span class="k">import</span> <span class="n">ParticleDiagnostic</span>
 <span class="kn">from</span> <span class="nn">fbpic.utils.mpi</span> <span class="k">import</span> <span class="n">comm</span>
 
-<div class="viewcode-block" id="set_periodic_checkpoint"><a class="viewcode-back" href="../../../api_reference/checkpoint_restart.html#fbpic.openpmd_diag.set_periodic_checkpoint">[docs]</a><span class="k">def</span> <span class="nf">set_periodic_checkpoint</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">period</span> <span class="p">):</span>
+<div class="viewcode-block" id="set_periodic_checkpoint"><a class="viewcode-back" href="../../../api_reference/checkpoint_restart.html#fbpic.openpmd_diag.set_periodic_checkpoint">[docs]</a><span class="k">def</span> <span class="nf">set_periodic_checkpoint</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">period</span><span class="p">,</span> <span class="n">checkpoint_dir</span><span class="o">=</span><span class="s1">&#39;./checkpoints&#39;</span> <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Set up periodic checkpoints of the simulation</span>
 
-<span class="sd">    The checkpoints are saved in openPMD format, in the directory</span>
-<span class="sd">    `./checkpoints`, with one subdirectory per process.</span>
+<span class="sd">    The checkpoints are saved in openPMD format, in the specified</span>
+<span class="sd">    directory, with one subdirectory per process.</span>
 <span class="sd">    The E and B fields and particle information of each processor is saved.</span>
 
 <span class="sd">    NB: Checkpoints are registered in the list `checkpoints` of the Simulation</span>
@@ -184,18 +184,23 @@
 
 <span class="sd">    period: integer</span>
 <span class="sd">       The number of PIC iteration between each checkpoint.</span>
+
+<span class="sd">    checkpoint_dir: string, optional</span>
+<span class="sd">        The path to the directory in which the checkpoints are stored</span>
+<span class="sd">        (When running a simulation with several MPI ranks, use the </span>
+<span class="sd">        same path for all ranks.)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Only processor 0 creates a directory where checkpoints will be stored</span>
     <span class="c1"># Make sure that all processors wait until this directory is created</span>
     <span class="c1"># (Use the global MPI communicator instead of the `BoundaryCommunicator`</span>
     <span class="c1"># so that this still works in the case `use_all_ranks=False`)</span>
     <span class="k">if</span> <span class="n">comm</span><span class="o">.</span><span class="n">rank</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s1">&#39;./checkpoints&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-            <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="s1">&#39;./checkpoints&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">checkpoint_dir</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">checkpoint_dir</span><span class="p">)</span>
     <span class="n">comm</span><span class="o">.</span><span class="n">barrier</span><span class="p">()</span>
 
     <span class="c1"># Choose the name of the directory: one directory per processor</span>
-    <span class="n">write_dir</span> <span class="o">=</span> <span class="s1">&#39;checkpoints/proc</span><span class="si">%d</span><span class="s1">/&#39;</span> <span class="o">%</span><span class="n">comm</span><span class="o">.</span><span class="n">rank</span>
+    <span class="n">write_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">checkpoint_dir</span><span class="p">,</span> <span class="s1">&#39;proc</span><span class="si">%d</span><span class="s1">/&#39;</span> <span class="o">%</span><span class="n">comm</span><span class="o">.</span><span class="n">rank</span><span class="p">)</span>
 
     <span class="c1"># Register a periodic FieldDiagnostic in the diagnostics of the simulation</span>
     <span class="n">sim</span><span class="o">.</span><span class="n">checkpoints</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">FieldDiagnostic</span><span class="p">(</span> <span class="n">period</span><span class="p">,</span> <span class="n">sim</span><span class="o">.</span><span class="n">fld</span><span class="p">,</span>
@@ -211,7 +216,8 @@
         <span class="n">sim</span><span class="o">.</span><span class="n">checkpoints</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
             <span class="n">ParticleDiagnostic</span><span class="p">(</span> <span class="n">period</span><span class="p">,</span> <span class="n">particle_dict</span><span class="p">,</span> <span class="n">write_dir</span><span class="o">=</span><span class="n">write_dir</span> <span class="p">)</span> <span class="p">)</span></div>
 
-<div class="viewcode-block" id="restart_from_checkpoint"><a class="viewcode-back" href="../../../api_reference/checkpoint_restart.html#fbpic.openpmd_diag.restart_from_checkpoint">[docs]</a><span class="k">def</span> <span class="nf">restart_from_checkpoint</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">None</span> <span class="p">):</span>
+<div class="viewcode-block" id="restart_from_checkpoint"><a class="viewcode-back" href="../../../api_reference/checkpoint_restart.html#fbpic.openpmd_diag.restart_from_checkpoint">[docs]</a><span class="k">def</span> <span class="nf">restart_from_checkpoint</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                            <span class="n">checkpoint_dir</span><span class="o">=</span><span class="s1">&#39;./checkpoints&#39;</span> <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Fills the Simulation object `sim` with data saved in a checkpoint.</span>
 
@@ -238,9 +244,14 @@
 <span class="sd">    sim: a Simulation object</span>
 <span class="sd">       The Simulation object into which the checkpoint should be loaded</span>
 
-<span class="sd">    iteration: integer (optional)</span>
+<span class="sd">    iteration: integer, optional</span>
 <span class="sd">       The iteration number of the checkpoint from which to restart</span>
 <span class="sd">       If None, the latest checkpoint available will be used.</span>
+
+<span class="sd">    checkpoint_dir: string, optional</span>
+<span class="sd">        The path to the directory that contains the checkpoints to be loaded.</span>
+<span class="sd">        (When running a simulation with several MPI ranks, use the </span>
+<span class="sd">        same path for all ranks.)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Import openPMD-viewer</span>
     <span class="k">try</span><span class="p">:</span>
@@ -254,13 +265,13 @@
     <span class="c1"># (Use the global MPI communicator instead of the `BoundaryCommunicator`,</span>
     <span class="c1"># so that this also works for `use_all_ranks=False`)</span>
     <span class="k">if</span> <span class="n">comm</span><span class="o">.</span><span class="n">rank</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">check_restart</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">iteration</span> <span class="p">)</span>
+        <span class="n">check_restart</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">iteration</span><span class="p">,</span> <span class="n">checkpoint_dir</span> <span class="p">)</span>
     <span class="n">comm</span><span class="o">.</span><span class="n">barrier</span><span class="p">()</span>
 
     <span class="c1"># Choose the name of the directory from which to restart:</span>
     <span class="c1"># one directory per processor</span>
-    <span class="n">checkpoint_dir</span> <span class="o">=</span> <span class="s1">&#39;checkpoints/proc</span><span class="si">%d</span><span class="s1">/hdf5&#39;</span> <span class="o">%</span><span class="n">comm</span><span class="o">.</span><span class="n">rank</span>
-    <span class="n">ts</span> <span class="o">=</span> <span class="n">OpenPMDTimeSeries</span><span class="p">(</span> <span class="n">checkpoint_dir</span> <span class="p">)</span>
+    <span class="n">data_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span> <span class="n">checkpoint_dir</span><span class="p">,</span> <span class="s1">&#39;proc</span><span class="si">%d</span><span class="s1">/hdf5&#39;</span> <span class="o">%</span><span class="n">comm</span><span class="o">.</span><span class="n">rank</span> <span class="p">)</span>
+    <span class="n">ts</span> <span class="o">=</span> <span class="n">OpenPMDTimeSeries</span><span class="p">(</span> <span class="n">data_dir</span> <span class="p">)</span>
     <span class="c1"># Select the iteration, and its index</span>
     <span class="k">if</span> <span class="n">iteration</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">iteration</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">iterations</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
@@ -304,19 +315,19 @@
     <span class="n">zmin_new</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">zmin</span>
     <span class="n">sim</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">shift_global_domain_positions</span><span class="p">(</span> <span class="n">zmin_new</span> <span class="o">-</span> <span class="n">zmin_old</span> <span class="p">)</span></div>
 
-<span class="k">def</span> <span class="nf">check_restart</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">iteration</span> <span class="p">):</span>
+<span class="k">def</span> <span class="nf">check_restart</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">iteration</span><span class="p">,</span> <span class="n">checkpoint_dir</span> <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Verify that the restart is valid.&quot;&quot;&quot;</span>
 
     <span class="c1"># Check that the checkpoint directory exists</span>
-    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s1">&#39;./checkpoints&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;The directory ./checkpoints, which is &#39;</span>
-         <span class="s1">&#39;required to restart a simulation, does not exist.&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">checkpoint_dir</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;The directory </span><span class="si">%s</span><span class="s1">, which is &#39;</span>
+         <span class="s1">&#39;required to restart a simulation, does not exist.&#39;</span> <span class="o">%</span><span class="n">checkpoint_dir</span><span class="p">)</span>
 
     <span class="c1"># Infer the number of processors that were used for the checkpoint</span>
     <span class="c1"># and check that it is the same as the current number of processors</span>
     <span class="n">nproc</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">regex_matcher</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;proc\d+&#39;</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">directory</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="s1">&#39;./checkpoints&#39;</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">directory</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">checkpoint_dir</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">regex_matcher</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">nproc</span> <span class="o">+=</span> <span class="mi">1</span>
     <span class="k">if</span> <span class="n">nproc</span> <span class="o">!=</span> <span class="n">comm</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
@@ -503,7 +514,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.9.5',
+            VERSION:'0.10.0',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

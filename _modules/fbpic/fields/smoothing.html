@@ -1,0 +1,304 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>fbpic.fields.smoothing &mdash; FBPIC 0.10.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> FBPIC
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.10.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../overview.html">Overview of the code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../install/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../how_to_run.html">How to run the code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api_reference/api_reference.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../advanced/advanced.html">Advanced use</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">FBPIC</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>fbpic.fields.smoothing</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for fbpic.fields.smoothing</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2018, FBPIC contributors</span>
+<span class="c1"># Authors: Remi Lehe, Manuel Kirchen, Soeren Jalas</span>
+<span class="c1"># License: 3-Clause-BSD-LBNL</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This file is part of the Fourier-Bessel Particle-In-Cell code (FB-PIC)</span>
+<span class="sd">It defines a class for field smoothing.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<div class="viewcode-block" id="BinomialSmoother"><a class="viewcode-back" href="../../../api_reference/smoothing.html#fbpic.fields.smoothing.BinomialSmoother">[docs]</a><span class="k">class</span> <span class="nc">BinomialSmoother</span><span class="p">(</span> <span class="nb">object</span> <span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class that defines a binomial smoother on a grid,</span>
+<span class="sd">    potentially with compensator.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">n_passes</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">compensator</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize a binomial smoother</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        n_passes: int or dictionary of ints</span>
+<span class="sd">            Number of passes of binomial smoothing in r and z.</span>
+<span class="sd">            (More passes results in smoother fields)</span>
+<span class="sd">            If `n_passes` is an integer, than the same number of passes</span>
+<span class="sd">            are applied in r and z.</span>
+<span class="sd">            If `n_passes` is a dictionary, it should be of the form</span>
+<span class="sd">            {&#39;z&#39;: &lt;int&gt;, &#39;r&#39;: &lt;int&gt;} to indicate the number of passes</span>
+<span class="sd">            in each direction.</span>
+
+<span class="sd">        compensator: bool, or dictionary of bools</span>
+<span class="sd">            Whether to apply a compensator in r and z.</span>
+<span class="sd">            (Applying a compensator mitigates the impact of the smoother</span>
+<span class="sd">            on low and intermediate frequencies)</span>
+<span class="sd">            If `compensator` is a boolean, than this applies to r and z.</span>
+<span class="sd">            If `n_passes` is a dictionary, it should be of the form</span>
+<span class="sd">            {&#39;z&#39;: &lt;bool&gt;, &#39;r&#39;: &lt;bool&gt;} to indicate whether a compensator</span>
+<span class="sd">            is applied in r and/or in z.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Register smoothing parameters</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">n_passes</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">int</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">n_passes</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;z&#39;</span><span class="p">:</span> <span class="n">n_passes</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">:</span> <span class="n">n_passes</span><span class="p">}</span>
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">n_passes</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">dict</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">n_passes</span> <span class="o">=</span> <span class="n">n_passes</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Invalid argument `n_passes`&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Register compensator</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">compensator</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">bool</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">compensator</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;z&#39;</span><span class="p">:</span> <span class="n">compensator</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">:</span> <span class="n">compensator</span><span class="p">}</span>
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">compensator</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">dict</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">compensator</span> <span class="o">=</span> <span class="n">compensator</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Invalid argument `compensator`&#39;</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">get_filter_array</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">kz</span><span class="p">,</span> <span class="n">kr</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">dr</span> <span class="p">)</span> <span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the array that multiplies the fields in k space</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        kz: 1darray</span>
+<span class="sd">            The true wavevectors of the longitudinal, spectral grid</span>
+<span class="sd">            (i.e. not the kz modified by finite order)</span>
+
+<span class="sd">        kr: 1darray</span>
+<span class="sd">            The transverse wavevectors on the spectral grid</span>
+
+<span class="sd">        dz, dr: float</span>
+<span class="sd">            The grid spacings (needed to calculate</span>
+<span class="sd">            precisely the filtering function in spectral space)</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        A 2darray of shape ( len(kz), len(kr) )</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Equivalent to nz passes of binomial filter in real space</span>
+        <span class="n">sz2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">kz</span> <span class="o">*</span> <span class="n">dz</span> <span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+        <span class="n">nz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_passes</span><span class="p">[</span><span class="s1">&#39;z&#39;</span><span class="p">]</span>
+        <span class="n">filt_z</span> <span class="o">=</span> <span class="p">(</span> <span class="mf">1.</span> <span class="o">-</span> <span class="n">sz2</span> <span class="p">)</span><span class="o">**</span><span class="n">nz</span>
+        <span class="c1"># Add compensator</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">compensator</span><span class="p">[</span><span class="s1">&#39;z&#39;</span><span class="p">]:</span>
+            <span class="n">filt_z</span> <span class="o">*=</span> <span class="p">(</span> <span class="mf">1.</span> <span class="o">+</span> <span class="n">nz</span><span class="o">*</span><span class="n">sz2</span> <span class="p">)</span>
+
+        <span class="c1"># Equivalent to nr passes of binomial filter in real space</span>
+        <span class="n">sr2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">kr</span> <span class="o">*</span> <span class="n">dr</span> <span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+        <span class="n">nr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_passes</span><span class="p">[</span><span class="s1">&#39;r&#39;</span><span class="p">]</span>
+        <span class="n">filt_r</span> <span class="o">=</span> <span class="p">(</span> <span class="mf">1.</span> <span class="o">-</span> <span class="n">sr2</span> <span class="p">)</span><span class="o">**</span><span class="n">nr</span>
+        <span class="c1"># Add compensator</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">compensator</span><span class="p">[</span><span class="s1">&#39;r&#39;</span><span class="p">]:</span>
+            <span class="n">filt_r</span> <span class="o">*=</span> <span class="p">(</span> <span class="mf">1.</span> <span class="o">+</span> <span class="n">nr</span><span class="o">*</span><span class="n">sr2</span> <span class="p">)</span>
+
+        <span class="k">return</span><span class="p">(</span> <span class="n">filt_z</span><span class="p">,</span> <span class="n">filt_r</span> <span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, FBPIC contributors.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'0.10.0',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

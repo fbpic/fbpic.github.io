@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Conversion to boosted-frame &mdash; FBPIC 0.9.5 documentation</title>
+  <title>Conversion to boosted-frame &mdash; FBPIC 0.10.0 documentation</title>
   
 
   
@@ -28,7 +28,7 @@
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Advanced use" href="../advanced/advanced.html" />
+    <link rel="next" title="Field smoothing" href="smoothing.html" />
     <link rel="prev" title="External fields" href="lpa_utilities/external_fields.html" /> 
 
   
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.9.5
+                0.10.0
               </div>
             
           
@@ -93,6 +93,7 @@
 <li class="toctree-l2"><a class="reference internal" href="checkpoint_restart.html">Checkpoints and restarts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lpa_utilities/lpa_utilities.html">Laser-plasma utilities</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Conversion to boosted-frame</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smoothing.html">Field smoothing</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../advanced/advanced.html">Advanced use</a></li>
@@ -285,6 +286,39 @@ particle has no transverse motion at all.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="fbpic.lpa_utils.boosted_frame.BoostConverter.interaction_time">
+<code class="descname">interaction_time</code><span class="sig-paren">(</span><em>L_interact</em>, <em>l_window</em>, <em>v_window</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/lpa_utils/boosted_frame.html#BoostConverter.interaction_time"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.boosted_frame.BoostConverter.interaction_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the interaction time in the boosted frame:
+(Time it takes for the moving window to slide once across the
+total interaction length, i.e. the plasma)</p>
+<p>L_interact’ = L_interact / gamma0
+l_window’ = l_window * gamma0 * ( 1 + beta0 )
+v_window’ = ( v_window - c * beta0 )/( 1 - beta0*v_window/c )
+v_plasma’ = -beta0 * c</p>
+<p>T_interact’ = L_interact’ + l_window’ / ( v_window’ - v_plasma’ )</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>L_interact</strong> (<em>float</em><em> (</em><em>in meter</em><em>)</em>) – The total interaction length (typically the length of the plasma)
+in the lab frame.</li>
+<li><strong>l_window</strong> (<em>float</em><em> (</em><em>in meter</em><em>)</em>) – The length of the moving window in the lab frame.</li>
+<li><strong>v_window</strong> (<em>float</em><em> (</em><em>in meter/second</em><em>)</em>) – The velocity of the moving window in the lab frame.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>T_interact</strong> – The interaction time in the boosted frame.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">float (in seconds)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="fbpic.lpa_utils.boosted_frame.BoostConverter.longitudinal_momentum">
 <code class="descname">longitudinal_momentum</code><span class="sig-paren">(</span><em>lab_frame_vars</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/lpa_utils/boosted_frame.html#BoostConverter.longitudinal_momentum"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.boosted_frame.BoostConverter.longitudinal_momentum" title="Permalink to this definition">¶</a></dt>
 <dd><p>Converts a list of momenta from the lab frame to the boosted frame:
@@ -395,7 +429,7 @@ k’ = k / ( gamma0 ( 1 + beta0 ) )</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../advanced/advanced.html" class="btn btn-neutral float-right" title="Advanced use" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="smoothing.html" class="btn btn-neutral float-right" title="Field smoothing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="lpa_utilities/external_fields.html" class="btn btn-neutral" title="External fields" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
@@ -429,7 +463,7 @@ k’ = k / ( gamma0 ( 1 + beta0 ) )</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.9.5',
+            VERSION:'0.10.0',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fbpic.main &mdash; FBPIC 0.9.5 documentation</title>
+  <title>fbpic.main &mdash; FBPIC 0.10.0 documentation</title>
   
 
   
@@ -56,7 +56,7 @@
             
             
               <div class="version">
-                0.9.5
+                0.10.0
               </div>
             
           
@@ -203,7 +203,8 @@
                  <span class="n">n_guard</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_damp</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">exchange_period</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">current_correction</span><span class="o">=</span><span class="s1">&#39;curl-free&#39;</span><span class="p">,</span> <span class="n">boundaries</span><span class="o">=</span><span class="s1">&#39;periodic&#39;</span><span class="p">,</span>
                  <span class="n">gamma_boost</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">use_all_mpi_ranks</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                 <span class="n">particle_shape</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">verbose_level</span><span class="o">=</span><span class="mi">1</span> <span class="p">):</span>
+                 <span class="n">particle_shape</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">verbose_level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                 <span class="n">smoother</span><span class="o">=</span><span class="kc">None</span> <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initializes a simulation.</span>
 
@@ -285,26 +286,27 @@
 <span class="sd">            calculates the required guard cells for n_order</span>
 <span class="sd">            automatically (approx 2*n_order). If no MPI is used and</span>
 <span class="sd">            in the case of open boundaries with an infinite order stencil,</span>
-<span class="sd">            n_guard defaults to 30, if not set otherwise.</span>
+<span class="sd">            n_guard defaults to 64, if not set otherwise.</span>
 <span class="sd">        n_damp : int, optional</span>
 <span class="sd">            Number of damping guard cells at the left and right of a</span>
 <span class="sd">            simulation box if a moving window is attached. The guard</span>
 <span class="sd">            region at these areas (left / right of moving window) is</span>
-<span class="sd">            extended by n_damp (N=n_guard+n_damp) in order to smoothly</span>
-<span class="sd">            damp the fields such that they do not wrap around.</span>
+<span class="sd">            extended by n_damp in order to smoothly damp the fields such</span>
+<span class="sd">            that they do not wrap around. Additionally, this region is</span>
+<span class="sd">            extended by an injection area of size n_guard/2 automatically.</span>
 <span class="sd">            (Defaults to 64)</span>
 <span class="sd">        exchange_period: int, optional</span>
 <span class="sd">            Number of iterations before which the particles are exchanged.</span>
 <span class="sd">            If set to None, the maximum exchange period is calculated</span>
 <span class="sd">            automatically: Within exchange_period timesteps, the</span>
 <span class="sd">            particles should never be able to travel more than</span>
-<span class="sd">            (n_guard - particle_shape order) cells. (Setting exchange_period</span>
+<span class="sd">            (n_guard/2 - particle_shape order) cells. (Setting exchange_period</span>
 <span class="sd">            to small values can substantially affect the performance)</span>
 
 <span class="sd">        boundaries: string, optional</span>
 <span class="sd">            Indicates how to exchange the fields at the left and right</span>
 <span class="sd">            boundaries of the global simulation box.</span>
-<span class="sd">            Either &#39;periodic&#39; or &#39;open&#39;</span>
+<span class="sd">            (Either &#39;periodic&#39; or &#39;open&#39;)</span>
 
 <span class="sd">        current_correction: string, optional</span>
 <span class="sd">            The method used in order to ensure that the continuity equation</span>
@@ -341,6 +343,10 @@
 <span class="sd">            0 - Print no information</span>
 <span class="sd">            1 (Default) - Print basic information</span>
 <span class="sd">            2 - Print detailed information</span>
+
+<span class="sd">        smoother: an instance of :any:`BinomialSmoother`, optional</span>
+<span class="sd">            Determines how the charge and currents are smoothed.</span>
+<span class="sd">            (Default: one-pass binomial filter and no compensator.)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Check whether to use CUDA</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">use_cuda</span> <span class="o">=</span> <span class="n">use_cuda</span>
@@ -374,7 +380,7 @@
         <span class="c1"># Initialize the boundary communicator</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">comm</span> <span class="o">=</span> <span class="n">BoundaryCommunicator</span><span class="p">(</span> <span class="n">Nz</span><span class="p">,</span> <span class="n">zmin</span><span class="p">,</span> <span class="n">zmax</span><span class="p">,</span> <span class="n">Nr</span><span class="p">,</span> <span class="n">rmax</span><span class="p">,</span> <span class="n">Nm</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">v_comoving</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_galilean</span><span class="p">,</span> <span class="n">boundaries</span><span class="p">,</span> <span class="n">n_order</span><span class="p">,</span>
-            <span class="n">n_guard</span><span class="p">,</span> <span class="n">n_damp</span><span class="p">,</span> <span class="n">exchange_period</span><span class="p">,</span> <span class="n">use_all_mpi_ranks</span> <span class="p">)</span>
+            <span class="n">n_guard</span><span class="p">,</span> <span class="n">n_damp</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">exchange_period</span><span class="p">,</span> <span class="n">use_all_mpi_ranks</span> <span class="p">)</span>
         <span class="c1"># Modify domain region</span>
         <span class="n">zmin</span><span class="p">,</span> <span class="n">zmax</span><span class="p">,</span> <span class="n">Nz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">divide_into_domain</span><span class="p">()</span>
         <span class="c1"># Initialize the field structure</span>
@@ -384,6 +390,7 @@
                     <span class="n">use_galilean</span><span class="o">=</span><span class="n">use_galilean</span><span class="p">,</span>
                     <span class="n">current_correction</span><span class="o">=</span><span class="n">current_correction</span><span class="p">,</span>
                     <span class="n">use_cuda</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">use_cuda</span><span class="p">,</span>
+                    <span class="n">smoother</span><span class="o">=</span><span class="n">smoother</span><span class="p">,</span>
                     <span class="c1"># Only create threading buffers when running on CPU</span>
                     <span class="n">create_threading_buffers</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">use_cuda</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">)</span> <span class="p">)</span>
 
@@ -515,6 +522,8 @@
                 <span class="c1"># are shifted by one box length, so they remain inside the box)</span>
                 <span class="k">for</span> <span class="n">species</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ptcl</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">exchange_particles</span><span class="p">(</span><span class="n">species</span><span class="p">,</span> <span class="n">fld</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">antenna</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">laser_antennas</span><span class="p">:</span>
+                    <span class="n">antenna</span><span class="o">.</span><span class="n">update_current_rank</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="p">)</span>
 
                 <span class="c1"># Reproject the charge on the interpolation grid</span>
                 <span class="c1"># (Since particles have been removed / added to the simulation;</span>
@@ -702,7 +711,7 @@
                 <span class="n">species</span><span class="o">.</span><span class="n">deposit</span><span class="p">(</span> <span class="n">fld</span><span class="p">,</span> <span class="s1">&#39;rho&#39;</span> <span class="p">)</span>
             <span class="c1"># Deposit the charge of the virtual particles in the antenna</span>
             <span class="k">for</span> <span class="n">antenna</span> <span class="ow">in</span> <span class="n">antennas_list</span><span class="p">:</span>
-                <span class="n">antenna</span><span class="o">.</span><span class="n">deposit</span><span class="p">(</span> <span class="n">fld</span><span class="p">,</span> <span class="s1">&#39;rho&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span> <span class="p">)</span>
+                <span class="n">antenna</span><span class="o">.</span><span class="n">deposit</span><span class="p">(</span> <span class="n">fld</span><span class="p">,</span> <span class="s1">&#39;rho&#39;</span> <span class="p">)</span>
             <span class="c1"># Sum contribution from each CPU threads (skipped on GPU)</span>
             <span class="n">fld</span><span class="o">.</span><span class="n">sum_reduce_deposition_array</span><span class="p">(</span><span class="s1">&#39;rho&#39;</span><span class="p">)</span>
             <span class="c1"># Divide by cell volume</span>
@@ -719,7 +728,7 @@
                 <span class="n">species</span><span class="o">.</span><span class="n">deposit</span><span class="p">(</span> <span class="n">fld</span><span class="p">,</span> <span class="s1">&#39;J&#39;</span> <span class="p">)</span>
             <span class="c1"># Deposit the current of the virtual particles in the antenna</span>
             <span class="k">for</span> <span class="n">antenna</span> <span class="ow">in</span> <span class="n">antennas_list</span><span class="p">:</span>
-                <span class="n">antenna</span><span class="o">.</span><span class="n">deposit</span><span class="p">(</span> <span class="n">fld</span><span class="p">,</span> <span class="s1">&#39;J&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span> <span class="p">)</span>
+                <span class="n">antenna</span><span class="o">.</span><span class="n">deposit</span><span class="p">(</span> <span class="n">fld</span><span class="p">,</span> <span class="s1">&#39;J&#39;</span> <span class="p">)</span>
             <span class="c1"># Sum contribution from each CPU threads (skipped on GPU)</span>
             <span class="n">fld</span><span class="o">.</span><span class="n">sum_reduce_deposition_array</span><span class="p">(</span><span class="s1">&#39;J&#39;</span><span class="p">)</span>
             <span class="c1"># Divide by cell volume</span>
@@ -1119,7 +1128,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.9.5',
+            VERSION:'0.10.0',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

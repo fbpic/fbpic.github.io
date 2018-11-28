@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Checkpoints and restarts &mdash; FBPIC 0.9.5 documentation</title>
+  <title>Checkpoints and restarts &mdash; FBPIC 0.10.0 documentation</title>
   
 
   
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.9.5
+                0.10.0
               </div>
             
           
@@ -97,6 +97,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="lpa_utilities/lpa_utilities.html">Laser-plasma utilities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="boost_converter.html">Conversion to boosted-frame</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smoothing.html">Field smoothing</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../advanced/advanced.html">Advanced use</a></li>
@@ -180,10 +181,10 @@ without having to run it again from the beginning.</p>
 <h2>Setting checkpoints<a class="headerlink" href="#setting-checkpoints" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="fbpic.openpmd_diag.set_periodic_checkpoint">
-<code class="descclassname">fbpic.openpmd_diag.</code><code class="descname">set_periodic_checkpoint</code><span class="sig-paren">(</span><em>sim</em>, <em>period</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/openpmd_diag/checkpoint_restart.html#set_periodic_checkpoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.openpmd_diag.set_periodic_checkpoint" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">fbpic.openpmd_diag.</code><code class="descname">set_periodic_checkpoint</code><span class="sig-paren">(</span><em>sim</em>, <em>period</em>, <em>checkpoint_dir='./checkpoints'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/openpmd_diag/checkpoint_restart.html#set_periodic_checkpoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.openpmd_diag.set_periodic_checkpoint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set up periodic checkpoints of the simulation</p>
-<p>The checkpoints are saved in openPMD format, in the directory
-<cite>./checkpoints</cite>, with one subdirectory per process.
+<p>The checkpoints are saved in openPMD format, in the specified
+directory, with one subdirectory per process.
 The E and B fields and particle information of each processor is saved.</p>
 <p>NB: Checkpoints are registered in the list <cite>checkpoints</cite> of the Simulation
 object <cite>sim</cite>, and written at the end of the PIC loop (whereas regular
@@ -195,6 +196,9 @@ diagnostics are written at the beginning of the PIC loop).</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>sim</strong> (<em>a Simulation object</em>) – The simulation that is to be saved in checkpoints</li>
 <li><strong>period</strong> (<em>integer</em>) – The number of PIC iteration between each checkpoint.</li>
+<li><strong>checkpoint_dir</strong> (<em>string</em><em>, </em><em>optional</em>) – The path to the directory in which the checkpoints are stored
+(When running a simulation with several MPI ranks, use the
+same path for all ranks.)</li>
 </ul>
 </td>
 </tr>
@@ -207,7 +211,7 @@ diagnostics are written at the beginning of the PIC loop).</p>
 <h2>Restarting a simulation<a class="headerlink" href="#restarting-a-simulation" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="fbpic.openpmd_diag.restart_from_checkpoint">
-<code class="descclassname">fbpic.openpmd_diag.</code><code class="descname">restart_from_checkpoint</code><span class="sig-paren">(</span><em>sim</em>, <em>iteration=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/openpmd_diag/checkpoint_restart.html#restart_from_checkpoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.openpmd_diag.restart_from_checkpoint" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">fbpic.openpmd_diag.</code><code class="descname">restart_from_checkpoint</code><span class="sig-paren">(</span><em>sim</em>, <em>iteration=None</em>, <em>checkpoint_dir='./checkpoints'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/openpmd_diag/checkpoint_restart.html#restart_from_checkpoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.openpmd_diag.restart_from_checkpoint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fills the Simulation object <cite>sim</cite> with data saved in a checkpoint.</p>
 <p>More precisely, the following data from <cite>sim</cite> is overwritten:</p>
 <ul class="simple">
@@ -230,8 +234,11 @@ particle injection from the existing particle data.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>sim</strong> (<em>a Simulation object</em>) – The Simulation object into which the checkpoint should be loaded</li>
-<li><strong>iteration</strong> (<em>integer</em><em> (</em><em>optional</em><em>)</em>) – The iteration number of the checkpoint from which to restart
+<li><strong>iteration</strong> (<em>integer</em><em>, </em><em>optional</em>) – The iteration number of the checkpoint from which to restart
 If None, the latest checkpoint available will be used.</li>
+<li><strong>checkpoint_dir</strong> (<em>string</em><em>, </em><em>optional</em>) – The path to the directory that contains the checkpoints to be loaded.
+(When running a simulation with several MPI ranks, use the
+same path for all ranks.)</li>
 </ul>
 </td>
 </tr>
@@ -284,7 +291,7 @@ If None, the latest checkpoint available will be used.</li>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.9.5',
+            VERSION:'0.10.0',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Installation on Titan (OLCF) &mdash; FBPIC 0.9.5 documentation</title>
+  <title>Installation on Titan (OLCF) &mdash; FBPIC 0.10.0 documentation</title>
   
 
   
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.9.5
+                0.10.0
               </div>
             
           
@@ -221,7 +221,7 @@ that you install locally.</p>
 <ul>
 <li><p class="first">Install the dependencies by typing</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">numba</span> <span class="n">scipy</span> <span class="n">h5py</span> <span class="n">mkl</span>
-<span class="n">conda</span> <span class="n">install</span> <span class="n">pyculib</span>
+<span class="n">conda</span> <span class="n">install</span> <span class="n">cudatoolkit</span><span class="o">=</span><span class="mf">8.0</span> <span class="n">pyculib</span>
 </pre></div>
 </div>
 </li>
@@ -323,7 +323,7 @@ aprun -n &lt;number of nodes&gt; -N 1 python fbpic_script.py
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.9.5',
+            VERSION:'0.10.0',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
