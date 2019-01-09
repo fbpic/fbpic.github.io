@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fbpic.openpmd_diag.particle_diag &mdash; FBPIC 0.10.0 documentation</title>
+  <title>fbpic.openpmd_diag.particle_diag &mdash; FBPIC 0.10.1 documentation</title>
   
 
   
@@ -56,7 +56,7 @@
             
             
               <div class="version">
-                0.10.0
+                0.10.1
               </div>
             
           
@@ -169,7 +169,8 @@
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">period</span><span class="p">,</span> <span class="n">species</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;electrons&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">},</span> <span class="n">comm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">particle_data</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;position&quot;</span><span class="p">,</span> <span class="s2">&quot;momentum&quot;</span><span class="p">,</span> <span class="s2">&quot;weighting&quot;</span><span class="p">],</span>
-        <span class="n">select</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">write_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration_min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">iteration_max</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span> <span class="p">)</span> <span class="p">:</span>
+        <span class="n">select</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">write_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration_min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">iteration_max</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> 
+        <span class="n">subsampling_fraction</span><span class="o">=</span><span class="kc">None</span> <span class="p">)</span> <span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize the particle diagnostics.</span>
 
@@ -212,6 +213,10 @@
 <span class="sd">        iteration_min, iteration_max: ints</span>
 <span class="sd">            The iterations between which data should be written</span>
 <span class="sd">            (`iteration_min` is inclusive, `iteration_max` is exclusive)</span>
+
+<span class="sd">        subsampling_fraction : float, optional</span>
+<span class="sd">            If this is not None, the particle data is subsampled with </span>
+<span class="sd">            subsampling_fraction probability</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># General setup</span>
         <span class="n">OpenPMDDiagnostic</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">period</span><span class="p">,</span> <span class="n">comm</span><span class="p">,</span> <span class="n">write_dir</span><span class="p">,</span>
@@ -220,6 +225,8 @@
         <span class="c1"># Register the arguments</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">species_dict</span> <span class="o">=</span> <span class="n">species</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">select</span> <span class="o">=</span> <span class="n">select</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">subsampling_fraction</span> <span class="o">=</span> <span class="n">subsampling_fraction</span>
+
         <span class="c1"># Build an ordered list of species. (This is needed since the order</span>
         <span class="c1"># of the keys is not well defined, so each MPI rank could go through</span>
         <span class="c1"># the species in a different order, if species_dict.keys() is used.)</span>
@@ -478,7 +485,8 @@
     <span class="k">def</span> <span class="nf">apply_selection</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">species</span> <span class="p">)</span> <span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Apply the rules of self.select to determine which</span>
-<span class="sd">        particles should be written</span>
+<span class="sd">        particles should be written, Apply random subsampling using</span>
+<span class="sd">        the property subsampling_fraction.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -492,12 +500,16 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Initialize an array filled with True</span>
         <span class="n">select_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span> <span class="n">species</span><span class="o">.</span><span class="n">Ntot</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;bool&#39;</span> <span class="p">)</span>
+        <span class="c1"># subsampling selector</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">subsampling_fraction</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="p">:</span>
+            <span class="n">subsampling_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">species</span><span class="o">.</span><span class="n">Ntot</span><span class="p">)</span> <span class="o">&lt;</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">subsampling_fraction</span>
+            <span class="n">select_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">subsampling_array</span><span class="p">,</span><span class="n">select_array</span><span class="p">)</span>
 
         <span class="c1"># Apply the rules successively</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">select</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="p">:</span>
             <span class="c1"># Go through the quantities on which a rule applies</span>
             <span class="k">for</span> <span class="n">quantity</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">select</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="p">:</span>
-
                 <span class="n">quantity_array</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span> <span class="n">species</span><span class="p">,</span> <span class="n">quantity</span> <span class="p">)</span>
                 <span class="c1"># Lower bound</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">select</span><span class="p">[</span><span class="n">quantity</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="p">:</span>
@@ -648,7 +660,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.10.0',
+            VERSION:'0.10.1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
