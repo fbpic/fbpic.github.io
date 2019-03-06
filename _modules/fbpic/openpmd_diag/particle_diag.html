@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fbpic.openpmd_diag.particle_diag &mdash; FBPIC 0.10.1 documentation</title>
+  <title>fbpic.openpmd_diag.particle_diag &mdash; FBPIC 0.11.0 documentation</title>
   
 
   
@@ -56,7 +56,7 @@
             
             
               <div class="version">
-                0.10.1
+                0.11.0
               </div>
             
           
@@ -169,10 +169,11 @@
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">period</span><span class="p">,</span> <span class="n">species</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;electrons&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">},</span> <span class="n">comm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">particle_data</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;position&quot;</span><span class="p">,</span> <span class="s2">&quot;momentum&quot;</span><span class="p">,</span> <span class="s2">&quot;weighting&quot;</span><span class="p">],</span>
-        <span class="n">select</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">write_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration_min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">iteration_max</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> 
+        <span class="n">select</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">write_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration_min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">iteration_max</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>
         <span class="n">subsampling_fraction</span><span class="o">=</span><span class="kc">None</span> <span class="p">)</span> <span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize the particle diagnostics.</span>
+
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -193,9 +194,11 @@
 <span class="sd">            (Make sure to use different write_dir in this case.)</span>
 
 <span class="sd">        particle_data : a list of strings, optional</span>
-<span class="sd">            The particle properties are given by:</span>
-<span class="sd">            [&quot;position&quot;, &quot;momentum&quot;, &quot;weighting&quot;]</span>
-<span class="sd">            for the coordinates x,y,z.</span>
+<span class="sd">            Possible values are:</span>
+<span class="sd">            [&quot;position&quot;, &quot;momentum&quot;, &quot;weighting&quot;, &quot;E&quot; , &quot;B&quot;, &quot;gamma&quot;]</span>
+<span class="sd">            &quot;E&quot; and &quot;B&quot; writes the E and B fields at the particles&#39; positions,</span>
+<span class="sd">            respectively, but is turned off by default.</span>
+<span class="sd">            &quot;gamma&quot; writes the particles&#39; Lorentz factor.</span>
 <span class="sd">            By default, if a particle is tracked, its id is always written.</span>
 
 <span class="sd">        select : dict, optional</span>
@@ -215,7 +218,7 @@
 <span class="sd">            (`iteration_min` is inclusive, `iteration_max` is exclusive)</span>
 
 <span class="sd">        subsampling_fraction : float, optional</span>
-<span class="sd">            If this is not None, the particle data is subsampled with </span>
+<span class="sd">            If this is not None, the particle data is subsampled with</span>
 <span class="sd">            subsampling_fraction probability</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># General setup</span>
@@ -244,6 +247,10 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">array_quantities_dict</span><span class="p">[</span><span class="n">species_name</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span><span class="s1">&#39;y&#39;</span><span class="p">,</span><span class="s1">&#39;z&#39;</span><span class="p">]</span>
                 <span class="k">elif</span> <span class="n">quantity</span> <span class="o">==</span> <span class="s2">&quot;momentum&quot;</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">array_quantities_dict</span><span class="p">[</span><span class="n">species_name</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span><span class="s1">&#39;ux&#39;</span><span class="p">,</span><span class="s1">&#39;uy&#39;</span><span class="p">,</span><span class="s1">&#39;uz&#39;</span><span class="p">]</span>
+                <span class="k">elif</span> <span class="n">quantity</span> <span class="o">==</span> <span class="s2">&quot;E&quot;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">array_quantities_dict</span><span class="p">[</span><span class="n">species_name</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span><span class="s1">&#39;Ex&#39;</span><span class="p">,</span><span class="s1">&#39;Ey&#39;</span><span class="p">,</span><span class="s1">&#39;Ez&#39;</span><span class="p">]</span>
+                <span class="k">elif</span> <span class="n">quantity</span> <span class="o">==</span> <span class="s2">&quot;B&quot;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">array_quantities_dict</span><span class="p">[</span><span class="n">species_name</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span><span class="s1">&#39;Bx&#39;</span><span class="p">,</span><span class="s1">&#39;By&#39;</span><span class="p">,</span><span class="s1">&#39;Bz&#39;</span><span class="p">]</span>
                 <span class="k">elif</span> <span class="n">quantity</span> <span class="o">==</span> <span class="s2">&quot;weighting&quot;</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">array_quantities_dict</span><span class="p">[</span><span class="n">species_name</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
@@ -458,7 +465,17 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">write_dataset</span><span class="p">(</span> <span class="n">species_grp</span><span class="p">,</span> <span class="n">species</span><span class="p">,</span> <span class="n">quantity_path</span><span class="p">,</span>
                         <span class="n">quantity</span><span class="p">,</span> <span class="n">n_rank</span><span class="p">,</span> <span class="n">Ntot</span><span class="p">,</span> <span class="n">select_array</span> <span class="p">)</span>
 
-            <span class="k">elif</span> <span class="n">quantity</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;charge&quot;</span><span class="p">]:</span>
+            <span class="k">elif</span> <span class="n">quantity</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;Ex&quot;</span> <span class="p">,</span> <span class="s2">&quot;Ey&quot;</span> <span class="p">,</span> <span class="s2">&quot;Ez&quot;</span><span class="p">]:</span>
+                <span class="n">quantity_path</span> <span class="o">=</span> <span class="s2">&quot;E/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">quantity</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">write_dataset</span><span class="p">(</span> <span class="n">species_grp</span><span class="p">,</span> <span class="n">species</span><span class="p">,</span> <span class="n">quantity_path</span><span class="p">,</span>
+                        <span class="n">quantity</span><span class="p">,</span> <span class="n">n_rank</span><span class="p">,</span> <span class="n">Ntot</span><span class="p">,</span> <span class="n">select_array</span> <span class="p">)</span>
+
+            <span class="k">elif</span> <span class="n">quantity</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;Bx&quot;</span><span class="p">,</span> <span class="s2">&quot;By&quot;</span><span class="p">,</span> <span class="s2">&quot;Bz&quot;</span><span class="p">]:</span>
+                <span class="n">quantity_path</span> <span class="o">=</span> <span class="s2">&quot;B/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">quantity</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">write_dataset</span><span class="p">(</span> <span class="n">species_grp</span><span class="p">,</span> <span class="n">species</span><span class="p">,</span> <span class="n">quantity_path</span><span class="p">,</span>
+                        <span class="n">quantity</span><span class="p">,</span> <span class="n">n_rank</span><span class="p">,</span> <span class="n">Ntot</span><span class="p">,</span> <span class="n">select_array</span> <span class="p">)</span>
+
+            <span class="k">elif</span> <span class="n">quantity</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;charge&quot;</span><span class="p">,</span> <span class="s2">&quot;gamma&quot;</span><span class="p">]:</span>
                 <span class="k">if</span> <span class="n">quantity</span> <span class="o">==</span> <span class="s2">&quot;w&quot;</span><span class="p">:</span>
                     <span class="n">quantity_path</span> <span class="o">=</span> <span class="s2">&quot;weighting&quot;</span>
                 <span class="k">else</span><span class="p">:</span>
@@ -473,7 +490,7 @@
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid string in </span><span class="si">%s</span><span class="s2"> of species&quot;</span>
                     				 <span class="o">%</span><span class="p">(</span><span class="n">quantity</span><span class="p">))</span>
 
-        <span class="c1"># Setup the hdf5 groups for the quantities &quot;position&quot; and &quot;momentum&quot;</span>
+        <span class="c1"># Setup the hdf5 groups for &quot;position&quot;, &quot;momentum&quot;, &quot;E&quot;, &quot;B&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rank</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">if</span> <span class="s2">&quot;x&quot;</span> <span class="ow">in</span> <span class="n">particle_data</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">setup_openpmd_species_record</span><span class="p">(</span>
@@ -481,6 +498,13 @@
             <span class="k">if</span> <span class="s2">&quot;ux&quot;</span> <span class="ow">in</span> <span class="n">particle_data</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">setup_openpmd_species_record</span><span class="p">(</span>
                     <span class="n">species_grp</span><span class="p">[</span><span class="s2">&quot;momentum&quot;</span><span class="p">],</span> <span class="s2">&quot;momentum&quot;</span> <span class="p">)</span>
+            <span class="k">if</span> <span class="s2">&quot;Ex&quot;</span> <span class="ow">in</span> <span class="n">particle_data</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">setup_openpmd_species_record</span><span class="p">(</span>
+                    <span class="n">species_grp</span><span class="p">[</span><span class="s2">&quot;E&quot;</span><span class="p">],</span> <span class="s2">&quot;E&quot;</span> <span class="p">)</span>
+            <span class="k">if</span> <span class="s2">&quot;Bx&quot;</span> <span class="ow">in</span> <span class="n">particle_data</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">setup_openpmd_species_record</span><span class="p">(</span>
+                    <span class="n">species_grp</span><span class="p">[</span><span class="s2">&quot;B&quot;</span><span class="p">],</span> <span class="s2">&quot;B&quot;</span> <span class="p">)</span>
+
 
     <span class="k">def</span> <span class="nf">apply_selection</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">species</span> <span class="p">)</span> <span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -510,7 +534,10 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">select</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="p">:</span>
             <span class="c1"># Go through the quantities on which a rule applies</span>
             <span class="k">for</span> <span class="n">quantity</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">select</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="p">:</span>
-                <span class="n">quantity_array</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span> <span class="n">species</span><span class="p">,</span> <span class="n">quantity</span> <span class="p">)</span>
+                <span class="k">if</span> <span class="n">quantity</span> <span class="o">==</span> <span class="s2">&quot;gamma&quot;</span><span class="p">:</span>
+                    <span class="n">quantity_array</span> <span class="o">=</span> <span class="mf">1.0</span><span class="o">/</span><span class="nb">getattr</span><span class="p">(</span> <span class="n">species</span><span class="p">,</span> <span class="s2">&quot;inv_gamma&quot;</span> <span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">quantity_array</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span> <span class="n">species</span><span class="p">,</span> <span class="n">quantity</span> <span class="p">)</span>
                 <span class="c1"># Lower bound</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">select</span><span class="p">[</span><span class="n">quantity</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="p">:</span>
                     <span class="n">select_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span>
@@ -544,7 +571,7 @@
 
 <span class="sd">        quantity : string</span>
 <span class="sd">            Describes which quantity is written</span>
-<span class="sd">            x, y, z, ux, uy, uz, w, id</span>
+<span class="sd">            x, y, z, ux, uy, uz, w, id, gamma</span>
 
 <span class="sd">        n_rank : list of ints</span>
 <span class="sd">            A list containing the number of particles to send on each proc</span>
@@ -606,6 +633,8 @@
             <span class="n">quantity_one_proc</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">e</span> <span class="o">*</span> <span class="n">species</span><span class="o">.</span><span class="n">ionizer</span><span class="o">.</span><span class="n">ionization_level</span>
         <span class="k">elif</span> <span class="n">quantity</span> <span class="o">==</span> <span class="s2">&quot;w&quot;</span><span class="p">:</span>
             <span class="n">quantity_one_proc</span> <span class="o">=</span> <span class="n">species</span><span class="o">.</span><span class="n">w</span>
+        <span class="k">elif</span> <span class="n">quantity</span> <span class="o">==</span> <span class="s2">&quot;gamma&quot;</span><span class="p">:</span>
+            <span class="n">quantity_one_proc</span> <span class="o">=</span> <span class="mf">1.0</span><span class="o">/</span><span class="nb">getattr</span><span class="p">(</span> <span class="n">species</span><span class="p">,</span> <span class="s2">&quot;inv_gamma&quot;</span> <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">quantity_one_proc</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span> <span class="n">species</span><span class="p">,</span> <span class="n">quantity</span> <span class="p">)</span>
 
@@ -638,7 +667,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016, FBPIC contributors.
+        &copy; Copyright 2016, FBPIC contributors
 
     </p>
   </div>
@@ -657,21 +686,14 @@
 
   
 
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../../../',
-            VERSION:'0.10.1',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../../../_static/jquery.js"></script>
-      <script type="text/javascript" src="../../../_static/underscore.js"></script>
-      <script type="text/javascript" src="../../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
 
   
 

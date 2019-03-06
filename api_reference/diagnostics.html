@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>The openPMD diagnostics &mdash; FBPIC 0.10.1 documentation</title>
+  <title>The openPMD diagnostics &mdash; FBPIC 0.11.0 documentation</title>
   
 
   
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.10.1
+                0.11.0
               </div>
             
           
@@ -243,9 +243,11 @@ is assigned to the particleName of this species.
 guard cells are removed.
 Otherwise, each rank writes its own data, including guard cells.
 (Make sure to use different write_dir in this case.)</li>
-<li><strong>particle_data</strong> (<em>a list of strings</em><em>, </em><em>optional</em>) – The particle properties are given by:
-[“position”, “momentum”, “weighting”]
-for the coordinates x,y,z.
+<li><strong>particle_data</strong> (<em>a list of strings</em><em>, </em><em>optional</em>) – Possible values are:
+[“position”, “momentum”, “weighting”, “E” , “B”, “gamma”]
+“E” and “B” writes the E and B fields at the particles’ positions,
+respectively, but is turned off by default.
+“gamma” writes the particles’ Lorentz factor.
 By default, if a particle is tracked, its id is always written.</li>
 <li><strong>select</strong> (<em>dict</em><em>, </em><em>optional</em>) – Either None or a dictionary of rules
 to select the particles, of the form
@@ -354,8 +356,15 @@ are then brought from spectral to real space, at each iteration.</li>
 as a series of snapshot (one file per snapshot),
 within a virtual moving window defined by zmin_lab, zmax_lab, v_lab.</p>
 <p>The parameters defined below are specific to the back-transformed
-diagnostics. See the documentation of <cite>FieldDiagnostic</cite> for
+diagnostics. See the documentation of <cite>ParticleDiagnostic</cite> for
 the other parameters.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The output of the gathered fields on the particles
+(<code class="docutils literal notranslate"><span class="pre">particle_data=[&quot;E&quot;,</span> <span class="pre">&quot;B&quot;]</span></code>) and of the Lorentz factor
+(<code class="docutils literal notranslate"><span class="pre">particle_data=[&quot;gamma&quot;]</span></code>) is not currently supported
+for <code class="docutils literal notranslate"><span class="pre">BoostedParticleDiagnostic</span></code>.</p>
+</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -403,7 +412,7 @@ extract some information about the grid</li>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016, FBPIC contributors.
+        &copy; Copyright 2016, FBPIC contributors
 
     </p>
   </div>
@@ -422,21 +431,14 @@ extract some information about the grid</li>
 
   
 
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../',
-            VERSION:'0.10.1',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../_static/jquery.js"></script>
-      <script type="text/javascript" src="../_static/underscore.js"></script>
-      <script type="text/javascript" src="../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
 
   
 

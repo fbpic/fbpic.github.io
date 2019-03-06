@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Installation on Lawrencium (LBNL) &mdash; FBPIC 0.10.1 documentation</title>
+  <title>Installation on Lawrencium (LBNL) &mdash; FBPIC 0.11.0 documentation</title>
   
 
   
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.10.1
+                0.11.0
               </div>
             
           
@@ -86,6 +86,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview of the code</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="installation.html">Installation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="install_local.html">Installation on a local computer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install_summit.html">Installation on Summit (OLCF)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="install_titan.html">Installation on Titan (OLCF)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="install_jureca.html">Installation on JURECA (JSC)</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Installation on Lawrencium (LBNL)</a><ul>
@@ -224,9 +225,8 @@ below:</p>
 <h3>Installation of FBPIC and its dependencies<a class="headerlink" href="#installation-of-fbpic-and-its-dependencies" title="Permalink to this headline">¶</a></h3>
 <ul>
 <li><p class="first">Install the dependencies of <code class="docutils literal notranslate"><span class="pre">fbpic</span></code></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">numba</span><span class="o">==</span><span class="mf">0.41</span> <span class="n">scipy</span> <span class="n">h5py</span> <span class="n">mkl</span>
-<span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">mpi4py</span>
-<span class="n">conda</span> <span class="n">install</span> <span class="n">cudatoolkit</span><span class="o">=</span><span class="mi">8</span> <span class="n">pyculib</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">numba</span> <span class="n">scipy</span> <span class="n">h5py</span> <span class="n">mkl</span> <span class="n">mpi4py</span>
+<span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">cudatoolkit</span><span class="o">=</span><span class="mi">8</span> <span class="n">pyculib</span>
 </pre></div>
 </div>
 </li>
@@ -272,21 +272,22 @@ your input script (typically this directory is a subdirectory of
 following text (and replace the bracketed text by the proper values).</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
 <span class="c1">#SBATCH -J my_job</span>
-<span class="c1">#SBATCH --partition=lr_manycore</span>
+<span class="c1">#SBATCH --partition lr_manycore</span>
+<span class="c1">#SBATCH --qos lr_normal</span>
 <span class="c1">#SBATCH --constraint &lt;gpuConstraint&gt;</span>
 <span class="c1">#SBATCH --time &lt;requestedTime&gt;</span>
-<span class="c1">#SBATCH --nodes 1</span>
-<span class="c1">#SBATCH --qos lr_normal</span>
+<span class="c1">#SBATCH --ntasks &lt;requestedRanks&gt;</span>
+<span class="c1">#SBATCH --ntasks-per-node &lt;gpuPerNode&gt;</span>
 
-<span class="n">python</span> <span class="o">&lt;</span><span class="n">fbpic_script</span><span class="o">.</span><span class="n">py</span><span class="o">&gt;</span>
+<span class="n">mpirun</span> <span class="o">-</span><span class="n">np</span> <span class="o">&lt;</span><span class="n">requestedRanks</span><span class="o">&gt;</span> <span class="n">python</span> <span class="n">fbpic_script</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
-<p>where <code class="docutils literal notranslate"><span class="pre">`&lt;gpuConstraint&gt;</span></code> should be either:</p>
+<p>where <code class="docutils literal notranslate"><span class="pre">&lt;gpuConstraint&gt;</span></code> and <code class="docutils literal notranslate"><span class="pre">&lt;gpuPerNode&gt;</span></code> should be:</p>
 <blockquote>
 <div><ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">lr_k20</span></code> for a node with a single K20 GPU</li>
-<li><code class="docutils literal notranslate"><span class="pre">lr_k80</span></code> for a node with four K80 GPUs</li>
-<li><code class="docutils literal notranslate"><span class="pre">lr_pascal</span></code> for a node with four GTX 1080Ti GPUs</li>
+<li>For the nodes with a single K20 GPU, <code class="docutils literal notranslate"><span class="pre">gpuConstraint=lr_k20</span></code> and <code class="docutils literal notranslate"><span class="pre">gpuPerNode=1</span></code></li>
+<li>For the nodes with four K80 GPUs, <code class="docutils literal notranslate"><span class="pre">gpuConstraint=lr_k80</span></code> and <code class="docutils literal notranslate"><span class="pre">gpuPerNode=4</span></code></li>
+<li>For the nodes with four GTX 1080Ti GPUs, <code class="docutils literal notranslate"><span class="pre">gpuConstraint=lr_pascal</span></code> and <code class="docutils literal notranslate"><span class="pre">gpuPerNode=4</span></code></li>
 </ul>
 </div></blockquote>
 <p>for more information on the available nodes, see
@@ -341,7 +342,7 @@ computer.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016, FBPIC contributors.
+        &copy; Copyright 2016, FBPIC contributors
 
     </p>
   </div>
@@ -360,21 +361,14 @@ computer.</p>
 
   
 
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../',
-            VERSION:'0.10.1',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../_static/jquery.js"></script>
-      <script type="text/javascript" src="../_static/underscore.js"></script>
-      <script type="text/javascript" src="../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
 
   
 

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Installation on Comet (SDSC) &mdash; FBPIC 0.10.1 documentation</title>
+  <title>Installation on Comet (SDSC) &mdash; FBPIC 0.11.0 documentation</title>
   
 
   
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.10.1
+                0.11.0
               </div>
             
           
@@ -86,6 +86,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview of the code</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="installation.html">Installation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="install_local.html">Installation on a local computer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install_summit.html">Installation on Summit (OLCF)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="install_titan.html">Installation on Titan (OLCF)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="install_jureca.html">Installation on JURECA (JSC)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="install_lawrencium.html">Installation on Lawrencium (LBNL)</a></li>
@@ -205,7 +206,7 @@ to your <code class="docutils literal notranslate"><span class="pre">.bashrc</sp
 <h3>Installation of FBPIC and its dependencies<a class="headerlink" href="#installation-of-fbpic-and-its-dependencies" title="Permalink to this headline">¶</a></h3>
 <ul>
 <li><p class="first">Install the dependencies of <code class="docutils literal notranslate"><span class="pre">fbpic</span></code> (except <code class="docutils literal notranslate"><span class="pre">mpi4py</span></code>)</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">numba</span><span class="o">==</span><span class="mf">0.41</span> <span class="n">scipy</span> <span class="n">h5py</span> <span class="n">mkl</span> <span class="n">cudatoolkit</span><span class="o">=</span><span class="mf">8.0</span> <span class="n">pyculib</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">numba</span> <span class="n">scipy</span> <span class="n">h5py</span> <span class="n">mkl</span> <span class="n">cudatoolkit</span><span class="o">=</span><span class="mf">8.0</span> <span class="n">pyculib</span>
 </pre></div>
 </div>
 </li>
@@ -303,7 +304,7 @@ following text (and replace the bracketed text by the proper values).</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016, FBPIC contributors.
+        &copy; Copyright 2016, FBPIC contributors
 
     </p>
   </div>
@@ -322,21 +323,14 @@ following text (and replace the bracketed text by the proper values).</p>
 
   
 
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../',
-            VERSION:'0.10.1',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../_static/jquery.js"></script>
-      <script type="text/javascript" src="../_static/underscore.js"></script>
-      <script type="text/javascript" src="../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
 
   
 

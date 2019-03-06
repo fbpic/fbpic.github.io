@@ -1,0 +1,378 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Installation on Summit (OLCF) &mdash; FBPIC 0.11.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Installation on Titan (OLCF)" href="install_titan.html" />
+    <link rel="prev" title="Installation on a local computer" href="install_local.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> FBPIC
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.11.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview of the code</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="installation.html">Installation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="install_local.html">Installation on a local computer</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Installation on Summit (OLCF)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#installation-of-fbpic">Installation of FBPIC</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#preparing-the-anaconda-environment">Preparing the Anaconda environment</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#installation-of-fbpic-and-its-dependencies">Installation of FBPIC and its dependencies</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#running-simulations">Running simulations</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#interactive-jobs">Interactive jobs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#batch-job">Batch job</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="install_titan.html">Installation on Titan (OLCF)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install_jureca.html">Installation on JURECA (JSC)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install_lawrencium.html">Installation on Lawrencium (LBNL)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install_comet.html">Installation on Comet (SDSC)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install_cori_edison.html">Installation on Cori and Edison (NERSC)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../how_to_run.html">How to run the code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api_reference/api_reference.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/advanced.html">Advanced use</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">FBPIC</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="installation.html">Installation</a> &raquo;</li>
+        
+      <li>Installation on Summit (OLCF)</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/install/install_summit.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="installation-on-summit-olcf">
+<h1>Installation on Summit (OLCF)<a class="headerlink" href="#installation-on-summit-olcf" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://www.olcf.ornl.gov/olcf-resources/compute-systems/summit/">Summit</a>
+is a GPU cluster at the <a class="reference external" href="https://www.olcf.ornl.gov/">Oakridge Leadership Computing Facility</a> (OLCF).</p>
+<p>Each node has of 6 Nvidia V100 GPUs.</p>
+<div class="section" id="installation-of-fbpic">
+<h2>Installation of FBPIC<a class="headerlink" href="#installation-of-fbpic" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="preparing-the-anaconda-environment">
+<h3>Preparing the Anaconda environment<a class="headerlink" href="#preparing-the-anaconda-environment" title="Permalink to this headline">¶</a></h3>
+<p>First load the relevant modules:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">module</span> <span class="n">purge</span>
+<span class="n">module</span> <span class="n">load</span> <span class="n">gcc</span><span class="o">/</span><span class="mf">4.8</span><span class="o">.</span><span class="mi">5</span>
+<span class="n">module</span> <span class="n">load</span> <span class="n">spectrum</span><span class="o">-</span><span class="n">mpi</span><span class="o">/</span><span class="mf">10.2</span><span class="o">.</span><span class="mf">0.10</span><span class="o">-</span><span class="mi">20181214</span>
+<span class="n">module</span> <span class="n">load</span> <span class="n">fftw</span><span class="o">/</span><span class="mf">3.3</span><span class="o">.</span><span class="mi">8</span>
+<span class="n">module</span> <span class="n">load</span> <span class="n">python</span><span class="o">/</span><span class="mf">3.7</span><span class="o">.</span><span class="mi">0</span><span class="o">-</span><span class="n">anaconda3</span><span class="o">-</span><span class="mf">5.3</span><span class="o">.</span><span class="mi">0</span>
+</pre></div>
+</div>
+<p>Then create a new <cite>conda</cite> environment</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">create</span> <span class="o">-</span><span class="n">n</span> <span class="n">fbpic</span> <span class="n">python</span><span class="o">=</span><span class="mi">3</span>
+<span class="n">source</span> <span class="n">activate</span> <span class="n">fbpic</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="installation-of-fbpic-and-its-dependencies">
+<h3>Installation of FBPIC and its dependencies<a class="headerlink" href="#installation-of-fbpic-and-its-dependencies" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><p class="first">Install the dependencies of <code class="docutils literal notranslate"><span class="pre">fbpic</span></code></p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">numba</span> <span class="n">scipy</span> <span class="n">h5py</span> <span class="n">cython</span> <span class="n">cudatoolkit</span><span class="o">=</span><span class="mf">8.0</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first">Install <code class="docutils literal notranslate"><span class="pre">pyfftw</span></code></p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">pyfftw</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first">Install <code class="docutils literal notranslate"><span class="pre">pyculib</span></code></p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">dzhoshkun</span><span class="o">/</span><span class="n">pyculib_sorting</span><span class="o">.</span><span class="n">git</span>
+<span class="n">cd</span> <span class="n">pyculib_sorting</span>
+<span class="n">git</span> <span class="n">submodule</span> <span class="n">update</span> <span class="o">--</span><span class="n">init</span>
+<span class="n">module</span> <span class="n">load</span> <span class="n">cuda</span>
+<span class="n">python</span> <span class="n">build_sorting_libs</span><span class="o">.</span><span class="n">py</span>
+<span class="n">module</span> <span class="n">unload</span> <span class="n">cuda</span>
+<span class="n">cp</span> <span class="n">lib</span><span class="o">/*.</span><span class="n">so</span> <span class="o">~/.</span><span class="n">conda</span><span class="o">/</span><span class="n">envs</span><span class="o">/</span><span class="n">fbpic</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="n">pyculib</span>
+<span class="n">cd</span> <span class="o">..</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first">Install <code class="docutils literal notranslate"><span class="pre">fbpic</span></code></p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">fbpic</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="running-simulations">
+<h2>Running simulations<a class="headerlink" href="#running-simulations" title="Permalink to this headline">¶</a></h2>
+<p>In order to create a new simulation, create a new directory in
+<code class="docutils literal notranslate"><span class="pre">$MEMBERWORK/</span></code> and copy your input script there:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>mkdir $MEMBERWORK/&lt;project_id&gt;/&lt;simulation name&gt;
+cp fbpic_script.py $MEMBERWORK/&lt;project_id&gt;/&lt;simulation name&gt;
+</pre></div>
+</div>
+<p>Also, before launching any new job, please make sure that the <cite>conda</cite>
+environment <code class="docutils literal notranslate"><span class="pre">fbpic</span></code> is <strong>not</strong> loaded, for instance by using</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">source</span> <span class="n">deactivate</span> <span class="n">fbpic</span>
+</pre></div>
+</div>
+<div class="section" id="interactive-jobs">
+<h3>Interactive jobs<a class="headerlink" href="#interactive-jobs" title="Permalink to this headline">¶</a></h3>
+<p>In order to request one node for 20 minutes:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">bsub</span> <span class="o">-</span><span class="n">W</span> <span class="mi">00</span><span class="p">:</span><span class="mi">20</span> <span class="o">-</span><span class="n">nnodes</span> <span class="mi">1</span> <span class="o">-</span><span class="n">P</span> <span class="o">&lt;</span><span class="n">account_number</span><span class="o">&gt;</span> <span class="o">-</span><span class="n">Is</span> <span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">bash</span>
+</pre></div>
+</div>
+<p>Then <code class="docutils literal notranslate"><span class="pre">cd</span></code> to the directory where you prepared your input script and type</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">module</span> <span class="n">purge</span>
+<span class="n">module</span> <span class="n">load</span> <span class="n">gcc</span><span class="o">/</span><span class="mf">4.8</span><span class="o">.</span><span class="mi">5</span>
+<span class="n">module</span> <span class="n">load</span> <span class="n">spectrum</span><span class="o">-</span><span class="n">mpi</span><span class="o">/</span><span class="mf">10.2</span><span class="o">.</span><span class="mf">0.10</span><span class="o">-</span><span class="mi">20181214</span>
+<span class="n">module</span> <span class="n">load</span> <span class="n">fftw</span><span class="o">/</span><span class="mf">3.3</span><span class="o">.</span><span class="mi">8</span>
+<span class="n">module</span> <span class="n">load</span> <span class="n">python</span><span class="o">/</span><span class="mf">3.7</span><span class="o">.</span><span class="mi">0</span><span class="o">-</span><span class="n">anaconda3</span><span class="o">-</span><span class="mf">5.3</span><span class="o">.</span><span class="mi">0</span>
+<span class="n">module</span> <span class="n">load</span> <span class="n">py</span><span class="o">-</span><span class="n">mpi4py</span><span class="o">/</span><span class="mf">3.0</span><span class="o">.</span><span class="mi">0</span><span class="o">-</span><span class="n">py3</span>
+<span class="n">source</span> <span class="n">activate</span> <span class="n">fbpic</span>
+<span class="n">export</span> <span class="n">NUMBA_NUM_THREADS</span><span class="o">=</span><span class="mi">7</span>
+<span class="n">export</span> <span class="n">OMP_NUM_THREADS</span><span class="o">=</span><span class="mi">7</span>
+
+<span class="n">jsrun</span> <span class="o">-</span><span class="n">n</span> <span class="mi">1</span> <span class="o">-</span><span class="n">a</span> <span class="mi">1</span> <span class="o">-</span><span class="n">c</span> <span class="mi">1</span> <span class="o">-</span><span class="n">g</span> <span class="mi">1</span> <span class="n">python</span> <span class="o">&lt;</span><span class="n">fbpic_script</span><span class="o">.</span><span class="n">py</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="batch-job">
+<h3>Batch job<a class="headerlink" href="#batch-job" title="Permalink to this headline">¶</a></h3>
+<p>Create a new file named <code class="docutils literal notranslate"><span class="pre">submission_script</span></code> in the same directory as
+your input script. Within this new file, copy the
+following text (and replace the bracketed text by the proper values).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1">#BSUB -J my_job</span>
+<span class="c1">#BSUB -W &lt;requestedTime&gt;</span>
+<span class="c1">#BSUB -nnodes &lt;requestedNode&gt;</span>
+<span class="c1">#BSUB -P &lt;accountNumber&gt;</span>
+
+<span class="n">module</span> <span class="n">purge</span>
+<span class="n">module</span> <span class="n">load</span> <span class="n">gcc</span><span class="o">/</span><span class="mf">4.8</span><span class="o">.</span><span class="mi">5</span>
+<span class="n">module</span> <span class="n">load</span> <span class="n">cuda</span><span class="o">/</span><span class="mf">9.1</span><span class="o">.</span><span class="mi">85</span>
+<span class="n">module</span> <span class="n">load</span> <span class="n">spectrum</span><span class="o">-</span><span class="n">mpi</span><span class="o">/</span><span class="mf">10.2</span><span class="o">.</span><span class="mf">0.10</span><span class="o">-</span><span class="mi">20181214</span>
+<span class="n">module</span> <span class="n">load</span> <span class="n">fftw</span><span class="o">/</span><span class="mf">3.3</span><span class="o">.</span><span class="mi">8</span>
+<span class="n">module</span> <span class="n">load</span> <span class="n">python</span><span class="o">/</span><span class="mf">3.7</span><span class="o">.</span><span class="mi">0</span><span class="o">-</span><span class="n">anaconda3</span><span class="o">-</span><span class="mf">5.3</span><span class="o">.</span><span class="mi">0</span>
+<span class="n">module</span> <span class="n">load</span> <span class="n">py</span><span class="o">-</span><span class="n">mpi4py</span><span class="o">/</span><span class="mf">3.0</span><span class="o">.</span><span class="mi">0</span><span class="o">-</span><span class="n">py3</span>
+<span class="n">source</span> <span class="n">activate</span> <span class="n">fbpic</span>
+
+<span class="n">export</span> <span class="n">NUMBA_NUM_THREADS</span><span class="o">=</span><span class="mi">7</span>
+<span class="n">export</span> <span class="n">OMP_NUM_THREADS</span><span class="o">=</span><span class="mi">7</span>
+<span class="n">export</span> <span class="n">FBPIC_ENABLE_GPUDIRECT</span><span class="o">=</span><span class="mi">1</span>
+
+<span class="n">jsrun</span> <span class="o">-</span><span class="n">n</span> <span class="o">&lt;</span><span class="n">requestedNode</span><span class="o">&gt;</span> <span class="o">-</span><span class="n">a</span> <span class="mi">6</span> <span class="o">-</span><span class="n">c</span> <span class="mi">42</span> <span class="o">-</span><span class="n">g</span> <span class="mi">6</span> <span class="o">--</span><span class="n">smpiargs</span><span class="o">=</span><span class="s2">&quot;-gpu&quot;</span> <span class="n">python</span> <span class="n">fbpic_script</span><span class="o">.</span><span class="n">py</span> <span class="o">&gt;</span> <span class="n">cpu</span><span class="o">.</span><span class="n">log</span>
+</pre></div>
+</div>
+<p>Then run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">bsub</span> <span class="n">submission_script</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Note that, in the above script, <code class="docutils literal notranslate"><span class="pre">module</span> <span class="pre">load</span> <span class="pre">cuda/9.1.85</span></code>,
+<code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">FBPIC_ENABLE_GPUDIRECT=1</span></code> and <code class="docutils literal notranslate"><span class="pre">--smpiargs=&quot;-gpu&quot;</span></code>
+are only needed if you wish to use the <strong>cuda-aware</strong> MPI.</p>
+</div>
+<p>Use <code class="docutils literal notranslate"><span class="pre">bjobs</span></code> to monitor the job.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="install_titan.html" class="btn btn-neutral float-right" title="Installation on Titan (OLCF)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="install_local.html" class="btn btn-neutral" title="Installation on a local computer" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, FBPIC contributors
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

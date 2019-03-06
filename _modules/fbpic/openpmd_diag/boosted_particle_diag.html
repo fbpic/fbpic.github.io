@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fbpic.openpmd_diag.boosted_particle_diag &mdash; FBPIC 0.10.1 documentation</title>
+  <title>fbpic.openpmd_diag.boosted_particle_diag &mdash; FBPIC 0.11.0 documentation</title>
   
 
   
@@ -56,7 +56,7 @@
             
             
               <div class="version">
-                0.10.1
+                0.11.0
               </div>
             
           
@@ -199,8 +199,15 @@
 <span class="sd">        within a virtual moving window defined by zmin_lab, zmax_lab, v_lab.</span>
 
 <span class="sd">        The parameters defined below are specific to the back-transformed</span>
-<span class="sd">        diagnostics. See the documentation of `FieldDiagnostic` for</span>
+<span class="sd">        diagnostics. See the documentation of `ParticleDiagnostic` for</span>
 <span class="sd">        the other parameters.</span>
+
+<span class="sd">        .. warning::</span>
+
+<span class="sd">            The output of the gathered fields on the particles</span>
+<span class="sd">            (``particle_data=[&quot;E&quot;, &quot;B&quot;]``) and of the Lorentz factor</span>
+<span class="sd">            (``particle_data=[&quot;gamma&quot;]``) is not currently supported</span>
+<span class="sd">            for ``BoostedParticleDiagnostic``.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1072,7 +1079,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016, FBPIC contributors.
+        &copy; Copyright 2016, FBPIC contributors
 
     </p>
   </div>
@@ -1091,21 +1098,14 @@
 
   
 
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../../../',
-            VERSION:'0.10.1',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../../../_static/jquery.js"></script>
-      <script type="text/javascript" src="../../../_static/underscore.js"></script>
-      <script type="text/javascript" src="../../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
 
   
 

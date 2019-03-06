@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fbpic.lpa_utils.bunch &mdash; FBPIC 0.10.1 documentation</title>
+  <title>fbpic.lpa_utils.bunch &mdash; FBPIC 0.11.0 documentation</title>
   
 
   
@@ -56,7 +56,7 @@
             
             
               <div class="version">
-                0.10.1
+                0.11.0
               </div>
             
           
@@ -162,6 +162,7 @@
 <span class="kn">from</span> <span class="nn">fbpic.particles.elementary_process.cuda_numba_utils</span> <span class="k">import</span> \
     <span class="n">reallocate_and_copy_old</span>
 <span class="kn">from</span> <span class="nn">fbpic.particles.injection</span> <span class="k">import</span> <span class="n">BallisticBeforePlane</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
 
 <div class="viewcode-block" id="add_elec_bunch"><a class="viewcode-back" href="../../../api_reference/lpa_utilities/beam.html#fbpic.lpa_utils.bunch.add_elec_bunch">[docs]</a><span class="k">def</span> <span class="nf">add_elec_bunch</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">gamma0</span><span class="p">,</span> <span class="n">n_e</span><span class="p">,</span> <span class="n">p_zmin</span><span class="p">,</span> <span class="n">p_zmax</span><span class="p">,</span> <span class="n">p_rmin</span><span class="p">,</span> <span class="n">p_rmax</span><span class="p">,</span>
                 <span class="n">p_nr</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">p_nz</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">p_nt</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">dens_func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">boost</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -245,6 +246,7 @@
     <span class="c1"># Get the corresponding space-charge fields</span>
     <span class="n">get_space_charge_fields</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">relat_elec</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">direction</span> <span class="p">)</span></div>
 
+
 <div class="viewcode-block" id="add_elec_bunch_gaussian"><a class="viewcode-back" href="../../../api_reference/lpa_utilities/beam.html#fbpic.lpa_utils.bunch.add_elec_bunch_gaussian">[docs]</a><span class="k">def</span> <span class="nf">add_elec_bunch_gaussian</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">sig_r</span><span class="p">,</span> <span class="n">sig_z</span><span class="p">,</span> <span class="n">n_emit</span><span class="p">,</span> <span class="n">gamma0</span><span class="p">,</span>
                         <span class="n">sig_gamma</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">tf</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">zf</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">boost</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                         <span class="n">save_beam</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">z_injection_plane</span><span class="o">=</span><span class="kc">None</span> <span class="p">):</span>
@@ -304,38 +306,61 @@
 <span class="sd">        boosted-frame simulations.</span>
 <span class="sd">        `z_injection_plane` is always given in the lab frame.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># Get Gaussian particle distribution in x,y,z</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="n">sig_r</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
-    <span class="n">y</span> <span class="o">=</span> <span class="n">sig_r</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
-    <span class="n">z</span> <span class="o">=</span> <span class="n">zf</span> <span class="o">+</span> <span class="n">sig_z</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span> <span class="c1"># with offset in z</span>
-    <span class="c1"># Define sigma of ux and uy based on normalized emittance</span>
-    <span class="n">sig_ur</span> <span class="o">=</span> <span class="p">(</span><span class="n">n_emit</span><span class="o">/</span><span class="n">sig_r</span><span class="p">)</span>
-    <span class="c1"># Get Gaussian distribution of transverse normalized momenta ux, uy</span>
-    <span class="n">ux</span> <span class="o">=</span> <span class="n">sig_ur</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
-    <span class="n">uy</span> <span class="o">=</span> <span class="n">sig_ur</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
-    <span class="c1"># Now we imprint an energy spread on the gammas of each particle</span>
+    <span class="c1"># Generate Gaussian gamma distribution of the beam</span>
     <span class="k">if</span> <span class="n">sig_gamma</span> <span class="o">&gt;</span> <span class="mf">0.</span><span class="p">:</span>
         <span class="n">gamma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">gamma0</span><span class="p">,</span> <span class="n">sig_gamma</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="c1"># Or set it to zero</span>
+        <span class="c1"># Zero energy spread beam</span>
         <span class="n">gamma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">gamma0</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">sig_gamma</span> <span class="o">&lt;</span> <span class="mf">0.</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warning: Negative energy spread sig_gamma detected.&quot;</span>
-                  <span class="s2">&quot; sig_gamma will be set to zero. </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;Negative energy spread sig_gamma detected.&quot;</span>
+                <span class="s2">&quot; sig_gamma will be set to zero. </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="c1"># Get inverse gamma</span>
+    <span class="n">inv_gamma</span> <span class="o">=</span> <span class="mf">1.</span> <span class="o">/</span> <span class="n">gamma</span>
+    <span class="c1"># Get Gaussian particle distribution in x,y,z</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">sig_r</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">sig_r</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">zf</span> <span class="o">+</span> <span class="n">sig_z</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>  <span class="c1"># with offset in z</span>
+
+    <span class="c1"># Define sigma of ux and uy based on normalized emittance</span>
+    <span class="n">sig_ur</span> <span class="o">=</span> <span class="p">(</span><span class="n">n_emit</span> <span class="o">/</span> <span class="n">sig_r</span><span class="p">)</span>
+    <span class="c1"># Get Gaussian distribution of transverse normalized momenta ux, uy</span>
+    <span class="n">ux</span> <span class="o">=</span> <span class="n">sig_ur</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+    <span class="n">uy</span> <span class="o">=</span> <span class="n">sig_ur</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+
     <span class="c1"># Finally we calculate the uz of each particle</span>
     <span class="c1"># from the gamma and the transverse momenta ux, uy</span>
-    <span class="n">uz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">gamma</span><span class="o">**</span><span class="mi">2</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">ux</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">uy</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
-    <span class="c1"># Get inverse gamma</span>
-    <span class="n">inv_gamma</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="n">gamma</span>
-    <span class="c1"># Get weight of each particle</span>
-    <span class="n">w</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">Q</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">N</span><span class="o">*</span><span class="n">e</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">uz_sqr</span> <span class="o">=</span> <span class="p">(</span><span class="n">gamma</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">ux</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">uy</span> <span class="o">**</span> <span class="mi">2</span>
 
+    <span class="c1"># Check for unphysical particles with uz**2 &lt; 0</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">uz_sqr</span> <span class="o">&gt;=</span> <span class="mi">0</span>
+    <span class="n">N_new</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">count_nonzero</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">N_new</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+              <span class="s2">&quot;Particles with uz**2&lt;0 detected.&quot;</span>
+              <span class="s2">&quot; </span><span class="si">%d</span><span class="s2"> Particles will be removed from the beam. </span><span class="se">\n</span><span class="s2">&quot;</span>
+              <span class="s2">&quot;This will truncate the distribution of the beam&quot;</span>
+              <span class="s2">&quot; at gamma ~= 1. </span><span class="se">\n</span><span class="s2">&quot;</span>
+              <span class="s2">&quot;However, the charge will be kept constant. </span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">N</span><span class="o">-</span><span class="n">N_new</span><span class="p">))</span>
+        <span class="c1"># Remove unphysical particles with uz**2 &lt; 0</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="n">z</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+        <span class="n">ux</span> <span class="o">=</span> <span class="n">ux</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+        <span class="n">uy</span> <span class="o">=</span> <span class="n">uy</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+        <span class="n">inv_gamma</span> <span class="o">=</span> <span class="n">inv_gamma</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+        <span class="n">uz_sqr</span> <span class="o">=</span> <span class="n">uz_sqr</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+    <span class="c1"># Calculate longitudinal momentum of the bunch</span>
+    <span class="n">uz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">uz_sqr</span><span class="p">)</span>
+    <span class="c1"># Get weight of each particle</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">Q</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">N_new</span> <span class="o">*</span> <span class="n">e</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
     <span class="c1"># Propagate distribution to an out-of-focus position tf.</span>
     <span class="c1"># (without taking space charge effects into account)</span>
     <span class="k">if</span> <span class="n">tf</span> <span class="o">!=</span> <span class="mf">0.</span><span class="p">:</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="n">ux</span><span class="o">*</span><span class="n">inv_gamma</span><span class="o">*</span><span class="n">c</span><span class="o">*</span><span class="n">tf</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">-</span> <span class="n">uy</span><span class="o">*</span><span class="n">inv_gamma</span><span class="o">*</span><span class="n">c</span><span class="o">*</span><span class="n">tf</span>
-        <span class="n">z</span> <span class="o">=</span> <span class="n">z</span> <span class="o">-</span> <span class="n">uz</span><span class="o">*</span><span class="n">inv_gamma</span><span class="o">*</span><span class="n">c</span><span class="o">*</span><span class="n">tf</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="n">ux</span> <span class="o">*</span> <span class="n">inv_gamma</span> <span class="o">*</span> <span class="n">c</span> <span class="o">*</span> <span class="n">tf</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">-</span> <span class="n">uy</span> <span class="o">*</span> <span class="n">inv_gamma</span> <span class="o">*</span> <span class="n">c</span> <span class="o">*</span> <span class="n">tf</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="n">z</span> <span class="o">-</span> <span class="n">uz</span> <span class="o">*</span> <span class="n">inv_gamma</span> <span class="o">*</span> <span class="n">c</span> <span class="o">*</span> <span class="n">tf</span>
 
     <span class="c1"># Save beam distribution to an .npz file</span>
     <span class="k">if</span> <span class="n">save_beam</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -578,14 +603,23 @@
     <span class="k">if</span> <span class="n">sim</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">rank</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Calculating initial space charge field...&quot;</span><span class="p">)</span>
 
-    <span class="c1"># Calculate the mean gamma by summing on each subdomain</span>
-    <span class="n">gamma_sum_local</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="n">ptcl</span><span class="o">.</span><span class="n">inv_gamma</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="c1"># Calculate the mean gamma by computing weighted sum on each subdomain</span>
+    <span class="n">w_sum_local</span> <span class="o">=</span> <span class="n">ptcl</span><span class="o">.</span><span class="n">w</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="n">w_gamma_sum_local</span> <span class="o">=</span> <span class="p">(</span><span class="n">ptcl</span><span class="o">.</span><span class="n">w</span><span class="o">*</span><span class="mf">1.</span><span class="o">/</span><span class="n">ptcl</span><span class="o">.</span><span class="n">inv_gamma</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">sim</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">mpi_comm</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">gamma</span> <span class="o">=</span> <span class="n">gamma_sum_local</span><span class="o">/</span><span class="n">ptcl</span><span class="o">.</span><span class="n">Ntot</span>
+        <span class="n">w_sum</span> <span class="o">=</span> <span class="n">w_sum_local</span>
+        <span class="n">w_gamma_sum</span> <span class="o">=</span> <span class="n">w_gamma_sum_local</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">gamma_sum</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">mpi_comm</span><span class="o">.</span><span class="n">allreduce</span><span class="p">(</span><span class="n">gamma_sum_local</span><span class="p">)</span>
-        <span class="n">Ntot</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">mpi_comm</span><span class="o">.</span><span class="n">allreduce</span><span class="p">(</span><span class="n">ptcl</span><span class="o">.</span><span class="n">Ntot</span><span class="p">)</span>
-        <span class="n">gamma</span> <span class="o">=</span> <span class="n">gamma_sum</span><span class="o">/</span><span class="n">Ntot</span>
+        <span class="n">w_sum</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">mpi_comm</span><span class="o">.</span><span class="n">allreduce</span><span class="p">(</span><span class="n">w_sum_local</span><span class="p">)</span>
+        <span class="n">w_gamma_sum</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">mpi_comm</span><span class="o">.</span><span class="n">allreduce</span><span class="p">(</span><span class="n">w_gamma_sum_local</span><span class="p">)</span>
+    <span class="c1"># Check that the number of particles is not 0</span>
+    <span class="k">if</span> <span class="n">w_sum</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;Tried to calculate space charge, but found 0 macroparticles in </span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;the corresponding species. Skipping space charge calculation...</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">gamma</span> <span class="o">=</span> <span class="n">w_gamma_sum</span><span class="o">/</span><span class="n">w_sum</span>
 
     <span class="c1"># Project the charge and currents onto the local subdomain</span>
     <span class="n">sim</span><span class="o">.</span><span class="n">deposit</span><span class="p">(</span> <span class="s1">&#39;rho&#39;</span><span class="p">,</span> <span class="n">exchange</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">species_list</span><span class="o">=</span><span class="p">[</span><span class="n">ptcl</span><span class="p">],</span>
@@ -603,7 +637,8 @@
                     <span class="n">local</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">with_damp</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">with_guard</span><span class="o">=</span><span class="kc">False</span> <span class="p">)</span>
     <span class="n">global_fld</span> <span class="o">=</span> <span class="n">Fields</span><span class="p">(</span> <span class="n">global_Nz</span><span class="p">,</span> <span class="n">global_zmax</span><span class="p">,</span>
             <span class="n">sim</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">Nr</span><span class="p">,</span> <span class="n">sim</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">rmax</span><span class="p">,</span> <span class="n">sim</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">Nm</span><span class="p">,</span> <span class="n">sim</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">dt</span><span class="p">,</span>
-            <span class="n">zmin</span><span class="o">=</span><span class="n">global_zmin</span><span class="p">,</span> <span class="n">n_order</span><span class="o">=</span><span class="n">sim</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">n_order</span><span class="p">,</span> <span class="n">use_cuda</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">n_order</span><span class="o">=</span><span class="n">sim</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">n_order</span><span class="p">,</span> <span class="n">smoother</span><span class="o">=</span><span class="n">sim</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">smoother</span><span class="p">,</span>
+            <span class="n">zmin</span><span class="o">=</span><span class="n">global_zmin</span><span class="p">,</span> <span class="n">use_cuda</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="c1"># Gather the sources on the interpolation grid of global_fld</span>
     <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">sim</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">Nm</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;Jr&#39;</span><span class="p">,</span> <span class="s1">&#39;Jt&#39;</span><span class="p">,</span> <span class="s1">&#39;Jz&#39;</span><span class="p">,</span> <span class="s1">&#39;rho&#39;</span><span class="p">]:</span>
@@ -725,7 +760,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016, FBPIC contributors.
+        &copy; Copyright 2016, FBPIC contributors
 
     </p>
   </div>
@@ -744,21 +779,14 @@
 
   
 
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../../../',
-            VERSION:'0.10.1',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../../../_static/jquery.js"></script>
-      <script type="text/javascript" src="../../../_static/underscore.js"></script>
-      <script type="text/javascript" src="../../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
 
   
 
