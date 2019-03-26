@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fbpic.openpmd_diag.boosted_field_diag &mdash; FBPIC 0.11.0 documentation</title>
+  <title>fbpic.openpmd_diag.boosted_field_diag &mdash; FBPIC 0.12.0 documentation</title>
   
 
   
@@ -17,32 +17,35 @@
   
 
   
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
-
-  
-  <script src="../../../_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -56,7 +59,7 @@
             
             
               <div class="version">
-                0.11.0
+                0.12.0
               </div>
             
           
@@ -153,7 +156,7 @@
 <span class="c1"># Authors: Remi Lehe, Manuel Kirchen</span>
 <span class="c1"># License: 3-Clause-BSD-LBNL</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">This file defines the class BoostedFieldDiagnostic</span>
+<span class="sd">This file defines the class BackTransformedFieldDiagnostic</span>
 
 <span class="sd">Major features:</span>
 <span class="sd">- The class reuses the existing methods of FieldDiagnostic</span>
@@ -172,7 +175,7 @@
 <span class="k">if</span> <span class="n">cuda_installed</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">fbpic.utils.cuda</span> <span class="k">import</span> <span class="n">cuda</span><span class="p">,</span> <span class="n">cuda_tpb_bpg_1d</span>
 
-<div class="viewcode-block" id="BoostedFieldDiagnostic"><a class="viewcode-back" href="../../../api_reference/diagnostics.html#fbpic.openpmd_diag.BoostedFieldDiagnostic">[docs]</a><span class="k">class</span> <span class="nc">BoostedFieldDiagnostic</span><span class="p">(</span><span class="n">FieldDiagnostic</span><span class="p">):</span>
+<div class="viewcode-block" id="BackTransformedFieldDiagnostic"><a class="viewcode-back" href="../../../api_reference/diagnostics.html#fbpic.openpmd_diag.BackTransformedFieldDiagnostic">[docs]</a><span class="k">class</span> <span class="nc">BackTransformedFieldDiagnostic</span><span class="p">(</span><span class="n">FieldDiagnostic</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Class that writes the fields *in the lab frame*, from</span>
 <span class="sd">    a simulation in the boosted frame</span>
@@ -942,6 +945,10 @@
                 <span class="n">slice_arr</span><span class="p">[</span><span class="mi">7</span><span class="p">,</span><span class="n">im</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">ir</span><span class="p">]</span> <span class="o">=</span> <span class="n">Sz</span><span class="o">*</span><span class="n">Jt</span><span class="p">[</span><span class="n">iz</span><span class="p">,</span><span class="n">ir</span><span class="p">]</span><span class="o">.</span><span class="n">imag</span> <span class="o">+</span> <span class="n">Szp</span><span class="o">*</span><span class="n">Jt</span><span class="p">[</span><span class="n">izp</span><span class="p">,</span><span class="n">ir</span><span class="p">]</span><span class="o">.</span><span class="n">imag</span>
                 <span class="n">slice_arr</span><span class="p">[</span><span class="mi">8</span><span class="p">,</span><span class="n">im</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">ir</span><span class="p">]</span> <span class="o">=</span> <span class="n">Sz</span><span class="o">*</span><span class="n">Jz</span><span class="p">[</span><span class="n">iz</span><span class="p">,</span><span class="n">ir</span><span class="p">]</span><span class="o">.</span><span class="n">imag</span> <span class="o">+</span> <span class="n">Szp</span><span class="o">*</span><span class="n">Jz</span><span class="p">[</span><span class="n">izp</span><span class="p">,</span><span class="n">ir</span><span class="p">]</span><span class="o">.</span><span class="n">imag</span>
                 <span class="n">slice_arr</span><span class="p">[</span><span class="mi">9</span><span class="p">,</span><span class="n">im</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">ir</span><span class="p">]</span> <span class="o">=</span> <span class="n">Sz</span><span class="o">*</span><span class="n">rho</span><span class="p">[</span><span class="n">iz</span><span class="p">,</span><span class="n">ir</span><span class="p">]</span><span class="o">.</span><span class="n">imag</span> <span class="o">+</span> <span class="n">Szp</span><span class="o">*</span><span class="n">rho</span><span class="p">[</span><span class="n">izp</span><span class="p">,</span><span class="n">ir</span><span class="p">]</span><span class="o">.</span><span class="n">imag</span>
+
+
+<span class="c1"># Alias, for backward compatibility</span>
+<span class="n">BoostedFieldDiagnostic</span> <span class="o">=</span> <span class="n">BackTransformedFieldDiagnostic</span>
 </pre></div>
 
            </div>
@@ -971,26 +978,16 @@
   
 
 
-  
-
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../../_static/doctools.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-
-  
-
-  <script type="text/javascript" src="../../../_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

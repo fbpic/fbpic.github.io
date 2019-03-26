@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>The openPMD diagnostics &mdash; FBPIC 0.11.0 documentation</title>
+  <title>The openPMD diagnostics &mdash; FBPIC 0.12.0 documentation</title>
   
 
   
@@ -17,34 +17,37 @@
   
 
   
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Checkpoints and restarts" href="checkpoint_restart.html" />
     <link rel="prev" title="The Particles class" href="particles.html" /> 
-
-  
-  <script src="../_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -58,7 +61,7 @@
             
             
               <div class="version">
-                0.11.0
+                0.12.0
               </div>
             
           
@@ -191,16 +194,19 @@ adding or removing a corresponding diagnostic object in the list of diagnostics 
 <h3>Field diagnostic<a class="headerlink" href="#field-diagnostic" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="fbpic.openpmd_diag.FieldDiagnostic">
-<em class="property">class </em><code class="descclassname">fbpic.openpmd_diag.</code><code class="descname">FieldDiagnostic</code><span class="sig-paren">(</span><em>period, fldobject, comm=None, fieldtypes=['rho', 'E', 'B', 'J'], write_dir=None, iteration_min=0, iteration_max=inf</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/openpmd_diag/field_diag.html#FieldDiagnostic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.openpmd_diag.FieldDiagnostic" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">fbpic.openpmd_diag.</code><code class="descname">FieldDiagnostic</code><span class="sig-paren">(</span><em>period=None, fldobject=None, comm=None, fieldtypes=['rho', 'E', 'B', 'J'], write_dir=None, iteration_min=0, iteration_max=inf, dt_period=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/openpmd_diag/field_diag.html#FieldDiagnostic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.openpmd_diag.FieldDiagnostic" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize the field diagnostic.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>period</strong> (<em>int</em>) – The period of the diagnostics, in number of timesteps.
+<li><strong>period</strong> (<em>int</em><em>, </em><em>optional</em>) – The period of the diagnostics, in number of timesteps.
 (i.e. the diagnostics are written whenever the number
-of iterations is divisible by <cite>period</cite>)</li>
+of iterations is divisible by <cite>period</cite>). Specify either this or
+<cite>dt_period</cite>.</li>
+<li><strong>dt_period</strong> (<em>float</em><em> (</em><em>in seconds</em><em>)</em><em>, </em><em>optional</em>) – The period of the diagnostics, in physical time of the simulation.
+Specify either this or <cite>period</cite></li>
 <li><strong>fldobject</strong> (<em>a Fields object</em>) – Points to the data that has to be written at each output</li>
 <li><strong>comm</strong> (<em>an fbpic BoundaryCommunicator object</em><em> or </em><em>None</em>) – If this is not None, the data is gathered on the first proc,
 and the guard cells are removed from the output.
@@ -226,19 +232,22 @@ of the current working directory.</li>
 <h3>Particle diagnostic<a class="headerlink" href="#particle-diagnostic" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="fbpic.openpmd_diag.ParticleDiagnostic">
-<em class="property">class </em><code class="descclassname">fbpic.openpmd_diag.</code><code class="descname">ParticleDiagnostic</code><span class="sig-paren">(</span><em>period, species={'electrons': None}, comm=None, particle_data=['position', 'momentum', 'weighting'], select=None, write_dir=None, iteration_min=0, iteration_max=inf, subsampling_fraction=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/openpmd_diag/particle_diag.html#ParticleDiagnostic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.openpmd_diag.ParticleDiagnostic" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">fbpic.openpmd_diag.</code><code class="descname">ParticleDiagnostic</code><span class="sig-paren">(</span><em>period=None, species={}, comm=None, particle_data=['position', 'momentum', 'weighting'], select=None, write_dir=None, iteration_min=0, iteration_max=inf, subsampling_fraction=None, dt_period=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/openpmd_diag/particle_diag.html#ParticleDiagnostic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.openpmd_diag.ParticleDiagnostic" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize the particle diagnostics.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>period</strong> (<em>int</em>) – The period of the diagnostics, in number of timesteps.
+<li><strong>period</strong> (<em>int</em><em>, </em><em>optional</em>) – The period of the diagnostics, in number of timesteps.
 (i.e. the diagnostics are written whenever the number
-of iterations is divisible by <cite>period</cite>)</li>
-<li><strong>species</strong> (<em>a dictionary of Particle objects</em>) – The object that is written (e.g. elec)
-is assigned to the particleName of this species.
-(e.g. {“electrons” : elec })</li>
+of iterations is divisible by <cite>period</cite>). Specify either this or
+<cite>dt_period</cite>.</li>
+<li><strong>dt_period</strong> (<em>float</em><em> (</em><em>in seconds</em><em>)</em><em>, </em><em>optional</em>) – The period of the diagnostics, in physical time of the simulation.
+Specify either this or <cite>period</cite></li>
+<li><strong>species</strong> (a dictionary of <a class="reference internal" href="particles.html#fbpic.particles.Particles" title="fbpic.particles.Particles"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Particles</span></code></a> objects) – The object that is written (e.g. elec)
+is assigned to the particle name of this species.
+(e.g. {“electrons”: elec })</li>
 <li><strong>comm</strong> (<em>an fbpic BoundaryCommunicator object</em><em> or </em><em>None</em>) – If this is not None, the data is gathered by the communicator, and
 guard cells are removed.
 Otherwise, each rank writes its own data, including guard cells.
@@ -273,7 +282,7 @@ subsampling_fraction probability</li>
 <h3>Particle density diagnostic<a class="headerlink" href="#particle-density-diagnostic" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="fbpic.openpmd_diag.ParticleChargeDensityDiagnostic">
-<em class="property">class </em><code class="descclassname">fbpic.openpmd_diag.</code><code class="descname">ParticleChargeDensityDiagnostic</code><span class="sig-paren">(</span><em>period</em>, <em>sim</em>, <em>species={'electrons': None}</em>, <em>write_dir=None</em>, <em>iteration_min=0</em>, <em>iteration_max=inf</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/openpmd_diag/particle_density_diag.html#ParticleChargeDensityDiagnostic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.openpmd_diag.ParticleChargeDensityDiagnostic" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">fbpic.openpmd_diag.</code><code class="descname">ParticleChargeDensityDiagnostic</code><span class="sig-paren">(</span><em>period=None</em>, <em>sim=None</em>, <em>species={}</em>, <em>write_dir=None</em>, <em>iteration_min=0</em>, <em>iteration_max=inf</em>, <em>dt_period=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/openpmd_diag/particle_density_diag.html#ParticleChargeDensityDiagnostic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.openpmd_diag.ParticleChargeDensityDiagnostic" title="Permalink to this definition">¶</a></dt>
 <dd><p>Writes the charge density of the specified species in the
 openPMD file (one dataset per species)</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -281,11 +290,14 @@ openPMD file (one dataset per species)</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>period</strong> (<em>int</em>) – The period of the diagnostics, in number of timesteps.
+<li><strong>period</strong> (<em>int</em><em>, </em><em>optional</em>) – The period of the diagnostics, in number of timesteps.
 (i.e. the diagnostics are written whenever the number
-of iterations is divisible by <cite>period</cite>)</li>
-<li><strong>sim</strong> (an fbpic <cite>Simulation</cite> object) – Contains the information of the simulation</li>
-<li><strong>species</strong> (<em>a dictionary of Particle objects</em>) – Similar to the corresponding object for <cite>ParticleDiagnostic</cite>
+of iterations is divisible by <cite>period</cite>). Specify either this or
+<cite>dt_period</cite>.</li>
+<li><strong>dt_period</strong> (<em>float</em><em> (</em><em>in seconds</em><em>)</em><em>, </em><em>optional</em>) – The period of the diagnostics, in physical time of the simulation.
+Specify either this or <cite>period</cite></li>
+<li><strong>sim</strong> (an fbpic <a class="reference internal" href="simulation.html#fbpic.main.Simulation" title="fbpic.main.Simulation"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Simulation</span></code></a> object) – Contains the information of the simulation</li>
+<li><strong>species</strong> (a dictionary of <a class="reference internal" href="particles.html#fbpic.particles.Particles" title="fbpic.particles.Particles"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Particles</span></code></a> objects) – Similar to the corresponding object for <cite>ParticleDiagnostic</cite>
 Specifies the density of which species should be written</li>
 <li><strong>write_dir</strong> (<em>string</em><em>, </em><em>optional</em>) – The POSIX path to the directory where the results are
 to be written. If none is provided, this will be the path
@@ -308,8 +320,8 @@ during a boosted-frame simulation.</p>
 <div class="section" id="id1">
 <h3>Field diagnostic<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
-<dt id="fbpic.openpmd_diag.BoostedFieldDiagnostic">
-<em class="property">class </em><code class="descclassname">fbpic.openpmd_diag.</code><code class="descname">BoostedFieldDiagnostic</code><span class="sig-paren">(</span><em>zmin_lab, zmax_lab, v_lab, dt_snapshots_lab, Ntot_snapshots_lab, gamma_boost, period, fldobject, comm=None, fieldtypes=['E', 'B'], write_dir=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/openpmd_diag/boosted_field_diag.html#BoostedFieldDiagnostic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.openpmd_diag.BoostedFieldDiagnostic" title="Permalink to this definition">¶</a></dt>
+<dt id="fbpic.openpmd_diag.BackTransformedFieldDiagnostic">
+<em class="property">class </em><code class="descclassname">fbpic.openpmd_diag.</code><code class="descname">BackTransformedFieldDiagnostic</code><span class="sig-paren">(</span><em>zmin_lab, zmax_lab, v_lab, dt_snapshots_lab, Ntot_snapshots_lab, gamma_boost, period, fldobject, comm=None, fieldtypes=['E', 'B'], write_dir=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/openpmd_diag/boosted_field_diag.html#BackTransformedFieldDiagnostic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.openpmd_diag.BackTransformedFieldDiagnostic" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize diagnostics that retrieve the data in the lab frame,
 as a series of snapshot (one file per snapshot),
 within a virtual moving window defined by zmin_lab, zmax_lab, v_lab.</p>
@@ -346,12 +358,20 @@ are then brought from spectral to real space, at each iteration.</li>
 </table>
 </dd></dl>
 
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p>The former class <code class="docutils literal notranslate"><span class="pre">BoostedFieldDiagnostic</span></code> has been renamed as
+<code class="docutils literal notranslate"><span class="pre">BackTransformedFieldDiagnostic</span></code>.</p>
+<p class="last">Although the name <code class="docutils literal notranslate"><span class="pre">BoostedFieldDiagnostic</span></code> can still be used
+(for backward compatibility), we recommend using
+<code class="docutils literal notranslate"><span class="pre">BackTransformedFieldDiagnostic</span></code> instead.</p>
+</div>
 </div>
 <div class="section" id="id2">
 <h3>Particle diagnostic<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
-<dt id="fbpic.openpmd_diag.BoostedParticleDiagnostic">
-<em class="property">class </em><code class="descclassname">fbpic.openpmd_diag.</code><code class="descname">BoostedParticleDiagnostic</code><span class="sig-paren">(</span><em>zmin_lab, zmax_lab, v_lab, dt_snapshots_lab, Ntot_snapshots_lab, gamma_boost, period, fldobject, particle_data=['position', 'momentum', 'weighting'], select=None, write_dir=None, species={'electrons': None}, comm=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/openpmd_diag/boosted_particle_diag.html#BoostedParticleDiagnostic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.openpmd_diag.BoostedParticleDiagnostic" title="Permalink to this definition">¶</a></dt>
+<dt id="fbpic.openpmd_diag.BackTransformedParticleDiagnostic">
+<em class="property">class </em><code class="descclassname">fbpic.openpmd_diag.</code><code class="descname">BackTransformedParticleDiagnostic</code><span class="sig-paren">(</span><em>zmin_lab, zmax_lab, v_lab, dt_snapshots_lab, Ntot_snapshots_lab, gamma_boost, period, fldobject, particle_data=['position', 'momentum', 'weighting'], select=None, write_dir=None, species={'electrons': None}, comm=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/openpmd_diag/boosted_particle_diag.html#BackTransformedParticleDiagnostic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.openpmd_diag.BackTransformedParticleDiagnostic" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize diagnostics that retrieve the data in the lab frame,
 as a series of snapshot (one file per snapshot),
 within a virtual moving window defined by zmin_lab, zmax_lab, v_lab.</p>
@@ -363,7 +383,7 @@ the other parameters.</p>
 <p class="last">The output of the gathered fields on the particles
 (<code class="docutils literal notranslate"><span class="pre">particle_data=[&quot;E&quot;,</span> <span class="pre">&quot;B&quot;]</span></code>) and of the Lorentz factor
 (<code class="docutils literal notranslate"><span class="pre">particle_data=[&quot;gamma&quot;]</span></code>) is not currently supported
-for <code class="docutils literal notranslate"><span class="pre">BoostedParticleDiagnostic</span></code>.</p>
+for <code class="docutils literal notranslate"><span class="pre">BackTransformedParticleDiagnostic</span></code>.</p>
 </div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -388,6 +408,14 @@ extract some information about the grid</li>
 </table>
 </dd></dl>
 
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p>The former class <code class="docutils literal notranslate"><span class="pre">BoostedParticleDiagnostic</span></code> has been renamed as
+<code class="docutils literal notranslate"><span class="pre">BackTransformedParticleDiagnostic</span></code>.</p>
+<p class="last">Although the name <code class="docutils literal notranslate"><span class="pre">BoostedParticleDiagnostic</span></code> can still be used
+(for backward compatibility), we recommend using
+<code class="docutils literal notranslate"><span class="pre">BackTransformedParticleDiagnostic</span></code> instead.</p>
+</div>
 </div>
 </div>
 </div>
@@ -403,7 +431,7 @@ extract some information about the grid</li>
         <a href="checkpoint_restart.html" class="btn btn-neutral float-right" title="Checkpoints and restarts" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="particles.html" class="btn btn-neutral" title="The Particles class" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="particles.html" class="btn btn-neutral float-left" title="The Particles class" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -429,26 +457,16 @@ extract some information about the grid</li>
   
 
 
-  
-
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-
-  
-
-  <script type="text/javascript" src="../_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

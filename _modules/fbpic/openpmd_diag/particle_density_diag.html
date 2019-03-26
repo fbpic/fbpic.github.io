@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fbpic.openpmd_diag.particle_density_diag &mdash; FBPIC 0.11.0 documentation</title>
+  <title>fbpic.openpmd_diag.particle_density_diag &mdash; FBPIC 0.12.0 documentation</title>
   
 
   
@@ -17,32 +17,35 @@
   
 
   
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
-
-  
-  <script src="../../../_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -56,7 +59,7 @@
             
             
               <div class="version">
-                0.11.0
+                0.12.0
               </div>
             
           
@@ -164,23 +167,29 @@
 <span class="sd">    Class that defines a diagnostic for particle density</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">period</span><span class="p">,</span> <span class="n">sim</span><span class="p">,</span> <span class="n">species</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;electrons&quot;</span><span class="p">:</span><span class="kc">None</span><span class="p">},</span>
-                <span class="n">write_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration_min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">iteration_max</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span> <span class="p">)</span> <span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">period</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">species</span><span class="o">=</span><span class="p">{},</span>
+                <span class="n">write_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration_min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">iteration_max</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>
+                <span class="n">dt_period</span><span class="o">=</span><span class="kc">None</span> <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Writes the charge density of the specified species in the</span>
 <span class="sd">        openPMD file (one dataset per species)</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        period: int</span>
+<span class="sd">        period : int, optional</span>
 <span class="sd">            The period of the diagnostics, in number of timesteps.</span>
 <span class="sd">            (i.e. the diagnostics are written whenever the number</span>
-<span class="sd">            of iterations is divisible by `period`)</span>
+<span class="sd">            of iterations is divisible by `period`). Specify either this or</span>
+<span class="sd">            `dt_period`.</span>
 
-<span class="sd">        sim: an fbpic `Simulation` object</span>
+<span class="sd">        dt_period : float (in seconds), optional</span>
+<span class="sd">            The period of the diagnostics, in physical time of the simulation.</span>
+<span class="sd">            Specify either this or `period`</span>
+
+<span class="sd">        sim: an fbpic :any:`Simulation` object</span>
 <span class="sd">            Contains the information of the simulation</span>
 
-<span class="sd">        species: a dictionary of Particle objects</span>
+<span class="sd">        species: a dictionary of :any:`Particles` objects</span>
 <span class="sd">            Similar to the corresponding object for `ParticleDiagnostic`</span>
 <span class="sd">            Specifies the density of which species should be written</span>
 
@@ -193,6 +202,12 @@
 <span class="sd">            The iterations between which data should be written</span>
 <span class="sd">            (`iteration_min` is inclusive, `iteration_max` is exclusive)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Check the arguments</span>
+        <span class="k">if</span> <span class="n">sim</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;You need to pass the argument `sim`.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">species</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;You need to pass a valid `species` dictionary.&quot;</span><span class="p">)</span>
+
         <span class="c1"># Build the list of fieldtypes</span>
         <span class="n">fieldtypes</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">species_name</span> <span class="ow">in</span> <span class="n">species</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
@@ -201,7 +216,8 @@
         <span class="c1"># General setup</span>
         <span class="n">FieldDiagnostic</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">period</span><span class="p">,</span> <span class="n">fldobject</span><span class="o">=</span><span class="n">sim</span><span class="o">.</span><span class="n">fld</span><span class="p">,</span>
                     <span class="n">comm</span><span class="o">=</span><span class="n">sim</span><span class="o">.</span><span class="n">comm</span><span class="p">,</span> <span class="n">fieldtypes</span><span class="o">=</span><span class="n">fieldtypes</span><span class="p">,</span> <span class="n">write_dir</span><span class="o">=</span><span class="n">write_dir</span><span class="p">,</span>
-                    <span class="n">iteration_min</span><span class="o">=</span><span class="n">iteration_min</span><span class="p">,</span> <span class="n">iteration_max</span><span class="o">=</span><span class="n">iteration_max</span> <span class="p">)</span>
+                    <span class="n">iteration_min</span><span class="o">=</span><span class="n">iteration_min</span><span class="p">,</span> <span class="n">iteration_max</span><span class="o">=</span><span class="n">iteration_max</span><span class="p">,</span>
+                    <span class="n">dt_period</span><span class="o">=</span><span class="n">dt_period</span> <span class="p">)</span>
 
         <span class="c1"># Register the arguments</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sim</span> <span class="o">=</span> <span class="n">sim</span>
@@ -296,26 +312,16 @@
   
 
 
-  
-
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../../_static/doctools.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-
-  
-
-  <script type="text/javascript" src="../../../_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>
