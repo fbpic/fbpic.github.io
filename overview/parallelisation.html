@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>parallelization of FBPIC &mdash; FBPIC 0.12.0 documentation</title>
+  <title>Parallelization of FBPIC &mdash; FBPIC 0.12.0 documentation</title>
   
 
   
@@ -88,7 +88,7 @@
               <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="overview.html">Overview of the code</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="pic_algorithm.html">FBPIC algorithm &amp; features</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">parallelization of FBPIC</a><ul>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Parallelization of FBPIC</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#two-level-parallelization">Two-level parallelization</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#intra-device-parallelization">Intra-device parallelization</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#inter-device-parallelization">Inter-device parallelization</a></li>
@@ -150,7 +150,7 @@
         
           <li><a href="overview.html">Overview of the code</a> &raquo;</li>
         
-      <li>parallelization of FBPIC</li>
+      <li>Parallelization of FBPIC</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -170,12 +170,12 @@
            <div itemprop="articleBody">
             
   <div class="section" id="parallelization-of-fbpic">
-<h1>parallelization of FBPIC<a class="headerlink" href="#parallelization-of-fbpic" title="Permalink to this headline">¶</a></h1>
+<h1>Parallelization of FBPIC<a class="headerlink" href="#parallelization-of-fbpic" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="two-level-parallelization">
 <h2>Two-level parallelization<a class="headerlink" href="#two-level-parallelization" title="Permalink to this headline">¶</a></h2>
 <p>PIC simulations are computationally demanding in terms of arithmetic
 operations and memory consumption. Therefore, simulations are typically
-<strong>parallelised</strong> across many compute units that share the computational work.</p>
+<strong>parallelized</strong> across many compute units that share the computational work.</p>
 <p>A common parallelization strategy is to spatially decompose the simulation
 box into <strong>multiple sub-domains</strong> (i.e. multiple chunks of space):</p>
 <blockquote>
@@ -189,7 +189,7 @@ device can work together on the same sub-domain, using their
 <strong>shared memory</strong> (<em>intra-device parallelization</em>).</p></li>
 </ul>
 </div></blockquote>
-<img alt="../_images/two_level_parallelisation.png" src="../_images/two_level_parallelisation.png" />
+<img alt="../_images/two_level_parallelization.png" src="../_images/two_level_parallelization.png" />
 <p>The above image illustrates how these two levels of parallelism are mapped
 onto a modern HPC (High Performance Computing) architecture. Within one
 sub-domain, the multiple cores of a single computing device exchange
