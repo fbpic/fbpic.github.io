@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Installation on JURECA (JSC) &mdash; FBPIC 0.12.0 documentation</title>
+  <title>Installation on JUWELS (JSC) &mdash; FBPIC 0.12.0 documentation</title>
   
 
   
@@ -17,34 +17,37 @@
   
 
   
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Installation on Lawrencium (LBNL)" href="install_lawrencium.html" />
     <link rel="prev" title="Installation on Titan (OLCF)" href="install_titan.html" /> 
-
-  
-  <script src="../_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -83,12 +86,12 @@
             
             
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview of the code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview/overview.html">Overview of the code</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="installation.html">Installation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="install_local.html">Installation on a local computer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="install_summit.html">Installation on Summit (OLCF)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="install_titan.html">Installation on Titan (OLCF)</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Installation on JURECA (JSC)</a><ul>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Installation on JUWELS (JSC)</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#loading-the-cluster-modules">Loading the cluster modules</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#installation-of-anaconda">Installation of Anaconda</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#installation-of-fbpic">Installation of FBPIC</a></li>
@@ -150,13 +153,13 @@
         
           <li><a href="installation.html">Installation</a> &raquo;</li>
         
-      <li>Installation on JURECA (JSC)</li>
+      <li>Installation on JUWELS (JSC)</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../_sources/install/install_jureca.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/install/install_juwels.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -169,54 +172,56 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="installation-on-jureca-jsc">
-<h1>Installation on JURECA (JSC)<a class="headerlink" href="#installation-on-jureca-jsc" title="Permalink to this headline">¶</a></h1>
-<p><a class="reference external" href="http://www.fz-juelich.de/ias/jsc/EN/Expertise/Supercomputers/JURECA/JURECA_node.html">JURECA</a>
+  <div class="section" id="installation-on-juwels-jsc">
+<h1>Installation on JUWELS (JSC)<a class="headerlink" href="#installation-on-juwels-jsc" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://www.fz-juelich.de/ias/jsc/EN/Expertise/Supercomputers/JUWELS/JUWELS_node.html">JUWELS</a>
 is a supercomputer at the <a class="reference external" href="http://www.fz-juelich.de/ias/jsc/EN/Home/home_node.html">Juelich Supercomputing Centre</a> (JSC).</p>
 <p>Installation and usage of FBPIC requires the following steps:</p>
 <ul class="simple">
-<li>Loading the cluster modules</li>
-<li>Installation of Anaconda</li>
-<li>Installation of FBPIC</li>
-<li>Allocation of resources and running simulations</li>
+<li><p>Loading the cluster modules</p></li>
+<li><p>Installation of Anaconda</p></li>
+<li><p>Installation of FBPIC</p></li>
+<li><p>Allocation of resources and running simulations</p></li>
 </ul>
 <div class="section" id="loading-the-cluster-modules">
 <h2>Loading the cluster modules<a class="headerlink" href="#loading-the-cluster-modules" title="Permalink to this headline">¶</a></h2>
-<p>On the JURECA cluster, the correct modules to use a fast CUDA-aware MPI
-distribution need to be loaded.</p>
-<p>Therefore, the <code class="docutils literal notranslate"><span class="pre">.bashrc</span></code> should contain the following:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">module</span> <span class="n">load</span> <span class="n">Intel</span>
-<span class="n">module</span> <span class="n">load</span> <span class="n">ParaStationMPI</span>
-<span class="n">module</span> <span class="n">load</span> <span class="n">CUDA</span>
-<span class="n">module</span> <span class="n">load</span> <span class="n">HDF5</span>
-<span class="n">module</span> <span class="n">load</span> <span class="n">mpi4py</span><span class="o">/</span><span class="mf">2.0</span><span class="o">.</span><span class="mi">0</span><span class="o">-</span><span class="n">Python</span><span class="o">-</span><span class="mf">2.7</span><span class="o">.</span><span class="mi">12</span>
-<span class="n">module</span> <span class="n">load</span> <span class="n">h5py</span><span class="o">/</span><span class="mf">2.6</span><span class="o">.</span><span class="mi">0</span><span class="o">-</span><span class="n">Python</span><span class="o">-</span><span class="mf">2.7</span><span class="o">.</span><span class="mi">12</span>
+<p>To load the standard modules the <code class="docutils literal notranslate"><span class="pre">.bashrc</span></code> should contain the following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">module</span> <span class="n">load</span> <span class="n">intel</span><span class="o">-</span><span class="n">para</span><span class="o">/</span><span class="mi">2019</span><span class="n">a</span>
 </pre></div>
 </div>
-<p>Please note that the exact versions may change in the future.</p>
 </div>
 <div class="section" id="installation-of-anaconda">
 <h2>Installation of Anaconda<a class="headerlink" href="#installation-of-anaconda" title="Permalink to this headline">¶</a></h2>
 <p>In order to download and install <a class="reference external" href="https://www.continuum.io/downloads">Anaconda</a>, type:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wget</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">repo</span><span class="o">.</span><span class="n">continuum</span><span class="o">.</span><span class="n">io</span><span class="o">/</span><span class="n">archive</span><span class="o">/</span><span class="n">Anaconda2</span><span class="o">-</span><span class="mf">4.2</span><span class="o">.</span><span class="mi">0</span><span class="o">-</span><span class="n">Linux</span><span class="o">-</span><span class="n">x86_64</span><span class="o">.</span><span class="n">sh</span>
-<span class="n">bash</span> <span class="n">Anaconda2</span><span class="o">-</span><span class="mf">4.2</span><span class="o">.</span><span class="mi">0</span><span class="o">-</span><span class="n">Linux</span><span class="o">-</span><span class="n">x86_64</span><span class="o">.</span><span class="n">sh</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wget</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">repo</span><span class="o">.</span><span class="n">anaconda</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">archive</span><span class="o">/</span><span class="n">Anaconda3</span><span class="o">-</span><span class="mf">2019.03</span><span class="o">-</span><span class="n">Linux</span><span class="o">-</span><span class="n">x86_64</span><span class="o">.</span><span class="n">sh</span>
+<span class="n">bash</span> <span class="n">Anaconda3</span><span class="o">-</span><span class="mf">2019.03</span><span class="o">-</span><span class="n">Linux</span><span class="o">-</span><span class="n">x86_64</span><span class="o">.</span><span class="n">sh</span>
 </pre></div>
 </div>
 <p>Then install the dependencies of FBPIC:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">numba</span><span class="o">==</span><span class="mf">0.42</span> <span class="n">mkl</span>
-<span class="n">conda</span> <span class="n">install</span> <span class="n">pyculib</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">numba</span><span class="o">==</span><span class="mf">0.42</span> <span class="n">scipy</span> <span class="n">h5py</span> <span class="n">mkl</span>
+<span class="n">conda</span> <span class="n">install</span> <span class="n">cudatoolkit</span><span class="o">=</span><span class="mf">8.0</span> <span class="n">pyculib</span>
 </pre></div>
 </div>
-<p>It is important that the following packages are <strong>NOT</strong> installed
-directly with Anaconda: <code class="docutils literal notranslate"><span class="pre">mpich</span></code>, <code class="docutils literal notranslate"><span class="pre">mpi4py</span></code>, <code class="docutils literal notranslate"><span class="pre">hdf5</span></code> and <code class="docutils literal notranslate"><span class="pre">h5py</span></code></p>
-<p>One can check if the correct MPI is linked by opening a <code class="docutils literal notranslate"><span class="pre">python</span></code> shell
+<p>It is advised that the following packages are <strong>NOT</strong> installed
+directly with Anaconda: <code class="docutils literal notranslate"><span class="pre">mpich</span></code> and <code class="docutils literal notranslate"><span class="pre">mpi4py</span></code></p>
+<p>You can install mpi4py directly with pip and it will be built against the MPI
+library that is loaded on the cluster via the modules.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">mpi4py</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">cache</span><span class="o">-</span><span class="nb">dir</span>
+</pre></div>
+</div>
+<p>You can check if the correct MPI is linked by opening a <code class="docutils literal notranslate"><span class="pre">python</span></code> shell
 and checking:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mpi4py</span> <span class="k">import</span> <span class="n">MPI</span>
 <span class="n">MPI</span><span class="o">.</span><span class="n">Get_library_version</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>Note that the <code class="docutils literal notranslate"><span class="pre">PATH</span></code> and <code class="docutils literal notranslate"><span class="pre">PYTHONPATH</span></code> environment variables have to be set
-after the <code class="docutils literal notranslate"><span class="pre">module</span> <span class="pre">loads</span> <span class="pre">...</span></code> in your <code class="docutils literal notranslate"><span class="pre">.bashrc</span></code> to work with the conda environment.</p>
+<p>Note that sometimes it is also required that you add the Anaconda folders to
+your <code class="docutils literal notranslate"><span class="pre">PATH</span></code> and <code class="docutils literal notranslate"><span class="pre">PYTHONPATH</span></code> environment variables after the
+<code class="docutils literal notranslate"><span class="pre">module</span> <span class="pre">loads</span> <span class="pre">...</span></code> in your <code class="docutils literal notranslate"><span class="pre">.bashrc</span></code>. For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>export PATH=&quot;/p/home/jusers/USERNAME/juwels/anaconda3/bin&quot;:$PATH
+export PYTHONPATH=&quot;/p/home/jusers/USERNAME/juwels/anaconda3/lib/python3.7/site-packages&quot;:$PYTHONPATH
+</pre></div>
+</div>
 </div>
 <div class="section" id="installation-of-fbpic">
 <h2>Installation of FBPIC<a class="headerlink" href="#installation-of-fbpic" title="Permalink to this headline">¶</a></h2>
@@ -229,22 +234,27 @@ and type</p>
 <div class="section" id="running-simulations">
 <h2>Running simulations<a class="headerlink" href="#running-simulations" title="Permalink to this headline">¶</a></h2>
 <p>In the following, it is explained how to allocate and use
-<strong>interactive</strong> jobs on JURECA. For the usage of normal jobs, one can
+<strong>interactive</strong> jobs on JUWELS. For the usage of normal jobs, one can
 use the similar commands in a job script. More information can be found
 here:</p>
-<p><code class="docutils literal notranslate"><span class="pre">http://www.fz-juelich.de/ias/jsc/EN/Expertise/Supercomputers/JURECA/UserInfo/UserInfo_node.html</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">https://www.fz-juelich.de/ias/jsc/EN/Expertise/Supercomputers/JUWELS/UserInfo/UserInfo_node.html</span></code></p>
 <p><strong>Allocation of ressources</strong></p>
-<p><strong>CPU:</strong> CPU nodes consist of 24 cores. Allocation of two nodes for 60
+<p><strong>CPU:</strong> CPU nodes consist of 2x24 cores. Allocation of two nodes for 60
 minutes:</p>
 <p><code class="docutils literal notranslate"><span class="pre">salloc</span> <span class="pre">--nodes=2</span> <span class="pre">--time=00:60:00</span></code></p>
-<p><strong>GPU:</strong> GPU nodes consist of 2 Nvidia K80 Devices, i.e. 4 GPUs.
-Allocation of 4 GPUs (2 nodes) for 60 minutes:</p>
+<p><strong>CPU multithreading:</strong> Best performance is expected if the FBPIC
+(and NUMBA/MKL) threading settings are set to 24 threads, while using one MPI
+process per socket. As a single JUWELS node has two sockets with each 24 cores,
+this means that ideally 2 MPI processes should be used when running on a
+single node.</p>
+<p><strong>GPU:</strong> GPU nodes consist of 4 Nvidia V100 Devices, i.e. 4 GPUs.
+Allocation of 8 GPUs (2 nodes) for 60 minutes:</p>
 <p><code class="docutils literal notranslate"><span class="pre">salloc</span> <span class="pre">--nodes=2</span> <span class="pre">--partition=gpus</span> <span class="pre">--time=00:60:00</span> <span class="pre">--gres=gpu:4</span></code></p>
 <p><strong>Starting an interactive run</strong></p>
 <p>The following command starts an interactive run (run_file.py) with 8
 tasks (e.g. 8 GPUs). <code class="docutils literal notranslate"><span class="pre">--pty</span></code> activates continuous console output and
 <code class="docutils literal notranslate"><span class="pre">--forward-x</span></code>enables X-forwarding if the connection to JURECA was
-established with <code class="docutils literal notranslate"><span class="pre">ssh</span> <span class="pre">-Y</span> <span class="pre">username&#64;jureca.fz-juelich.de</span></code>.</p>
+established with <code class="docutils literal notranslate"><span class="pre">ssh</span> <span class="pre">-Y</span> <span class="pre">username&#64;juwels.fz-juelich.de</span></code>.</p>
 <p><code class="docutils literal notranslate"><span class="pre">srun</span> <span class="pre">--ntasks=8</span> <span class="pre">--forward-x</span> <span class="pre">--pty</span> <span class="pre">python</span> <span class="pre">run_file.py</span></code></p>
 </div>
 </div>
@@ -260,7 +270,7 @@ established with <code class="docutils literal notranslate"><span class="pre">ss
         <a href="install_lawrencium.html" class="btn btn-neutral float-right" title="Installation on Lawrencium (LBNL)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="install_titan.html" class="btn btn-neutral" title="Installation on Titan (OLCF)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="install_titan.html" class="btn btn-neutral float-left" title="Installation on Titan (OLCF)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -286,26 +296,16 @@ established with <code class="docutils literal notranslate"><span class="pre">ss
   
 
 
-  
-
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-
-  
-
-  <script type="text/javascript" src="../_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

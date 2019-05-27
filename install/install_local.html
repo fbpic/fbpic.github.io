@@ -17,34 +17,37 @@
   
 
   
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Installation on Summit (OLCF)" href="install_summit.html" />
     <link rel="prev" title="Installation" href="installation.html" /> 
-
-  
-  <script src="../_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -83,7 +86,7 @@
             
             
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview of the code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview/overview.html">Overview of the code</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="installation.html">Installation</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Installation on a local computer</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#installing-fbpic">Installing FBPIC</a></li>
@@ -93,7 +96,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="install_summit.html">Installation on Summit (OLCF)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="install_titan.html">Installation on Titan (OLCF)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="install_jureca.html">Installation on JURECA (JSC)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install_juwels.html">Installation on JUWELS (JSC)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="install_lawrencium.html">Installation on Lawrencium (LBNL)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="install_comet.html">Installation on Comet (SDSC)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="install_cori_edison.html">Installation on Cori and Edison (NERSC)</a></li>
@@ -177,13 +180,13 @@
 Python. If Anaconda is not your default Python distribution, download and install it from <a class="reference external" href="https://www.continuum.io/downloads">here</a>.</p>
 <p><strong>Installation steps</strong>:</p>
 <ul>
-<li><p class="first">Install the dependencies of FBPIC. This can be done in two lines:</p>
+<li><p>Install the dependencies of FBPIC. This can be done in two lines:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">numba</span><span class="o">==</span><span class="mf">0.42</span> <span class="n">scipy</span> <span class="n">h5py</span> <span class="n">mkl</span>
 <span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">mpi4py</span>
 </pre></div>
 </div>
 </li>
-<li><p class="first">Install <code class="docutils literal notranslate"><span class="pre">fbpic</span></code></p>
+<li><p>Install <code class="docutils literal notranslate"><span class="pre">fbpic</span></code></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">fbpic</span>
 </pre></div>
 </div>
@@ -191,14 +194,16 @@ Python. If Anaconda is not your default Python distribution, download and instal
 from the souces, by cloning the <a class="reference external" href="https://github.com/fbpic/fbpic">code from Github</a>, and typing <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">setup.py</span>
 <span class="pre">install</span></code>.</p>
 </li>
-<li><p class="first"><strong>Optional:</strong> In order to be able to run the code on a GPU:</p>
+<li><p><strong>Optional:</strong> In order to be able to run the code on a GPU:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">cudatoolkit</span><span class="o">=</span><span class="mf">8.0</span> <span class="n">pyculib</span>
 </pre></div>
 </div>
-<p>(If your GPU driver supports a newer version of CUDA than 8.0, you can
-modify the above number accordingly.)</p>
+<p>If your GPU driver supports a newer version of CUDA than 8.0, you can
+modify the above number accordingly. See
+<a class="reference external" href="https://docs.anaconda.com/anaconda/user-guide/tasks/gpu-packages/#software-requirements">this page</a>
+for more information.</p>
 </li>
-<li><p class="first"><strong>Optional:</strong> In order to run on a CPU which is <strong>not</strong> an Intel model, you need to install <cite>pyfftw</cite>, in order to replace the MKL FFT:</p>
+<li><p><strong>Optional:</strong> In order to run on a CPU which is <strong>not</strong> an Intel model, you need to install <cite>pyfftw</cite>, in order to replace the MKL FFT:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">pyfftw</span>
 </pre></div>
 </div>
@@ -235,7 +240,7 @@ MPI-related error, try installing <code class="docutils literal notranslate"><sp
         <a href="install_summit.html" class="btn btn-neutral float-right" title="Installation on Summit (OLCF)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="installation.html" class="btn btn-neutral" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -261,26 +266,16 @@ MPI-related error, try installing <code class="docutils literal notranslate"><sp
   
 
 
-  
-
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-
-  
-
-  <script type="text/javascript" src="../_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

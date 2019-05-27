@@ -17,34 +17,37 @@
   
 
   
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Laser-plasma utilities" href="lpa_utilities/lpa_utilities.html" />
     <link rel="prev" title="The openPMD diagnostics" href="diagnostics.html" /> 
-
-  
-  <script src="../_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -83,7 +86,7 @@
             
             
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview of the code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview/overview.html">Overview of the code</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../install/installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../how_to_run.html">How to run the code</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="api_reference.html">API reference</a><ul class="current">
@@ -189,21 +192,17 @@ The E and B fields and particle information of each processor is saved.</p>
 <p>NB: Checkpoints are registered in the list <cite>checkpoints</cite> of the Simulation
 object <cite>sim</cite>, and written at the end of the PIC loop (whereas regular
 diagnostics are written at the beginning of the PIC loop).</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>sim</strong> (<em>a Simulation object</em>) – The simulation that is to be saved in checkpoints</li>
-<li><strong>period</strong> (<em>integer</em>) – The number of PIC iteration between each checkpoint.</li>
-<li><strong>checkpoint_dir</strong> (<em>string</em><em>, </em><em>optional</em>) – The path to the directory in which the checkpoints are stored
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sim</strong> (<em>a Simulation object</em>) – The simulation that is to be saved in checkpoints</p></li>
+<li><p><strong>period</strong> (<em>integer</em>) – The number of PIC iteration between each checkpoint.</p></li>
+<li><p><strong>checkpoint_dir</strong> (<em>string</em><em>, </em><em>optional</em>) – The path to the directory in which the checkpoints are stored
 (When running a simulation with several MPI ranks, use the
-same path for all ranks.)</li>
+same path for all ranks.)</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -215,10 +214,10 @@ same path for all ranks.)</li>
 <dd><p>Fills the Simulation object <cite>sim</cite> with data saved in a checkpoint.</p>
 <p>More precisely, the following data from <cite>sim</cite> is overwritten:</p>
 <ul class="simple">
-<li>Current time and iteration number of the simulation</li>
-<li>Position of the boundaries of the simulation box</li>
-<li>Values of the field arrays</li>
-<li>Size and values of the particle arrays</li>
+<li><p>Current time and iteration number of the simulation</p></li>
+<li><p>Position of the boundaries of the simulation box</p></li>
+<li><p>Values of the field arrays</p></li>
+<li><p>Size and values of the particle arrays</p></li>
 </ul>
 <p>Any other information (e.g. diagnostics of the simulation, presence of a
 moving window, presence of a laser antenna, etc.) need to be set by hand.</p>
@@ -228,22 +227,18 @@ a new input script from scratch.</p>
 <p>NB: This function should always be called <em>before</em> the initialization
 of the moving window, since the moving window infers the position of
 particle injection from the existing particle data.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>sim</strong> (<em>a Simulation object</em>) – The Simulation object into which the checkpoint should be loaded</li>
-<li><strong>iteration</strong> (<em>integer</em><em>, </em><em>optional</em>) – The iteration number of the checkpoint from which to restart
-If None, the latest checkpoint available will be used.</li>
-<li><strong>checkpoint_dir</strong> (<em>string</em><em>, </em><em>optional</em>) – The path to the directory that contains the checkpoints to be loaded.
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sim</strong> (<em>a Simulation object</em>) – The Simulation object into which the checkpoint should be loaded</p></li>
+<li><p><strong>iteration</strong> (<em>integer</em><em>, </em><em>optional</em>) – The iteration number of the checkpoint from which to restart
+If None, the latest checkpoint available will be used.</p></li>
+<li><p><strong>checkpoint_dir</strong> (<em>string</em><em>, </em><em>optional</em>) – The path to the directory that contains the checkpoints to be loaded.
 (When running a simulation with several MPI ranks, use the
-same path for all ranks.)</li>
+same path for all ranks.)</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -260,7 +255,7 @@ same path for all ranks.)</li>
         <a href="lpa_utilities/lpa_utilities.html" class="btn btn-neutral float-right" title="Laser-plasma utilities" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="diagnostics.html" class="btn btn-neutral" title="The openPMD diagnostics" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="diagnostics.html" class="btn btn-neutral float-left" title="The openPMD diagnostics" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -286,26 +281,16 @@ same path for all ranks.)</li>
   
 
 
-  
-
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-
-  
-
-  <script type="text/javascript" src="../_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

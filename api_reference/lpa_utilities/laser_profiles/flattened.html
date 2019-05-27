@@ -17,34 +17,37 @@
   
 
   
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Beam initialization" href="../beam.html" />
     <link rel="prev" title="Donut-like Laguerre-Gauss profile" href="donut_laguerre.html" /> 
-
-  
-  <script src="../../../_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -83,7 +86,7 @@
             
             
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../../../overview.html">Overview of the code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../overview/overview.html">Overview of the code</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../install/installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../how_to_run.html">How to run the code</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../api_reference.html">API reference</a><ul class="current">
@@ -196,8 +199,8 @@ Laguerre polynomials <span class="math notranslate nohighlight">\(L^0_n\)</span>
 \exp\left(-\frac{r^2}{(N+1)w_0^2}\right)
 \sum_{n=0}^N c'_n L^0_n\left(\frac{2\,r^2}{(N+1)w_0^2}\right)\\\mathrm{with} \qquad c'_n = \sum_{m=n}^{N}\frac{1}{2^m}\binom{m}{n}\end{aligned}\end{align} \]</div>
 <ul class="simple">
-<li>For <span class="math notranslate nohighlight">\(N=0\)</span>, this is a Gaussian profile: <span class="math notranslate nohighlight">\(E\propto\exp\left(-\frac{r^2}{w_0^2}\right)\)</span>.</li>
-<li>For <span class="math notranslate nohighlight">\(N\rightarrow\infty\)</span>, this is a Jinc profile: <span class="math notranslate nohighlight">\(E\propto \frac{J_1(r/w_0)}{r/w_0}\)</span>.</li>
+<li><p>For <span class="math notranslate nohighlight">\(N=0\)</span>, this is a Gaussian profile: <span class="math notranslate nohighlight">\(E\propto\exp\left(-\frac{r^2}{w_0^2}\right)\)</span>.</p></li>
+<li><p>For <span class="math notranslate nohighlight">\(N\rightarrow\infty\)</span>, this is a Jinc profile: <span class="math notranslate nohighlight">\(E\propto \frac{J_1(r/w_0)}{r/w_0}\)</span>.</p></li>
 </ul>
 <p>The expression <strong>far from focus</strong> is</p>
 <div class="math notranslate nohighlight">
@@ -205,39 +208,35 @@ Laguerre polynomials <span class="math notranslate nohighlight">\(L^0_n\)</span>
 \exp\left(-\frac{(N+1)r^2}{w(z)^2}\right)
 \sum_{n=0}^N \frac{1}{n!}\left(\frac{(N+1)\,r^2}{w(z)^2}\right)^n\\\mathrm{with} \qquad w(z) = \frac{\lambda_0}{\pi w_0}|z-z_{foc}|\end{aligned}\end{align} \]</div>
 <ul class="simple">
-<li>For <span class="math notranslate nohighlight">\(N=0\)</span>, this is a Gaussian profile: <span class="math notranslate nohighlight">\(E\propto\exp\left(-\frac{r^2}{w_(z)^2}\right)\)</span>.</li>
-<li>For <span class="math notranslate nohighlight">\(N\rightarrow\infty\)</span>, this is a flat profile: <span class="math notranslate nohighlight">\(E\propto \Theta(w(z)-r)\)</span>.</li>
+<li><p>For <span class="math notranslate nohighlight">\(N=0\)</span>, this is a Gaussian profile: <span class="math notranslate nohighlight">\(E\propto\exp\left(-\frac{r^2}{w_(z)^2}\right)\)</span>.</p></li>
+<li><p>For <span class="math notranslate nohighlight">\(N\rightarrow\infty\)</span>, this is a flat profile: <span class="math notranslate nohighlight">\(E\propto \Theta(w(z)-r)\)</span>.</p></li>
 </ul>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>a0</strong> (<em>float</em><em> (</em><em>dimensionless</em><em>)</em>) – The peak normalized vector potential at the focal plane.</li>
-<li><strong>w0</strong> (<em>float</em><em> (</em><em>in meter</em><em>)</em>) – Laser spot size in the focal plane, defined as <span class="math notranslate nohighlight">\(w_0\)</span> in the
-above formula.</li>
-<li><strong>tau</strong> (<em>float</em><em> (</em><em>in second</em><em>)</em>) – The duration of the laser (in the lab frame)</li>
-<li><strong>z0</strong> (<em>float</em><em> (</em><em>in meter</em><em>)</em>) – The initial position of the centroid of the laser
-(in the lab frame)</li>
-<li><strong>N</strong> (<em>int</em>) – Determines the “flatness” of the transverse profile, far from
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a0</strong> (<em>float</em><em> (</em><em>dimensionless</em><em>)</em>) – The peak normalized vector potential at the focal plane.</p></li>
+<li><p><strong>w0</strong> (<em>float</em><em> (</em><em>in meter</em><em>)</em>) – Laser spot size in the focal plane, defined as <span class="math notranslate nohighlight">\(w_0\)</span> in the
+above formula.</p></li>
+<li><p><strong>tau</strong> (<em>float</em><em> (</em><em>in second</em><em>)</em>) – The duration of the laser (in the lab frame)</p></li>
+<li><p><strong>z0</strong> (<em>float</em><em> (</em><em>in meter</em><em>)</em>) – The initial position of the centroid of the laser
+(in the lab frame)</p></li>
+<li><p><strong>N</strong> (<em>int</em>) – Determines the “flatness” of the transverse profile, far from
 focus (see the above formula).
-Default: <code class="docutils literal notranslate"><span class="pre">N=6</span></code> ; somewhat close to an 8th order supergaussian.</li>
-<li><strong>zf</strong> (<em>float</em><em> (</em><em>in meter</em><em>)</em><em>, </em><em>optional</em>) – The position of the focal plane (in the lab frame).
+Default: <code class="docutils literal notranslate"><span class="pre">N=6</span></code> ; somewhat close to an 8th order supergaussian.</p></li>
+<li><p><strong>zf</strong> (<em>float</em><em> (</em><em>in meter</em><em>)</em><em>, </em><em>optional</em>) – The position of the focal plane (in the lab frame).
 If <code class="docutils literal notranslate"><span class="pre">zf</span></code> is not provided, the code assumes that <code class="docutils literal notranslate"><span class="pre">zf=z0</span></code>, i.e.
-that the laser pulse is at the focal plane initially.</li>
-<li><strong>theta_pol</strong> (<em>float</em><em> (</em><em>in radian</em><em>)</em><em>, </em><em>optional</em>) – The angle of polarization with respect to the x axis.</li>
-<li><strong>lambda0</strong> (<em>float</em><em> (</em><em>in meter</em><em>)</em><em>, </em><em>optional</em>) – The wavelength of the laser (in the lab frame)
-Default: 0.8 microns (Ti:Sapph laser).</li>
-<li><strong>cep_phase</strong> (<em>float</em><em> (</em><em>in radian</em><em>)</em><em>, </em><em>optional</em>) – The Carrier Enveloppe Phase (CEP, i.e. the phase of the laser
-oscillation, at the position where the laser enveloppe is maximum)</li>
-<li><strong>propagation_direction</strong> (<em>int</em><em>, </em><em>optional</em>) – Indicates in which direction the laser propagates.
+that the laser pulse is at the focal plane initially.</p></li>
+<li><p><strong>theta_pol</strong> (<em>float</em><em> (</em><em>in radian</em><em>)</em><em>, </em><em>optional</em>) – The angle of polarization with respect to the x axis.</p></li>
+<li><p><strong>lambda0</strong> (<em>float</em><em> (</em><em>in meter</em><em>)</em><em>, </em><em>optional</em>) – The wavelength of the laser (in the lab frame)
+Default: 0.8 microns (Ti:Sapph laser).</p></li>
+<li><p><strong>cep_phase</strong> (<em>float</em><em> (</em><em>in radian</em><em>)</em><em>, </em><em>optional</em>) – The Carrier Enveloppe Phase (CEP, i.e. the phase of the laser
+oscillation, at the position where the laser enveloppe is maximum)</p></li>
+<li><p><strong>propagation_direction</strong> (<em>int</em><em>, </em><em>optional</em>) – Indicates in which direction the laser propagates.
 This should be either 1 (laser propagates towards positive z)
-or -1 (laser propagates towards negative z).</li>
+or -1 (laser propagates towards negative z).</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -253,7 +252,7 @@ or -1 (laser propagates towards negative z).</li>
         <a href="../beam.html" class="btn btn-neutral float-right" title="Beam initialization" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="donut_laguerre.html" class="btn btn-neutral" title="Donut-like Laguerre-Gauss profile" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="donut_laguerre.html" class="btn btn-neutral float-left" title="Donut-like Laguerre-Gauss profile" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -279,26 +278,16 @@ or -1 (laser propagates towards negative z).</li>
   
 
 
-  
-
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../../_static/doctools.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-
-  
-
-  <script type="text/javascript" src="../../../_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

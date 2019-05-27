@@ -17,34 +17,37 @@
   
 
   
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Gaussian profile" href="laser_profiles/gaussian.html" />
     <link rel="prev" title="Laser-plasma utilities" href="lpa_utilities.html" /> 
-
-  
-  <script src="../../_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -83,7 +86,7 @@
             
             
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../../overview.html">Overview of the code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../overview/overview.html">Overview of the code</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../install/installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../how_to_run.html">How to run the code</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../api_reference.html">API reference</a><ul class="current">
@@ -179,8 +182,8 @@
 <h1>Laser initialization<a class="headerlink" href="#laser-initialization" title="Permalink to this headline">¶</a></h1>
 <p>There are two functions that allow to introduce a laser pulse in an FBPIC simulation:</p>
 <ul class="simple">
-<li>The generic function <code class="docutils literal notranslate"><span class="pre">add_laser_pulse</span></code>, which can introduce an arbitrary laser profile.</li>
-<li>The compact function <code class="docutils literal notranslate"><span class="pre">add_laser</span></code>, which can only introduce a Gaussian profile.</li>
+<li><p>The generic function <code class="docutils literal notranslate"><span class="pre">add_laser_pulse</span></code>, which can introduce an arbitrary laser profile.</p></li>
+<li><p>The compact function <code class="docutils literal notranslate"><span class="pre">add_laser</span></code>, which can only introduce a Gaussian profile.</p></li>
 </ul>
 <p>The generic function is presented first here. This page also explains how
 to define laser profiles in FBPIC. Finally the compact function is described
@@ -188,13 +191,12 @@ at the end of this page.</p>
 <p>Both of the above functions support two types of methods, in order to introduce
 the laser in the simulation box:</p>
 <ul>
-<li><dl class="first docutils">
-<dt>The <code class="docutils literal notranslate"><span class="pre">direct</span></code> method:</dt>
-<dd><p class="first">In this case, the entire laser pulse is initialized in the simulation box,
+<li><dl>
+<dt>The <code class="docutils literal notranslate"><span class="pre">direct</span></code> method:</dt><dd><p>In this case, the entire laser pulse is initialized in the simulation box,
 immediately when the function is called.</p>
-<div class="last admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">When using this method, FBPIC will always initialize the laser field
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When using this method, FBPIC will always initialize the laser field
 on the grid in a <strong>self-consistent manner</strong> (e.g. such that the equations
 <span class="math notranslate nohighlight">\(\boldsymbol{\nabla} \cdot \boldsymbol{E} = 0\)</span>
 and <span class="math notranslate nohighlight">\(\boldsymbol{\nabla} \cdot \boldsymbol{B} = 0\)</span>
@@ -203,14 +205,13 @@ are automatically satisfied, for the added laser field).</p>
 </dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt>The <code class="docutils literal notranslate"><span class="pre">antenna</span></code> method:</dt>
-<dd><p class="first">In this case, the laser pulse is progressively emitted by a virtual antenna
+<li><dl>
+<dt>The <code class="docutils literal notranslate"><span class="pre">antenna</span></code> method:</dt><dd><p>In this case, the laser pulse is progressively emitted by a virtual antenna
 during the simulation. This can be advantageous when the simulation box is
 too small to contain the initial laser pulse entirely.</p>
-<div class="last admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Due to the details of its implementation, the laser antenna always
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Due to the details of its implementation, the laser antenna always
 emits <strong>two laser pulses</strong> that propagate in opposite directions (one
 on each side of the plane of the antenna). One of these two pulses
 is usually unwanted. However, when using a moving window that follows
@@ -230,31 +231,27 @@ the simulation box.</p>
 <p>The laser is either added directly to the interpolation grid initially
 (method= <code class="docutils literal notranslate"><span class="pre">direct</span></code>) or it is progressively emitted by an antenna
 (method= <code class="docutils literal notranslate"><span class="pre">antenna</span></code>).</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>sim</strong> (<em>a Simulation object</em>) – The structure that contains the simulation.</li>
-<li><strong>laser_profile</strong> (<em>a valid laser profile object</em>) – Laser profiles can be imported from <code class="docutils literal notranslate"><span class="pre">fbpic.lpa_utils.laser</span></code></li>
-<li><strong>gamma_boost</strong> (<em>float</em><em>, </em><em>optional</em>) – When initializing the laser in a boosted frame, set the value of
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sim</strong> (<em>a Simulation object</em>) – The structure that contains the simulation.</p></li>
+<li><p><strong>laser_profile</strong> (<em>a valid laser profile object</em>) – Laser profiles can be imported from <code class="docutils literal notranslate"><span class="pre">fbpic.lpa_utils.laser</span></code></p></li>
+<li><p><strong>gamma_boost</strong> (<em>float</em><em>, </em><em>optional</em>) – When initializing the laser in a boosted frame, set the value of
 <code class="docutils literal notranslate"><span class="pre">gamma_boost</span></code> to the corresponding Lorentz factor.
 In this case, <code class="docutils literal notranslate"><span class="pre">laser_profile</span></code> should be initialized with all its
 physical quantities (wavelength, etc…) given in the lab frame,
 and the function <code class="docutils literal notranslate"><span class="pre">add_laser_pulse</span></code> will automatically convert
-these properties to their boosted-frame value.</li>
-<li><strong>method</strong> (<em>string</em><em>, </em><em>optional</em>) – Whether to initialize the laser directly in the box
+these properties to their boosted-frame value.</p></li>
+<li><p><strong>method</strong> (<em>string</em><em>, </em><em>optional</em>) – Whether to initialize the laser directly in the box
 (method= <code class="docutils literal notranslate"><span class="pre">direct</span></code>) or through a laser antenna (method= <code class="docutils literal notranslate"><span class="pre">antenna</span></code>).
-Default: <code class="docutils literal notranslate"><span class="pre">direct</span></code></li>
-<li><strong>z0_antenna</strong> (<em>float</em><em>, </em><em>optional</em><em> (</em><em>meters</em><em>)</em>) – Required for the <code class="docutils literal notranslate"><span class="pre">antenna</span></code> method: initial position
-(in the lab frame) of the antenna.</li>
-<li><strong>v_antenna</strong> (<em>float</em><em>, </em><em>optional</em><em> (</em><em>meters per second</em><em>)</em>) – Only used for the <code class="docutils literal notranslate"><span class="pre">antenna</span></code> method: velocity of the antenna
-(in the lab frame)</li>
+Default: <code class="docutils literal notranslate"><span class="pre">direct</span></code></p></li>
+<li><p><strong>z0_antenna</strong> (<em>float</em><em>, </em><em>optional</em><em> (</em><em>meters</em><em>)</em>) – Required for the <code class="docutils literal notranslate"><span class="pre">antenna</span></code> method: initial position
+(in the lab frame) of the antenna.</p></li>
+<li><p><strong>v_antenna</strong> (<em>float</em><em>, </em><em>optional</em><em> (</em><em>meters per second</em><em>)</em>) – Only used for the <code class="docutils literal notranslate"><span class="pre">antenna</span></code> method: velocity of the antenna
+(in the lab frame)</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <p class="rubric">Example</p>
 <p>In order to initialize a Laguerre-Gauss profile with a waist of
 5 microns and a duration of 30 femtoseconds, centered at <span class="math notranslate nohighlight">\(z=3\)</span>
@@ -330,8 +327,8 @@ is given by:</p>
 <p>where <span class="math notranslate nohighlight">\(k_0 = 2\pi/\lambda_0\)</span> is the wavevector and where
 <span class="math notranslate nohighlight">\(E_0 = m_e c^2 k_0 / q_e\)</span> is the field amplitude for <span class="math notranslate nohighlight">\(a_0=1\)</span>.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">The additional terms that arise <strong>far from the focal plane</strong>
+<p class="admonition-title">Note</p>
+<p>The additional terms that arise <strong>far from the focal plane</strong>
 (Gouy phase, wavefront curvature, …) are not included in the above
 formula for simplicity, but are of course taken into account by
 the code, when initializing the laser pulse away from the focal plane.</p>
@@ -339,53 +336,49 @@ the code, when initializing the laser pulse away from the focal plane.</p>
 <p>The laser is either added directly to the interpolation grid initially
 (method= <code class="docutils literal notranslate"><span class="pre">direct</span></code>) or it is progressively emitted by an antenna
 (method= <code class="docutils literal notranslate"><span class="pre">antenna</span></code>).</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>sim</strong> (<em>a Simulation object</em>) – The structure that contains the simulation.</li>
-<li><strong>a0</strong> (<em>float</em><em> (</em><em>dimensionless</em><em>)</em>) – The peak normalized vector potential at the focal plane, defined
-as <span class="math notranslate nohighlight">\(a_0\)</span> in the above formula.</li>
-<li><strong>w0</strong> (<em>float</em><em> (</em><em>in meter</em><em>)</em>) – Laser waist at the focal plane, defined as <span class="math notranslate nohighlight">\(w_0\)</span> in the
-above formula.</li>
-<li><strong>ctau</strong> (<em>float</em><em> (</em><em>in meter</em><em>)</em>) – The duration of the laser (in the lab frame),
-defined as <span class="math notranslate nohighlight">\(c\tau\)</span> in the above formula.</li>
-<li><strong>z0</strong> (<em>float</em><em> (</em><em>in meter</em><em>)</em>) – The initial position of the centroid of the laser
-(in the lab frame), defined as <span class="math notranslate nohighlight">\(z_0\)</span> in the above formula.</li>
-<li><strong>zf</strong> (<em>float</em><em> (</em><em>in meter</em><em>)</em><em>, </em><em>optional</em>) – The position of the focal plane (in the lab frame).
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sim</strong> (<em>a Simulation object</em>) – The structure that contains the simulation.</p></li>
+<li><p><strong>a0</strong> (<em>float</em><em> (</em><em>dimensionless</em><em>)</em>) – The peak normalized vector potential at the focal plane, defined
+as <span class="math notranslate nohighlight">\(a_0\)</span> in the above formula.</p></li>
+<li><p><strong>w0</strong> (<em>float</em><em> (</em><em>in meter</em><em>)</em>) – Laser waist at the focal plane, defined as <span class="math notranslate nohighlight">\(w_0\)</span> in the
+above formula.</p></li>
+<li><p><strong>ctau</strong> (<em>float</em><em> (</em><em>in meter</em><em>)</em>) – The duration of the laser (in the lab frame),
+defined as <span class="math notranslate nohighlight">\(c\tau\)</span> in the above formula.</p></li>
+<li><p><strong>z0</strong> (<em>float</em><em> (</em><em>in meter</em><em>)</em>) – The initial position of the centroid of the laser
+(in the lab frame), defined as <span class="math notranslate nohighlight">\(z_0\)</span> in the above formula.</p></li>
+<li><p><strong>zf</strong> (<em>float</em><em> (</em><em>in meter</em><em>)</em><em>, </em><em>optional</em>) – The position of the focal plane (in the lab frame).
 If <code class="docutils literal notranslate"><span class="pre">zf</span></code> is not provided, the code assumes that <code class="docutils literal notranslate"><span class="pre">zf=z0</span></code>, i.e.
-that the laser pulse is at the focal plane initially.</li>
-<li><strong>theta_pol</strong> (<em>float</em><em> (</em><em>in radian</em><em>)</em><em>, </em><em>optional</em>) – The angle of polarization with respect to the x axis.</li>
-<li><strong>lambda0</strong> (<em>float</em><em> (</em><em>in meter</em><em>)</em><em>, </em><em>optional</em>) – The wavelength of the laser (in the lab frame), defined as
-<span class="math notranslate nohighlight">\(\lambda_0\)</span> in the above formula.</li>
-<li><strong>cep_phase</strong> (<em>float</em><em> (</em><em>in radian</em><em>)</em><em>, </em><em>optional</em>) – The Carrier Enveloppe Phase (CEP), defined as <span class="math notranslate nohighlight">\(\phi_{cep}\)</span>
+that the laser pulse is at the focal plane initially.</p></li>
+<li><p><strong>theta_pol</strong> (<em>float</em><em> (</em><em>in radian</em><em>)</em><em>, </em><em>optional</em>) – The angle of polarization with respect to the x axis.</p></li>
+<li><p><strong>lambda0</strong> (<em>float</em><em> (</em><em>in meter</em><em>)</em><em>, </em><em>optional</em>) – The wavelength of the laser (in the lab frame), defined as
+<span class="math notranslate nohighlight">\(\lambda_0\)</span> in the above formula.</p></li>
+<li><p><strong>cep_phase</strong> (<em>float</em><em> (</em><em>in radian</em><em>)</em><em>, </em><em>optional</em>) – The Carrier Enveloppe Phase (CEP), defined as <span class="math notranslate nohighlight">\(\phi_{cep}\)</span>
 in the above formula (i.e. the phase of the laser
-oscillation, at the position where the laser enveloppe is maximum)</li>
-<li><strong>phi2_chirp</strong> (<em>float</em><em> (</em><em>in second^2</em><em>)</em>) – The amount of temporal chirp, at focus (in the lab frame)
+oscillation, at the position where the laser enveloppe is maximum)</p></li>
+<li><p><strong>phi2_chirp</strong> (<em>float</em><em> (</em><em>in second^2</em><em>)</em>) – The amount of temporal chirp, at focus (in the lab frame)
 Namely, a wave packet centered on the frequency
 <span class="math notranslate nohighlight">\((\omega_0 + \delta \omega)\)</span> will reach its peak intensity
 at <span class="math notranslate nohighlight">\(z(\delta \omega) = z_0 - c \phi^{(2)} \, \delta \omega\)</span>.
 Thus, a positive <span class="math notranslate nohighlight">\(\phi^{(2)}\)</span> corresponds to positive chirp,
 i.e. red part of the spectrum in the front of the pulse and blue
-part of the spectrum in the back.</li>
-<li><strong>gamma_boost</strong> (<em>float</em><em>, </em><em>optional</em>) – When initializing the laser in a boosted frame, set the value of
+part of the spectrum in the back.</p></li>
+<li><p><strong>gamma_boost</strong> (<em>float</em><em>, </em><em>optional</em>) – When initializing the laser in a boosted frame, set the value of
 <cite>gamma_boost</cite> to the corresponding Lorentz factor. All the other
-quantities (ctau, zf, etc.) are to be given in the lab frame.</li>
-<li><strong>method</strong> (<em>string</em><em>, </em><em>optional</em>) – Whether to initialize the laser directly in the box (method=`direct`)
-or through a laser antenna (method=`antenna`)</li>
-<li><strong>fw_propagating</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether the laser is propagating in the forward or backward direction.</li>
-<li><strong>update_spectral</strong> (<em>bool</em><em>, </em><em>optional</em>) – Only for the <cite>direct</cite> method: Wether to update the fields in spectral
-space after modifying the fields on the interpolation grid.</li>
-<li><strong>z0_antenna</strong> (<em>float</em><em>, </em><em>optional</em><em> (</em><em>meters</em><em>)</em>) – Only for the <cite>antenna</cite> method: initial position (in the lab frame)
-of the antenna. If not provided, then the z0_antenna is set to zf.</li>
-<li><strong>v_antenna</strong> (<em>float</em><em>, </em><em>optional</em><em> (</em><em>meters per second</em><em>)</em>) – Only used for the <code class="docutils literal notranslate"><span class="pre">antenna</span></code> method: velocity of the antenna
-(in the lab frame)</li>
+quantities (ctau, zf, etc.) are to be given in the lab frame.</p></li>
+<li><p><strong>method</strong> (<em>string</em><em>, </em><em>optional</em>) – Whether to initialize the laser directly in the box (method=`direct`)
+or through a laser antenna (method=`antenna`)</p></li>
+<li><p><strong>fw_propagating</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether the laser is propagating in the forward or backward direction.</p></li>
+<li><p><strong>update_spectral</strong> (<em>bool</em><em>, </em><em>optional</em>) – Only for the <cite>direct</cite> method: Wether to update the fields in spectral
+space after modifying the fields on the interpolation grid.</p></li>
+<li><p><strong>z0_antenna</strong> (<em>float</em><em>, </em><em>optional</em><em> (</em><em>meters</em><em>)</em>) – Only for the <cite>antenna</cite> method: initial position (in the lab frame)
+of the antenna. If not provided, then the z0_antenna is set to zf.</p></li>
+<li><p><strong>v_antenna</strong> (<em>float</em><em>, </em><em>optional</em><em> (</em><em>meters per second</em><em>)</em>) – Only used for the <code class="docutils literal notranslate"><span class="pre">antenna</span></code> method: velocity of the antenna
+(in the lab frame)</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -402,7 +395,7 @@ of the antenna. If not provided, then the z0_antenna is set to zf.</li>
         <a href="laser_profiles/gaussian.html" class="btn btn-neutral float-right" title="Gaussian profile" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="lpa_utilities.html" class="btn btn-neutral" title="Laser-plasma utilities" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="lpa_utilities.html" class="btn btn-neutral float-left" title="Laser-plasma utilities" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -428,26 +421,16 @@ of the antenna. If not provided, then the z0_antenna is set to zf.</li>
   
 
 
-  
-
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../_static/doctools.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-
-  
-
-  <script type="text/javascript" src="../../_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

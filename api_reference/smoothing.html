@@ -17,34 +17,37 @@
   
 
   
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Advanced use" href="../advanced/advanced.html" />
     <link rel="prev" title="Conversion to boosted-frame" href="boost_converter.html" /> 
-
-  
-  <script src="../_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -83,7 +86,7 @@
             
             
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview of the code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview/overview.html">Overview of the code</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../install/installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../how_to_run.html">How to run the code</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="api_reference.html">API reference</a><ul class="current">
@@ -169,30 +172,26 @@
 <dt id="fbpic.fields.smoothing.BinomialSmoother">
 <em class="property">class </em><code class="descclassname">fbpic.fields.smoothing.</code><code class="descname">BinomialSmoother</code><span class="sig-paren">(</span><em>n_passes=1</em>, <em>compensator=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/fields/smoothing.html#BinomialSmoother"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.fields.smoothing.BinomialSmoother" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize a binomial smoother</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>n_passes</strong> (<em>int</em><em> or </em><em>dictionary of ints</em>) – Number of passes of binomial smoothing in r and z.
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n_passes</strong> (<em>int</em><em> or </em><em>dictionary of ints</em>) – Number of passes of binomial smoothing in r and z.
 (More passes results in smoother fields)
 If <cite>n_passes</cite> is an integer, than the same number of passes
 are applied in r and z.
 If <cite>n_passes</cite> is a dictionary, it should be of the form
 {‘z’: &lt;int&gt;, ‘r’: &lt;int&gt;} to indicate the number of passes
-in each direction.</li>
-<li><strong>compensator</strong> (<em>bool</em><em>, or </em><em>dictionary of bools</em>) – Whether to apply a compensator in r and z.
+in each direction.</p></li>
+<li><p><strong>compensator</strong> (<em>bool</em><em>, or </em><em>dictionary of bools</em>) – Whether to apply a compensator in r and z.
 (Applying a compensator mitigates the impact of the smoother
 on low and intermediate frequencies)
 If <cite>compensator</cite> is a boolean, than this applies to r and z.
 If <cite>n_passes</cite> is a dictionary, it should be of the form
 {‘z’: &lt;bool&gt;, ‘r’: &lt;bool&gt;} to indicate whether a compensator
-is applied in r and/or in z.</li>
+is applied in r and/or in z.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -208,7 +207,7 @@ is applied in r and/or in z.</li>
         <a href="../advanced/advanced.html" class="btn btn-neutral float-right" title="Advanced use" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="boost_converter.html" class="btn btn-neutral" title="Conversion to boosted-frame" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="boost_converter.html" class="btn btn-neutral float-left" title="Conversion to boosted-frame" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -234,26 +233,16 @@ is applied in r and/or in z.</li>
   
 
 
-  
-
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-
-  
-
-  <script type="text/javascript" src="../_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

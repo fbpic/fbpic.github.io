@@ -17,34 +17,37 @@
   
 
   
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Standard simulation of laser-wakefield acceleration" href="example_input/lwfa_script.html" />
     <link rel="prev" title="Installation on Cori and Edison (NERSC)" href="install/install_cori_edison.html" /> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -83,7 +86,7 @@
             
             
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview of the code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview/overview.html">Overview of the code</a></li>
 <li class="toctree-l1"><a class="reference internal" href="install/installation.html">Installation</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">How to run the code</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#script-examples">Script examples</a><ul>
@@ -192,13 +195,27 @@ defined in the section <a class="reference internal" href="api_reference/api_ref
 <p>where <code class="docutils literal notranslate"><span class="pre">fbpic_script.py</span></code> should be replaced by the name of your
 Python script: either <code class="docutils literal notranslate"><span class="pre">lwfa_script.py</span></code> or
 <code class="docutils literal notranslate"><span class="pre">boosted_frame_script.py</span></code> for the above examples.</p>
+<p>If an MPI implementation is available within the compute environment and
+the <code class="docutils literal notranslate"><span class="pre">mpi4py</span></code> package is installed, the computation can be scaled to multiple
+processes (e.g. 4) by running</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mpirun</span> <span class="o">-</span><span class="n">n</span> <span class="mi">4</span> <span class="n">python</span> <span class="n">fbpic_script</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Note that, depending on the size of the simulation, running with
+multiple MPI processes is not necessarily faster. In addition,
+MPI simulations require using a finite order (e.g. <code class="docutils literal notranslate"><span class="pre">n_order=32</span></code>)
+for the field solver. Please read the
+documentation on the <a class="reference internal" href="overview/parallelisation.html"><span class="doc">parallelisation of FBPIC</span></a> before using this feature.</p>
+</div>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
+<p class="admonition-title">Note</p>
 <p>When running on CPU, <strong>multi-threading</strong> is enabled by default, and the
-default number of threads is the number of cores on your system. You
-can modify this with environment variables:</p>
+default number of threads is the number of (virtual) cores on your system.
+You can modify this with environment variables:</p>
 <ul class="simple">
-<li>To modify the number of threads (e.g. set it to 8 threads):</li>
+<li><p>To modify the number of threads (e.g. set it to 8 threads):</p></li>
 </ul>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">export</span> <span class="n">MKL_NUM_THREADS</span><span class="o">=</span><span class="mi">8</span>
 <span class="n">export</span> <span class="n">NUMBA_NUM_THREADS</span><span class="o">=</span><span class="mi">8</span>
@@ -206,15 +223,53 @@ can modify this with environment variables:</p>
 </pre></div>
 </div>
 <ul class="simple">
-<li>To disable multi-threading altogether (except for the FFT and DHT):</li>
+<li><p>To disable multi-threading altogether:</p></li>
 </ul>
-<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">export</span> <span class="n">FBPIC_DISABLE_THREADING</span><span class="o">=</span><span class="mi">1</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">export</span> <span class="n">FBPIC_DISABLE_THREADING</span><span class="o">=</span><span class="mi">1</span>
+<span class="n">export</span> <span class="n">MKL_NUM_THREADS</span><span class="o">=</span><span class="mi">1</span>
+<span class="n">export</span> <span class="n">NUMBA_NUM_THREADS</span><span class="o">=</span><span class="mi">1</span>
 <span class="n">python</span> <span class="n">fbpic_script</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<p>It can also happen that an alternative threading backend is selected by Numba
+during installation. It is therefore sometimes required to set
+<code class="docutils literal notranslate"><span class="pre">OMP_NUM_THREADS</span></code> in addition to (or instead of) <code class="docutils literal notranslate"><span class="pre">MKL_NUM_THREADS</span></code>.</p>
+<p>When running in a Jupyter notebook, environment variables can be set by
+executing the following command at the beginning of the notebook:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;MKL_NUM_THREADS&#39;</span><span class="p">]</span><span class="o">=</span><span class="s1">&#39;1&#39;</span>
 </pre></div>
 </div>
 </div>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
+<p class="admonition-title">Note</p>
+<p>On systems with more than one CPU socket per node, multi-threading
+can become inefficient if the threads are distributed across sockets.
+It can be advantageous to use one MPI process per socket and to limit the
+number of threads to the number of physical cores of each socket. In addition,
+it can be necessary to explicitly bind all threads of an MPI process to the
+same socket.</p>
+<p>On a machine with 2 sockets and 12 physical cores per socket, the following
+commands spawn 2 MPI processes each with 12 threads bound to a single socket:</p>
+<ul>
+<li><p>Using the SLURM workload manager:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">export</span> <span class="n">MKL_NUM_THREADS</span><span class="o">=</span><span class="mi">12</span>
+<span class="n">export</span> <span class="n">NUMBA_NUM_THREADS</span><span class="o">=</span><span class="mi">12</span>
+<span class="n">srun</span> <span class="o">-</span><span class="n">n</span> <span class="mi">2</span> <span class="o">--</span><span class="n">cpu_bind</span><span class="o">=</span><span class="n">socket</span> <span class="n">python</span> <span class="n">fbpic_script</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+</li>
+<li><p>Using the <code class="docutils literal notranslate"><span class="pre">mpirun</span></code> executable:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">export</span> <span class="n">MKL_NUM_THREADS</span><span class="o">=</span><span class="mi">12</span>
+<span class="n">export</span> <span class="n">NUMBA_NUM_THREADS</span><span class="o">=</span><span class="mi">12</span>
+<span class="n">mpirun</span> <span class="o">-</span><span class="n">n</span> <span class="mi">2</span> <span class="o">--</span><span class="n">bind</span><span class="o">-</span><span class="n">to</span> <span class="n">socket</span> <span class="n">python</span> <span class="n">fbpic_script</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
 <p>When running on GPU with MPI domain decomposition, it is possible to enable
 the CUDA GPUDirect technology. GPUDirect enables direct communication of
 CUDA device arrays between GPUs over MPI without explicitly copying the data
@@ -223,7 +278,7 @@ feature requires a CUDA-aware MPI implementation that supports GPUDirect,
 it is disabled by default and should be used with care.</p>
 <p>To activate this feature, the user needs to set the following
 environment variable:</p>
-<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">export</span> <span class="n">FBPIC_ENABLE_GPUDIRECT</span><span class="o">=</span><span class="mi">1</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">export</span> <span class="n">FBPIC_ENABLE_GPUDIRECT</span><span class="o">=</span><span class="mi">1</span>
 </pre></div>
 </div>
 </div>
@@ -258,7 +313,7 @@ learn more, see the tutorial notebook on the  <a class="reference external" href
         <a href="example_input/lwfa_script.html" class="btn btn-neutral float-right" title="Standard simulation of laser-wakefield acceleration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="install/install_cori_edison.html" class="btn btn-neutral" title="Installation on Cori and Edison (NERSC)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="install/install_cori_edison.html" class="btn btn-neutral float-left" title="Installation on Cori and Edison (NERSC)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -284,26 +339,16 @@ learn more, see the tutorial notebook on the  <a class="reference external" href
   
 
 
-  
-
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-
-  
-
-  <script type="text/javascript" src="_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

@@ -17,34 +17,37 @@
   
 
   
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="The Particles class" href="particles.html" />
     <link rel="prev" title="API reference" href="api_reference.html" /> 
-
-  
-  <script src="../_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -83,7 +86,7 @@
             
             
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview of the code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview/overview.html">Overview of the code</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../install/installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../how_to_run.html">How to run the code</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="api_reference.html">API reference</a><ul class="current">
@@ -177,113 +180,109 @@ species, and its method <a class="reference internal" href="#fbpic.main.Simulati
 <p>By default the simulation contains:</p>
 <blockquote>
 <div><ul class="simple">
-<li>an electron species</li>
-<li>(if <code class="docutils literal notranslate"><span class="pre">initialize_ions</span></code> is True) an ion species (Hydrogen 1+)</li>
+<li><p>an electron species</p></li>
+<li><p>(if <code class="docutils literal notranslate"><span class="pre">initialize_ions</span></code> is True) an ion species (Hydrogen 1+)</p></li>
 </ul>
 </div></blockquote>
 <p>These species are stored in the attribute <code class="docutils literal notranslate"><span class="pre">ptcl</span></code> of <code class="docutils literal notranslate"><span class="pre">Simulation</span></code>
 (which is a Python list, containing the different species).</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">For the arguments <cite>p_rmin</cite>, <cite>p_rmax</cite>, <cite>p_nz</cite>, <cite>p_nr</cite>, <cite>p_nt</cite>,
+<p class="admonition-title">Note</p>
+<p>For the arguments <cite>p_rmin</cite>, <cite>p_rmax</cite>, <cite>p_nz</cite>, <cite>p_nr</cite>, <cite>p_nt</cite>,
 <cite>n_e</cite>, and <cite>dens_func</cite>, see the docstring of the method
 <cite>add_new_species</cite> (where <cite>n_e</cite> has been re-labeled as <cite>n</cite>).</p>
 </div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>Nz</strong> (<em>int</em>) – The number of gridpoints along z</li>
-<li><strong>Nr</strong> (<em>int</em>) – The number of gridpoints along r</li>
-<li><strong>zmax</strong> (<em>float</em>) – The position of the edge of the simulation in z
-(More precisely, the position of the edge of the last cell)</li>
-<li><strong>rmax</strong> (<em>float</em>) – The position of the edge of the simulation in r
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Nz</strong> (<em>int</em>) – The number of gridpoints along z</p></li>
+<li><p><strong>Nr</strong> (<em>int</em>) – The number of gridpoints along r</p></li>
+<li><p><strong>zmax</strong> (<em>float</em>) – The position of the edge of the simulation in z
+(More precisely, the position of the edge of the last cell)</p></li>
+<li><p><strong>rmax</strong> (<em>float</em>) – The position of the edge of the simulation in r
 (More precisely, the position of the edge of the last
-cell)</li>
-<li><strong>Nm</strong> (<em>int</em>) – The number of azimuthal modes taken into account. (The simulation
-uses the modes from <cite>m=0</cite> to <cite>m=(Nm-1)</cite>.)</li>
-<li><strong>dt</strong> (<em>float</em>) – The timestep of the simulation</li>
-<li><strong>n_order</strong> (<em>int</em><em>, </em><em>optional</em>) – The order of the stencil for z derivatives in the Maxwell solver.
+cell)</p></li>
+<li><p><strong>Nm</strong> (<em>int</em>) – The number of azimuthal modes taken into account. (The simulation
+uses the modes from <cite>m=0</cite> to <cite>m=(Nm-1)</cite>.)</p></li>
+<li><p><strong>dt</strong> (<em>float</em>) – The timestep of the simulation</p></li>
+<li><p><strong>n_order</strong> (<em>int</em><em>, </em><em>optional</em>) – The order of the stencil for z derivatives in the Maxwell solver.
 Use -1 for infinite order, i.e. for exact dispersion relation in
 all direction (adviced for single-GPU/single-CPU simulation).
 Use a positive number (and multiple of 2) for a finite-order stencil
 (required for multi-GPU/multi-CPU with MPI). A large <cite>n_order</cite> leads
 to more overhead in MPI communications, but also to a more accurate
 dispersion relation for electromagnetic waves. (Typically,
-<cite>n_order = 32</cite> is a good trade-off.) See <a class="reference external" href="https://arxiv.org/abs/1611.05712">this article</a> for more information.</li>
-<li><strong>zmin</strong> (<em>float</em><em>, </em><em>optional</em>) – The position of the edge of the simulation box.
-(More precisely, the position of the edge of the first cell)</li>
-<li><strong>initialize_ions</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to initialize the neutralizing ions</li>
-<li><strong>filter_currents</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to filter the currents and charge in k space</li>
-<li><strong>v_comoving</strong> (<em>float</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – If this variable is None, the standard PSATD is used (default).
+<cite>n_order = 32</cite> is a good trade-off.) See <a class="reference external" href="https://arxiv.org/abs/1611.05712">this article</a> for more information.</p></li>
+<li><p><strong>zmin</strong> (<em>float</em><em>, </em><em>optional</em>) – The position of the edge of the simulation box.
+(More precisely, the position of the edge of the first cell)</p></li>
+<li><p><strong>initialize_ions</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to initialize the neutralizing ions</p></li>
+<li><p><strong>filter_currents</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to filter the currents and charge in k space</p></li>
+<li><p><strong>v_comoving</strong> (<em>float</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – If this variable is None, the standard PSATD is used (default).
 Otherwise, the current is assumed to be “comoving”,
 i.e. constant with respect to (z - v_comoving * t).
 This can be done in two ways: either by
 - Using a PSATD scheme that takes this hypothesis into account
-- Solving the PSATD scheme in a Galilean frame</li>
-<li><strong>use_galilean</strong> (<em>bool</em><em>, </em><em>optional</em>) – Determines which one of the two above schemes is used
+- Solving the PSATD scheme in a Galilean frame</p></li>
+<li><p><strong>use_galilean</strong> (<em>bool</em><em>, </em><em>optional</em>) – Determines which one of the two above schemes is used
 When use_galilean is true, the whole grid moves
-with a speed v_comoving</li>
-<li><strong>use_cuda</strong> (<em>bool</em><em>, </em><em>optional</em>) – Wether to use CUDA (GPU) acceleration</li>
-<li><strong>n_guard</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of guard cells to use at the left and right of
+with a speed v_comoving</p></li>
+<li><p><strong>use_cuda</strong> (<em>bool</em><em>, </em><em>optional</em>) – Wether to use CUDA (GPU) acceleration</p></li>
+<li><p><strong>n_guard</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of guard cells to use at the left and right of
 a domain, when performing parallel (MPI) computation
 or when using open boundaries. Defaults to None, which
 calculates the required guard cells for n_order
 automatically (approx 2*n_order). If no MPI is used and
 in the case of open boundaries with an infinite order stencil,
-n_guard defaults to 64, if not set otherwise.</li>
-<li><strong>n_damp</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of damping guard cells at the left and right of a
+n_guard defaults to 64, if not set otherwise.</p></li>
+<li><p><strong>n_damp</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of damping guard cells at the left and right of a
 simulation box if a moving window is attached. The guard
 region at these areas (left / right of moving window) is
 extended by n_damp in order to smoothly damp the fields such
 that they do not wrap around. Additionally, this region is
 extended by an injection area of size n_guard/2 automatically.
-(Defaults to 64)</li>
-<li><strong>exchange_period</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of iterations before which the particles are exchanged.
+(Defaults to 64)</p></li>
+<li><p><strong>exchange_period</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of iterations before which the particles are exchanged.
 If set to None, the maximum exchange period is calculated
 automatically: Within exchange_period timesteps, the
 particles should never be able to travel more than
 (n_guard/2 - particle_shape order) cells. (Setting exchange_period
-to small values can substantially affect the performance)</li>
-<li><strong>boundaries</strong> (<em>string</em><em>, </em><em>optional</em>) – Indicates how to exchange the fields at the left and right
+to small values can substantially affect the performance)</p></li>
+<li><p><strong>boundaries</strong> (<em>string</em><em>, </em><em>optional</em>) – Indicates how to exchange the fields at the left and right
 boundaries of the global simulation box.
-(Either ‘periodic’ or ‘open’)</li>
-<li><strong>current_correction</strong> (<em>string</em><em>, </em><em>optional</em>) – The method used in order to ensure that the continuity equation
+(Either ‘periodic’ or ‘open’)</p></li>
+<li><p><strong>current_correction</strong> (<em>string</em><em>, </em><em>optional</em>) – The method used in order to ensure that the continuity equation
 is satisfied. Either <cite>curl-free</cite> or <cite>cross-deposition</cite>.
 <cite>curl-free</cite> is faster but less local (should not be used with MPI).
-For the moment, <cite>cross-deposition</cite> is still experimental.</li>
-<li><strong>gamma_boost</strong> (<em>float</em><em>, </em><em>optional</em>) – When initializing the laser in a boosted frame, set the
+For the moment, <cite>cross-deposition</cite> is still experimental.</p></li>
+<li><p><strong>gamma_boost</strong> (<em>float</em><em>, </em><em>optional</em>) – When initializing the laser in a boosted frame, set the
 value of <cite>gamma_boost</cite> to the corresponding Lorentz factor.
 All the other quantities (zmin, zmax, n_e, etc.) are to be given
-in the lab frame.</li>
-<li><strong>use_all_mpi_ranks</strong> (<em>bool</em><em>, </em><em>optional</em>) – <p>When launching the simulation with mpirun:</p>
+in the lab frame.</p></li>
+<li><p><strong>use_all_mpi_ranks</strong> (<em>bool</em><em>, </em><em>optional</em>) – <p>When launching the simulation with mpirun:</p>
 <ul>
-<li>if <cite>use_all_mpi_ranks</cite> is True (default):
+<li><p>if <cite>use_all_mpi_ranks</cite> is True (default):
 All the MPI ranks will contribute to the same simulation,
-using domain-decomposition to share the work.</li>
-<li>if <cite>use_all_mpi_ranks</cite> is False:
+using domain-decomposition to share the work.</p></li>
+<li><p>if <cite>use_all_mpi_ranks</cite> is False:
 Each MPI rank will run an independent simulation.
 This can be useful when running parameter scans. In this case,
 make sure that your input script is written so that the input
-parameters and output folder depend on the MPI rank.</li>
+parameters and output folder depend on the MPI rank.</p></li>
 </ul>
-</li>
-<li><strong>particle_shape</strong> (<em>str</em><em>, </em><em>optional</em>) – Set the particle shape for the charge/current deposition.
+</p></li>
+<li><p><strong>particle_shape</strong> (<em>str</em><em>, </em><em>optional</em>) – Set the particle shape for the charge/current deposition.
 Possible values are ‘cubic’, ‘linear’. (‘cubic’ corresponds to
-third order shapes and ‘linear’ to first order shapes).</li>
-<li><strong>verbose_level</strong> (<em>int</em><em>, </em><em>optional</em>) – Print information about the simulation setup after
+third order shapes and ‘linear’ to first order shapes).</p></li>
+<li><p><strong>verbose_level</strong> (<em>int</em><em>, </em><em>optional</em>) – Print information about the simulation setup after
 initialization of the Simulation class.
 0 - Print no information
 1 (Default) - Print basic information
-2 - Print detailed information</li>
-<li><strong>smoother</strong> (an instance of <a class="reference internal" href="smoothing.html#fbpic.fields.smoothing.BinomialSmoother" title="fbpic.fields.smoothing.BinomialSmoother"><code class="xref any py py-class docutils literal notranslate"><span class="pre">BinomialSmoother</span></code></a>, optional) – Determines how the charge and currents are smoothed.
-(Default: one-pass binomial filter and no compensator.)</li>
+2 - Print detailed information</p></li>
+<li><p><strong>smoother</strong> (an instance of <a class="reference internal" href="smoothing.html#fbpic.fields.smoothing.BinomialSmoother" title="fbpic.fields.smoothing.BinomialSmoother"><code class="xref any py py-class docutils literal notranslate"><span class="pre">BinomialSmoother</span></code></a>, optional) – Determines how the charge and currents are smoothed.
+(Default: one-pass binomial filter and no compensator.)</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <dl class="method">
 <dt id="fbpic.main.Simulation.add_new_species">
 <code class="descname">add_new_species</code><span class="sig-paren">(</span><em>q</em>, <em>m</em>, <em>n=None</em>, <em>dens_func=None</em>, <em>p_nz=None</em>, <em>p_nr=None</em>, <em>p_nt=None</em>, <em>p_zmin=-inf</em>, <em>p_zmax=inf</em>, <em>p_rmin=0</em>, <em>p_rmax=inf</em>, <em>uz_m=0.0</em>, <em>ux_m=0.0</em>, <em>uy_m=0.0</em>, <em>uz_th=0.0</em>, <em>ux_th=0.0</em>, <em>uy_th=0.0</em>, <em>continuous_injection=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/main.html#Simulation.add_new_species"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.main.Simulation.add_new_species" title="Permalink to this definition">¶</a></dt>
@@ -298,100 +297,88 @@ as been passed to the <cite>Simulation</cite> object), all quantities that
 are explicitly mentioned to be in the lab frame below are
 automatically converted to the boosted frame.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">For the arguments below, it is recommended to have at least
+<p class="admonition-title">Note</p>
+<p>For the arguments below, it is recommended to have at least
 <code class="docutils literal notranslate"><span class="pre">p_nt</span> <span class="pre">=</span> <span class="pre">4*Nm</span></code>, i.e. the required number of macroparticles
 along <cite>theta</cite> (in order for the simulation to be properly resolved)
 increases with the number of azimuthal modes used.</p>
 </div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>q</strong> (<em>float</em><em> (</em><em>in Coulombs</em><em>)</em>) – Charge of the particle species</li>
-<li><strong>m</strong> (<em>float</em><em> (</em><em>in kg</em><em>)</em>) – Mass of the particle species</li>
-<li><strong>n</strong> (float (in particles per m^3) or <cite>None</cite>, optional) – Density of physical particles (in the lab frame).
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>q</strong> (<em>float</em><em> (</em><em>in Coulombs</em><em>)</em>) – Charge of the particle species</p></li>
+<li><p><strong>m</strong> (<em>float</em><em> (</em><em>in kg</em><em>)</em>) – Mass of the particle species</p></li>
+<li><p><strong>n</strong> (float (in particles per m^3) or <cite>None</cite>, optional) – Density of physical particles (in the lab frame).
 If this is <cite>None</cite>, no macroparticles will be created.
-If <cite>n</cite> is not None, evenly-spaced macroparticles will be generated.</li>
-<li><strong>dens_func</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function of the form :
+If <cite>n</cite> is not None, evenly-spaced macroparticles will be generated.</p></li>
+<li><p><strong>dens_func</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function of the form :
 def dens_func( z, r ) …
 where z and r are 1d arrays, and which returns
 a 1d array containing the density <em>relative to n</em>
-(i.e. a number between 0 and 1) at the given positions</li>
-<li><strong>p_nz</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of macroparticles per cell along the z direction</li>
-<li><strong>p_nr</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of macroparticles per cell along the r direction</li>
-<li><strong>p_nt</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of macroparticles along the theta direction</li>
-<li><strong>p_zmin</strong> (<em>float</em><em> (</em><em>in meters</em><em>)</em><em>, </em><em>optional</em>) – The minimal z position above which the particles are initialized
-(in the lab frame). Default: left edge of the simulation box.</li>
-<li><strong>p_zmax</strong> (<em>float</em><em> (</em><em>in meters</em><em>)</em><em>, </em><em>optional</em>) – The maximal z position below which the particles are initialized
-(in the lab frame). Default: right edge of the simulation box.</li>
-<li><strong>p_rmin</strong> (<em>float</em><em> (</em><em>in meters</em><em>)</em><em>, </em><em>optional</em>) – The minimal r position above which the particles are initialized
-(in the lab frame). Default: 0</li>
-<li><strong>p_rmax</strong> (<em>floats</em><em> (</em><em>in meters</em><em>)</em><em>, </em><em>optional</em>) – The maximal r position below which the particles are initialized
-(in the lab frame). Default: upper edge of the simulation box.</li>
-<li><strong>ux_m</strong><strong>, </strong><strong>uy_m</strong> (<em>uz_m</em><em>,</em>) – Normalized mean momenta (in the lab frame)
-of the injected particles in each direction</li>
-<li><strong>ux_th</strong><strong>, </strong><strong>uy_th</strong> (<em>uz_th</em><em>,</em>) – Normalized thermal momenta (in the lab frame)
-in each direction</li>
-<li><strong>continuous_injection</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to continuously inject the particles,
-in the case of a moving window</li>
+(i.e. a number between 0 and 1) at the given positions</p></li>
+<li><p><strong>p_nz</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of macroparticles per cell along the z direction</p></li>
+<li><p><strong>p_nr</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of macroparticles per cell along the r direction</p></li>
+<li><p><strong>p_nt</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of macroparticles along the theta direction</p></li>
+<li><p><strong>p_zmin</strong> (<em>float</em><em> (</em><em>in meters</em><em>)</em><em>, </em><em>optional</em>) – The minimal z position above which the particles are initialized
+(in the lab frame). Default: left edge of the simulation box.</p></li>
+<li><p><strong>p_zmax</strong> (<em>float</em><em> (</em><em>in meters</em><em>)</em><em>, </em><em>optional</em>) – The maximal z position below which the particles are initialized
+(in the lab frame). Default: right edge of the simulation box.</p></li>
+<li><p><strong>p_rmin</strong> (<em>float</em><em> (</em><em>in meters</em><em>)</em><em>, </em><em>optional</em>) – The minimal r position above which the particles are initialized
+(in the lab frame). Default: 0</p></li>
+<li><p><strong>p_rmax</strong> (<em>floats</em><em> (</em><em>in meters</em><em>)</em><em>, </em><em>optional</em>) – The maximal r position below which the particles are initialized
+(in the lab frame). Default: upper edge of the simulation box.</p></li>
+<li><p><strong>ux_m</strong><strong>, </strong><strong>uy_m</strong> (<em>uz_m</em><em>,</em>) – Normalized mean momenta (in the lab frame)
+of the injected particles in each direction</p></li>
+<li><p><strong>ux_th</strong><strong>, </strong><strong>uy_th</strong> (<em>uz_th</em><em>,</em>) – Normalized thermal momenta (in the lab frame)
+in each direction</p></li>
+<li><p><strong>continuous_injection</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to continuously inject the particles,
+in the case of a moving window</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>new_species</strong></p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">an instance of the <cite>Particles</cite> class</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>new_species</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>an instance of the <cite>Particles</cite> class</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="fbpic.main.Simulation.set_moving_window">
 <code class="descname">set_moving_window</code><span class="sig-paren">(</span><em>v=299792458.0</em>, <em>ux_m=None</em>, <em>uy_m=None</em>, <em>uz_m=None</em>, <em>ux_th=None</em>, <em>uy_th=None</em>, <em>uz_th=None</em>, <em>gamma_boost=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/main.html#Simulation.set_moving_window"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.main.Simulation.set_moving_window" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initializes a moving window for the simulation.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>v</strong> (<em>float</em><em> (</em><em>in meters per seconds</em><em>)</em><em>, </em><em>optional</em>) – The speed of the moving window</li>
-<li><strong>uy_m</strong><strong>, </strong><strong>uz_m</strong> (<em>ux_m</em><em>,</em>) – Unused, kept for backward-compatibility</li>
-<li><strong>uy_th</strong><strong>, </strong><strong>uz_th</strong> (<em>ux_th</em><em>,</em>) – Unused, kept for backward-compatibility</li>
-<li><strong>gamma_boost</strong> (<em>float</em><em>, </em><em>optional</em>) – Unused; kept for backward compatibility</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>v</strong> (<em>float</em><em> (</em><em>in meters per seconds</em><em>)</em><em>, </em><em>optional</em>) – The speed of the moving window</p></li>
+<li><p><strong>uy_m</strong><strong>, </strong><strong>uz_m</strong> (<em>ux_m</em><em>,</em>) – Unused, kept for backward-compatibility</p></li>
+<li><p><strong>uy_th</strong><strong>, </strong><strong>uz_th</strong> (<em>ux_th</em><em>,</em>) – Unused, kept for backward-compatibility</p></li>
+<li><p><strong>gamma_boost</strong> (<em>float</em><em>, </em><em>optional</em>) – Unused; kept for backward compatibility</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="fbpic.main.Simulation.step">
 <code class="descname">step</code><span class="sig-paren">(</span><em>N=1</em>, <em>correct_currents=True</em>, <em>correct_divE=False</em>, <em>use_true_rho=False</em>, <em>move_positions=True</em>, <em>move_momenta=True</em>, <em>show_progress=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/main.html#Simulation.step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.main.Simulation.step" title="Permalink to this definition">¶</a></dt>
 <dd><p>Perform N PIC cycles.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>N</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of timesteps to take
-Default: N=1</li>
-<li><strong>correct_currents</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to correct the currents in spectral space</li>
-<li><strong>correct_divE</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to correct the divergence of E in spectral space</li>
-<li><strong>use_true_rho</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to use the true rho deposited on the grid for the
-field push or not. (requires initialize_ions = True)</li>
-<li><strong>move_positions</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to move or freeze the particles’ positions</li>
-<li><strong>move_momenta</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to move or freeze the particles’ momenta</li>
-<li><strong>show_progress</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to show a progression bar</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>N</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of timesteps to take
+Default: N=1</p></li>
+<li><p><strong>correct_currents</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to correct the currents in spectral space</p></li>
+<li><p><strong>correct_divE</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to correct the divergence of E in spectral space</p></li>
+<li><p><strong>use_true_rho</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to use the true rho deposited on the grid for the
+field push or not. (requires initialize_ions = True)</p></li>
+<li><p><strong>move_positions</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to move or freeze the particles’ positions</p></li>
+<li><p><strong>move_momenta</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to move or freeze the particles’ momenta</p></li>
+<li><p><strong>show_progress</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to show a progression bar</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -409,7 +396,7 @@ field push or not. (requires initialize_ions = True)</li>
         <a href="particles.html" class="btn btn-neutral float-right" title="The Particles class" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="api_reference.html" class="btn btn-neutral" title="API reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="api_reference.html" class="btn btn-neutral float-left" title="API reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -435,26 +422,16 @@ field push or not. (requires initialize_ions = True)</li>
   
 
 
-  
-
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-
-  
-
-  <script type="text/javascript" src="../_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

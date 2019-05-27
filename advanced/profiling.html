@@ -17,34 +17,37 @@
   
 
   
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Performing parameter scans in parallel" href="parameter_scans.html" />
     <link rel="prev" title="Advanced use" href="advanced.html" /> 
-
-  
-  <script src="../_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -83,7 +86,7 @@
             
             
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview of the code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview/overview.html">Overview of the code</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../install/installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../how_to_run.html">How to run the code</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../api_reference/api_reference.html">API reference</a></li>
@@ -240,19 +243,19 @@ using binary output:</p>
 </div>
 <p>And click <code class="docutils literal notranslate"><span class="pre">File</span> <span class="pre">&gt;</span> <span class="pre">Open</span></code>, in order to select the file <code class="docutils literal notranslate"><span class="pre">gpu.prof</span></code>.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
+<p class="admonition-title">Note</p>
 <p>You do not need to run <strong>snakeviz</strong> or <strong>nvvp</strong> on the same machine on
 which the simulation was run. (In particular, <strong>nvvp</strong> does not need to
 have access to a GPU.) This means for example that, if your simulation
 was run on a remote cluster, you can simply transfer the
 files <strong>cpu.prof</strong> and/or <strong>gpu.prof</strong> to your local computer, and run
 <strong>snakeviz</strong> or <strong>nvvp</strong> locally.</p>
-<p class="last">You can install <strong>nvvp</strong> on your local computer by installing the
+<p>You can install <strong>nvvp</strong> on your local computer by installing the
 <a class="reference external" href="http://developer.nvidia.com/cuda-downloads">cuda toolkit</a>.</p>
 </div>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">When profiling the code with <strong>nvprof</strong>, the profiling data can quickly
+<p class="admonition-title">Note</p>
+<p>When profiling the code with <strong>nvprof</strong>, the profiling data can quickly
 become very large. Therefore we recommend to profile the code only
 on a small number of PIC iterations (&lt;1000).</p>
 </div>
@@ -268,7 +271,7 @@ MPI process.</p>
 <p>One way to create one file per MPI rank is to <strong>modify your FBPIC script</strong>,
 in the following way:</p>
 <ul>
-<li><p class="first">Add the following lines at the beginning of the file:</p>
+<li><p>Add the following lines at the beginning of the file:</p>
 <blockquote>
 <div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">cProfile</span><span class="o">,</span> <span class="nn">sys</span>
 <span class="kn">from</span> <span class="nn">mpi4py.MPI</span> <span class="k">import</span> <span class="n">COMM_WORLD</span> <span class="k">as</span> <span class="n">comm</span>
@@ -276,7 +279,7 @@ in the following way:</p>
 </div>
 </div></blockquote>
 </li>
-<li><p class="first">Replace the line:</p>
+<li><p>Replace the line:</p>
 <blockquote>
 <div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sim</span><span class="o">.</span><span class="n">step</span><span class="p">(</span> <span class="n">N_step</span> <span class="p">)</span>
 </pre></div>
@@ -323,8 +326,8 @@ in the following way:</p>
 your MPI distribution:</p>
 <blockquote>
 <div><ul class="simple">
-<li>For openmpi: <code class="docutils literal notranslate"><span class="pre">OMPI_COMM_WORLD_RANK</span></code></li>
-<li>For mpich: <code class="docutils literal notranslate"><span class="pre">PMI_RANK</span></code></li>
+<li><p>For openmpi: <code class="docutils literal notranslate"><span class="pre">OMPI_COMM_WORLD_RANK</span></code></p></li>
+<li><p>For mpich: <code class="docutils literal notranslate"><span class="pre">PMI_RANK</span></code></p></li>
 </ul>
 </div></blockquote>
 <p>(If you are unsure which name to use, type <code class="docutils literal notranslate"><span class="pre">mpirun</span> <span class="pre">-np</span> <span class="pre">2</span> <span class="pre">printenv</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">RANK</span></code>.)</p>
@@ -347,7 +350,7 @@ see <a class="reference external" href="https://devblogs.nvidia.com/cuda-pro-tip
         <a href="parameter_scans.html" class="btn btn-neutral float-right" title="Performing parameter scans in parallel" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="advanced.html" class="btn btn-neutral" title="Advanced use" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="advanced.html" class="btn btn-neutral float-left" title="Advanced use" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -373,26 +376,16 @@ see <a class="reference external" href="https://devblogs.nvidia.com/cuda-pro-tip
   
 
 
-  
-
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-
-  
-
-  <script type="text/javascript" src="../_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

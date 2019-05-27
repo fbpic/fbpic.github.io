@@ -17,33 +17,36 @@
   
 
   
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Overview of the code" href="overview.html" /> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
+    <link rel="next" title="Overview of the code" href="overview/overview.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -82,7 +85,7 @@
             
             
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview of the code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview/overview.html">Overview of the code</a></li>
 <li class="toctree-l1"><a class="reference internal" href="install/installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="how_to_run.html">How to run the code</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api_reference/api_reference.html">API reference</a></li>
@@ -161,29 +164,23 @@ physics. It is especially well-suited for physical simulations of <strong>laser-
 a <strong>spectral cylindrical representation.</strong> This makes the code both <strong>fast</strong>
 and <strong>accurate</strong>, for situations with <strong>close-to-cylindrical
 symmetry</strong>. For a brief overview of the
-algorithm, its advantages and limitations, see the section <a class="reference internal" href="overview.html"><span class="doc">Overview of the code</span></a>.</p>
+algorithm, its advantages and limitations, see the section <a class="reference internal" href="overview/overview.html"><span class="doc">Overview of the code</span></a>.</p>
 <p>In addition, FBPIC implements several <strong>useful features for laser-plasma acceleration</strong>, including:</p>
 <blockquote>
 <div><ul class="simple">
-<li>Moving window</li>
-<li>Calculation of <strong>space-charge fields</strong> at the beginning of the simulation</li>
-<li>Intrinsic <strong>mitigation of Numerical Cherenkov Radiation</strong> (NCR) from relativistic bunches</li>
-<li><strong>Field ionization</strong> module (ADK model)</li>
-<li>Support for <strong>boosted-frame simulations</strong> (see <a class="reference internal" href="advanced/boosted_frame.html"><span class="doc">Running boosted-frame simulations</span></a>)</li>
+<li><p>Moving window</p></li>
+<li><p>Calculation of <strong>space-charge fields</strong> at the beginning of the simulation</p></li>
+<li><p>Intrinsic <strong>mitigation of Numerical Cherenkov Radiation</strong> (NCR) from relativistic bunches</p></li>
+<li><p><strong>Field ionization</strong> module (ADK model)</p></li>
+<li><p>Support for <strong>boosted-frame simulations</strong> (see <a class="reference internal" href="advanced/boosted_frame.html"><span class="doc">Running boosted-frame simulations</span></a>)</p></li>
 </ul>
 </div></blockquote>
 <p>FBPIC can run on <strong>multi-core CPU</strong> (with multi-threading) or <strong>GPU</strong>. For large
 simulations, running the code on GPU can be much faster than on CPU.</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Running simulations with <strong>multiple</strong> CPU nodes or <strong>multiple</strong> GPUs
-(using <strong>MPI</strong>) is currently functional, but not yet officially supported.
-Use this feature with caution for now.</p>
-</div>
 <div class="section" id="contents-of-the-documentation">
 <h2>Contents of the documentation<a class="headerlink" href="#contents-of-the-documentation" title="Permalink to this headline">¶</a></h2>
 <p>If you are new to FBPIC, we <strong>strongly recommend</strong> that you read the
-section <a class="reference internal" href="overview.html"><span class="doc">Overview of the code</span></a> first, so as to have a basic understanding of
+section <a class="reference internal" href="overview/overview.html"><span class="doc">Overview of the code</span></a> first, so as to have a basic understanding of
 what the code does.</p>
 <p>You can then see the section <a class="reference internal" href="install/installation.html"><span class="doc">Installation</span></a> and
 <a class="reference internal" href="how_to_run.html"><span class="doc">How to run the code</span></a>, to get started with using FBPIC. For more
@@ -191,7 +188,7 @@ information, the section <a class="reference internal" href="api_reference/api_r
 that are accessible through FBPIC.</p>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview of the code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview/overview.html">Overview of the code</a></li>
 <li class="toctree-l1"><a class="reference internal" href="install/installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="how_to_run.html">How to run the code</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api_reference/api_reference.html">API reference</a></li>
@@ -216,13 +213,13 @@ Irene Dornmair (CFEL), Igor Andriyash (Weizmann Institute), Omri Seemann (Weizma
 <p>FBPIC’s algorithms are documented in following scientific publications:</p>
 <blockquote>
 <div><ul class="simple">
-<li>General description of FBPIC and it’s algorithm (original paper):
-<a class="reference external" href="http://www.sciencedirect.com/science/article/pii/S0010465516300224">R. Lehe et al., CPC, 2016</a> (<a class="reference external" href="https://arxiv.org/abs/1507.04790">arXiv</a>)</li>
-<li>Boosted-frame technique with Galilean algorithm:
+<li><p>General description of FBPIC and it’s algorithm (original paper):
+<a class="reference external" href="http://www.sciencedirect.com/science/article/pii/S0010465516300224">R. Lehe et al., CPC, 2016</a> (<a class="reference external" href="https://arxiv.org/abs/1507.04790">arXiv</a>)</p></li>
+<li><p>Boosted-frame technique with Galilean algorithm:
 <a class="reference external" href="https://aip.scitation.org/doi/10.1063/1.4964770">M. Kirchen et al., PoP, 2016</a> (<a class="reference external" href="https://arxiv.org/abs/1608.00215">arXiv</a>) and
-<a class="reference external" href="https://journals.aps.org/pre/abstract/10.1103/PhysRevE.94.053305">Lehe et al., PRE, 2016</a> (<a class="reference external" href="https://arxiv.org/abs/1608.00227">arXiv</a>)</li>
-<li>Parallel finite-order solver for multi-CPU/GPU simulations:
-<a class="reference external" href="https://aip.scitation.org/doi/abs/10.1063/1.4978569">S. Jalas et al., PoP, 2017</a> (<a class="reference external" href="https://arxiv.org/abs/1611.05712">arXiv</a>)</li>
+<a class="reference external" href="https://journals.aps.org/pre/abstract/10.1103/PhysRevE.94.053305">Lehe et al., PRE, 2016</a> (<a class="reference external" href="https://arxiv.org/abs/1608.00227">arXiv</a>)</p></li>
+<li><p>Parallel finite-order solver for multi-CPU/GPU simulations:
+<a class="reference external" href="https://aip.scitation.org/doi/abs/10.1063/1.4978569">S. Jalas et al., PoP, 2017</a> (<a class="reference external" href="https://arxiv.org/abs/1611.05712">arXiv</a>)</p></li>
 </ul>
 </div></blockquote>
 <p>If you use FBPIC for your research project: that’s great! We are
@@ -240,7 +237,7 @@ If your project uses the more advanced algorithms, please consider citing the re
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="overview.html" class="btn btn-neutral float-right" title="Overview of the code" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="overview/overview.html" class="btn btn-neutral float-right" title="Overview of the code" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
     </div>
@@ -267,26 +264,16 @@ If your project uses the more advanced algorithms, please consider citing the re
   
 
 
-  
-
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-
-  
-
-  <script type="text/javascript" src="_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

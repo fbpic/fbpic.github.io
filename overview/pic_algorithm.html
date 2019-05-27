@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Overview of the code &mdash; FBPIC 0.12.0 documentation</title>
+  <title>FBPIC algorithm &amp; features &mdash; FBPIC 0.12.0 documentation</title>
   
 
   
@@ -17,38 +17,41 @@
   
 
   
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Installation" href="install/installation.html" />
-    <link rel="prev" title="FBPIC documentation" href="index.html" /> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="parallelization of FBPIC" href="parallelisation.html" />
+    <link rel="prev" title="Overview of the code" href="overview.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
-            <a href="index.html" class="icon icon-home"> FBPIC
+            <a href="../index.html" class="icon icon-home"> FBPIC
           
 
           
@@ -65,7 +68,7 @@
 
           
 <div role="search">
-  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
@@ -83,20 +86,24 @@
             
             
               <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Overview of the code</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#introduction-to-the-pic-cycle">Introduction to the PIC cycle</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#the-distinctive-features-of-fbpic">The distinctive features of FBPIC</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#cylindrical-grid-with-azimuthal-decomposition">Cylindrical grid with azimuthal decomposition</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#analytical-integration-in-spectral-space">Analytical integration in spectral space</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#centering-in-time-and-space">Centering in time and space</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="overview.html">Overview of the code</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">FBPIC algorithm &amp; features</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#introduction-to-the-pic-cycle">Introduction to the PIC cycle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#the-distinctive-features-of-fbpic">The distinctive features of FBPIC</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#cylindrical-grid-with-azimuthal-decomposition">Cylindrical grid with azimuthal decomposition</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#analytical-integration-in-spectral-space">Analytical integration in spectral space</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#centering-in-time-and-space">Centering in time and space</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="install/installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="how_to_run.html">How to run the code</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api_reference/api_reference.html">API reference</a></li>
-<li class="toctree-l1"><a class="reference internal" href="advanced/advanced.html">Advanced use</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parallelisation.html">parallelization of FBPIC</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../install/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how_to_run.html">How to run the code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api_reference/api_reference.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/advanced.html">Advanced use</a></li>
 </ul>
 
             
@@ -111,7 +118,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">FBPIC</a>
+          <a href="../index.html">FBPIC</a>
         
       </nav>
 
@@ -140,15 +147,17 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="index.html">Docs</a> &raquo;</li>
+      <li><a href="../index.html">Docs</a> &raquo;</li>
         
-      <li>Overview of the code</li>
+          <li><a href="overview.html">Overview of the code</a> &raquo;</li>
+        
+      <li>FBPIC algorithm &amp; features</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/overview.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/overview/pic_algorithm.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -161,8 +170,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="overview-of-the-code">
-<h1>Overview of the code<a class="headerlink" href="#overview-of-the-code" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="fbpic-algorithm-features">
+<h1>FBPIC algorithm &amp; features<a class="headerlink" href="#fbpic-algorithm-features" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="introduction-to-the-pic-cycle">
 <h2>Introduction to the PIC cycle<a class="headerlink" href="#introduction-to-the-pic-cycle" title="Permalink to this headline">¶</a></h2>
 <p>Like any electromagnetic PIC code, FBPIC simulates the
@@ -174,13 +183,13 @@ on a <strong>grid</strong>. The time evolution of the system is simulated by tak
 time steps</strong>. At each timestep:</p>
 <blockquote>
 <div><ul class="simple">
-<li>The values of E and B are gathered from the grid onto the macroparticles.</li>
-<li>The particles are pushed in time.</li>
-<li>The charge and current of the macroparticles are deposited onto the grid.</li>
-<li>The fields E and B are pushed in time.</li>
+<li><p>The values of E and B are gathered from the grid onto the macroparticles.</p></li>
+<li><p>The particles are pushed in time.</p></li>
+<li><p>The charge and current of the macroparticles are deposited onto the grid.</p></li>
+<li><p>The fields E and B are pushed in time.</p></li>
 </ul>
 </div></blockquote>
-<img alt="_images/pic_loop.png" src="_images/pic_loop.png" />
+<img alt="../_images/pic_loop.png" src="../_images/pic_loop.png" />
 </div>
 <div class="section" id="the-distinctive-features-of-fbpic">
 <h2>The distinctive features of FBPIC<a class="headerlink" href="#the-distinctive-features-of-fbpic" title="Permalink to this headline">¶</a></h2>
@@ -192,36 +201,36 @@ expensive. For physical situations that have
 close-to-cylindrical symmetry, it is more efficient to use a
 <strong>cylindrical grid</strong> for the fields. This is represented below, with
 macroparticles in blue and the grid for the fields in red.</p>
-<img alt="_images/3d_vs_cylindrical.png" src="_images/3d_vs_cylindrical.png" />
+<img alt="../_images/3d_vs_cylindrical.png" src="../_images/3d_vs_cylindrical.png" />
 <p>The above image is only a schematic view. In fact, instead of using a <strong>3D
 Cartesian grid</strong>, FBPIC (and other PIC codes such as <a class="reference external" href="http://www.sciencedirect.com/science/article/pii/S0021999108005950">Calder Circ</a>)
 use <strong>a set of 2D radial grids</strong>, as represented below. Each 2D radial grid represents <strong>an azimuthal mode</strong> (labeled by an integer <span class="math notranslate nohighlight">\(m\)</span>):</p>
-<img alt="_images/cylindrical_grid.png" src="_images/cylindrical_grid.png" />
+<img alt="../_images/cylindrical_grid.png" src="../_images/cylindrical_grid.png" />
 <ul class="simple">
-<li>The grid for <span class="math notranslate nohighlight">\(m=0\)</span> represents the fields that are <strong>independent of</strong>
+<li><p>The grid for <span class="math notranslate nohighlight">\(m=0\)</span> represents the fields that are <strong>independent of</strong>
 <span class="math notranslate nohighlight">\(\theta\)</span>. (In idealized laser-wakefield acceleration, this is
-for instance the case for the wakefield.)</li>
-<li>The grid for <span class="math notranslate nohighlight">\(m=1\)</span> represents the fields that <strong>vary
+for instance the case for the wakefield.)</p></li>
+<li><p>The grid for <span class="math notranslate nohighlight">\(m=1\)</span> represents the fields that <strong>vary
 proportionally to</strong> <span class="math notranslate nohighlight">\(\cos(\theta)\)</span> and <span class="math notranslate nohighlight">\(\sin(\theta)\)</span>. (In
 idealized laser-wakefield acceleration, this is the case of a
 linearly-polarized laser field, when expressed in cylindrical coordinates,
-as <span class="math notranslate nohighlight">\(E_r\)</span> and <span class="math notranslate nohighlight">\(E_{\theta}\)</span>.)</li>
-<li>The grids for higher values of <span class="math notranslate nohighlight">\(m\)</span> represent the fields that
+as <span class="math notranslate nohighlight">\(E_r\)</span> and <span class="math notranslate nohighlight">\(E_{\theta}\)</span>.)</p></li>
+<li><p>The grids for higher values of <span class="math notranslate nohighlight">\(m\)</span> represent the fields that
 <strong>vary proportionally to</strong> <span class="math notranslate nohighlight">\(\cos(m\theta)\)</span> and
 <span class="math notranslate nohighlight">\(\sin(m\theta)\)</span>. These modes take into account
-further departures from the cylindrical symmetry.</li>
+further departures from the cylindrical symmetry.</p></li>
 </ul>
 <p>For more details on the cylindrical representation with azimuthal
 decomposition, see the <a class="reference external" href="http://www.sciencedirect.com/science/article/pii/S0021999108005950">original paper</a> of the PIC
 code Calder Circ.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
+<p class="admonition-title">Note</p>
 <p>The user chooses the number of azimuthal modes used in an FBPIC simulation.
 Thus, you should make sure that you choose <strong>enough modes</strong> to resolve the
 physics at stake (e.g. typically 2 modes for idealized laser-wakefield
 acceleration - although non-linear effects such as self-injection
 may sometimes require 3 modes).</p>
-<p class="last">The fact that only a few 2D grids are used (one per azimuthal mode),
+<p>The fact that only a few 2D grids are used (one per azimuthal mode),
 instead of a full 3D grid, implies that the code uses <strong>vastly less memory</strong>,
 and runs <strong>faster by orders of magnitude</strong> compared to a 3D Cartesian code.
 Nonetheless, the computational cost of an FBPIC simulation does of course
@@ -231,30 +240,30 @@ Nonetheless, the computational cost of an FBPIC simulation does of course
 charge and current on each radial grid, and gather the sum of the
 fields from each grid.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
+<p class="admonition-title">Note</p>
 <p>Due to details of the algorithm, the charge deposition in the
 very first radial cell can be problematic <strong>if</strong> all the particles
 of this cell are <strong>on the axis</strong> instead of being <strong>roughly uniformly distributed</strong>
 over this cell.</p>
-<p class="last">Thus, always make sure that the radial resolution of your simulation is
+<p>Thus, always make sure that the radial resolution of your simulation is
 sufficient for the structures that are near the axis
 (e.g. electron beam) to be at least resolved by a few radial cells,
 so that the macroparticles are roughly uniformly distributed within
 the first cell.</p>
 </div>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
+<p class="admonition-title">Note</p>
 <p>Because of the cylindrical representation, the macroparticles have
 <strong>different weights</strong> (i.e. they represent a different number of
 physical particles): e.g. macroparticles that were initialized far
 from the axis have a larger weight.</p>
-<p class="last">The diagnostics of an FBPIC simulation output the macroparticles
+<p>The diagnostics of an FBPIC simulation output the macroparticles
 along with their weights (denoted as <cite>w</cite>) ; be sure to take them into account in
 your post-analysis.</p>
 </div>
 </div>
 <div class="section" id="analytical-integration-in-spectral-space">
-<h3>Analytical integration in spectral space<a class="headerlink" href="#analytical-integration-in-spectral-space" title="Permalink to this headline">¶</a></h3>
+<span id="spectral-solver"></span><h3>Analytical integration in spectral space<a class="headerlink" href="#analytical-integration-in-spectral-space" title="Permalink to this headline">¶</a></h3>
 <p>In the <em>standard</em> PIC algorithm, for the field solver, the spatial and
 time derivatives in the Maxwell equations are discretized using <strong>finite-difference</strong>. However, this can lead to
 several important numerical artifacts, including <strong>spurious numerical
@@ -267,8 +276,8 @@ algorithm <strong>dispersion-free in all directions</strong>. For more details
 on the algorithm and the artifacts that it avoids, see the <a class="reference external" href="http://www.sciencedirect.com/science/article/pii/S0010465516300224">original article</a>
 of FBPIC (arxiv version <a class="reference external" href="https://arxiv.org/abs/1507.04790">here</a>).</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Thanks to the above algorithm, the field solver in
+<p class="admonition-title">Note</p>
+<p>Thanks to the above algorithm, the field solver in
 FBPIC has <strong>no Courant limit</strong>, and thus the timestep <span class="math notranslate nohighlight">\(\Delta t\)</span> can be
 chosen freely. In practice, it is common to choose <span class="math notranslate nohighlight">\(\Delta t =
 \Delta z/c\)</span> where <span class="math notranslate nohighlight">\(\Delta z\)</span> in the resolution along <span class="math notranslate nohighlight">\(z\)</span>.</p>
@@ -279,8 +288,8 @@ space. Because of the cylindrical geometry, the spectral
 transformations consist of a <strong>Fourier transform</strong> along <span class="math notranslate nohighlight">\(z\)</span>
 and a <strong>Hankel transform</strong> along <span class="math notranslate nohighlight">\(r\)</span>.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">While the computational cost of the Fourier transform scales as
+<p class="admonition-title">Note</p>
+<p>While the computational cost of the Fourier transform scales as
 <span class="math notranslate nohighlight">\(N_z \log(N_z)\)</span>, the cost of the Hankel transform scales as <span class="math notranslate nohighlight">\(N_r^2\)</span>. Thus, be aware that, when
 using a large number of gridpoints along <span class="math notranslate nohighlight">\(r\)</span> (<span class="math notranslate nohighlight">\(N_r\sim 1000\)</span>),
 the Hankel transforms may dominate the computational time.</p>
@@ -308,10 +317,10 @@ of FBPIC).</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="install/installation.html" class="btn btn-neutral float-right" title="Installation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="parallelisation.html" class="btn btn-neutral float-right" title="parallelization of FBPIC" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="index.html" class="btn btn-neutral" title="FBPIC documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="overview.html" class="btn btn-neutral float-left" title="Overview of the code" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -337,26 +346,16 @@ of FBPIC).</p>
   
 
 
-  
-
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-
-  
-
-  <script type="text/javascript" src="_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

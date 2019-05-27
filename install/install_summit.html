@@ -17,34 +17,37 @@
   
 
   
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Installation on Titan (OLCF)" href="install_titan.html" />
     <link rel="prev" title="Installation on a local computer" href="install_local.html" /> 
-
-  
-  <script src="../_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -83,7 +86,7 @@
             
             
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview of the code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview/overview.html">Overview of the code</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="installation.html">Installation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="install_local.html">Installation on a local computer</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Installation on Summit (OLCF)</a><ul>
@@ -100,7 +103,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="install_titan.html">Installation on Titan (OLCF)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="install_jureca.html">Installation on JURECA (JSC)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install_juwels.html">Installation on JUWELS (JSC)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="install_lawrencium.html">Installation on Lawrencium (LBNL)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="install_comet.html">Installation on Comet (SDSC)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="install_cori_edison.html">Installation on Cori and Edison (NERSC)</a></li>
@@ -201,21 +204,21 @@ is a GPU cluster at the <a class="reference external" href="https://www.olcf.orn
 <div class="section" id="installation-of-fbpic-and-its-dependencies">
 <h3>Installation of FBPIC and its dependencies<a class="headerlink" href="#installation-of-fbpic-and-its-dependencies" title="Permalink to this headline">¶</a></h3>
 <ul>
-<li><p class="first">Install the dependencies of <code class="docutils literal notranslate"><span class="pre">fbpic</span></code></p>
+<li><p>Install the dependencies of <code class="docutils literal notranslate"><span class="pre">fbpic</span></code></p>
 <blockquote>
 <div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">numba</span><span class="o">=</span><span class="mf">0.42</span> <span class="n">scipy</span> <span class="n">h5py</span> <span class="n">cython</span> <span class="n">cudatoolkit</span><span class="o">=</span><span class="mf">8.0</span>
 </pre></div>
 </div>
 </div></blockquote>
 </li>
-<li><p class="first">Install <code class="docutils literal notranslate"><span class="pre">pyfftw</span></code></p>
+<li><p>Install <code class="docutils literal notranslate"><span class="pre">pyfftw</span></code></p>
 <blockquote>
 <div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">pyfftw</span>
 </pre></div>
 </div>
 </div></blockquote>
 </li>
-<li><p class="first">Install <code class="docutils literal notranslate"><span class="pre">pyculib</span></code></p>
+<li><p>Install <code class="docutils literal notranslate"><span class="pre">pyculib</span></code></p>
 <blockquote>
 <div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">dzhoshkun</span><span class="o">/</span><span class="n">pyculib_sorting</span><span class="o">.</span><span class="n">git</span>
 <span class="n">cd</span> <span class="n">pyculib_sorting</span>
@@ -230,7 +233,7 @@ is a GPU cluster at the <a class="reference external" href="https://www.olcf.orn
 </div>
 </div></blockquote>
 </li>
-<li><p class="first">Install <code class="docutils literal notranslate"><span class="pre">fbpic</span></code></p>
+<li><p>Install <code class="docutils literal notranslate"><span class="pre">fbpic</span></code></p>
 <blockquote>
 <div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">fbpic</span>
 </pre></div>
@@ -306,8 +309,8 @@ following text (and replace the bracketed text by the proper values).</p>
 </pre></div>
 </div>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Note that, in the above script, <code class="docutils literal notranslate"><span class="pre">module</span> <span class="pre">load</span> <span class="pre">cuda/9.1.85</span></code>,
+<p class="admonition-title">Note</p>
+<p>Note that, in the above script, <code class="docutils literal notranslate"><span class="pre">module</span> <span class="pre">load</span> <span class="pre">cuda/9.1.85</span></code>,
 <code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">FBPIC_ENABLE_GPUDIRECT=1</span></code> and <code class="docutils literal notranslate"><span class="pre">--smpiargs=&quot;-gpu&quot;</span></code>
 are only needed if you wish to use the <strong>cuda-aware</strong> MPI.</p>
 </div>
@@ -327,7 +330,7 @@ are only needed if you wish to use the <strong>cuda-aware</strong> MPI.</p>
         <a href="install_titan.html" class="btn btn-neutral float-right" title="Installation on Titan (OLCF)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="install_local.html" class="btn btn-neutral" title="Installation on a local computer" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="install_local.html" class="btn btn-neutral float-left" title="Installation on a local computer" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -353,26 +356,16 @@ are only needed if you wish to use the <strong>cuda-aware</strong> MPI.</p>
   
 
 
-  
-
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-
-  
-
-  <script type="text/javascript" src="../_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

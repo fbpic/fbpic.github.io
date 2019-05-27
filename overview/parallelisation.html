@@ -1,0 +1,382 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>parallelization of FBPIC &mdash; FBPIC 0.12.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Installation" href="../install/installation.html" />
+    <link rel="prev" title="FBPIC algorithm &amp; features" href="pic_algorithm.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> FBPIC
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.12.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="overview.html">Overview of the code</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="pic_algorithm.html">FBPIC algorithm &amp; features</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">parallelization of FBPIC</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#two-level-parallelization">Two-level parallelization</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#intra-device-parallelization">Intra-device parallelization</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#inter-device-parallelization">Inter-device parallelization</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#finite-order-spectral-solver">Finite-order spectral solver</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../install/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how_to_run.html">How to run the code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api_reference/api_reference.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/advanced.html">Advanced use</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">FBPIC</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="overview.html">Overview of the code</a> &raquo;</li>
+        
+      <li>parallelization of FBPIC</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/overview/parallelisation.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="parallelization-of-fbpic">
+<h1>parallelization of FBPIC<a class="headerlink" href="#parallelization-of-fbpic" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="two-level-parallelization">
+<h2>Two-level parallelization<a class="headerlink" href="#two-level-parallelization" title="Permalink to this headline">¶</a></h2>
+<p>PIC simulations are computationally demanding in terms of arithmetic
+operations and memory consumption. Therefore, simulations are typically
+<strong>parallelised</strong> across many compute units that share the computational work.</p>
+<p>A common parallelization strategy is to spatially decompose the simulation
+box into <strong>multiple sub-domains</strong> (i.e. multiple chunks of space):</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Each sub-domain can be treated by a <strong>separate</strong> computing device
+(e.g. a separate multi-core CPU or GPU). These devices exchange
+a minimal amount of information, at the boundary of the sub-domains,
+using the <strong>MPI</strong> protocol (<em>inter-device parallelization</em>).</p></li>
+<li><p><strong>Within</strong> each sub-domain, the multiple cores of a <strong>single</strong> computing
+device can work together on the same sub-domain, using their
+<strong>shared memory</strong> (<em>intra-device parallelization</em>).</p></li>
+</ul>
+</div></blockquote>
+<img alt="../_images/two_level_parallelisation.png" src="../_images/two_level_parallelisation.png" />
+<p>The above image illustrates how these two levels of parallelism are mapped
+onto a modern HPC (High Performance Computing) architecture. Within one
+sub-domain, the multiple cores of a single computing device exchange
+large amounts of information via the (fast) shared memory (RAM for CPU, or
+device memory for GPU). Between sub-domains, the computing devices exchange
+a smaller amount of information via the (relatively slower) local area network.</p>
+<div class="section" id="intra-device-parallelization">
+<h3>Intra-device parallelization<a class="headerlink" href="#intra-device-parallelization" title="Permalink to this headline">¶</a></h3>
+<p>A single computing device can consist of a multi-core CPU or a GPU. Within
+such a device, many computational cores can access the same memory.
+In this <strong>shared memory layout</strong>, the algorithmic PIC methods are executed
+on a single such device by many threads in parallel.</p>
+<p>FBPIC can run either on <strong>CPUs</strong> or on <strong>NVIDIA GPUs</strong>. GPUs are well suited
+for the parallel execution of the PIC algorithm, as they can execute thousands
+of threads simultaneously. In contrast, only a few parallel threads run
+efficiently on a CPU - but each of them has a much higher performance
+than a single GPU thread. For typical simulation sizes and modern hardware,
+FBPIC is generally much faster on GPU than on CPU.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When running <strong>on a CPU</strong>, the best performance is typically achieved by
+using only a <strong>single CPU socket</strong>, with the number of threads matching
+the number of physical cores per socket. In this case, the user is
+responsible for setting the correct number of threads
+(see <a class="reference internal" href="../how_to_run.html"><span class="doc">How to run the code</span></a>).</p>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>FBPIC simulations are most efficient when using <strong>only the intra-device
+parallelization</strong>, i.e. executing on a <strong>single</strong> GPU or
+a <strong>single</strong> multi-core CPU.</p>
+<p>This is because using <strong>inter-device parallelization</strong> instead comes
+with overheads (see next section). In general, using multiple GPUs/CPUs
+(with inter-device parallelization) is only advantageous if:</p>
+<ul class="simple">
+<li><p>The simulation is so large that each PIC iteration takes <strong>more than
+a hundred milliseconds</strong>. (In this case, the inter-device overheads
+become negligible.)</p></li>
+<li><p>The simulation is so large that it <strong>does not fit</strong> in the memory
+of a single computing device.</p></li>
+</ul>
+<p>Note also that you can still use multiple GPUs/CPUs <strong>without</strong>
+inter-device parallelization, by running <strong>independent</strong> simulations
+in parallel: see <a class="reference internal" href="../advanced/parameter_scans.html"><span class="doc">Performing parameter scans in parallel</span></a>.</p>
+</div>
+</div>
+<div class="section" id="inter-device-parallelization">
+<h3>Inter-device parallelization<a class="headerlink" href="#inter-device-parallelization" title="Permalink to this headline">¶</a></h3>
+<p>As mentioned above, if the simulation is large enough, it can be advantageous
+to use <strong>multiple computing devices</strong> with <strong>inter-device parallelization</strong>.
+In this case, the simulation box is split into smaller chunks (sub-domains).
+Each computing device handles a separate sub-domain, and they exchange
+information on the fields and particles at the boundaries.</p>
+<img alt="../_images/domain_decomposition.png" src="../_images/domain_decomposition.png" />
+<p>As shown in the image below, a guard region is used as a boundary layer to
+ensure that fields and particles propagate correctly from one domain to the other:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>After each iteration, the updated electromagnetic fields of a local
+domain are copied to the neighboring guard region.</p></li>
+<li><p>Similarly, the charge and current density are added between overlapping
+domains as if particles would reside in both domains simultaneously.</p></li>
+<li><p>Particles are transferred to the neighboring domain in regular time
+intervals if they left the local domain.</p></li>
+</ul>
+</div></blockquote>
+<p>Note that FBPIC implements spatial domain decomposition <strong>only in the
+longitudinal direction</strong> (i.e. the <cite>z</cite> axis).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Communication between domains occurs via MPI (Message Passing Interface),
+using the <code class="docutils literal notranslate"><span class="pre">mpi4py</span></code> package.</p>
+<ul class="simple">
+<li><p>When running on GPUs, FBPIC should use <strong>one MPI process per GPU</strong>.</p></li>
+<li><p>When running on CPUs, FBPIC should use <strong>one MPI process per CPU socket</strong>
+(and one thread per physical core in each socket, as mentioned above).</p></li>
+</ul>
+<p>See the section <a class="reference internal" href="../how_to_run.html"><span class="doc">How to run the code</span></a> to learn how to launch a simulation
+with MPI. You can also pass <code class="docutils literal notranslate"><span class="pre">verbose_level=2</span></code> to the <a class="reference internal" href="../api_reference/simulation.html#fbpic.main.Simulation" title="fbpic.main.Simulation"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Simulation</span></code></a>
+object to check which CPU/GPU are used by FBPIC.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>For standard simulation sizes, efficient scaling of the inter-node
+parallelization is typically limited to a few (~4-16) domains. Using too
+many domains will result in poor performance, as the size of a single domain
+becomes too small and/or the overhead of communication too large. Please
+also note that the performance achieved in practice can highly depend on
+the HPC architecture used.</p>
+</div>
+<p>Note that the inter-device parallelization strategy also comes with a trade-off.
+It requires <strong>locality</strong> of the simulated physics, with information
+propagating not farther than the guard region of a domain. This is ensured by
+using a <strong>tunable finite-order spectral solver</strong> for which the required
+<strong>guard region size</strong> is inversely proportional to the <strong>accuracy of the solver</strong>.</p>
+</div>
+</div>
+<div class="section" id="finite-order-spectral-solver">
+<h2>Finite-order spectral solver<a class="headerlink" href="#finite-order-spectral-solver" title="Permalink to this headline">¶</a></h2>
+<p>As described in <a class="reference internal" href="pic_algorithm.html#spectral-solver"><span class="std std-ref">this section</span></a>, the field solver of
+FBPIC integrates the Maxwell equations in the frequency domain as opposed
+to <em>standard</em> field solvers that use finite-differences
+to approximate the field evolution. These FDTD (Finite-Difference Time Domain)
+solvers are sometimes classified by their <strong>order of accuracy</strong>. In an
+FDTD solver, the order of accuracy determines the extent of the
+finite-difference stencil used in the Maxwell solver.</p>
+<p>Following this notation, the <em>default</em> spectral solver of FBPIC is of
+<strong>infinite order</strong> with its stencil extending across the entire simulation
+grid. However, the accuracy of the spectral solver can be artificially reduced
+to a <strong>finite order</strong>, virtually limiting the extent of the stencil to a
+finite range of cells.</p>
+<p>Applying the finite-order modification to FBPIC’s spectral solver brings the
+locality which is required to spatially decompose the simulation grid.
+The required size of the overlapping guard region between the individual
+smaller domains is then governed by the order (accuracy) of the solver.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A lower order requires less guard cells between the domains, therefore
+lowering the overhead from MPI communication. However, it will also decrease
+the accuracy of the field solver. Similar to finite-difference solvers this
+leads to a <strong>spurious numerical dispersion</strong> of the electromagnetic waves,
+potentially causing a deterioration of the beam quality due to <strong>Numerical
+Cherenkov Radiation</strong> (NCR). For common simulation cases of plasma
+acceleration, we recommend using <code class="docutils literal notranslate"><span class="pre">n_order=32</span></code> to get accurate results.
+You can learn more about the finite order spectral solver and how to
+identify NCR in a simulation in <a class="reference external" href="https://aip.scitation.org/doi/abs/10.1063/1.4978569">this article</a>.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Although the finite-order spectral solver guarantees locality when advancing
+the electromagnetic fields in time, this is not necessarily true for the
+standard current correction (<code class="docutils literal notranslate"><span class="pre">curl-free</span></code>) of the PIC algorithm. However,
+in practice, this will typically have no negative influence on the
+simulation results. As an alternative, an effectively local current
+correction (<code class="docutils literal notranslate"><span class="pre">cross-deposition</span></code>) can be selected - having the slight
+disadvantage of not strictly preserving a linear laser polarization.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../install/installation.html" class="btn btn-neutral float-right" title="Installation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="pic_algorithm.html" class="btn btn-neutral float-left" title="FBPIC algorithm &amp; features" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, FBPIC contributors
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

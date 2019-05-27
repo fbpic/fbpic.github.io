@@ -17,34 +17,37 @@
   
 
   
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Installation on JURECA (JSC)" href="install_jureca.html" />
+    <link rel="next" title="Installation on JUWELS (JSC)" href="install_juwels.html" />
     <link rel="prev" title="Installation on Summit (OLCF)" href="install_summit.html" /> 
-
-  
-  <script src="../_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -83,7 +86,7 @@
             
             
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview of the code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview/overview.html">Overview of the code</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="installation.html">Installation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="install_local.html">Installation on a local computer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="install_summit.html">Installation on Summit (OLCF)</a></li>
@@ -100,7 +103,7 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="install_jureca.html">Installation on JURECA (JSC)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install_juwels.html">Installation on JUWELS (JSC)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="install_lawrencium.html">Installation on Lawrencium (LBNL)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="install_comet.html">Installation on Comet (SDSC)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="install_cori_edison.html">Installation on Cori and Edison (NERSC)</a></li>
@@ -186,12 +189,12 @@
 <h3>Installation of Anaconda<a class="headerlink" href="#installation-of-anaconda" title="Permalink to this headline">¶</a></h3>
 <p>In order to install FBPIC, you need to first install <a class="reference external" href="https://www.continuum.io/why-anaconda">Anaconda</a>:</p>
 <ul>
-<li><p class="first">Download Miniconda:</p>
+<li><p>Download Miniconda:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wget</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">repo</span><span class="o">.</span><span class="n">continuum</span><span class="o">.</span><span class="n">io</span><span class="o">/</span><span class="n">miniconda</span><span class="o">/</span><span class="n">Miniconda</span><span class="o">-</span><span class="n">latest</span><span class="o">-</span><span class="n">Linux</span><span class="o">-</span><span class="n">x86_64</span><span class="o">.</span><span class="n">sh</span> <span class="o">-</span><span class="n">O</span> <span class="n">miniconda</span><span class="o">.</span><span class="n">sh</span>
 </pre></div>
 </div>
 </li>
-<li><p class="first">Execute the installation script, and use <code class="docutils literal notranslate"><span class="pre">/ccs/proj/&lt;project_id&gt;</span></code>
+<li><p>Execute the installation script, and use <code class="docutils literal notranslate"><span class="pre">/ccs/proj/&lt;project_id&gt;</span></code>
 as an install directory, so that the installation is accessible to
 the compute nodes.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">bash</span> <span class="n">miniconda</span><span class="o">.</span><span class="n">sh</span> <span class="o">-</span><span class="n">b</span> <span class="o">-</span><span class="n">p</span> <span class="o">/</span><span class="n">ccs</span><span class="o">/</span><span class="n">proj</span><span class="o">/&lt;</span><span class="n">project_id</span><span class="o">&gt;/</span><span class="n">miniconda2</span>
@@ -200,7 +203,7 @@ the compute nodes.</p>
 <p>where the bracketed text should be replaced by the values for your
 account.</p>
 </li>
-<li><p class="first">Add the following lines at the end of your .bashrc</p>
+<li><p>Add the following lines at the end of your .bashrc</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>module load python_anaconda
 export PATH=/ccs/proj/&lt;project_id&gt;/miniconda2/bin:$PATH
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/ccs/proj/&lt;project_id&gt;/miniconda2/lib
@@ -220,14 +223,13 @@ that you install locally.</p>
 <div class="section" id="installation-of-fbpic-and-its-dependencies">
 <h3>Installation of FBPIC and its dependencies<a class="headerlink" href="#installation-of-fbpic-and-its-dependencies" title="Permalink to this headline">¶</a></h3>
 <ul>
-<li><p class="first">Install the dependencies by typing</p>
+<li><p>Install the dependencies by typing</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">numba</span><span class="o">==</span><span class="mf">0.42</span> <span class="n">scipy</span> <span class="n">h5py</span> <span class="n">mkl</span>
 <span class="n">conda</span> <span class="n">install</span> <span class="n">cudatoolkit</span><span class="o">=</span><span class="mf">8.0</span> <span class="n">pyculib</span>
 </pre></div>
 </div>
 </li>
-<li><p class="first">Clone and install the <code class="docutils literal notranslate"><span class="pre">fbpic</span></code> repository using git</p>
-</li>
+<li><p>Clone and install the <code class="docutils literal notranslate"><span class="pre">fbpic</span></code> repository using git</p></li>
 </ul>
 <blockquote>
 <div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">git</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">fbpic</span><span class="o">/</span><span class="n">fbpic</span><span class="o">.</span><span class="n">git</span>
@@ -290,10 +292,10 @@ aprun -n &lt;number of nodes&gt; -N 1 python fbpic_script.py
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="install_jureca.html" class="btn btn-neutral float-right" title="Installation on JURECA (JSC)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="install_juwels.html" class="btn btn-neutral float-right" title="Installation on JUWELS (JSC)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="install_summit.html" class="btn btn-neutral" title="Installation on Summit (OLCF)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="install_summit.html" class="btn btn-neutral float-left" title="Installation on Summit (OLCF)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -319,26 +321,16 @@ aprun -n &lt;number of nodes&gt; -N 1 python fbpic_script.py
   
 
 
-  
-
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-
-  
-
-  <script type="text/javascript" src="../_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>
