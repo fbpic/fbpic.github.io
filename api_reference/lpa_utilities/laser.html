@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Laser initialization &mdash; FBPIC 0.12.0 documentation</title>
+  <title>Laser initialization &mdash; FBPIC 0.13.0 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.12.0
+                0.13.0
               </div>
             
           
@@ -226,7 +226,7 @@ the simulation box.</p>
 <h2>Generic function for arbitrary laser profile<a class="headerlink" href="#generic-function-for-arbitrary-laser-profile" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="fbpic.lpa_utils.laser.add_laser_pulse">
-<code class="descclassname">fbpic.lpa_utils.laser.</code><code class="descname">add_laser_pulse</code><span class="sig-paren">(</span><em>sim</em>, <em>laser_profile</em>, <em>gamma_boost=None</em>, <em>method='direct'</em>, <em>z0_antenna=None</em>, <em>v_antenna=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fbpic/lpa_utils/laser/laser.html#add_laser_pulse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.laser.add_laser_pulse" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">fbpic.lpa_utils.laser.</code><code class="sig-name descname">add_laser_pulse</code><span class="sig-paren">(</span><em class="sig-param">sim</em>, <em class="sig-param">laser_profile</em>, <em class="sig-param">gamma_boost=None</em>, <em class="sig-param">method='direct'</em>, <em class="sig-param">z0_antenna=None</em>, <em class="sig-param">v_antenna=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fbpic/lpa_utils/laser/laser.html#add_laser_pulse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.laser.add_laser_pulse" title="Permalink to this definition">¶</a></dt>
 <dd><p>Introduce a laser pulse in the simulation.</p>
 <p>The laser is either added directly to the interpolation grid initially
 (method= <code class="docutils literal notranslate"><span class="pre">direct</span></code>) or it is progressively emitted by an antenna
@@ -316,7 +316,7 @@ look at how the existing laser profiles that are implemented <a class="reference
 function, with a <code class="docutils literal notranslate"><span class="pre">GaussianLaser</span></code> profile.</p>
 <dl class="function">
 <dt id="fbpic.lpa_utils.laser.add_laser">
-<code class="descclassname">fbpic.lpa_utils.laser.</code><code class="descname">add_laser</code><span class="sig-paren">(</span><em>sim</em>, <em>a0</em>, <em>w0</em>, <em>ctau</em>, <em>z0</em>, <em>zf=None</em>, <em>lambda0=8e-07</em>, <em>cep_phase=0.0</em>, <em>phi2_chirp=0.0</em>, <em>theta_pol=0.0</em>, <em>gamma_boost=None</em>, <em>method='direct'</em>, <em>fw_propagating=True</em>, <em>update_spectral=True</em>, <em>z0_antenna=None</em>, <em>v_antenna=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fbpic/lpa_utils/laser/laser.html#add_laser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.laser.add_laser" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">fbpic.lpa_utils.laser.</code><code class="sig-name descname">add_laser</code><span class="sig-paren">(</span><em class="sig-param">sim</em>, <em class="sig-param">a0</em>, <em class="sig-param">w0</em>, <em class="sig-param">ctau</em>, <em class="sig-param">z0</em>, <em class="sig-param">zf=None</em>, <em class="sig-param">lambda0=8e-07</em>, <em class="sig-param">cep_phase=0.0</em>, <em class="sig-param">phi2_chirp=0.0</em>, <em class="sig-param">theta_pol=0.0</em>, <em class="sig-param">gamma_boost=None</em>, <em class="sig-param">method='direct'</em>, <em class="sig-param">fw_propagating=True</em>, <em class="sig-param">update_spectral=True</em>, <em class="sig-param">z0_antenna=None</em>, <em class="sig-param">v_antenna=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fbpic/lpa_utils/laser/laser.html#add_laser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.laser.add_laser" title="Permalink to this definition">¶</a></dt>
 <dd><p>Introduce a linearly-polarized, Gaussian laser in the simulation.</p>
 <p>More precisely, the electric field <strong>near the focal plane</strong>
 is given by:</p>

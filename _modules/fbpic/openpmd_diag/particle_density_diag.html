@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fbpic.openpmd_diag.particle_density_diag &mdash; FBPIC 0.12.0 documentation</title>
+  <title>fbpic.openpmd_diag.particle_density_diag &mdash; FBPIC 0.13.0 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.12.0
+                0.13.0
               </div>
             
           
@@ -256,8 +256,15 @@
             <span class="c1"># affect the spectral space, and therefore it does not affect</span>
             <span class="c1"># the simulation</span>
             <span class="n">species_object</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">species</span><span class="p">[</span><span class="n">species_name</span><span class="p">]</span>
-            <span class="n">sim</span><span class="o">.</span><span class="n">deposit</span><span class="p">(</span> <span class="s1">&#39;rho&#39;</span><span class="p">,</span> <span class="n">species_list</span><span class="o">=</span><span class="p">[</span><span class="n">species_object</span><span class="p">],</span>
-                        <span class="n">update_spectral</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">exchange</span><span class="o">=</span><span class="kc">True</span> <span class="p">)</span>
+            <span class="c1"># Deposit and overwrite rho_next in spectral space as it will be</span>
+            <span class="c1"># correctly updated anyways later in this iteration by the PIC loop</span>
+            <span class="n">sim</span><span class="o">.</span><span class="n">deposit</span><span class="p">(</span> <span class="s1">&#39;rho_next&#39;</span><span class="p">,</span> <span class="n">species_list</span><span class="o">=</span><span class="p">[</span><span class="n">species_object</span><span class="p">],</span>
+                        <span class="n">update_spectral</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exchange</span><span class="o">=</span><span class="kc">False</span> <span class="p">)</span>
+            <span class="c1"># Bring filtered particle density back to the intermediate grid</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">spect2interp</span><span class="p">(</span><span class="s1">&#39;rho_next&#39;</span><span class="p">)</span>
+            <span class="c1"># Exchange (add) the particle density between domains</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">sim</span><span class="o">.</span><span class="n">comm</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">sim</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">sim</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">exchange_fields</span><span class="p">(</span><span class="n">sim</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">,</span> <span class="s1">&#39;rho&#39;</span><span class="p">,</span> <span class="s1">&#39;add&#39;</span><span class="p">)</span>
 
             <span class="c1"># If needed: Receive data from the GPU</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">use_cuda</span> <span class="p">:</span>

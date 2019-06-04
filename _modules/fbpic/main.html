@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fbpic.main &mdash; FBPIC 0.12.0 documentation</title>
+  <title>fbpic.main &mdash; FBPIC 0.13.0 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.12.0
+                0.13.0
               </div>
             
           
@@ -167,7 +167,7 @@
 <span class="c1"># Check if threading is available</span>
 <span class="kn">from</span> <span class="nn">.utils.threading</span> <span class="k">import</span> <span class="n">threading_enabled</span>
 <span class="c1"># Check if CUDA is available, then import CUDA functions</span>
-<span class="kn">from</span> <span class="nn">.utils.cuda</span> <span class="k">import</span> <span class="n">cuda_installed</span>
+<span class="kn">from</span> <span class="nn">.utils.cuda</span> <span class="k">import</span> <span class="n">cuda_installed</span><span class="p">,</span> <span class="n">cupy_installed</span>
 <span class="k">if</span> <span class="n">cuda_installed</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">.utils.cuda</span> <span class="k">import</span> <span class="n">send_data_to_gpu</span><span class="p">,</span> \
                 <span class="n">receive_data_from_gpu</span><span class="p">,</span> <span class="n">mpi_select_gpus</span>
@@ -314,11 +314,10 @@
 <span class="sd">        current_correction: string, optional</span>
 <span class="sd">            The method used in order to ensure that the continuity equation</span>
 <span class="sd">            is satisfied. Either `curl-free` or `cross-deposition`.</span>
-<span class="sd">            `curl-free` is faster but less local (should not be used with MPI).</span>
-<span class="sd">            For the moment, `cross-deposition` is still experimental.</span>
+<span class="sd">            `curl-free` is faster but less local.</span>
 
 <span class="sd">        gamma_boost : float, optional</span>
-<span class="sd">            When initializing the laser in a boosted frame, set the</span>
+<span class="sd">            When running the simulation in a boosted frame, set the</span>
 <span class="sd">            value of `gamma_boost` to the corresponding Lorentz factor.</span>
 <span class="sd">            All the other quantities (zmin, zmax, n_e, etc.) are to be given</span>
 <span class="sd">            in the lab frame.</span>
@@ -358,6 +357,11 @@
                 <span class="s1">&#39;Cuda not available for the simulation.</span><span class="se">\n</span><span class="s1">&#39;</span>
                 <span class="s1">&#39;Performing the simulation on CPU.&#39;</span> <span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">use_cuda</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">use_cuda</span><span class="o">==</span><span class="kc">True</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">cupy_installed</span><span class="o">==</span><span class="kc">False</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                <span class="s1">&#39;In order to run on GPUs, FBPIC version 0.13 and later </span><span class="se">\n</span><span class="s1">&#39;</span>
+                <span class="s1">&#39;require the `cupy` package (version 6).</span><span class="se">\n</span><span class="s1">&#39;</span>
+                <span class="s1">&#39;See the FBPIC documentation in order to install cupy.&#39;</span><span class="p">)</span>
         <span class="c1"># CPU multi-threading</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">use_threading</span> <span class="o">=</span> <span class="n">threading_enabled</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_threading</span><span class="p">:</span>

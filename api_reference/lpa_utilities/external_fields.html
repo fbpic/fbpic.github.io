@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>External fields &mdash; FBPIC 0.12.0 documentation</title>
+  <title>External fields &mdash; FBPIC 0.13.0 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.12.0
+                0.13.0
               </div>
             
           
@@ -180,7 +180,7 @@ timestep and are <strong>specified by the user</strong>, instead of being self-c
 evolved by the simulation.</p>
 <dl class="class">
 <dt id="fbpic.lpa_utils.external_fields.ExternalField">
-<em class="property">class </em><code class="descclassname">fbpic.lpa_utils.external_fields.</code><code class="descname">ExternalField</code><span class="sig-paren">(</span><em>field_func</em>, <em>fieldtype</em>, <em>amplitude</em>, <em>length_scale</em>, <em>species=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fbpic/lpa_utils/external_fields.html#ExternalField"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.external_fields.ExternalField" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">fbpic.lpa_utils.external_fields.</code><code class="sig-name descname">ExternalField</code><span class="sig-paren">(</span><em class="sig-param">field_func</em>, <em class="sig-param">fieldtype</em>, <em class="sig-param">amplitude</em>, <em class="sig-param">length_scale</em>, <em class="sig-param">species=None</em>, <em class="sig-param">gamma_boost=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fbpic/lpa_utils/external_fields.html#ExternalField"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.external_fields.ExternalField" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize an ExternalField object, so that the function
 <cite>field_func</cite> is called at each time step on the field <cite>fieldtype</cite></p>
 <p>This object should be added to the list <cite>external_fields</cite>,
@@ -192,14 +192,15 @@ function if needed, by using numba’s ufunc feature.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>field_func</strong> (<em>callable</em>) – <p>Function of the form <cite>field_func( F, x, y, z, t, amplitude,
-length_scale )</cite> and which returns the modified field F’</p>
+length_scale )</cite> and which returns the modified field F’
+(in the lab frame)</p>
 <p>This function will be called at each timestep, with:</p>
 <ul>
 <li><p>F: 1d array of shape (N_ptcl,), containing the field
 designated by fieldtype, gathered on the particles</p></li>
 <li><p>x, y, z: 1d arrays of shape (N_ptcl), containing the
-positions of the particles</p></li>
-<li><p>t: float, the time in the simulation</p></li>
+positions of the particles (in the lab frame)</p></li>
+<li><p>t: float, the time in the simulation (in the lab frame)</p></li>
 <li><p>amplitude and length_scale: floats that can be used within
 the function expression</p></li>
 </ul>
@@ -223,6 +224,10 @@ Either ‘Ex’, ‘Ey’, ‘Ez’, ‘Bx’, ‘By’, ‘Bz’</p></li>
 <li><p><strong>species</strong> (<em>a Particles object</em><em>, </em><em>optionals</em>) – The species on which the external field has to be applied.
 If no species is specified, the external field is applied
 to all particles.</p></li>
+<li><p><strong>gamma_boost</strong> (<em>float</em><em>, </em><em>optional</em>) – When running the simulation in a boosted frame, set the
+value of <cite>gamma_boost</cite> to the corresponding Lorentz factor.
+The external fields will be automatically converted to the
+boosted frame.</p></li>
 </ul>
 </dd>
 </dl>
@@ -234,6 +239,23 @@ a field of 1 Tesla and a period of 1 cm :</p>
 
 <span class="n">sim</span><span class="o">.</span><span class="n">external_fields</span> <span class="o">=</span> <span class="p">[</span> <span class="n">ExternalField</span><span class="p">(</span> <span class="n">field_func</span><span class="p">,</span> <span class="s1">&#39;By&#39;</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">1.e-2</span> <span class="p">)</span> <span class="p">]</span>
 </pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Note that, in principle, <code class="docutils literal notranslate"><span class="pre">field_func</span></code> does not necessarily need
+to use the arguments <code class="docutils literal notranslate"><span class="pre">amplitude</span></code> and <code class="docutils literal notranslate"><span class="pre">length_scale</span></code>.
+For instance, in the above example, we could have used</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">field_func</span><span class="p">(</span> <span class="n">F</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">t</span> <span class="p">,</span> <span class="n">amplitude</span><span class="p">,</span> <span class="n">length_scale</span> <span class="p">):</span>
+    <span class="k">return</span><span class="p">(</span> <span class="n">F</span> <span class="o">+</span> <span class="mf">1.</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">z</span><span class="o">/</span><span class="mf">1.e-2</span> <span class="p">)</span> <span class="p">)</span>
+</pre></div>
+</div>
+<p>However, <strong>when running the simulation in a boosted frame</strong>
+(i.e. when setting the above argument <code class="docutils literal notranslate"><span class="pre">gamma_boost</span></code>),
+the expression of the external fields <strong>needs to be proportional
+to</strong> <code class="docutils literal notranslate"><span class="pre">amplitude</span></code>. This is because, internally, the automatic
+conversion of the external fields to the boosted frame relies
+on this variable. (There is no similar constraint for
+<code class="docutils literal notranslate"><span class="pre">length_scale</span></code>, however.)</p>
 </div>
 </dd></dl>
 

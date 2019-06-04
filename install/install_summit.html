@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Installation on Summit (OLCF) &mdash; FBPIC 0.12.0 documentation</title>
+  <title>Installation on Summit (OLCF) &mdash; FBPIC 0.13.0 documentation</title>
   
 
   
@@ -36,8 +36,8 @@
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Installation on Titan (OLCF)" href="install_titan.html" />
-    <link rel="prev" title="Installation on a local computer" href="install_local.html" /> 
+    <link rel="next" title="How to run the code" href="../how_to_run.html" />
+    <link rel="prev" title="Installation on Cori and Edison (NERSC)" href="install_cori_edison.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.12.0
+                0.13.0
               </div>
             
           
@@ -89,6 +89,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../overview/overview.html">Overview of the code</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="installation.html">Installation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="install_local.html">Installation on a local computer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install_juwels.html">Installation on JUWELS (JSC)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install_lawrencium.html">Installation on Lawrencium (LBNL)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install_comet.html">Installation on Comet (SDSC)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install_cori_edison.html">Installation on Cori and Edison (NERSC)</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Installation on Summit (OLCF)</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#installation-of-fbpic">Installation of FBPIC</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#preparing-the-anaconda-environment">Preparing the Anaconda environment</a></li>
@@ -102,11 +106,6 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="install_titan.html">Installation on Titan (OLCF)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="install_juwels.html">Installation on JUWELS (JSC)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="install_lawrencium.html">Installation on Lawrencium (LBNL)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="install_comet.html">Installation on Comet (SDSC)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="install_cori_edison.html">Installation on Cori and Edison (NERSC)</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../how_to_run.html">How to run the code</a></li>
@@ -190,7 +189,7 @@ is a GPU cluster at the <a class="reference external" href="https://www.olcf.orn
 <p>First load the relevant modules:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">module</span> <span class="n">purge</span>
 <span class="n">module</span> <span class="n">load</span> <span class="n">gcc</span><span class="o">/</span><span class="mf">4.8</span><span class="o">.</span><span class="mi">5</span>
-<span class="n">module</span> <span class="n">load</span> <span class="n">spectrum</span><span class="o">-</span><span class="n">mpi</span><span class="o">/</span><span class="mf">10.2</span><span class="o">.</span><span class="mf">0.10</span><span class="o">-</span><span class="mi">20181214</span>
+<span class="n">module</span> <span class="n">load</span> <span class="n">spectrum</span><span class="o">-</span><span class="n">mpi</span><span class="o">/</span><span class="mf">10.3</span><span class="o">.</span><span class="mf">0.0</span><span class="o">-</span><span class="mi">20190419</span>
 <span class="n">module</span> <span class="n">load</span> <span class="n">fftw</span><span class="o">/</span><span class="mf">3.3</span><span class="o">.</span><span class="mi">8</span>
 <span class="n">module</span> <span class="n">load</span> <span class="n">python</span><span class="o">/</span><span class="mf">3.7</span><span class="o">.</span><span class="mi">0</span><span class="o">-</span><span class="n">anaconda3</span><span class="o">-</span><span class="mf">5.3</span><span class="o">.</span><span class="mi">0</span>
 </pre></div>
@@ -206,7 +205,16 @@ is a GPU cluster at the <a class="reference external" href="https://www.olcf.orn
 <ul>
 <li><p>Install the dependencies of <code class="docutils literal notranslate"><span class="pre">fbpic</span></code></p>
 <blockquote>
-<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">numba</span><span class="o">=</span><span class="mf">0.42</span> <span class="n">scipy</span> <span class="n">h5py</span> <span class="n">cython</span> <span class="n">cudatoolkit</span><span class="o">=</span><span class="mf">8.0</span>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">numba</span> <span class="n">scipy</span> <span class="n">h5py</span> <span class="n">cython</span> <span class="n">cudatoolkit</span><span class="o">=</span><span class="mf">9.0</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>Install <code class="docutils literal notranslate"><span class="pre">cupy</span></code> (This step can take a few minutes.)</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">module</span> <span class="n">load</span> <span class="n">cuda</span><span class="o">/</span><span class="mf">9.1</span><span class="o">.</span><span class="mi">85</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="n">cupy</span>
+<span class="n">module</span> <span class="n">unload</span> <span class="n">cuda</span>
 </pre></div>
 </div>
 </div></blockquote>
@@ -214,21 +222,6 @@ is a GPU cluster at the <a class="reference external" href="https://www.olcf.orn
 <li><p>Install <code class="docutils literal notranslate"><span class="pre">pyfftw</span></code></p>
 <blockquote>
 <div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">pyfftw</span>
-</pre></div>
-</div>
-</div></blockquote>
-</li>
-<li><p>Install <code class="docutils literal notranslate"><span class="pre">pyculib</span></code></p>
-<blockquote>
-<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">dzhoshkun</span><span class="o">/</span><span class="n">pyculib_sorting</span><span class="o">.</span><span class="n">git</span>
-<span class="n">cd</span> <span class="n">pyculib_sorting</span>
-<span class="n">git</span> <span class="n">submodule</span> <span class="n">update</span> <span class="o">--</span><span class="n">init</span>
-<span class="n">module</span> <span class="n">load</span> <span class="n">cuda</span>
-<span class="n">python</span> <span class="n">build_sorting_libs</span><span class="o">.</span><span class="n">py</span>
-<span class="n">module</span> <span class="n">unload</span> <span class="n">cuda</span>
-<span class="n">cp</span> <span class="n">lib</span><span class="o">/*.</span><span class="n">so</span> <span class="o">~/.</span><span class="n">conda</span><span class="o">/</span><span class="n">envs</span><span class="o">/</span><span class="n">fbpic</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span>
-<span class="n">pip</span> <span class="n">install</span> <span class="n">pyculib</span>
-<span class="n">cd</span> <span class="o">..</span>
 </pre></div>
 </div>
 </div></blockquote>
@@ -263,54 +256,59 @@ environment <code class="docutils literal notranslate"><span class="pre">fbpic</
 </pre></div>
 </div>
 <p>Then <code class="docutils literal notranslate"><span class="pre">cd</span></code> to the directory where you prepared your input script and type</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">module</span> <span class="n">purge</span>
-<span class="n">module</span> <span class="n">load</span> <span class="n">gcc</span><span class="o">/</span><span class="mf">4.8</span><span class="o">.</span><span class="mi">5</span>
-<span class="n">module</span> <span class="n">load</span> <span class="n">spectrum</span><span class="o">-</span><span class="n">mpi</span><span class="o">/</span><span class="mf">10.2</span><span class="o">.</span><span class="mf">0.10</span><span class="o">-</span><span class="mi">20181214</span>
-<span class="n">module</span> <span class="n">load</span> <span class="n">fftw</span><span class="o">/</span><span class="mf">3.3</span><span class="o">.</span><span class="mi">8</span>
-<span class="n">module</span> <span class="n">load</span> <span class="n">python</span><span class="o">/</span><span class="mf">3.7</span><span class="o">.</span><span class="mi">0</span><span class="o">-</span><span class="n">anaconda3</span><span class="o">-</span><span class="mf">5.3</span><span class="o">.</span><span class="mi">0</span>
-<span class="n">module</span> <span class="n">load</span> <span class="n">py</span><span class="o">-</span><span class="n">mpi4py</span><span class="o">/</span><span class="mf">3.0</span><span class="o">.</span><span class="mi">0</span><span class="o">-</span><span class="n">py3</span>
-<span class="n">source</span> <span class="n">activate</span> <span class="n">fbpic</span>
-<span class="n">export</span> <span class="n">NUMBA_NUM_THREADS</span><span class="o">=</span><span class="mi">7</span>
-<span class="n">export</span> <span class="n">OMP_NUM_THREADS</span><span class="o">=</span><span class="mi">7</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>module purge
+module load gcc/4.8.5
+module load cuda/9.1.85
+module load spectrum-mpi/10.3.0.0-20190419
+module load fftw/3.3.8
+module load python/3.7.0-anaconda3-5.3.0
+module load py-mpi4py/3.0.0-py3
+source activate fbpic
+export CUPY_CACHE_DIR=$MEMBERWORK/&lt;project_id&gt;/.cupy/kernel_cache
 
-<span class="n">jsrun</span> <span class="o">-</span><span class="n">n</span> <span class="mi">1</span> <span class="o">-</span><span class="n">a</span> <span class="mi">1</span> <span class="o">-</span><span class="n">c</span> <span class="mi">1</span> <span class="o">-</span><span class="n">g</span> <span class="mi">1</span> <span class="n">python</span> <span class="o">&lt;</span><span class="n">fbpic_script</span><span class="o">.</span><span class="n">py</span><span class="o">&gt;</span>
+export NUMBA_NUM_THREADS=7
+export OMP_NUM_THREADS=7
+jsrun -n 1 -a 1 -c 1 -g 1 python &lt;fbpic_script.py&gt;
 </pre></div>
 </div>
+<p>where <code class="docutils literal notranslate"><span class="pre">&lt;project_id&gt;</span></code> should be replaced by your project account number.</p>
 </div>
 <div class="section" id="batch-job">
 <h3>Batch job<a class="headerlink" href="#batch-job" title="Permalink to this headline">¶</a></h3>
 <p>Create a new file named <code class="docutils literal notranslate"><span class="pre">submission_script</span></code> in the same directory as
 your input script. Within this new file, copy the
 following text (and replace the bracketed text by the proper values).</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
-<span class="c1">#BSUB -J my_job</span>
-<span class="c1">#BSUB -W &lt;requestedTime&gt;</span>
-<span class="c1">#BSUB -nnodes &lt;requestedNode&gt;</span>
-<span class="c1">#BSUB -P &lt;accountNumber&gt;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>#!/bin/bash
+#BSUB -J my_job
+#BSUB -W &lt;requestedTime&gt;
+#BSUB -nnodes &lt;requestedNode&gt;
+#BSUB -P &lt;accountNumber&gt;
 
-<span class="n">module</span> <span class="n">purge</span>
-<span class="n">module</span> <span class="n">load</span> <span class="n">gcc</span><span class="o">/</span><span class="mf">4.8</span><span class="o">.</span><span class="mi">5</span>
-<span class="n">module</span> <span class="n">load</span> <span class="n">cuda</span><span class="o">/</span><span class="mf">9.1</span><span class="o">.</span><span class="mi">85</span>
-<span class="n">module</span> <span class="n">load</span> <span class="n">spectrum</span><span class="o">-</span><span class="n">mpi</span><span class="o">/</span><span class="mf">10.2</span><span class="o">.</span><span class="mf">0.10</span><span class="o">-</span><span class="mi">20181214</span>
-<span class="n">module</span> <span class="n">load</span> <span class="n">fftw</span><span class="o">/</span><span class="mf">3.3</span><span class="o">.</span><span class="mi">8</span>
-<span class="n">module</span> <span class="n">load</span> <span class="n">python</span><span class="o">/</span><span class="mf">3.7</span><span class="o">.</span><span class="mi">0</span><span class="o">-</span><span class="n">anaconda3</span><span class="o">-</span><span class="mf">5.3</span><span class="o">.</span><span class="mi">0</span>
-<span class="n">module</span> <span class="n">load</span> <span class="n">py</span><span class="o">-</span><span class="n">mpi4py</span><span class="o">/</span><span class="mf">3.0</span><span class="o">.</span><span class="mi">0</span><span class="o">-</span><span class="n">py3</span>
-<span class="n">source</span> <span class="n">activate</span> <span class="n">fbpic</span>
+module purge
+module load gcc/4.8.5
+module load cuda/9.1.85
+module load spectrum-mpi/10.3.0.0-20190419
+module load fftw/3.3.8
+module load python/3.7.0-anaconda3-5.3.0
+module load py-mpi4py/3.0.0-py3
+source activate fbpic
+export CUPY_CACHE_DIR=$MEMBERWORK/&lt;project_id&gt;/.cupy/kernel_cache
 
-<span class="n">export</span> <span class="n">NUMBA_NUM_THREADS</span><span class="o">=</span><span class="mi">7</span>
-<span class="n">export</span> <span class="n">OMP_NUM_THREADS</span><span class="o">=</span><span class="mi">7</span>
-<span class="n">export</span> <span class="n">FBPIC_ENABLE_GPUDIRECT</span><span class="o">=</span><span class="mi">1</span>
+export NUMBA_NUM_THREADS=7
+export OMP_NUM_THREADS=7
+export FBPIC_ENABLE_GPUDIRECT=1
 
-<span class="n">jsrun</span> <span class="o">-</span><span class="n">n</span> <span class="o">&lt;</span><span class="n">requestedNode</span><span class="o">&gt;</span> <span class="o">-</span><span class="n">a</span> <span class="mi">6</span> <span class="o">-</span><span class="n">c</span> <span class="mi">42</span> <span class="o">-</span><span class="n">g</span> <span class="mi">6</span> <span class="o">--</span><span class="n">smpiargs</span><span class="o">=</span><span class="s2">&quot;-gpu&quot;</span> <span class="n">python</span> <span class="n">fbpic_script</span><span class="o">.</span><span class="n">py</span> <span class="o">&gt;</span> <span class="n">cpu</span><span class="o">.</span><span class="n">log</span>
+jsrun -n &lt;requestedNode&gt; -a 6 -c 42 -g 6 --smpiargs=&quot;-gpu&quot; python fbpic_script.py &gt; cpu.log
 </pre></div>
 </div>
+<p>where <code class="docutils literal notranslate"><span class="pre">&lt;project_id&gt;</span></code> should be replaced by your project account number.</p>
 <p>Then run:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">bsub</span> <span class="n">submission_script</span>
 </pre></div>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Note that, in the above script, <code class="docutils literal notranslate"><span class="pre">module</span> <span class="pre">load</span> <span class="pre">cuda/9.1.85</span></code>,
+<p>Note that, in the above script,
 <code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">FBPIC_ENABLE_GPUDIRECT=1</span></code> and <code class="docutils literal notranslate"><span class="pre">--smpiargs=&quot;-gpu&quot;</span></code>
 are only needed if you wish to use the <strong>cuda-aware</strong> MPI.</p>
 </div>
@@ -327,10 +325,10 @@ are only needed if you wish to use the <strong>cuda-aware</strong> MPI.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="install_titan.html" class="btn btn-neutral float-right" title="Installation on Titan (OLCF)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="../how_to_run.html" class="btn btn-neutral float-right" title="How to run the code" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="install_local.html" class="btn btn-neutral float-left" title="Installation on a local computer" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="install_cori_edison.html" class="btn btn-neutral float-left" title="Installation on Cori and Edison (NERSC)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

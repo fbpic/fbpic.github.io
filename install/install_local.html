@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Installation on a local computer &mdash; FBPIC 0.12.0 documentation</title>
+  <title>Installation on a local computer &mdash; FBPIC 0.13.0 documentation</title>
   
 
   
@@ -36,7 +36,7 @@
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Installation on Summit (OLCF)" href="install_summit.html" />
+    <link rel="next" title="Installation on JUWELS (JSC)" href="install_juwels.html" />
     <link rel="prev" title="Installation" href="installation.html" /> 
 </head>
 
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.12.0
+                0.13.0
               </div>
             
           
@@ -94,12 +94,11 @@
 <li class="toctree-l3"><a class="reference internal" href="#running-simulations">Running simulations</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="install_summit.html">Installation on Summit (OLCF)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="install_titan.html">Installation on Titan (OLCF)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="install_juwels.html">Installation on JUWELS (JSC)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="install_lawrencium.html">Installation on Lawrencium (LBNL)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="install_comet.html">Installation on Comet (SDSC)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="install_cori_edison.html">Installation on Cori and Edison (NERSC)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install_summit.html">Installation on Summit (OLCF)</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../how_to_run.html">How to run the code</a></li>
@@ -181,7 +180,7 @@ Python. If Anaconda is not your default Python distribution, download and instal
 <p><strong>Installation steps</strong>:</p>
 <ul>
 <li><p>Install the dependencies of FBPIC. This can be done in two lines:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">numba</span><span class="o">==</span><span class="mf">0.42</span> <span class="n">scipy</span> <span class="n">h5py</span> <span class="n">mkl</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">numba</span> <span class="n">scipy</span> <span class="n">h5py</span> <span class="n">mkl</span>
 <span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">mpi4py</span>
 </pre></div>
 </div>
@@ -194,14 +193,20 @@ Python. If Anaconda is not your default Python distribution, download and instal
 from the souces, by cloning the <a class="reference external" href="https://github.com/fbpic/fbpic">code from Github</a>, and typing <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">setup.py</span>
 <span class="pre">install</span></code>.</p>
 </li>
-<li><p><strong>Optional:</strong> In order to be able to run the code on a GPU:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">cudatoolkit</span><span class="o">=</span><span class="mf">8.0</span> <span class="n">pyculib</span>
+<li><p><strong>Optional:</strong> In order to be able to run the code on a GPU,
+install the additional package <code class="docutils literal notranslate"><span class="pre">cudatoolkit</span></code> and <code class="docutils literal notranslate"><span class="pre">cupy</span></code> –
+e.g. using CUDA version 10.0:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">cudatoolkit</span><span class="o">=</span><span class="mf">10.0</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="n">cupy</span><span class="o">-</span><span class="n">cuda100</span>
 </pre></div>
 </div>
-<p>If your GPU driver supports a newer version of CUDA than 8.0, you can
-modify the above number accordingly. See
-<a class="reference external" href="https://docs.anaconda.com/anaconda/user-guide/tasks/gpu-packages/#software-requirements">this page</a>
-for more information.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>In the above command, you should choose a CUDA version that is <strong>compatible
+with your GPU driver</strong>. You can see the version of your GPU driver by typing
+the command <code class="docutils literal notranslate"><span class="pre">nvidia-smi</span></code>. You can then find the compatible CUDA
+versions using <a class="reference external" href="https://docs.nvidia.com/cuda/cuda-toolkit-release-notes/index.html#major-components__table-cuda-toolkit-driver-versions">this table</a>.</p>
+</div>
 </li>
 <li><p><strong>Optional:</strong> In order to run on a CPU which is <strong>not</strong> an Intel model, you need to install <cite>pyfftw</cite>, in order to replace the MKL FFT:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">pyfftw</span>
@@ -237,7 +242,7 @@ MPI-related error, try installing <code class="docutils literal notranslate"><sp
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="install_summit.html" class="btn btn-neutral float-right" title="Installation on Summit (OLCF)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="install_juwels.html" class="btn btn-neutral float-right" title="Installation on JUWELS (JSC)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

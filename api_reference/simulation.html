@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>The Simulation class &mdash; FBPIC 0.12.0 documentation</title>
+  <title>The Simulation class &mdash; FBPIC 0.13.0 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.12.0
+                0.13.0
               </div>
             
           
@@ -175,7 +175,7 @@ that performs the PIC cycle.</p>
 species, and its method <a class="reference internal" href="#fbpic.main.Simulation.set_moving_window" title="fbpic.main.Simulation.set_moving_window"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">set_moving_window</span></code></a> activates the moving window.</p>
 <dl class="class">
 <dt id="fbpic.main.Simulation">
-<em class="property">class </em><code class="descclassname">fbpic.main.</code><code class="descname">Simulation</code><span class="sig-paren">(</span><em>Nz</em>, <em>zmax</em>, <em>Nr</em>, <em>rmax</em>, <em>Nm</em>, <em>dt</em>, <em>p_zmin=-inf</em>, <em>p_zmax=inf</em>, <em>p_rmin=0</em>, <em>p_rmax=inf</em>, <em>p_nz=None</em>, <em>p_nr=None</em>, <em>p_nt=None</em>, <em>n_e=None</em>, <em>zmin=0.0</em>, <em>n_order=-1</em>, <em>dens_func=None</em>, <em>filter_currents=True</em>, <em>v_comoving=None</em>, <em>use_galilean=True</em>, <em>initialize_ions=False</em>, <em>use_cuda=False</em>, <em>n_guard=None</em>, <em>n_damp=64</em>, <em>exchange_period=None</em>, <em>current_correction='curl-free'</em>, <em>boundaries='periodic'</em>, <em>gamma_boost=None</em>, <em>use_all_mpi_ranks=True</em>, <em>particle_shape='linear'</em>, <em>verbose_level=1</em>, <em>smoother=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/main.html#Simulation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.main.Simulation" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">fbpic.main.</code><code class="sig-name descname">Simulation</code><span class="sig-paren">(</span><em class="sig-param">Nz</em>, <em class="sig-param">zmax</em>, <em class="sig-param">Nr</em>, <em class="sig-param">rmax</em>, <em class="sig-param">Nm</em>, <em class="sig-param">dt</em>, <em class="sig-param">p_zmin=-inf</em>, <em class="sig-param">p_zmax=inf</em>, <em class="sig-param">p_rmin=0</em>, <em class="sig-param">p_rmax=inf</em>, <em class="sig-param">p_nz=None</em>, <em class="sig-param">p_nr=None</em>, <em class="sig-param">p_nt=None</em>, <em class="sig-param">n_e=None</em>, <em class="sig-param">zmin=0.0</em>, <em class="sig-param">n_order=-1</em>, <em class="sig-param">dens_func=None</em>, <em class="sig-param">filter_currents=True</em>, <em class="sig-param">v_comoving=None</em>, <em class="sig-param">use_galilean=True</em>, <em class="sig-param">initialize_ions=False</em>, <em class="sig-param">use_cuda=False</em>, <em class="sig-param">n_guard=None</em>, <em class="sig-param">n_damp=64</em>, <em class="sig-param">exchange_period=None</em>, <em class="sig-param">current_correction='curl-free'</em>, <em class="sig-param">boundaries='periodic'</em>, <em class="sig-param">gamma_boost=None</em>, <em class="sig-param">use_all_mpi_ranks=True</em>, <em class="sig-param">particle_shape='linear'</em>, <em class="sig-param">verbose_level=1</em>, <em class="sig-param">smoother=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/main.html#Simulation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.main.Simulation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initializes a simulation.</p>
 <p>By default the simulation contains:</p>
 <blockquote>
@@ -252,9 +252,8 @@ boundaries of the global simulation box.
 (Either ‘periodic’ or ‘open’)</p></li>
 <li><p><strong>current_correction</strong> (<em>string</em><em>, </em><em>optional</em>) – The method used in order to ensure that the continuity equation
 is satisfied. Either <cite>curl-free</cite> or <cite>cross-deposition</cite>.
-<cite>curl-free</cite> is faster but less local (should not be used with MPI).
-For the moment, <cite>cross-deposition</cite> is still experimental.</p></li>
-<li><p><strong>gamma_boost</strong> (<em>float</em><em>, </em><em>optional</em>) – When initializing the laser in a boosted frame, set the
+<cite>curl-free</cite> is faster but less local.</p></li>
+<li><p><strong>gamma_boost</strong> (<em>float</em><em>, </em><em>optional</em>) – When running the simulation in a boosted frame, set the
 value of <cite>gamma_boost</cite> to the corresponding Lorentz factor.
 All the other quantities (zmin, zmax, n_e, etc.) are to be given
 in the lab frame.</p></li>
@@ -285,7 +284,7 @@ initialization of the Simulation class.
 </dl>
 <dl class="method">
 <dt id="fbpic.main.Simulation.add_new_species">
-<code class="descname">add_new_species</code><span class="sig-paren">(</span><em>q</em>, <em>m</em>, <em>n=None</em>, <em>dens_func=None</em>, <em>p_nz=None</em>, <em>p_nr=None</em>, <em>p_nt=None</em>, <em>p_zmin=-inf</em>, <em>p_zmax=inf</em>, <em>p_rmin=0</em>, <em>p_rmax=inf</em>, <em>uz_m=0.0</em>, <em>ux_m=0.0</em>, <em>uy_m=0.0</em>, <em>uz_th=0.0</em>, <em>ux_th=0.0</em>, <em>uy_th=0.0</em>, <em>continuous_injection=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/main.html#Simulation.add_new_species"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.main.Simulation.add_new_species" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">add_new_species</code><span class="sig-paren">(</span><em class="sig-param">q</em>, <em class="sig-param">m</em>, <em class="sig-param">n=None</em>, <em class="sig-param">dens_func=None</em>, <em class="sig-param">p_nz=None</em>, <em class="sig-param">p_nr=None</em>, <em class="sig-param">p_nt=None</em>, <em class="sig-param">p_zmin=-inf</em>, <em class="sig-param">p_zmax=inf</em>, <em class="sig-param">p_rmin=0</em>, <em class="sig-param">p_rmax=inf</em>, <em class="sig-param">uz_m=0.0</em>, <em class="sig-param">ux_m=0.0</em>, <em class="sig-param">uy_m=0.0</em>, <em class="sig-param">uz_th=0.0</em>, <em class="sig-param">ux_th=0.0</em>, <em class="sig-param">uy_th=0.0</em>, <em class="sig-param">continuous_injection=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/main.html#Simulation.add_new_species"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.main.Simulation.add_new_species" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a new species (i.e. an instance of <cite>Particles</cite>) with
 charge <cite>q</cite> and mass <cite>m</cite>. Add it to the simulation (i.e. to the list
 <cite>Simulation.ptcl</cite>), and return it, so that the methods of the
@@ -346,7 +345,7 @@ in the case of a moving window</p></li>
 
 <dl class="method">
 <dt id="fbpic.main.Simulation.set_moving_window">
-<code class="descname">set_moving_window</code><span class="sig-paren">(</span><em>v=299792458.0</em>, <em>ux_m=None</em>, <em>uy_m=None</em>, <em>uz_m=None</em>, <em>ux_th=None</em>, <em>uy_th=None</em>, <em>uz_th=None</em>, <em>gamma_boost=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/main.html#Simulation.set_moving_window"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.main.Simulation.set_moving_window" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">set_moving_window</code><span class="sig-paren">(</span><em class="sig-param">v=299792458.0</em>, <em class="sig-param">ux_m=None</em>, <em class="sig-param">uy_m=None</em>, <em class="sig-param">uz_m=None</em>, <em class="sig-param">ux_th=None</em>, <em class="sig-param">uy_th=None</em>, <em class="sig-param">uz_th=None</em>, <em class="sig-param">gamma_boost=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/main.html#Simulation.set_moving_window"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.main.Simulation.set_moving_window" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initializes a moving window for the simulation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -362,7 +361,7 @@ in the case of a moving window</p></li>
 
 <dl class="method">
 <dt id="fbpic.main.Simulation.step">
-<code class="descname">step</code><span class="sig-paren">(</span><em>N=1</em>, <em>correct_currents=True</em>, <em>correct_divE=False</em>, <em>use_true_rho=False</em>, <em>move_positions=True</em>, <em>move_momenta=True</em>, <em>show_progress=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/main.html#Simulation.step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.main.Simulation.step" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">step</code><span class="sig-paren">(</span><em class="sig-param">N=1</em>, <em class="sig-param">correct_currents=True</em>, <em class="sig-param">correct_divE=False</em>, <em class="sig-param">use_true_rho=False</em>, <em class="sig-param">move_positions=True</em>, <em class="sig-param">move_momenta=True</em>, <em class="sig-param">show_progress=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/main.html#Simulation.step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.main.Simulation.step" title="Permalink to this definition">¶</a></dt>
 <dd><p>Perform N PIC cycles.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>

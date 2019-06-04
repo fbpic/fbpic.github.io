@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fbpic.lpa_utils.external_fields &mdash; FBPIC 0.12.0 documentation</title>
+  <title>fbpic.lpa_utils.external_fields &mdash; FBPIC 0.13.0 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.12.0
+                0.13.0
               </div>
             
           
@@ -155,7 +155,9 @@
 <span></span><span class="c1"># Copyright 2016, FBPIC contributors</span>
 <span class="c1"># Authors: Remi Lehe, Manuel Kirchen</span>
 <span class="c1"># License: 3-Clause-BSD-LBNL</span>
-<span class="kn">from</span> <span class="nn">numba</span> <span class="k">import</span> <span class="n">vectorize</span><span class="p">,</span> <span class="n">float64</span>
+<span class="kn">from</span> <span class="nn">numba</span> <span class="k">import</span> <span class="n">vectorize</span><span class="p">,</span> <span class="n">float64</span><span class="p">,</span> <span class="n">njit</span>
+<span class="kn">from</span> <span class="nn">scipy.constants</span> <span class="k">import</span> <span class="n">c</span>
+<span class="n">inv_c</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="n">c</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="c1"># Check if CUDA is available, then import CUDA functions</span>
 <span class="kn">from</span> <span class="nn">fbpic.utils.cuda</span> <span class="k">import</span> <span class="n">cuda_installed</span>
@@ -163,7 +165,7 @@
 <div class="viewcode-block" id="ExternalField"><a class="viewcode-back" href="../../../api_reference/lpa_utilities/external_fields.html#fbpic.lpa_utils.external_fields.ExternalField">[docs]</a><span class="k">class</span> <span class="nc">ExternalField</span><span class="p">(</span> <span class="nb">object</span> <span class="p">):</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field_func</span><span class="p">,</span> <span class="n">fieldtype</span><span class="p">,</span> <span class="n">amplitude</span><span class="p">,</span>
-                 <span class="n">length_scale</span><span class="p">,</span> <span class="n">species</span><span class="o">=</span><span class="kc">None</span> <span class="p">):</span>
+                 <span class="n">length_scale</span><span class="p">,</span> <span class="n">species</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">gamma_boost</span><span class="o">=</span><span class="kc">None</span> <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize an ExternalField object, so that the function</span>
 <span class="sd">        `field_func` is called at each time step on the field `fieldtype`</span>
@@ -180,22 +182,23 @@
 <span class="sd">        field_func: callable</span>
 <span class="sd">            Function of the form `field_func( F, x, y, z, t, amplitude,</span>
 <span class="sd">            length_scale )` and which returns the modified field F&#39;</span>
+<span class="sd">            (in the lab frame)</span>
 
 <span class="sd">            This function will be called at each timestep, with:</span>
 
 <span class="sd">            - F: 1d array of shape (N_ptcl,), containing the field</span>
 <span class="sd">              designated by fieldtype, gathered on the particles</span>
 <span class="sd">            - x, y, z: 1d arrays of shape (N_ptcl), containing the</span>
-<span class="sd">              positions of the particles</span>
-<span class="sd">            - t: float, the time in the simulation</span>
+<span class="sd">              positions of the particles (in the lab frame)</span>
+<span class="sd">            - t: float, the time in the simulation (in the lab frame)</span>
 <span class="sd">            - amplitude and length_scale: floats that can be used within</span>
 <span class="sd">              the function expression</span>
 
 <span class="sd">            .. warning::</span>
 <span class="sd">                In the PIC loop, this function is called after</span>
 <span class="sd">                the field gathering. Thus this function can potentially</span>
-<span class="sd">                overwrite the fields that were gathered on the grid. To avoid </span>
-<span class="sd">                this, use &quot;return(F + external_field) &quot; inside the definition </span>
+<span class="sd">                overwrite the fields that were gathered on the grid. To avoid</span>
+<span class="sd">                this, use &quot;return(F + external_field) &quot; inside the definition</span>
 <span class="sd">                of `field_func` instead of &quot;return(external_field)&quot;</span>
 
 <span class="sd">            .. warning::</span>
@@ -212,6 +215,12 @@
 <span class="sd">            If no species is specified, the external field is applied</span>
 <span class="sd">            to all particles.</span>
 
+<span class="sd">        gamma_boost: float, optional</span>
+<span class="sd">            When running the simulation in a boosted frame, set the</span>
+<span class="sd">            value of `gamma_boost` to the corresponding Lorentz factor.</span>
+<span class="sd">            The external fields will be automatically converted to the</span>
+<span class="sd">            boosted frame.</span>
+
 <span class="sd">        Example</span>
 <span class="sd">        -------</span>
 <span class="sd">        In order to define a magnetic undulator, polarized along y, with</span>
@@ -223,26 +232,81 @@
 <span class="sd">                return( F + amplitude * math.cos( 2*np.pi*z/length_scale ) )</span>
 
 <span class="sd">            sim.external_fields = [ ExternalField( field_func, &#39;By&#39;, 1., 1.e-2 ) ]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># Check that fieldtype is a correct field</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">fieldtype</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;Ex&#39;</span><span class="p">,</span> <span class="s1">&#39;Ey&#39;</span><span class="p">,</span> <span class="s1">&#39;Ez&#39;</span><span class="p">,</span> <span class="s1">&#39;Bx&#39;</span><span class="p">,</span> <span class="s1">&#39;By&#39;</span><span class="p">,</span> <span class="s1">&#39;Bz&#39;</span><span class="p">])</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">()</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">fieldtype</span> <span class="o">=</span> <span class="n">fieldtype</span>
 
+<span class="sd">        .. warning::</span>
+
+<span class="sd">            Note that, in principle, ``field_func`` does not necessarily need</span>
+<span class="sd">            to use the arguments ``amplitude`` and ``length_scale``.</span>
+<span class="sd">            For instance, in the above example, we could have used</span>
+
+<span class="sd">            ::</span>
+
+<span class="sd">                def field_func( F, x, y, z, t , amplitude, length_scale ):</span>
+<span class="sd">                    return( F + 1. * math.cos( 2*np.pi*z/1.e-2 ) )</span>
+
+<span class="sd">            However, **when running the simulation in a boosted frame**</span>
+<span class="sd">            (i.e. when setting the above argument ``gamma_boost``),</span>
+<span class="sd">            the expression of the external fields **needs to be proportional</span>
+<span class="sd">            to** ``amplitude``. This is because, internally, the automatic</span>
+<span class="sd">            conversion of the external fields to the boosted frame relies</span>
+<span class="sd">            on this variable. (There is no similar constraint for</span>
+<span class="sd">            ``length_scale``, however.)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Register the arguments</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">amplitude</span> <span class="o">=</span> <span class="n">amplitude</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">length_scale</span> <span class="o">=</span> <span class="n">length_scale</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">species</span> <span class="o">=</span> <span class="n">species</span>
+        <span class="c1"># Check that fieldtype is a correct field</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">fieldtype</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;Ex&#39;</span><span class="p">,</span> <span class="s1">&#39;Ey&#39;</span><span class="p">,</span> <span class="s1">&#39;Ez&#39;</span><span class="p">,</span> <span class="s1">&#39;Bx&#39;</span><span class="p">,</span> <span class="s1">&#39;By&#39;</span><span class="p">,</span> <span class="s1">&#39;Bz&#39;</span><span class="p">])</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;`fieldtype` must be one of Ex, Ey, Ez, Bx, By, Bz&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Note: when `gamma_boost` is passed, the fields are evaluated in</span>
+        <span class="c1"># the boosted frame, even though the user-provided function corresponds</span>
+        <span class="c1"># to the lab frame. This is done (conceptually) in 2 steps:</span>
+        <span class="c1"># - the field is computed in the lab frame, by transforming</span>
+        <span class="c1">#   the current position/time of particles to the lab frame</span>
+        <span class="c1"># - the field is converted back to the boosted frame, by using</span>
+        <span class="c1">#   Lorentz transform formulas for E and B</span>
+
+        <span class="c1"># Modify user-input function, so as to evaluate field in the lab frame</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">gamma_boost</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">gamma_boost</span> <span class="o">!=</span> <span class="mf">1.</span><span class="p">):</span>
+            <span class="n">beta_boost</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">1.</span> <span class="o">-</span> <span class="mf">1.</span><span class="o">/</span><span class="n">gamma_boost</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">field_func</span> <span class="o">=</span> <span class="n">njit</span><span class="p">(</span><span class="n">field_func</span><span class="p">)</span>
+            <span class="k">def</span> <span class="nf">func</span><span class="p">(</span> <span class="n">F</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">amplitude</span><span class="p">,</span> <span class="n">length_scale</span> <span class="p">):</span>
+                <span class="n">zlab</span> <span class="o">=</span> <span class="n">gamma_boost</span><span class="o">*</span><span class="p">(</span><span class="n">z</span> <span class="o">+</span> <span class="n">beta_boost</span><span class="o">*</span><span class="n">c</span><span class="o">*</span><span class="n">t</span><span class="p">)</span>
+                <span class="n">tlab</span> <span class="o">=</span> <span class="n">gamma_boost</span><span class="o">*</span><span class="p">(</span><span class="n">t</span> <span class="o">+</span> <span class="n">beta_boost</span><span class="o">*</span><span class="n">inv_c</span><span class="o">*</span><span class="n">z</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">field_func</span><span class="p">(</span><span class="n">F</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">zlab</span><span class="p">,</span> <span class="n">tlab</span><span class="p">,</span> <span class="n">amplitude</span><span class="p">,</span> <span class="n">length_scale</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">func</span> <span class="o">=</span> <span class="n">field_func</span>
 
         <span class="c1"># Compile the field_func for cpu and gpu</span>
         <span class="n">signature</span> <span class="o">=</span> <span class="p">[</span> <span class="n">float64</span><span class="p">(</span> <span class="n">float64</span><span class="p">,</span> <span class="n">float64</span><span class="p">,</span> <span class="n">float64</span><span class="p">,</span>
                                <span class="n">float64</span><span class="p">,</span> <span class="n">float64</span><span class="p">,</span> <span class="n">float64</span><span class="p">,</span> <span class="n">float64</span> <span class="p">)</span> <span class="p">]</span>
         <span class="n">cpu_compiler</span> <span class="o">=</span> <span class="n">vectorize</span><span class="p">(</span> <span class="n">signature</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="s1">&#39;cpu&#39;</span><span class="p">,</span> <span class="n">nopython</span><span class="o">=</span><span class="kc">True</span> <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cpu_func</span> <span class="o">=</span> <span class="n">cpu_compiler</span><span class="p">(</span> <span class="n">field_func</span> <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cpu_func</span> <span class="o">=</span> <span class="n">cpu_compiler</span><span class="p">(</span> <span class="n">func</span> <span class="p">)</span>
         <span class="k">if</span> <span class="n">cuda_installed</span><span class="p">:</span>
             <span class="n">gpu_compiler</span> <span class="o">=</span> <span class="n">vectorize</span><span class="p">(</span> <span class="n">signature</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="s1">&#39;cuda&#39;</span> <span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">gpu_func</span> <span class="o">=</span> <span class="n">gpu_compiler</span><span class="p">(</span> <span class="n">field_func</span> <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gpu_func</span> <span class="o">=</span> <span class="n">gpu_compiler</span><span class="p">(</span> <span class="n">func</span> <span class="p">)</span>
+
+        <span class="c1"># Convert the field back to the boosted frame</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">gamma_boost</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">gamma_boost</span> <span class="o">!=</span> <span class="mf">1.</span><span class="p">):</span>
+            <span class="n">g</span> <span class="o">=</span> <span class="n">gamma_boost</span>
+            <span class="n">gb</span> <span class="o">=</span> <span class="n">gamma_boost</span><span class="o">*</span><span class="n">beta_boost</span>
+            <span class="k">if</span> <span class="n">fieldtype</span> <span class="o">==</span> <span class="s1">&#39;Ex&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">fieldtypes_and_amplitudes</span> <span class="o">=</span> <span class="p">((</span><span class="s1">&#39;Ex&#39;</span><span class="p">,</span> <span class="n">g</span><span class="o">*</span><span class="n">amplitude</span><span class="p">),</span>
+                                                  <span class="p">(</span><span class="s1">&#39;By&#39;</span><span class="p">,</span> <span class="o">-</span><span class="n">gb</span><span class="o">*</span><span class="n">inv_c</span><span class="o">*</span><span class="n">amplitude</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="n">fieldtype</span> <span class="o">==</span> <span class="s1">&#39;Ey&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">fieldtypes_and_amplitudes</span> <span class="o">=</span> <span class="p">((</span><span class="s1">&#39;Ey&#39;</span><span class="p">,</span> <span class="n">g</span><span class="o">*</span><span class="n">amplitude</span><span class="p">),</span>
+                                                  <span class="p">(</span><span class="s1">&#39;Bx&#39;</span><span class="p">,</span> <span class="n">gb</span><span class="o">*</span><span class="n">inv_c</span><span class="o">*</span><span class="n">amplitude</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="n">fieldtype</span> <span class="o">==</span> <span class="s1">&#39;Bx&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">fieldtypes_and_amplitudes</span> <span class="o">=</span> <span class="p">((</span><span class="s1">&#39;Bx&#39;</span><span class="p">,</span> <span class="n">g</span><span class="o">*</span><span class="n">amplitude</span><span class="p">),</span>
+                                                  <span class="p">(</span><span class="s1">&#39;Ey&#39;</span><span class="p">,</span> <span class="n">gb</span><span class="o">*</span><span class="n">c</span><span class="o">*</span><span class="n">amplitude</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="n">fieldtype</span> <span class="o">==</span> <span class="s1">&#39;By&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">fieldtypes_and_amplitudes</span> <span class="o">=</span> <span class="p">((</span><span class="s1">&#39;By&#39;</span><span class="p">,</span> <span class="n">g</span><span class="o">*</span><span class="n">amplitude</span><span class="p">),</span>
+                                                  <span class="p">(</span><span class="s1">&#39;Ex&#39;</span><span class="p">,</span> <span class="o">-</span><span class="n">gb</span><span class="o">*</span><span class="n">c</span><span class="o">*</span><span class="n">amplitude</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="p">(</span><span class="n">fieldtype</span> <span class="o">==</span> <span class="s1">&#39;Ez&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">fieldtype</span> <span class="o">==</span> <span class="s1">&#39;Bz&#39;</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">fieldtypes_and_amplitudes</span> <span class="o">=</span> <span class="p">((</span><span class="n">fieldtype</span><span class="p">,</span> <span class="n">amplitude</span><span class="p">),)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fieldtypes_and_amplitudes</span> <span class="o">=</span> <span class="p">((</span><span class="n">fieldtype</span><span class="p">,</span> <span class="n">amplitude</span><span class="p">),)</span>
 
 
     <span class="k">def</span> <span class="nf">apply_expression</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">ptcl</span><span class="p">,</span> <span class="n">t</span> <span class="p">):</span>
@@ -268,18 +332,22 @@
 
                 <span class="c1"># Only apply the field if there are macroparticles</span>
                 <span class="c1"># in this species</span>
-                <span class="k">if</span> <span class="n">species</span><span class="o">.</span><span class="n">Ntot</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">species</span><span class="o">.</span><span class="n">Ntot</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">return</span>
 
-                    <span class="n">field</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span> <span class="n">species</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fieldtype</span> <span class="p">)</span>
+                <span class="c1"># Loop over the different fields involved</span>
+                <span class="k">for</span> <span class="p">(</span><span class="n">fieldtype</span><span class="p">,</span> <span class="n">amplitude</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fieldtypes_and_amplitudes</span><span class="p">:</span>
+
+                    <span class="n">field</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span> <span class="n">species</span><span class="p">,</span> <span class="n">fieldtype</span> <span class="p">)</span>
 
                     <span class="k">if</span> <span class="nb">type</span><span class="p">(</span> <span class="n">field</span> <span class="p">)</span> <span class="ow">is</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
                         <span class="c1"># Call the CPU function</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">cpu_func</span><span class="p">(</span> <span class="n">field</span><span class="p">,</span> <span class="n">species</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">species</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">species</span><span class="o">.</span><span class="n">z</span><span class="p">,</span>
-                              <span class="n">t</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">amplitude</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">length_scale</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">field</span> <span class="p">)</span>
+                              <span class="n">t</span><span class="p">,</span> <span class="n">amplitude</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">length_scale</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">field</span> <span class="p">)</span>
                     <span class="k">else</span><span class="p">:</span>
                         <span class="c1"># Call the GPU function</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">gpu_func</span><span class="p">(</span> <span class="n">field</span><span class="p">,</span> <span class="n">species</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">species</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">species</span><span class="o">.</span><span class="n">z</span><span class="p">,</span>
-                              <span class="n">t</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">amplitude</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">length_scale</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">field</span> <span class="p">)</span></div>
+                              <span class="n">t</span><span class="p">,</span> <span class="n">amplitude</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">length_scale</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">field</span> <span class="p">)</span></div>
 </pre></div>
 
            </div>

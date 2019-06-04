@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Beam initialization &mdash; FBPIC 0.12.0 documentation</title>
+  <title>Beam initialization &mdash; FBPIC 0.13.0 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.12.0
+                0.13.0
               </div>
             
           
@@ -175,22 +175,24 @@
             
   <div class="section" id="beam-initialization">
 <h1>Beam initialization<a class="headerlink" href="#beam-initialization" title="Permalink to this headline">¶</a></h1>
-<p>The functions below allow to <strong>initialize a relativistic electron beam</strong>
+<p>The functions below allow to <strong>initialize a relativistic particle beam</strong>
 with various distributions in space (e.g. Gaussian, flat-top, from a file,
 etc.). In each case, the <strong>self-consistent space-charge fields</strong> are
 automatically calculated by the code, and added to the simulation.</p>
 <dl class="function">
-<dt id="fbpic.lpa_utils.bunch.add_elec_bunch">
-<code class="descclassname">fbpic.lpa_utils.bunch.</code><code class="descname">add_elec_bunch</code><span class="sig-paren">(</span><em>sim</em>, <em>gamma0</em>, <em>n_e</em>, <em>p_zmin</em>, <em>p_zmax</em>, <em>p_rmin</em>, <em>p_rmax</em>, <em>p_nr=2</em>, <em>p_nz=2</em>, <em>p_nt=4</em>, <em>dens_func=None</em>, <em>boost=None</em>, <em>direction='forward'</em>, <em>z_injection_plane=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fbpic/lpa_utils/bunch.html#add_elec_bunch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.bunch.add_elec_bunch" title="Permalink to this definition">¶</a></dt>
-<dd><p>Introduce a simple relativistic electron bunch in the simulation,
+<dt id="fbpic.lpa_utils.bunch.add_particle_bunch">
+<code class="sig-prename descclassname">fbpic.lpa_utils.bunch.</code><code class="sig-name descname">add_particle_bunch</code><span class="sig-paren">(</span><em class="sig-param">sim</em>, <em class="sig-param">q</em>, <em class="sig-param">m</em>, <em class="sig-param">gamma0</em>, <em class="sig-param">n</em>, <em class="sig-param">p_zmin</em>, <em class="sig-param">p_zmax</em>, <em class="sig-param">p_rmin</em>, <em class="sig-param">p_rmax</em>, <em class="sig-param">p_nr=2</em>, <em class="sig-param">p_nz=2</em>, <em class="sig-param">p_nt=4</em>, <em class="sig-param">dens_func=None</em>, <em class="sig-param">boost=None</em>, <em class="sig-param">direction='forward'</em>, <em class="sig-param">z_injection_plane=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fbpic/lpa_utils/bunch.html#add_particle_bunch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.bunch.add_particle_bunch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Introduce a simple relativistic particle bunch in the simulation,
 along with its space charge field.</p>
 <p>Uniform particle distribution with weights according to density function.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>sim</strong> (<em>a Simulation object</em>) – The structure that contains the simulation.</p></li>
-<li><p><strong>gamma0</strong> (<em>float</em>) – The Lorentz factor of the electrons</p></li>
-<li><p><strong>n_e</strong> (<em>float</em><em> (</em><em>in particles per m^3</em><em>)</em>) – Density of the electron bunch</p></li>
+<li><p><strong>q</strong> (<em>float</em><em> (</em><em>in Coulomb</em><em>)</em>) – Charge of the particle species</p></li>
+<li><p><strong>m</strong> (<em>float</em><em> (</em><em>in kg</em><em>)</em>) – Mass of the particle species</p></li>
+<li><p><strong>gamma0</strong> (<em>float</em>) – The Lorentz factor of the particles</p></li>
+<li><p><strong>n</strong> (<em>float</em><em> (</em><em>in particles per m^3</em><em>)</em>) – Density of the bunch</p></li>
 <li><p><strong>p_zmin</strong> (<em>float</em><em> (</em><em>in meters</em><em>)</em>) – The minimal z position above which the particles are initialized</p></li>
 <li><p><strong>p_zmax</strong> (<em>float</em><em> (</em><em>in meters</em><em>)</em>) – The maximal z position below which the particles are initialized</p></li>
 <li><p><strong>p_rmin</strong> (<em>float</em><em> (</em><em>in meters</em><em>)</em>) – The minimal r position above which the particles are initialized</p></li>
@@ -201,7 +203,7 @@ along with its space charge field.</p>
 <li><p><strong>dens_func</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function of the form :
 <cite>def dens_func( z, r ) …</cite>
 where <cite>z</cite> and <cite>r</cite> are 1d arrays, and which returns
-a 1d array containing the density <em>relative to n_e</em>
+a 1d array containing the density <em>relative to n</em>
 (i.e. a number between 0 and 1) at the given positions.</p></li>
 <li><p><strong>boost</strong> (<em>a BoostConverter object</em><em>, </em><em>optional</em>) – A BoostConverter object defining the Lorentz boost of
 the simulation.</p></li>
@@ -217,9 +219,9 @@ boosted-frame simulations.
 </dd></dl>
 
 <dl class="function">
-<dt id="fbpic.lpa_utils.bunch.add_elec_bunch_gaussian">
-<code class="descclassname">fbpic.lpa_utils.bunch.</code><code class="descname">add_elec_bunch_gaussian</code><span class="sig-paren">(</span><em>sim</em>, <em>sig_r</em>, <em>sig_z</em>, <em>n_emit</em>, <em>gamma0</em>, <em>sig_gamma</em>, <em>Q</em>, <em>N</em>, <em>tf=0.0</em>, <em>zf=0.0</em>, <em>boost=None</em>, <em>save_beam=None</em>, <em>z_injection_plane=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fbpic/lpa_utils/bunch.html#add_elec_bunch_gaussian"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.bunch.add_elec_bunch_gaussian" title="Permalink to this definition">¶</a></dt>
-<dd><p>Introduce a relativistic Gaussian electron bunch in the simulation,
+<dt id="fbpic.lpa_utils.bunch.add_particle_bunch_gaussian">
+<code class="sig-prename descclassname">fbpic.lpa_utils.bunch.</code><code class="sig-name descname">add_particle_bunch_gaussian</code><span class="sig-paren">(</span><em class="sig-param">sim</em>, <em class="sig-param">q</em>, <em class="sig-param">m</em>, <em class="sig-param">sig_r</em>, <em class="sig-param">sig_z</em>, <em class="sig-param">n_emit</em>, <em class="sig-param">gamma0</em>, <em class="sig-param">sig_gamma</em>, <em class="sig-param">n_physical_particles</em>, <em class="sig-param">n_macroparticles</em>, <em class="sig-param">tf=0.0</em>, <em class="sig-param">zf=0.0</em>, <em class="sig-param">boost=None</em>, <em class="sig-param">save_beam=None</em>, <em class="sig-param">z_injection_plane=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fbpic/lpa_utils/bunch.html#add_particle_bunch_gaussian"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.bunch.add_particle_bunch_gaussian" title="Permalink to this definition">¶</a></dt>
+<dd><p>Introduce a relativistic Gaussian particle bunch in the simulation,
 along with its space charge field.</p>
 <p>The bunch is initialized with a normalized emittance <cite>n_emit</cite>,
 in such a way that it will be focused at time <cite>tf</cite>, at the position <cite>zf</cite>.
@@ -229,15 +231,16 @@ Thus if <cite>tf</cite> is not 0, the bunch will be initially out of focus.
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>sim</strong> (<em>a Simulation object</em>) – The structure that contains the simulation.</p></li>
+<li><p><strong>q</strong> (<em>float</em><em> (</em><em>in Coulomb</em><em>)</em>) – Charge of the particle species</p></li>
+<li><p><strong>m</strong> (<em>float</em><em> (</em><em>in kg</em><em>)</em>) – Mass of the particle species</p></li>
 <li><p><strong>sig_r</strong> (<em>float</em><em> (</em><em>in meters</em><em>)</em>) – The transverse RMS bunch size.</p></li>
 <li><p><strong>sig_z</strong> (<em>float</em><em> (</em><em>in meters</em><em>)</em>) – The longitudinal RMS bunch size.</p></li>
 <li><p><strong>n_emit</strong> (<em>float</em><em> (</em><em>in meters</em><em>)</em>) – The normalized emittance of the bunch.</p></li>
 <li><p><strong>gamma0</strong> (<em>float</em>) – The Lorentz factor of the electrons.</p></li>
 <li><p><strong>sig_gamma</strong> (<em>float</em>) – The absolute energy spread of the bunch.</p></li>
-<li><p><strong>Q</strong> (<em>float</em><em> (</em><em>in Coulomb</em><em>)</em>) – The total charge of the bunch (in absolute value)
-(if a negative number is given, its absolute value will
-automatically be taken)</p></li>
-<li><p><strong>N</strong> (<em>int</em>) – The number of particles the bunch should consist of.</p></li>
+<li><p><strong>n_physical_particles</strong> (<em>float</em>) – The number of physical particles (e.g. electrons) the bunch should
+consist of.</p></li>
+<li><p><strong>n_macroparticles</strong> (<em>int</em>) – The number of macroparticles the bunch should consist of.</p></li>
 <li><p><strong>zf</strong> (<em>float</em><em> (</em><em>in meters</em><em>)</em><em>, </em><em>optional</em>) – Position of the focus.</p></li>
 <li><p><strong>tf</strong> (<em>float</em><em> (</em><em>in seconds</em><em>)</em><em>, </em><em>optional</em>) – Time at which the bunch reaches focus.</p></li>
 <li><p><strong>boost</strong> (<em>a BoostConverter object</em><em>, </em><em>optional</em>) – A BoostConverter object defining the Lorentz boost of
@@ -253,14 +256,16 @@ boosted-frame simulations.
 </dd></dl>
 
 <dl class="function">
-<dt id="fbpic.lpa_utils.bunch.add_elec_bunch_from_arrays">
-<code class="descclassname">fbpic.lpa_utils.bunch.</code><code class="descname">add_elec_bunch_from_arrays</code><span class="sig-paren">(</span><em>sim</em>, <em>x</em>, <em>y</em>, <em>z</em>, <em>ux</em>, <em>uy</em>, <em>uz</em>, <em>w</em>, <em>boost=None</em>, <em>direction='forward'</em>, <em>z_injection_plane=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fbpic/lpa_utils/bunch.html#add_elec_bunch_from_arrays"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.bunch.add_elec_bunch_from_arrays" title="Permalink to this definition">¶</a></dt>
-<dd><p>Introduce a relativistic electron bunch in the simulation,
+<dt id="fbpic.lpa_utils.bunch.add_particle_bunch_from_arrays">
+<code class="sig-prename descclassname">fbpic.lpa_utils.bunch.</code><code class="sig-name descname">add_particle_bunch_from_arrays</code><span class="sig-paren">(</span><em class="sig-param">sim</em>, <em class="sig-param">q</em>, <em class="sig-param">m</em>, <em class="sig-param">x</em>, <em class="sig-param">y</em>, <em class="sig-param">z</em>, <em class="sig-param">ux</em>, <em class="sig-param">uy</em>, <em class="sig-param">uz</em>, <em class="sig-param">w</em>, <em class="sig-param">boost=None</em>, <em class="sig-param">direction='forward'</em>, <em class="sig-param">z_injection_plane=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fbpic/lpa_utils/bunch.html#add_particle_bunch_from_arrays"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.bunch.add_particle_bunch_from_arrays" title="Permalink to this definition">¶</a></dt>
+<dd><p>Introduce a relativistic particle bunch in the simulation,
 along with its space charge field, loading particles from numpy arrays.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>sim</strong> (<em>a Simulation object</em>) – The structure that contains the simulation.</p></li>
+<li><p><strong>q</strong> (<em>float</em>) – Charge of the particle species</p></li>
+<li><p><strong>m</strong> (<em>float</em>) – Mass of the particle species</p></li>
 <li><p><strong>y</strong><strong>, </strong><strong>z</strong> (<em>x</em><em>,</em>) – The positions of the particles in x, y, z in meters</p></li>
 <li><p><strong>uy</strong><strong>, </strong><strong>uz</strong> (<em>ux</em><em>,</em>) – The dimensionless momenta of the particles in each direction</p></li>
 <li><p><strong>w</strong> (<em>1d array of length</em><em> (</em><em>N_macroparticles</em><em>,</em><em>)</em>) – The weight of the particles, i.e. the number of physical particles
@@ -279,15 +284,17 @@ boosted-frame simulations.
 </dd></dl>
 
 <dl class="function">
-<dt id="fbpic.lpa_utils.bunch.add_elec_bunch_openPMD">
-<code class="descclassname">fbpic.lpa_utils.bunch.</code><code class="descname">add_elec_bunch_openPMD</code><span class="sig-paren">(</span><em>sim</em>, <em>ts_path</em>, <em>z_off=0.0</em>, <em>species=None</em>, <em>select=None</em>, <em>iteration=None</em>, <em>boost=None</em>, <em>z_injection_plane=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fbpic/lpa_utils/bunch.html#add_elec_bunch_openPMD"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.bunch.add_elec_bunch_openPMD" title="Permalink to this definition">¶</a></dt>
-<dd><p>Introduce a relativistic electron bunch in the simulation,
+<dt id="fbpic.lpa_utils.bunch.add_particle_bunch_openPMD">
+<code class="sig-prename descclassname">fbpic.lpa_utils.bunch.</code><code class="sig-name descname">add_particle_bunch_openPMD</code><span class="sig-paren">(</span><em class="sig-param">sim</em>, <em class="sig-param">q</em>, <em class="sig-param">m</em>, <em class="sig-param">ts_path</em>, <em class="sig-param">z_off=0.0</em>, <em class="sig-param">species=None</em>, <em class="sig-param">select=None</em>, <em class="sig-param">iteration=None</em>, <em class="sig-param">boost=None</em>, <em class="sig-param">z_injection_plane=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fbpic/lpa_utils/bunch.html#add_particle_bunch_openPMD"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.bunch.add_particle_bunch_openPMD" title="Permalink to this definition">¶</a></dt>
+<dd><p>Introduce a relativistic particle bunch in the simulation,
 along with its space charge field, loading particles from an openPMD
 timeseries.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>sim</strong> (<em>a Simulation object</em>) – The structure that contains the simulation.</p></li>
+<li><p><strong>q</strong> (<em>float</em><em> (</em><em>in Coulomb</em><em>)</em>) – Charge of the particle species</p></li>
+<li><p><strong>m</strong> (<em>float</em><em> (</em><em>in kg</em><em>)</em>) – Mass of the particle species</p></li>
 <li><p><strong>ts_path</strong> (<em>string</em>) – The path to the directory where the openPMD files are.
 For the moment, only HDF5 files are supported. There should be
 one file per iteration, and the name of the files should end
@@ -315,18 +322,21 @@ boosted-frame simulations.
 </dd></dl>
 
 <dl class="function">
-<dt id="fbpic.lpa_utils.bunch.add_elec_bunch_file">
-<code class="descclassname">fbpic.lpa_utils.bunch.</code><code class="descname">add_elec_bunch_file</code><span class="sig-paren">(</span><em>sim</em>, <em>filename</em>, <em>Q_tot</em>, <em>z_off=0.0</em>, <em>boost=None</em>, <em>direction='forward'</em>, <em>z_injection_plane=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fbpic/lpa_utils/bunch.html#add_elec_bunch_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.bunch.add_elec_bunch_file" title="Permalink to this definition">¶</a></dt>
-<dd><p>Introduce a relativistic electron bunch in the simulation,
+<dt id="fbpic.lpa_utils.bunch.add_particle_bunch_file">
+<code class="sig-prename descclassname">fbpic.lpa_utils.bunch.</code><code class="sig-name descname">add_particle_bunch_file</code><span class="sig-paren">(</span><em class="sig-param">sim</em>, <em class="sig-param">q</em>, <em class="sig-param">m</em>, <em class="sig-param">filename</em>, <em class="sig-param">n_physical_particles</em>, <em class="sig-param">z_off=0.0</em>, <em class="sig-param">boost=None</em>, <em class="sig-param">direction='forward'</em>, <em class="sig-param">z_injection_plane=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fbpic/lpa_utils/bunch.html#add_particle_bunch_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.bunch.add_particle_bunch_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Introduce a relativistic particle bunch in the simulation,
 along with its space charge field, loading particles from text file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>sim</strong> (<em>a Simulation object</em>) – The structure that contains the simulation.</p></li>
+<li><p><strong>q</strong> (<em>float</em><em> (</em><em>in Coulomb</em><em>)</em>) – Charge of the particle species</p></li>
+<li><p><strong>m</strong> (<em>float</em><em> (</em><em>in kg</em><em>)</em>) – Mass of the particle species</p></li>
 <li><p><strong>filename</strong> (<em>string</em>) – the file containing the particle phase space in seven columns
 all float, no header
 x [m]  y [m]  z [m]  ux [unitless]  uy [unitless]  uz [unitless]</p></li>
-<li><p><strong>Q_tot</strong> (<em>float</em><em> (</em><em>in Coulomb</em><em>)</em>) – Total charge in bunch (should be a positive number)</p></li>
+<li><p><strong>n_physical_particles</strong> (<em>float</em>) – The number of physical particles (e.g. electrons) the bunch should
+consist of.</p></li>
 <li><p><strong>z_off</strong> (<em>float</em><em> (</em><em>in meters</em><em>)</em>) – Shift the particle positions in z by z_off</p></li>
 <li><p><strong>boost</strong> (<em>a BoostConverter object</em><em>, </em><em>optional</em>) – A BoostConverter object defining the Lorentz boost of
 the simulation.</p></li>
@@ -341,6 +351,14 @@ boosted-frame simulations.
 </dl>
 </dd></dl>
 
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The former methods to initialize electron beams have been updated to allow
+the use of arbitrary particle beams.</p>
+<p>Although the old methods (e.g. <code class="docutils literal notranslate"><span class="pre">add_elec_bunch</span></code>) can still be used
+(for backward compatibility), we recommend using
+the new more flexible methods instead.</p>
+</div>
 </div>
 
 
