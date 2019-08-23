@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fbpic.openpmd_diag.checkpoint_restart &mdash; FBPIC 0.13.0 documentation</title>
+  <title>fbpic.openpmd_diag.checkpoint_restart &mdash; FBPIC 0.13.1 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.13.0
+                0.13.1
               </div>
             
           
@@ -261,12 +261,21 @@
 <span class="sd">        (When running a simulation with several MPI ranks, use the</span>
 <span class="sd">        same path for all ranks.)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># Import openPMD-viewer</span>
+    <span class="c1"># Try to import openPMD-viewer, version 1</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="kn">from</span> <span class="nn">opmd_viewer</span> <span class="k">import</span> <span class="n">OpenPMDTimeSeries</span>
+        <span class="kn">from</span> <span class="nn">openpmd_viewer</span> <span class="k">import</span> <span class="n">OpenPMDTimeSeries</span>
+        <span class="n">openpmd_viewer_version</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="c1"># If not available, try to import openPMD-viewer, version 0</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">opmd_viewer</span> <span class="k">import</span> <span class="n">OpenPMDTimeSeries</span>
+            <span class="n">openpmd_viewer_version</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+            <span class="n">openpmd_viewer_version</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="c1"># Otherwise, raise an error</span>
+    <span class="k">if</span> <span class="n">openpmd_viewer_version</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
-        <span class="s1">&#39;The package `opmd_viewer` is required to restart from checkpoints.&#39;</span>
+        <span class="s1">&#39;The package openPMD-viewer is required to restart from checkpoints.&#39;</span>
         <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Please install it from https://github.com/openPMD/openPMD-viewer&#39;</span><span class="p">)</span>
 
     <span class="c1"># Verify that the restart is valid (only for the first processor)</span>
@@ -300,7 +309,8 @@
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">avail_species</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">sim</span><span class="o">.</span><span class="n">ptcl</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sim</span><span class="o">.</span><span class="n">ptcl</span><span class="p">)):</span>
             <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;species </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span><span class="n">i</span>
-            <span class="n">load_species</span><span class="p">(</span> <span class="n">sim</span><span class="o">.</span><span class="n">ptcl</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">name</span><span class="p">,</span> <span class="n">ts</span><span class="p">,</span> <span class="n">iteration</span><span class="p">,</span> <span class="n">sim</span><span class="o">.</span><span class="n">comm</span> <span class="p">)</span>
+            <span class="n">load_species</span><span class="p">(</span> <span class="n">sim</span><span class="o">.</span><span class="n">ptcl</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">name</span><span class="p">,</span> <span class="n">ts</span><span class="p">,</span> <span class="n">iteration</span><span class="p">,</span>
+                            <span class="n">sim</span><span class="o">.</span><span class="n">comm</span><span class="p">,</span> <span class="n">openpmd_viewer_version</span> <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span> \
 <span class="sd">&quot;&quot;&quot;Species numbers in checkpoint and simulation should be same, but</span>
@@ -413,7 +423,7 @@
     <span class="n">length_new</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">zmax</span> <span class="o">-</span> <span class="n">grid</span><span class="o">.</span><span class="n">zmin</span>
     <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span> <span class="n">length_old</span><span class="p">,</span> <span class="n">length_new</span> <span class="p">)</span>
 
-<span class="k">def</span> <span class="nf">load_species</span><span class="p">(</span> <span class="n">species</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">ts</span><span class="p">,</span> <span class="n">iteration</span><span class="p">,</span> <span class="n">comm</span> <span class="p">):</span>
+<span class="k">def</span> <span class="nf">load_species</span><span class="p">(</span> <span class="n">species</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">ts</span><span class="p">,</span> <span class="n">iteration</span><span class="p">,</span> <span class="n">comm</span><span class="p">,</span> <span class="n">openpmd_viewer_version</span> <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Read the species data from the checkpoint `ts`</span>
 <span class="sd">    and load it into the Species object `species`</span>
@@ -434,11 +444,20 @@
 
 <span class="sd">    comm: an fbpic.BoundaryCommunicator object</span>
 <span class="sd">        Contains information about the number of procs</span>
+
+<span class="sd">    openpmd_viewer_version: int</span>
+<span class="sd">        Version of openPMD-viewer that was imported</span>
+<span class="sd">        (needed in order to properly read the particle positions)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Get the particles&#39; positions (convert to meters)</span>
     <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">get_particle</span><span class="p">(</span>
                 <span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">],</span> <span class="n">iteration</span><span class="o">=</span><span class="n">iteration</span><span class="p">,</span> <span class="n">species</span><span class="o">=</span><span class="n">name</span> <span class="p">)</span>
-    <span class="n">species</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">species</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">species</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="mf">1.e-6</span><span class="o">*</span><span class="n">x</span><span class="p">,</span> <span class="mf">1.e-6</span><span class="o">*</span><span class="n">y</span><span class="p">,</span> <span class="mf">1.e-6</span><span class="o">*</span><span class="n">z</span>
+    <span class="k">if</span> <span class="n">openpmd_viewer_version</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="c1"># Version 0: Convert from microns to meters</span>
+        <span class="n">species</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">species</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">species</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="mf">1.e-6</span><span class="o">*</span><span class="n">x</span><span class="p">,</span> <span class="mf">1.e-6</span><span class="o">*</span><span class="n">y</span><span class="p">,</span> <span class="mf">1.e-6</span><span class="o">*</span><span class="n">z</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Version 1: Positions are directly given in meters</span>
+        <span class="n">species</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">species</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">species</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span>
     <span class="c1"># Get the particles&#39; momenta</span>
     <span class="n">species</span><span class="o">.</span><span class="n">ux</span><span class="p">,</span> <span class="n">species</span><span class="o">.</span><span class="n">uy</span><span class="p">,</span> <span class="n">species</span><span class="o">.</span><span class="n">uz</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">get_particle</span><span class="p">(</span>
         <span class="p">[</span><span class="s1">&#39;ux&#39;</span><span class="p">,</span> <span class="s1">&#39;uy&#39;</span><span class="p">,</span> <span class="s1">&#39;uz&#39;</span> <span class="p">],</span> <span class="n">iteration</span><span class="o">=</span><span class="n">iteration</span><span class="p">,</span> <span class="n">species</span><span class="o">=</span><span class="n">name</span> <span class="p">)</span>

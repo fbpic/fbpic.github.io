@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fbpic.lpa_utils.bunch &mdash; FBPIC 0.13.0 documentation</title>
+  <title>fbpic.lpa_utils.bunch &mdash; FBPIC 0.13.1 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.13.0
+                0.13.1
               </div>
             
           
@@ -170,7 +170,8 @@
 
 <div class="viewcode-block" id="add_particle_bunch"><a class="viewcode-back" href="../../../api_reference/lpa_utilities/beam.html#fbpic.lpa_utils.bunch.add_particle_bunch">[docs]</a><span class="k">def</span> <span class="nf">add_particle_bunch</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">gamma0</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">p_zmin</span><span class="p">,</span> <span class="n">p_zmax</span><span class="p">,</span> <span class="n">p_rmin</span><span class="p">,</span> <span class="n">p_rmax</span><span class="p">,</span>
                        <span class="n">p_nr</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">p_nz</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">p_nt</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">dens_func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">boost</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                       <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;forward&#39;</span><span class="p">,</span> <span class="n">z_injection_plane</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+                       <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;forward&#39;</span><span class="p">,</span> <span class="n">z_injection_plane</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                       <span class="n">initialize_self_field</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Introduce a simple relativistic particle bunch in the simulation,</span>
 <span class="sd">    along with its space charge field.</span>
@@ -235,6 +236,10 @@
 <span class="sd">        motion for z&lt;z_injection_plane. This is sometimes useful in</span>
 <span class="sd">        boosted-frame simulations.</span>
 <span class="sd">        `z_injection_plane` is always given in the lab frame.</span>
+
+<span class="sd">    initialize_self_field: bool, optional</span>
+<span class="sd">       Whether to calculate the initial space charge fields of the bunch</span>
+<span class="sd">       and add these fields to the fields on the grid (Default: True)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Calculate the electron momentum</span>
     <span class="n">uz_m</span> <span class="o">=</span> <span class="p">(</span> <span class="n">gamma0</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="mf">1.</span> <span class="p">)</span><span class="o">**</span><span class="mf">0.5</span>
@@ -254,14 +259,16 @@
         <span class="n">ptcl_bunch</span><span class="o">.</span><span class="n">injector</span> <span class="o">=</span> <span class="n">BallisticBeforePlane</span><span class="p">(</span> <span class="n">z_injection_plane</span><span class="p">,</span> <span class="n">boost</span> <span class="p">)</span>
 
     <span class="c1"># Get the corresponding space-charge fields</span>
-    <span class="n">get_space_charge_fields</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">ptcl_bunch</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">direction</span> <span class="p">)</span>
+    <span class="k">if</span> <span class="n">initialize_self_field</span><span class="p">:</span>
+        <span class="n">get_space_charge_fields</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">ptcl_bunch</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">direction</span> <span class="p">)</span>
     <span class="k">return</span> <span class="n">ptcl_bunch</span></div>
 
 
 <div class="viewcode-block" id="add_particle_bunch_gaussian"><a class="viewcode-back" href="../../../api_reference/lpa_utilities/beam.html#fbpic.lpa_utils.bunch.add_particle_bunch_gaussian">[docs]</a><span class="k">def</span> <span class="nf">add_particle_bunch_gaussian</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">sig_r</span><span class="p">,</span> <span class="n">sig_z</span><span class="p">,</span> <span class="n">n_emit</span><span class="p">,</span> <span class="n">gamma0</span><span class="p">,</span>
                                 <span class="n">sig_gamma</span><span class="p">,</span> <span class="n">n_physical_particles</span><span class="p">,</span>
                                 <span class="n">n_macroparticles</span><span class="p">,</span> <span class="n">tf</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">zf</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">boost</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                                <span class="n">save_beam</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">z_injection_plane</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+                                <span class="n">save_beam</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">z_injection_plane</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                <span class="n">initialize_self_field</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Introduce a relativistic Gaussian particle bunch in the simulation,</span>
 <span class="sd">    along with its space charge field.</span>
@@ -322,6 +329,10 @@
 <span class="sd">        motion for z&lt;z_injection_plane. This is sometimes useful in</span>
 <span class="sd">        boosted-frame simulations.</span>
 <span class="sd">        `z_injection_plane` is always given in the lab frame.</span>
+
+<span class="sd">    initialize_self_field: bool, optional</span>
+<span class="sd">       Whether to calculate the initial space charge fields of the bunch</span>
+<span class="sd">       and add these fields to the fields on the grid (Default: True)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Generate Gaussian gamma distribution of the beam</span>
     <span class="k">if</span> <span class="n">sig_gamma</span> <span class="o">&gt;</span> <span class="mf">0.</span><span class="p">:</span>
@@ -388,14 +399,15 @@
 
     <span class="c1"># Add the electrons to the simulation</span>
     <span class="n">ptcl_bunch</span> <span class="o">=</span> <span class="n">add_particle_bunch_from_arrays</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">ux</span><span class="p">,</span> <span class="n">uy</span><span class="p">,</span> <span class="n">uz</span><span class="p">,</span>
-                                           <span class="n">w</span><span class="p">,</span> <span class="n">boost</span><span class="o">=</span><span class="n">boost</span><span class="p">,</span>
-                                           <span class="n">z_injection_plane</span><span class="o">=</span><span class="n">z_injection_plane</span><span class="p">)</span>
+                    <span class="n">w</span><span class="p">,</span> <span class="n">boost</span><span class="o">=</span><span class="n">boost</span><span class="p">,</span> <span class="n">z_injection_plane</span><span class="o">=</span><span class="n">z_injection_plane</span><span class="p">,</span>
+                    <span class="n">initialize_self_field</span><span class="o">=</span><span class="n">initialize_self_field</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">ptcl_bunch</span></div>
 
 
 <div class="viewcode-block" id="add_particle_bunch_file"><a class="viewcode-back" href="../../../api_reference/lpa_utilities/beam.html#fbpic.lpa_utils.bunch.add_particle_bunch_file">[docs]</a><span class="k">def</span> <span class="nf">add_particle_bunch_file</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">n_physical_particles</span><span class="p">,</span>
                             <span class="n">z_off</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">boost</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;forward&#39;</span><span class="p">,</span>
-                            <span class="n">z_injection_plane</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+                            <span class="n">z_injection_plane</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                            <span class="n">initialize_self_field</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Introduce a relativistic particle bunch in the simulation,</span>
 <span class="sd">    along with its space charge field, loading particles from text file.</span>
@@ -436,6 +448,10 @@
 <span class="sd">        motion for z&lt;z_injection_plane. This is sometimes useful in</span>
 <span class="sd">        boosted-frame simulations.</span>
 <span class="sd">        `z_injection_plane` is always given in the lab frame.</span>
+
+<span class="sd">    initialize_self_field: bool, optional</span>
+<span class="sd">       Whether to calculate the initial space charge fields of the bunch</span>
+<span class="sd">       and add these fields to the fields on the grid (Default: True)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Load particle data to numpy array</span>
     <span class="n">particle_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
@@ -454,14 +470,16 @@
 
     <span class="c1"># Add the electrons to the simulation</span>
     <span class="n">ptcl_bunch</span> <span class="o">=</span> <span class="n">add_particle_bunch_from_arrays</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">ux</span><span class="p">,</span> <span class="n">uy</span><span class="p">,</span> <span class="n">uz</span><span class="p">,</span>
-                                   <span class="n">w</span><span class="p">,</span><span class="n">boost</span><span class="o">=</span><span class="n">boost</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">,</span>
-                                   <span class="n">z_injection_plane</span><span class="o">=</span><span class="n">z_injection_plane</span><span class="p">)</span>
+                           <span class="n">w</span><span class="p">,</span> <span class="n">boost</span><span class="o">=</span><span class="n">boost</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">,</span>
+                           <span class="n">z_injection_plane</span><span class="o">=</span><span class="n">z_injection_plane</span><span class="p">,</span>
+                           <span class="n">initialize_self_field</span><span class="o">=</span><span class="n">initialize_self_field</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">ptcl_bunch</span></div>
 
 
 <div class="viewcode-block" id="add_particle_bunch_openPMD"><a class="viewcode-back" href="../../../api_reference/lpa_utilities/beam.html#fbpic.lpa_utils.bunch.add_particle_bunch_openPMD">[docs]</a><span class="k">def</span> <span class="nf">add_particle_bunch_openPMD</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">ts_path</span><span class="p">,</span> <span class="n">z_off</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">species</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                                 <span class="n">select</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">boost</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                                <span class="n">z_injection_plane</span><span class="o">=</span><span class="kc">None</span> <span class="p">):</span>
+                                <span class="n">z_injection_plane</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                <span class="n">initialize_self_field</span><span class="o">=</span><span class="kc">True</span> <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Introduce a relativistic particle bunch in the simulation,</span>
 <span class="sd">    along with its space charge field, loading particles from an openPMD</span>
@@ -512,6 +530,10 @@
 <span class="sd">        motion for z&lt;z_injection_plane. This is sometimes useful in</span>
 <span class="sd">        boosted-frame simulations.</span>
 <span class="sd">        `z_injection_plane` is always given in the lab frame.</span>
+
+<span class="sd">    initialize_self_field: bool, optional</span>
+<span class="sd">       Whether to calculate the initial space charge fields of the bunch</span>
+<span class="sd">       and add these fields to the fields on the grid (Default: True)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Import openPMD viewer</span>
     <span class="k">try</span><span class="p">:</span>
@@ -535,14 +557,16 @@
 
     <span class="c1"># Add the electrons to the simulation, and calculate the space charge</span>
     <span class="n">ptcl_bunch</span> <span class="o">=</span> <span class="n">add_particle_bunch_from_arrays</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">ux</span><span class="p">,</span> <span class="n">uy</span><span class="p">,</span> <span class="n">uz</span><span class="p">,</span>
-                                        <span class="n">w</span><span class="p">,</span> <span class="n">boost</span><span class="o">=</span><span class="n">boost</span><span class="p">,</span>
-                                        <span class="n">z_injection_plane</span><span class="o">=</span><span class="n">z_injection_plane</span><span class="p">)</span>
+                            <span class="n">w</span><span class="p">,</span> <span class="n">boost</span><span class="o">=</span><span class="n">boost</span><span class="p">,</span>
+                            <span class="n">z_injection_plane</span><span class="o">=</span><span class="n">z_injection_plane</span><span class="p">,</span>
+                            <span class="n">initialize_self_field</span><span class="o">=</span><span class="n">initialize_self_field</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">ptcl_bunch</span></div>
 
 
 <div class="viewcode-block" id="add_particle_bunch_from_arrays"><a class="viewcode-back" href="../../../api_reference/lpa_utilities/beam.html#fbpic.lpa_utils.bunch.add_particle_bunch_from_arrays">[docs]</a><span class="k">def</span> <span class="nf">add_particle_bunch_from_arrays</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">ux</span><span class="p">,</span> <span class="n">uy</span><span class="p">,</span> <span class="n">uz</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span>
                                    <span class="n">boost</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;forward&#39;</span><span class="p">,</span>
-                                   <span class="n">z_injection_plane</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+                                   <span class="n">z_injection_plane</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                   <span class="n">initialize_self_field</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Introduce a relativistic particle bunch in the simulation,</span>
 <span class="sd">    along with its space charge field, loading particles from numpy arrays.</span>
@@ -581,6 +605,10 @@
 <span class="sd">        motion for z&lt;z_injection_plane. This is sometimes useful in</span>
 <span class="sd">        boosted-frame simulations.</span>
 <span class="sd">        `z_injection_plane` is always given in the lab frame.</span>
+
+<span class="sd">    initialize_self_field: bool, optional</span>
+<span class="sd">       Whether to calculate the initial space charge fields of the bunch</span>
+<span class="sd">       and add these fields to the fields on the grid (Default: True)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">inv_gamma</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span> <span class="mf">1.</span> <span class="o">+</span> <span class="n">ux</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">uy</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">uz</span><span class="o">**</span><span class="mi">2</span> <span class="p">)</span>
     <span class="c1"># Convert the particles to the boosted-frame</span>
@@ -624,7 +652,8 @@
         <span class="n">ptcl_bunch</span><span class="o">.</span><span class="n">injector</span> <span class="o">=</span> <span class="n">BallisticBeforePlane</span><span class="p">(</span> <span class="n">z_injection_plane</span><span class="p">,</span> <span class="n">boost</span> <span class="p">)</span>
 
     <span class="c1"># Get the corresponding space-charge fields</span>
-    <span class="n">get_space_charge_fields</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">ptcl_bunch</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">initialize_self_field</span><span class="p">:</span>
+        <span class="n">get_space_charge_fields</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">ptcl_bunch</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">ptcl_bunch</span></div>
 
 

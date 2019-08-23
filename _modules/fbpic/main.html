@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fbpic.main &mdash; FBPIC 0.13.0 documentation</title>
+  <title>fbpic.main &mdash; FBPIC 0.13.1 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.13.0
+                0.13.1
               </div>
             
           
@@ -211,19 +211,22 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initializes a simulation.</span>
 
-<span class="sd">        By default the simulation contains:</span>
-
-<span class="sd">            - an electron species</span>
-<span class="sd">            - (if ``initialize_ions`` is True) an ion species (Hydrogen 1+)</span>
-
-<span class="sd">        These species are stored in the attribute ``ptcl`` of ``Simulation``</span>
-<span class="sd">        (which is a Python list, containing the different species).</span>
+<span class="sd">        By default, this will not create any particle species. You can</span>
+<span class="sd">        then add particles species to the simulation by using e.g. the method</span>
+<span class="sd">        ``add_new_species`` of the simulation object.</span>
 
 <span class="sd">        .. note::</span>
 
-<span class="sd">            For the arguments `p_rmin`, `p_rmax`, `p_nz`, `p_nr`, `p_nt`,</span>
-<span class="sd">            `n_e`, and `dens_func`, see the docstring of the method</span>
-<span class="sd">            `add_new_species` (where `n_e` has been re-labeled as `n`).</span>
+<span class="sd">            As a short-cut, you can also directly create particle</span>
+<span class="sd">            species when initializing the ``Simulation`` object,</span>
+<span class="sd">            by passing the aguments `n_e`, `p_rmin`, `p_rmax`, `p_nz`,</span>
+<span class="sd">            `p_nr`, `p_nt`, and `dens_func`. This will create:</span>
+
+<span class="sd">                - an electron species</span>
+<span class="sd">                - (if ``initialize_ions`` is True) an ion species (Hydrogen 1+)</span>
+
+<span class="sd">            See the docstring of the method ``add_new_species`` for the</span>
+<span class="sd">            above-mentioned arguments (where `n_e` has been re-labeled as `n`).</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -280,7 +283,7 @@
 <span class="sd">            with a speed v_comoving</span>
 
 <span class="sd">        use_cuda: bool, optional</span>
-<span class="sd">            Wether to use CUDA (GPU) acceleration</span>
+<span class="sd">            Whether to use CUDA (GPU) acceleration</span>
 
 <span class="sd">        n_guard: int, optional</span>
 <span class="sd">            Number of guard cells to use at the left and right of</span>
@@ -352,12 +355,12 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Check whether to use CUDA</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">use_cuda</span> <span class="o">=</span> <span class="n">use_cuda</span>
-        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">use_cuda</span><span class="o">==</span><span class="kc">True</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">cuda_installed</span><span class="o">==</span><span class="kc">False</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_cuda</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">cuda_installed</span><span class="p">:</span>
             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
                 <span class="s1">&#39;Cuda not available for the simulation.</span><span class="se">\n</span><span class="s1">&#39;</span>
                 <span class="s1">&#39;Performing the simulation on CPU.&#39;</span> <span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">use_cuda</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">use_cuda</span><span class="o">==</span><span class="kc">True</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">cupy_installed</span><span class="o">==</span><span class="kc">False</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_cuda</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">cupy_installed</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
                 <span class="s1">&#39;In order to run on GPUs, FBPIC version 0.13 and later </span><span class="se">\n</span><span class="s1">&#39;</span>
                 <span class="s1">&#39;require the `cupy` package (version 6).</span><span class="se">\n</span><span class="s1">&#39;</span>
@@ -405,17 +408,18 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">grid_shape</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">Ez</span><span class="o">.</span><span class="n">shape</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">particle_shape</span> <span class="o">=</span> <span class="n">particle_shape</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ptcl</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="c1"># - Initialize the electrons</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_new_species</span><span class="p">(</span> <span class="n">q</span><span class="o">=-</span><span class="n">e</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="n">m_e</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n_e</span><span class="p">,</span> <span class="n">dens_func</span><span class="o">=</span><span class="n">dens_func</span><span class="p">,</span>
-                              <span class="n">p_nz</span><span class="o">=</span><span class="n">p_nz</span><span class="p">,</span> <span class="n">p_nr</span><span class="o">=</span><span class="n">p_nr</span><span class="p">,</span> <span class="n">p_nt</span><span class="o">=</span><span class="n">p_nt</span><span class="p">,</span>
-                              <span class="n">p_zmin</span><span class="o">=</span><span class="n">p_zmin</span><span class="p">,</span> <span class="n">p_zmax</span><span class="o">=</span><span class="n">p_zmax</span><span class="p">,</span>
-                              <span class="n">p_rmin</span><span class="o">=</span><span class="n">p_rmin</span><span class="p">,</span> <span class="n">p_rmax</span><span class="o">=</span><span class="n">p_rmax</span> <span class="p">)</span>
-        <span class="c1"># - Initialize the ions</span>
-        <span class="k">if</span> <span class="n">initialize_ions</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">add_new_species</span><span class="p">(</span> <span class="n">q</span><span class="o">=</span><span class="n">e</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="n">m_p</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n_e</span><span class="p">,</span> <span class="n">dens_func</span><span class="o">=</span><span class="n">dens_func</span><span class="p">,</span>
-                              <span class="n">p_nz</span><span class="o">=</span><span class="n">p_nz</span><span class="p">,</span> <span class="n">p_nr</span><span class="o">=</span><span class="n">p_nr</span><span class="p">,</span> <span class="n">p_nt</span><span class="o">=</span><span class="n">p_nt</span><span class="p">,</span>
-                              <span class="n">p_zmin</span><span class="o">=</span><span class="n">p_zmin</span><span class="p">,</span> <span class="n">p_zmax</span><span class="o">=</span><span class="n">p_zmax</span><span class="p">,</span>
-                              <span class="n">p_rmin</span><span class="o">=</span><span class="n">p_rmin</span><span class="p">,</span> <span class="n">p_rmax</span><span class="o">=</span><span class="n">p_rmax</span> <span class="p">)</span>
+        <span class="k">if</span> <span class="n">n_e</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># - Initialize the electrons</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_new_species</span><span class="p">(</span> <span class="n">q</span><span class="o">=-</span><span class="n">e</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="n">m_e</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n_e</span><span class="p">,</span> <span class="n">dens_func</span><span class="o">=</span><span class="n">dens_func</span><span class="p">,</span>
+                                  <span class="n">p_nz</span><span class="o">=</span><span class="n">p_nz</span><span class="p">,</span> <span class="n">p_nr</span><span class="o">=</span><span class="n">p_nr</span><span class="p">,</span> <span class="n">p_nt</span><span class="o">=</span><span class="n">p_nt</span><span class="p">,</span>
+                                  <span class="n">p_zmin</span><span class="o">=</span><span class="n">p_zmin</span><span class="p">,</span> <span class="n">p_zmax</span><span class="o">=</span><span class="n">p_zmax</span><span class="p">,</span>
+                                  <span class="n">p_rmin</span><span class="o">=</span><span class="n">p_rmin</span><span class="p">,</span> <span class="n">p_rmax</span><span class="o">=</span><span class="n">p_rmax</span> <span class="p">)</span>
+            <span class="c1"># - Initialize the ions</span>
+            <span class="k">if</span> <span class="n">initialize_ions</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">add_new_species</span><span class="p">(</span> <span class="n">q</span><span class="o">=</span><span class="n">e</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="n">m_p</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n_e</span><span class="p">,</span> <span class="n">dens_func</span><span class="o">=</span><span class="n">dens_func</span><span class="p">,</span>
+                                  <span class="n">p_nz</span><span class="o">=</span><span class="n">p_nz</span><span class="p">,</span> <span class="n">p_nr</span><span class="o">=</span><span class="n">p_nr</span><span class="p">,</span> <span class="n">p_nt</span><span class="o">=</span><span class="n">p_nt</span><span class="p">,</span>
+                                  <span class="n">p_zmin</span><span class="o">=</span><span class="n">p_zmin</span><span class="p">,</span> <span class="n">p_zmax</span><span class="o">=</span><span class="n">p_zmax</span><span class="p">,</span>
+                                  <span class="n">p_rmin</span><span class="o">=</span><span class="n">p_rmin</span><span class="p">,</span> <span class="n">p_rmax</span><span class="o">=</span><span class="n">p_rmax</span> <span class="p">)</span>
 
         <span class="c1"># Register the time and the iteration</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="mf">0.</span>

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Installation on Cori and Edison (NERSC) &mdash; FBPIC 0.13.0 documentation</title>
+  <title>Installation on Cori (NERSC) &mdash; FBPIC 0.13.1 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.13.0
+                0.13.1
               </div>
             
           
@@ -92,7 +92,7 @@
 <li class="toctree-l2"><a class="reference internal" href="install_juwels.html">Installation on JUWELS (JSC)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="install_lawrencium.html">Installation on Lawrencium (LBNL)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="install_comet.html">Installation on Comet (SDSC)</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Installation on Cori and Edison (NERSC)</a><ul>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Installation on Cori (NERSC)</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#installation-of-fbpic-and-its-dependencies">Installation of FBPIC and its dependencies</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#running-simulations">Running simulations</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#preparing-a-new-simulation">Preparing a new simulation</a></li>
@@ -156,13 +156,13 @@
         
           <li><a href="installation.html">Installation</a> &raquo;</li>
         
-      <li>Installation on Cori and Edison (NERSC)</li>
+      <li>Installation on Cori (NERSC)</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../_sources/install/install_cori_edison.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/install/install_cori.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -175,20 +175,18 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="installation-on-cori-and-edison-nersc">
-<h1>Installation on Cori and Edison (NERSC)<a class="headerlink" href="#installation-on-cori-and-edison-nersc" title="Permalink to this headline">¶</a></h1>
-<p><a class="reference external" href="http://www.nersc.gov/users/computational-systems/cori/">Cori</a> and
-<a class="reference external" href="http://www.nersc.gov/users/computational-systems/edison/">Edison</a>
-are two high-performance clusters at <a class="reference external" href="http://www.nersc.gov/">NERSC</a>.</p>
-<p>Each node of Edison contains an Ivy Bridge processor (24-core Xeon processor).</p>
-<p>On the other hand, Cori has two types of nodes:</p>
+  <div class="section" id="installation-on-cori-nersc">
+<h1>Installation on Cori (NERSC)<a class="headerlink" href="#installation-on-cori-nersc" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="http://www.nersc.gov/users/computational-systems/cori/">Cori</a> is
+a high-performance cluster at <a class="reference external" href="http://www.nersc.gov/">NERSC</a>.</p>
+<p>Cori has two types of nodes:</p>
 <ul class="simple">
-<li>Haswell (32-core Xeon processor)</li>
-<li>KNL (68-core Xeon-Phi processor)</li>
+<li><p>Haswell (32-core Xeon processor)</p></li>
+<li><p>KNL (68-core Xeon-Phi processor)</p></li>
 </ul>
 <div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">FBPIC has not been optimized for KNL, and thus its performance on these
+<p class="admonition-title">Warning</p>
+<p>FBPIC has not been optimized for KNL, and thus its performance on these
 nodes is poor. It is strongly recommended to use the Haswell nodes
 when running FBPIC on Cori.</p>
 </div>
@@ -196,17 +194,17 @@ when running FBPIC on Cori.</p>
 <h2>Installation of FBPIC and its dependencies<a class="headerlink" href="#installation-of-fbpic-and-its-dependencies" title="Permalink to this headline">¶</a></h2>
 <p>In order to install FBPIC, follow the steps below:</p>
 <ul>
-<li><p class="first">Set your environment to use the Anaconda distribution:</p>
+<li><p>Set your environment to use the Anaconda distribution:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">module</span> <span class="n">load</span> <span class="n">python</span><span class="o">/</span><span class="mf">2.7</span><span class="o">-</span><span class="n">anaconda</span>
 </pre></div>
 </div>
 </li>
-<li><p class="first">Install the missing dependencies of FBPIC</p>
+<li><p>Install the missing dependencies of FBPIC</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">upgrade</span> <span class="n">numba</span> <span class="n">llvmlite</span> <span class="n">tbb</span> <span class="o">--</span><span class="n">user</span>
 </pre></div>
 </div>
 </li>
-<li><p class="first">Install FBPIC</p>
+<li><p>Install FBPIC</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">fbpic</span> <span class="o">--</span><span class="n">user</span>
 </pre></div>
 </div>
@@ -223,8 +221,7 @@ the above-mentioned directory, and copy your input script there.</p>
 </div>
 <div class="section" id="interactive-jobs">
 <h3>Interactive jobs<a class="headerlink" href="#interactive-jobs" title="Permalink to this headline">¶</a></h3>
-<p>In order to request a Haswell node on Cori, use the following command.
-(For Edison, simply remove the <code class="docutils literal notranslate"><span class="pre">-C</span> <span class="pre">haswell</span></code> option.)</p>
+<p>In order to request a Haswell node on Cori, use the following command.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">salloc</span> <span class="o">--</span><span class="n">time</span><span class="o">=</span><span class="mi">00</span><span class="p">:</span><span class="mi">30</span><span class="p">:</span><span class="mi">00</span> <span class="o">--</span><span class="n">nodes</span><span class="o">=</span><span class="mi">1</span> <span class="o">--</span><span class="n">partition</span> <span class="n">debug</span>  <span class="o">-</span><span class="n">C</span> <span class="n">haswell</span>
 </pre></div>
 </div>
@@ -240,9 +237,7 @@ the above-mentioned directory, and copy your input script there.</p>
 <p>Create a new file named <code class="docutils literal notranslate"><span class="pre">submission_file</span></code> in the same directory as
 your input script (typically this directory is a subdirectory of
 <code class="docutils literal notranslate"><span class="pre">$SCRATCH</span></code>). Within this new file, copy the following text,
-and replace the bracketed text by the proper values.
-(The line <code class="docutils literal notranslate"><span class="pre">#SBATCH</span> <span class="pre">-C</span> <span class="pre">haswell</span></code> is specific to Cori. When running on
-Edison, simply remove this line.)</p>
+and replace the bracketed text by the proper values.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
 <span class="c1">#SBATCH -J my_job</span>
 <span class="c1">#SBATCH --partition=regular</span>
@@ -252,10 +247,10 @@ Edison, simply remove this line.)</p>
 
 <span class="n">module</span> <span class="n">load</span> <span class="n">python</span><span class="o">/</span><span class="mf">2.7</span><span class="o">-</span><span class="n">anaconda</span>
 <span class="n">export</span> <span class="n">NUMBA_THREADING_LAYER</span><span class="o">=</span><span class="n">tbb</span>
-<span class="n">export</span> <span class="n">NUMBA_NUM_THREADS</span><span class="o">=&lt;</span><span class="n">n_threads</span><span class="o">&gt;</span>
-<span class="n">export</span> <span class="n">MKL_NUM_THREADS</span><span class="o">=&lt;</span><span class="n">n_threads</span><span class="o">&gt;</span>
+<span class="n">export</span> <span class="n">NUMBA_NUM_THREADS</span><span class="o">=</span><span class="mi">16</span>
+<span class="n">export</span> <span class="n">MKL_NUM_THREADS</span><span class="o">=</span><span class="mi">16</span>
 
-<span class="n">srun</span> <span class="o">-</span><span class="n">n</span> <span class="o">&lt;</span><span class="n">n_mpi</span><span class="o">&gt;</span> <span class="o">-</span><span class="n">c</span> <span class="o">&lt;</span><span class="n">n_logical_cores_per_mpi</span><span class="o">&gt;</span> <span class="o">--</span><span class="n">cpu_bind</span><span class="o">=</span><span class="n">cores</span> <span class="n">python</span> <span class="o">&lt;</span><span class="n">fbpic_script</span><span class="o">.</span><span class="n">py</span><span class="o">&gt;</span>
+<span class="n">srun</span> <span class="o">-</span><span class="n">n</span> <span class="o">&lt;</span><span class="n">n_mpi</span><span class="o">&gt;</span> <span class="o">-</span><span class="n">c</span> <span class="mi">32</span> <span class="o">--</span><span class="n">cpu</span><span class="o">-</span><span class="n">bind</span><span class="o">=</span><span class="n">cores</span> <span class="n">python</span> <span class="o">&lt;</span><span class="n">fbpic_script</span><span class="o">.</span><span class="n">py</span><span class="o">&gt;</span>
 </pre></div>
 </div>
 <p>Then run:</p>
@@ -264,25 +259,6 @@ Edison, simply remove this line.)</p>
 </pre></div>
 </div>
 </div></blockquote>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p>In order to have a favorable scaling, it is recommended to use 2 MPI ranks
-per node (i.e. <code class="docutils literal notranslate"><span class="pre">&lt;n_mpi&gt;</span> <span class="pre">=</span> <span class="pre">2</span> <span class="pre">*</span> <span class="pre">&lt;n_nodes&gt;</span></code>), and to use the following values:</p>
-<ul class="last">
-<li><p class="first">For Cori:</p>
-<blockquote>
-<div><p><code class="docutils literal notranslate"><span class="pre">&lt;n_threads&gt;</span> <span class="pre">=</span> <span class="pre">16</span></code></p>
-<p><code class="docutils literal notranslate"><span class="pre">&lt;n_logical_cores_per_mpi&gt;</span> <span class="pre">=</span> <span class="pre">32</span></code></p>
-</div></blockquote>
-</li>
-<li><p class="first">For Edison:</p>
-<blockquote>
-<div><p><code class="docutils literal notranslate"><span class="pre">&lt;n_threads&gt;</span> <span class="pre">=</span> <span class="pre">12</span></code></p>
-<p><code class="docutils literal notranslate"><span class="pre">&lt;n_logical_cores_per_mpi&gt;</span> <span class="pre">=</span> <span class="pre">24</span></code></p>
-</div></blockquote>
-</li>
-</ul>
-</div>
 </div>
 <div class="section" id="visualizing-the-results-through-jupyter">
 <h3>Visualizing the results through Jupyter<a class="headerlink" href="#visualizing-the-results-through-jupyter" title="Permalink to this headline">¶</a></h3>

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Standard simulation of laser-wakefield acceleration &mdash; FBPIC 0.13.0 documentation</title>
+  <title>Standard simulation of laser-wakefield acceleration &mdash; FBPIC 0.13.1 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.13.0
+                0.13.1
               </div>
             
           
@@ -169,7 +169,7 @@
             
   <div class="section" id="standard-simulation-of-laser-wakefield-acceleration">
 <h1>Standard simulation of laser-wakefield acceleration<a class="headerlink" href="#standard-simulation-of-laser-wakefield-acceleration" title="Permalink to this headline">¶</a></h1>
-<p>You can download the script below by clicking on <a class="reference download internal" download="" href="../_downloads/a26913add2f1cfee7b8d46ad04e258d6/lwfa_script.py"><code class="xref download docutils literal notranslate"><span class="pre">this</span> <span class="pre">link</span></code></a>.</p>
+<p>You can download the script below by clicking on <a class="reference download internal" download="" href="../_downloads/a6ae9198fac12d614644f1312bc9feb7/lwfa_script.py"><code class="xref download docutils literal notranslate"><span class="pre">this</span> <span class="pre">link</span></code></a>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">This is a typical input script that runs a simulation of</span>
 <span class="sd">laser-wakefield acceleration using FBPIC.</span>
@@ -190,7 +190,7 @@
 <span class="c1"># Imports</span>
 <span class="c1"># -------</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">scipy.constants</span> <span class="kn">import</span> <span class="n">c</span>
+<span class="kn">from</span> <span class="nn">scipy.constants</span> <span class="kn">import</span> <span class="n">c</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">m_e</span>
 <span class="c1"># Import the relevant structures in FBPIC</span>
 <span class="kn">from</span> <span class="nn">fbpic.main</span> <span class="kn">import</span> <span class="n">Simulation</span>
 <span class="kn">from</span> <span class="nn">fbpic.lpa_utils.laser</span> <span class="kn">import</span> <span class="n">add_laser</span>
@@ -227,9 +227,8 @@
 <span class="n">dt</span> <span class="o">=</span> <span class="p">(</span><span class="n">zmax</span><span class="o">-</span><span class="n">zmin</span><span class="p">)</span><span class="o">/</span><span class="n">Nz</span><span class="o">/</span><span class="n">c</span>   <span class="c1"># Timestep (seconds)</span>
 
 <span class="c1"># The particles</span>
-<span class="n">p_zmin</span> <span class="o">=</span> <span class="mf">25.e-6</span>  <span class="c1"># Position of the beginning of the plasma (meters)</span>
+<span class="n">p_zmin</span> <span class="o">=</span> <span class="mf">30.e-6</span>  <span class="c1"># Position of the beginning of the plasma (meters)</span>
 <span class="n">p_zmax</span> <span class="o">=</span> <span class="mf">500.e-6</span> <span class="c1"># Position of the end of the plasma (meters)</span>
-<span class="n">p_rmin</span> <span class="o">=</span> <span class="mf">0.</span>      <span class="c1"># Minimal radial position of the plasma (meters)</span>
 <span class="n">p_rmax</span> <span class="o">=</span> <span class="mf">18.e-6</span>  <span class="c1"># Maximal radial position of the plasma (meters)</span>
 <span class="n">n_e</span> <span class="o">=</span> <span class="mf">4.e18</span><span class="o">*</span><span class="mf">1.e6</span> <span class="c1"># Density (electrons.meters^-3)</span>
 <span class="n">p_nz</span> <span class="o">=</span> <span class="mi">2</span>         <span class="c1"># Number of particles per cell along z</span>
@@ -281,10 +280,13 @@
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
 
     <span class="c1"># Initialize the simulation object</span>
-    <span class="n">sim</span> <span class="o">=</span> <span class="n">Simulation</span><span class="p">(</span> <span class="n">Nz</span><span class="p">,</span> <span class="n">zmax</span><span class="p">,</span> <span class="n">Nr</span><span class="p">,</span> <span class="n">rmax</span><span class="p">,</span> <span class="n">Nm</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span>
-        <span class="n">p_zmin</span><span class="p">,</span> <span class="n">p_zmax</span><span class="p">,</span> <span class="n">p_rmin</span><span class="p">,</span> <span class="n">p_rmax</span><span class="p">,</span> <span class="n">p_nz</span><span class="p">,</span> <span class="n">p_nr</span><span class="p">,</span> <span class="n">p_nt</span><span class="p">,</span> <span class="n">n_e</span><span class="p">,</span>
-        <span class="n">dens_func</span><span class="o">=</span><span class="n">dens_func</span><span class="p">,</span> <span class="n">zmin</span><span class="o">=</span><span class="n">zmin</span><span class="p">,</span> <span class="n">boundaries</span><span class="o">=</span><span class="s1">&#39;open&#39;</span><span class="p">,</span>
-        <span class="n">n_order</span><span class="o">=</span><span class="n">n_order</span><span class="p">,</span> <span class="n">use_cuda</span><span class="o">=</span><span class="n">use_cuda</span> <span class="p">)</span>
+    <span class="n">sim</span> <span class="o">=</span> <span class="n">Simulation</span><span class="p">(</span> <span class="n">Nz</span><span class="p">,</span> <span class="n">zmax</span><span class="p">,</span> <span class="n">Nr</span><span class="p">,</span> <span class="n">rmax</span><span class="p">,</span> <span class="n">Nm</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">zmin</span><span class="o">=</span><span class="n">zmin</span><span class="p">,</span>
+        <span class="n">boundaries</span><span class="o">=</span><span class="s1">&#39;open&#39;</span><span class="p">,</span> <span class="n">n_order</span><span class="o">=</span><span class="n">n_order</span><span class="p">,</span> <span class="n">use_cuda</span><span class="o">=</span><span class="n">use_cuda</span> <span class="p">)</span>
+
+    <span class="c1"># Create the plasma electrons</span>
+    <span class="n">elec</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">add_new_species</span><span class="p">(</span> <span class="n">q</span><span class="o">=-</span><span class="n">e</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="n">m_e</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n_e</span><span class="p">,</span>
+        <span class="n">dens_func</span><span class="o">=</span><span class="n">dens_func</span><span class="p">,</span> <span class="n">p_zmin</span><span class="o">=</span><span class="n">p_zmin</span><span class="p">,</span> <span class="n">p_zmax</span><span class="o">=</span><span class="n">p_zmax</span><span class="p">,</span> <span class="n">p_rmax</span><span class="o">=</span><span class="n">p_rmax</span><span class="p">,</span>
+        <span class="n">p_nz</span><span class="o">=</span><span class="n">p_nz</span><span class="p">,</span> <span class="n">p_nr</span><span class="o">=</span><span class="n">p_nr</span><span class="p">,</span> <span class="n">p_nt</span><span class="o">=</span><span class="n">p_nt</span> <span class="p">)</span>
 
     <span class="c1"># Load initial fields</span>
     <span class="c1"># Add a laser to the fields of the simulation</span>
@@ -293,7 +295,7 @@
     <span class="k">if</span> <span class="n">use_restart</span> <span class="ow">is</span> <span class="bp">False</span><span class="p">:</span>
         <span class="c1"># Track electrons if required (species 0 correspond to the electrons)</span>
         <span class="k">if</span> <span class="n">track_electrons</span><span class="p">:</span>
-            <span class="n">sim</span><span class="o">.</span><span class="n">ptcl</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">track</span><span class="p">(</span> <span class="n">sim</span><span class="o">.</span><span class="n">comm</span> <span class="p">)</span>
+            <span class="n">elec</span><span class="o">.</span><span class="n">track</span><span class="p">(</span> <span class="n">sim</span><span class="o">.</span><span class="n">comm</span> <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># Load the fields and particles from the latest checkpoint file</span>
         <span class="n">restart_from_checkpoint</span><span class="p">(</span> <span class="n">sim</span> <span class="p">)</span>
@@ -303,7 +305,7 @@
 
     <span class="c1"># Add diagnostics</span>
     <span class="n">sim</span><span class="o">.</span><span class="n">diags</span> <span class="o">=</span> <span class="p">[</span> <span class="n">FieldDiagnostic</span><span class="p">(</span> <span class="n">diag_period</span><span class="p">,</span> <span class="n">sim</span><span class="o">.</span><span class="n">fld</span><span class="p">,</span> <span class="n">comm</span><span class="o">=</span><span class="n">sim</span><span class="o">.</span><span class="n">comm</span> <span class="p">),</span>
-                  <span class="n">ParticleDiagnostic</span><span class="p">(</span> <span class="n">diag_period</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;electrons&quot;</span> <span class="p">:</span> <span class="n">sim</span><span class="o">.</span><span class="n">ptcl</span><span class="p">[</span><span class="mi">0</span><span class="p">]},</span>
+                  <span class="n">ParticleDiagnostic</span><span class="p">(</span> <span class="n">diag_period</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;electrons&quot;</span> <span class="p">:</span> <span class="n">elec</span><span class="p">},</span>
                     <span class="n">select</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;uz&quot;</span> <span class="p">:</span> <span class="p">[</span><span class="mf">1.</span><span class="p">,</span> <span class="bp">None</span> <span class="p">]},</span> <span class="n">comm</span><span class="o">=</span><span class="n">sim</span><span class="o">.</span><span class="n">comm</span> <span class="p">)</span> <span class="p">]</span>
     <span class="c1"># Add checkpoints</span>
     <span class="k">if</span> <span class="n">save_checkpoints</span><span class="p">:</span>

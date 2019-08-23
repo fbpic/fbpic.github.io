@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Laser-wakefield acceleration with ionization &mdash; FBPIC 0.13.0 documentation</title>
+  <title>Laser-wakefield acceleration with ionization &mdash; FBPIC 0.13.1 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.13.0
+                0.13.1
               </div>
             
           
@@ -169,7 +169,7 @@
             
   <div class="section" id="laser-wakefield-acceleration-with-ionization">
 <h1>Laser-wakefield acceleration with ionization<a class="headerlink" href="#laser-wakefield-acceleration-with-ionization" title="Permalink to this headline">¶</a></h1>
-<p>You can download the script below by clicking on <a class="reference download internal" download="" href="../_downloads/541b5916318796839bb02a19ce9ed506/ionization_script.py"><code class="xref download docutils literal notranslate"><span class="pre">this</span> <span class="pre">link</span></code></a>.</p>
+<p>You can download the script below by clicking on <a class="reference download internal" download="" href="../_downloads/b74a29d7fcbdd0c0e7cea633a89cf36a/ionization_script.py"><code class="xref download docutils literal notranslate"><span class="pre">this</span> <span class="pre">link</span></code></a>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">This is an input script that runs a simulation of</span>
 <span class="sd">laser-wakefield acceleration with ionization, using FBPIC.</span>
@@ -281,14 +281,8 @@
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
 
     <span class="c1"># Initialize the simulation object</span>
-    <span class="n">sim</span> <span class="o">=</span> <span class="n">Simulation</span><span class="p">(</span> <span class="n">Nz</span><span class="p">,</span> <span class="n">zmax</span><span class="p">,</span> <span class="n">Nr</span><span class="p">,</span> <span class="n">rmax</span><span class="p">,</span> <span class="n">Nm</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span>
-        <span class="n">zmin</span><span class="o">=</span><span class="n">zmin</span><span class="p">,</span> <span class="n">boundaries</span><span class="o">=</span><span class="s1">&#39;open&#39;</span><span class="p">,</span> <span class="n">initialize_ions</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
-        <span class="n">n_order</span><span class="o">=</span><span class="n">n_order</span><span class="p">,</span> <span class="n">use_cuda</span><span class="o">=</span><span class="n">use_cuda</span> <span class="p">)</span>
-    <span class="c1"># By default the simulation initializes an electron species (sim.ptcl[0])</span>
-    <span class="c1"># Because we did not pass the arguments `n`, `p_nz`, `p_nr`, `p_nz`,</span>
-    <span class="c1"># this electron species does not contain any macroparticles.</span>
-    <span class="c1"># It is okay to just remove it from the list of species.</span>
-    <span class="n">sim</span><span class="o">.</span><span class="n">ptcl</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">sim</span> <span class="o">=</span> <span class="n">Simulation</span><span class="p">(</span> <span class="n">Nz</span><span class="p">,</span> <span class="n">zmax</span><span class="p">,</span> <span class="n">Nr</span><span class="p">,</span> <span class="n">rmax</span><span class="p">,</span> <span class="n">Nm</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">zmin</span><span class="o">=</span><span class="n">zmin</span><span class="p">,</span>
+        <span class="n">boundaries</span><span class="o">=</span><span class="s1">&#39;open&#39;</span><span class="p">,</span> <span class="n">n_order</span><span class="o">=</span><span class="n">n_order</span><span class="p">,</span> <span class="n">use_cuda</span><span class="o">=</span><span class="n">use_cuda</span> <span class="p">)</span>
 
     <span class="c1"># Add the Helium ions (pre-ionized up to level 1),</span>
     <span class="c1"># the Nitrogen ions (pre-ionized up to level 5)</span>
