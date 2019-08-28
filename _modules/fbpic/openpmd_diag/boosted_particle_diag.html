@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fbpic.openpmd_diag.boosted_particle_diag &mdash; FBPIC 0.13.1 documentation</title>
+  <title>fbpic.openpmd_diag.boosted_particle_diag &mdash; FBPIC 0.13.2 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.13.1
+                0.13.2
               </div>
             
           
@@ -829,8 +829,8 @@
             <span class="c1"># Calculate cell area to get particles from</span>
             <span class="c1"># - Get z indices of the slices in which to get the particles</span>
             <span class="c1"># (mirrors the index calculation in `get_cell_idx_per_particle`)</span>
-            <span class="n">iz_curr</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">((</span><span class="n">current_z_boost</span><span class="o">-</span><span class="n">zmin</span><span class="o">-</span><span class="mf">0.5</span><span class="o">*</span><span class="n">dz</span><span class="p">)</span><span class="o">/</span><span class="n">dz</span><span class="p">)</span>
-            <span class="n">iz_prev</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">((</span><span class="n">previous_z_boost</span><span class="o">-</span><span class="n">zmin</span><span class="o">-</span><span class="mf">0.5</span><span class="o">*</span><span class="n">dz</span> <span class="o">+</span> <span class="n">dt</span><span class="o">*</span><span class="n">c</span><span class="p">)</span><span class="o">/</span><span class="n">dz</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">iz_curr</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">((</span><span class="n">current_z_boost</span><span class="o">-</span><span class="n">zmin</span><span class="o">-</span><span class="mf">0.5</span><span class="o">*</span><span class="n">dz</span><span class="p">)</span><span class="o">/</span><span class="n">dz</span><span class="p">))</span>
+            <span class="n">iz_prev</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">((</span><span class="n">previous_z_boost</span><span class="o">-</span><span class="n">zmin</span><span class="o">-</span><span class="mf">0.5</span><span class="o">*</span><span class="n">dz</span> <span class="o">+</span> <span class="n">dt</span><span class="o">*</span><span class="n">c</span><span class="p">)</span><span class="o">/</span><span class="n">dz</span><span class="p">))</span> <span class="o">+</span> <span class="mi">1</span>
             <span class="c1"># - Get the prefix sum values that correspond to these indices</span>
             <span class="c1">#   (Take into account potential shift due to the moving window)</span>
             <span class="n">z_cell_curr</span> <span class="o">=</span> <span class="n">iz_curr</span> <span class="o">+</span> <span class="n">pref_sum_shift</span>
