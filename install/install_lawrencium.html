@@ -93,7 +93,7 @@
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Installation on Lawrencium (LBNL)</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#connecting-to-lawrencium">Connecting to Lawrencium</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#installation-of-fbpic">Installation of FBPIC</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#installation-of-anaconda">Installation of Anaconda</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#setting-up-anaconda">Setting up Anaconda</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#installation-of-fbpic-and-its-dependencies">Installation of FBPIC and its dependencies</a></li>
 </ul>
 </li>
@@ -188,8 +188,8 @@ is a local cluster at the <a class="reference external" href="http://www.lbl.gov
 <p>It has 24 nodes with GPUs:</p>
 <blockquote>
 <div><ul class="simple">
-<li>12 nodes with four GTX 1080Ti GPUs each</li>
-<li>12 nodes with two V100 GPUs each</li>
+<li><p>12 nodes with four GTX 1080Ti GPUs each</p></li>
+<li><p>12 nodes with two V100 GPUs each</p></li>
 </ul>
 </div></blockquote>
 <div class="section" id="connecting-to-lawrencium">
@@ -205,39 +205,38 @@ instructions</a>.</p>
 </div>
 <div class="section" id="installation-of-fbpic">
 <h2>Installation of FBPIC<a class="headerlink" href="#installation-of-fbpic" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="installation-of-anaconda">
-<h3>Installation of Anaconda<a class="headerlink" href="#installation-of-anaconda" title="Permalink to this headline">¶</a></h3>
-<p>In order to download and install Anaconda and FBPIC, follow the steps
-below:</p>
+<div class="section" id="setting-up-anaconda">
+<h3>Setting up Anaconda<a class="headerlink" href="#setting-up-anaconda" title="Permalink to this headline">¶</a></h3>
 <ul>
-<li><p class="first">Download Miniconda:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wget</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">repo</span><span class="o">.</span><span class="n">continuum</span><span class="o">.</span><span class="n">io</span><span class="o">/</span><span class="n">miniconda</span><span class="o">/</span><span class="n">Miniconda3</span><span class="o">-</span><span class="n">latest</span><span class="o">-</span><span class="n">Linux</span><span class="o">-</span><span class="n">x86_64</span><span class="o">.</span><span class="n">sh</span>
-</pre></div>
-</div>
-</li>
-<li><p class="first">Execute the Miniconda installation script, and use <code class="docutils literal notranslate"><span class="pre">/global/scratch/&lt;yourUsername&gt;</span></code> as an install directory, for faster disk access.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">bash</span> <span class="n">Miniconda3</span><span class="o">-</span><span class="n">latest</span><span class="o">-</span><span class="n">Linux</span><span class="o">-</span><span class="n">x86_64</span><span class="o">.</span><span class="n">sh</span> <span class="o">-</span><span class="n">p</span> <span class="o">/</span><span class="k">global</span><span class="o">/</span><span class="n">scratch</span><span class="o">/&lt;</span><span class="n">yourUsername</span><span class="o">&gt;/</span><span class="n">miniconda3</span>
-</pre></div>
-</div>
-<p>where the bracketed text should be replaced by your username. Then type</p>
-</li>
-</ul>
+<li><p>Add the following lines in your <code class="docutils literal notranslate"><span class="pre">~/.bashrc</span></code></p>
 <blockquote>
-<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">source</span> <span class="o">.</span><span class="n">bashrc</span>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">module</span> <span class="n">load</span> <span class="n">python</span>
+<span class="o">.</span> <span class="o">/</span><span class="k">global</span><span class="o">/</span><span class="n">software</span><span class="o">/</span><span class="n">sl</span><span class="o">-</span><span class="mf">7.</span><span class="n">x86_64</span><span class="o">/</span><span class="n">modules</span><span class="o">/</span><span class="n">langs</span><span class="o">/</span><span class="n">python</span><span class="o">/</span><span class="mf">3.6</span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">profile</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">conda</span><span class="o">.</span><span class="n">sh</span>
 </pre></div>
 </div>
 </div></blockquote>
+<p>Then log off and log in again in order for these changes to be active.</p>
+</li>
+<li><p>Create a new conda environment and activate it.</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">create</span> <span class="o">-</span><span class="n">n</span> <span class="n">fbpic</span> <span class="n">python</span><span class="o">=</span><span class="mi">3</span>
+<span class="n">conda</span> <span class="n">activate</span> <span class="n">fbpic</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ul>
 </div>
 <div class="section" id="installation-of-fbpic-and-its-dependencies">
 <h3>Installation of FBPIC and its dependencies<a class="headerlink" href="#installation-of-fbpic-and-its-dependencies" title="Permalink to this headline">¶</a></h3>
 <ul>
-<li><p class="first">Install the dependencies of <code class="docutils literal notranslate"><span class="pre">fbpic</span></code></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">numba</span> <span class="n">scipy</span> <span class="n">h5py</span> <span class="n">mkl</span> <span class="n">mpi4py</span> <span class="n">cudatoolkit</span><span class="o">=</span><span class="mf">10.0</span>
+<li><p>Install the dependencies of <code class="docutils literal notranslate"><span class="pre">fbpic</span></code></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">numba</span> <span class="n">scipy</span> <span class="n">h5py</span> <span class="n">mkl</span> <span class="n">cudatoolkit</span><span class="o">=</span><span class="mf">10.0</span> <span class="n">mpi4py</span><span class="o">=*=*</span><span class="n">mpich</span><span class="o">*</span>
 <span class="n">pip</span> <span class="n">install</span> <span class="n">cupy</span><span class="o">-</span><span class="n">cuda100</span>
 </pre></div>
 </div>
 </li>
-<li><p class="first">Install <code class="docutils literal notranslate"><span class="pre">fbpic</span></code></p>
+<li><p>Install <code class="docutils literal notranslate"><span class="pre">fbpic</span></code></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">fbpic</span>
 </pre></div>
 </div>
@@ -267,7 +266,8 @@ the above-mentioned directory, and copy your input script there.</p>
 </div>
 <p>in order to connect to the node that has been allocated. Then <code class="docutils literal notranslate"><span class="pre">cd</span></code> to
 the directory where you prepared your input script and type</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">&lt;</span><span class="n">fbpic_script</span><span class="o">.</span><span class="n">py</span><span class="o">&gt;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">activate</span> <span class="n">fbpic</span>
+<span class="n">python</span> <span class="o">&lt;</span><span class="n">fbpic_script</span><span class="o">.</span><span class="n">py</span><span class="o">&gt;</span>
 </pre></div>
 </div>
 </div>
@@ -286,14 +286,18 @@ following text (and replace the bracketed text by the proper values).</p>
 <span class="c1">#SBATCH --ntasks &lt;requestedRanks&gt;</span>
 <span class="c1">#SBATCH --gres=gpu:&lt;gpuPerNode&gt; --cpus-per-task=&lt;cpuPerTask&gt;</span>
 
+<span class="n">module</span> <span class="n">load</span> <span class="n">python</span>
+<span class="o">.</span> <span class="o">/</span><span class="k">global</span><span class="o">/</span><span class="n">software</span><span class="o">/</span><span class="n">sl</span><span class="o">-</span><span class="mf">7.</span><span class="n">x86_64</span><span class="o">/</span><span class="n">modules</span><span class="o">/</span><span class="n">langs</span><span class="o">/</span><span class="n">python</span><span class="o">/</span><span class="mf">3.6</span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">profile</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">conda</span><span class="o">.</span><span class="n">sh</span>
+<span class="n">conda</span> <span class="n">activate</span> <span class="n">fbpic</span>
+
 <span class="n">mpirun</span> <span class="o">-</span><span class="n">np</span> <span class="o">&lt;</span><span class="n">requestedRanks</span><span class="o">&gt;</span> <span class="n">python</span> <span class="n">fbpic_script</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
 <p>where <code class="docutils literal notranslate"><span class="pre">&lt;gpuConstraint&gt;</span></code> and <code class="docutils literal notranslate"><span class="pre">&lt;gpuPerNode&gt;</span></code> should be:</p>
 <blockquote>
 <div><ul class="simple">
-<li>For the nodes with four GTX 1080Ti GPUs, <code class="docutils literal notranslate"><span class="pre">gpuConstraint=es1_1080ti</span></code>, <code class="docutils literal notranslate"><span class="pre">gpuPerNode=4</span></code> and <code class="docutils literal notranslate"><span class="pre">cpuPerTask=2</span></code></li>
-<li>For the nodes with two V100 GPUs, <code class="docutils literal notranslate"><span class="pre">gpuConstraint=es1_v100</span></code>, <code class="docutils literal notranslate"><span class="pre">gpuPerNode=2</span></code> and <code class="docutils literal notranslate"><span class="pre">cpuPerTask=4</span></code></li>
+<li><p>For the nodes with four GTX 1080Ti GPUs, <code class="docutils literal notranslate"><span class="pre">gpuConstraint=es1_1080ti</span></code>, <code class="docutils literal notranslate"><span class="pre">gpuPerNode=4</span></code> and <code class="docutils literal notranslate"><span class="pre">cpuPerTask=2</span></code></p></li>
+<li><p>For the nodes with two V100 GPUs, <code class="docutils literal notranslate"><span class="pre">gpuConstraint=es1_v100</span></code>, <code class="docutils literal notranslate"><span class="pre">gpuPerNode=2</span></code> and <code class="docutils literal notranslate"><span class="pre">cpuPerTask=4</span></code></p></li>
 </ul>
 </div></blockquote>
 <p>for more information on the available nodes, see

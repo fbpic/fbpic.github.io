@@ -203,14 +203,14 @@ is a GPU cluster at the <a class="reference external" href="https://www.olcf.orn
 <div class="section" id="installation-of-fbpic-and-its-dependencies">
 <h3>Installation of FBPIC and its dependencies<a class="headerlink" href="#installation-of-fbpic-and-its-dependencies" title="Permalink to this headline">¶</a></h3>
 <ul>
-<li><p class="first">Install the dependencies of <code class="docutils literal notranslate"><span class="pre">fbpic</span></code></p>
+<li><p>Install the dependencies of <code class="docutils literal notranslate"><span class="pre">fbpic</span></code></p>
 <blockquote>
 <div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">numba</span> <span class="n">scipy</span> <span class="n">h5py</span> <span class="n">cython</span> <span class="n">cudatoolkit</span><span class="o">=</span><span class="mf">9.0</span>
 </pre></div>
 </div>
 </div></blockquote>
 </li>
-<li><p class="first">Install <code class="docutils literal notranslate"><span class="pre">cupy</span></code> (This step can take a few minutes.)</p>
+<li><p>Install <code class="docutils literal notranslate"><span class="pre">cupy</span></code> (This step can take a few minutes.)</p>
 <blockquote>
 <div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">module</span> <span class="n">load</span> <span class="n">cuda</span><span class="o">/</span><span class="mf">9.1</span><span class="o">.</span><span class="mi">85</span>
 <span class="n">pip</span> <span class="n">install</span> <span class="n">cupy</span>
@@ -219,14 +219,14 @@ is a GPU cluster at the <a class="reference external" href="https://www.olcf.orn
 </div>
 </div></blockquote>
 </li>
-<li><p class="first">Install <code class="docutils literal notranslate"><span class="pre">pyfftw</span></code></p>
+<li><p>Install <code class="docutils literal notranslate"><span class="pre">pyfftw</span></code></p>
 <blockquote>
 <div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">pyfftw</span>
 </pre></div>
 </div>
 </div></blockquote>
 </li>
-<li><p class="first">Install <code class="docutils literal notranslate"><span class="pre">fbpic</span></code></p>
+<li><p>Install <code class="docutils literal notranslate"><span class="pre">fbpic</span></code></p>
 <blockquote>
 <div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">fbpic</span>
 </pre></div>
@@ -307,8 +307,8 @@ jsrun -n &lt;requestedNode&gt; -a 6 -c 42 -g 6 --smpiargs=&quot;-gpu&quot; pytho
 </pre></div>
 </div>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Note that, in the above script,
+<p class="admonition-title">Note</p>
+<p>Note that, in the above script,
 <code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">FBPIC_ENABLE_GPUDIRECT=1</span></code> and <code class="docutils literal notranslate"><span class="pre">--smpiargs=&quot;-gpu&quot;</span></code>
 are only needed if you wish to use the <strong>cuda-aware</strong> MPI.</p>
 </div>
