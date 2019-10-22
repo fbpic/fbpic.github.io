@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Installation on Cori (NERSC) &mdash; FBPIC 0.13.2 documentation</title>
+  <title>Installation on Cori (NERSC) &mdash; FBPIC 0.13.3 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.13.2
+                0.13.3
               </div>
             
           
@@ -181,12 +181,12 @@
 a high-performance cluster at <a class="reference external" href="http://www.nersc.gov/">NERSC</a>.</p>
 <p>Cori has two types of nodes:</p>
 <ul class="simple">
-<li><p>Haswell (32-core Xeon processor)</p></li>
-<li><p>KNL (68-core Xeon-Phi processor)</p></li>
+<li>Haswell (32-core Xeon processor)</li>
+<li>KNL (68-core Xeon-Phi processor)</li>
 </ul>
 <div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>FBPIC has not been optimized for KNL, and thus its performance on these
+<p class="first admonition-title">Warning</p>
+<p class="last">FBPIC has not been optimized for KNL, and thus its performance on these
 nodes is poor. It is strongly recommended to use the Haswell nodes
 when running FBPIC on Cori.</p>
 </div>
@@ -194,17 +194,17 @@ when running FBPIC on Cori.</p>
 <h2>Installation of FBPIC and its dependencies<a class="headerlink" href="#installation-of-fbpic-and-its-dependencies" title="Permalink to this headline">¶</a></h2>
 <p>In order to install FBPIC, follow the steps below:</p>
 <ul>
-<li><p>Set your environment to use the Anaconda distribution:</p>
+<li><p class="first">Set your environment to use the Anaconda distribution:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">module</span> <span class="n">load</span> <span class="n">python</span><span class="o">/</span><span class="mf">2.7</span><span class="o">-</span><span class="n">anaconda</span>
 </pre></div>
 </div>
 </li>
-<li><p>Install the missing dependencies of FBPIC</p>
+<li><p class="first">Install the missing dependencies of FBPIC</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">upgrade</span> <span class="n">numba</span> <span class="n">llvmlite</span> <span class="n">tbb</span> <span class="o">--</span><span class="n">user</span>
 </pre></div>
 </div>
 </li>
-<li><p>Install FBPIC</p>
+<li><p class="first">Install FBPIC</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">fbpic</span> <span class="o">--</span><span class="n">user</span>
 </pre></div>
 </div>

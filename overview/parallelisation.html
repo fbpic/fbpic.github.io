@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Parallelization of FBPIC &mdash; FBPIC 0.13.2 documentation</title>
+  <title>Parallelization of FBPIC &mdash; FBPIC 0.13.3 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.13.2
+                0.13.3
               </div>
             
           
@@ -180,13 +180,13 @@ operations and memory consumption. Therefore, simulations are typically
 box into <strong>multiple sub-domains</strong> (i.e. multiple chunks of space):</p>
 <blockquote>
 <div><ul class="simple">
-<li><p>Each sub-domain can be treated by a <strong>separate</strong> computing device
+<li>Each sub-domain can be treated by a <strong>separate</strong> computing device
 (e.g. a separate multi-core CPU or GPU). These devices exchange
 a minimal amount of information, at the boundary of the sub-domains,
-using the <strong>MPI</strong> protocol (<em>inter-device parallelization</em>).</p></li>
-<li><p><strong>Within</strong> each sub-domain, the multiple cores of a <strong>single</strong> computing
+using the <strong>MPI</strong> protocol (<em>inter-device parallelization</em>).</li>
+<li><strong>Within</strong> each sub-domain, the multiple cores of a <strong>single</strong> computing
 device can work together on the same sub-domain, using their
-<strong>shared memory</strong> (<em>intra-device parallelization</em>).</p></li>
+<strong>shared memory</strong> (<em>intra-device parallelization</em>).</li>
 </ul>
 </div></blockquote>
 <img alt="../_images/two_level_parallelization.png" src="../_images/two_level_parallelization.png" />
@@ -209,15 +209,15 @@ efficiently on a CPU - but each of them has a much higher performance
 than a single GPU thread. For typical simulation sizes and modern hardware,
 FBPIC is generally much faster on GPU than on CPU.</p>
 <div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>When running <strong>on a CPU</strong>, the best performance is typically achieved by
+<p class="first admonition-title">Note</p>
+<p class="last">When running <strong>on a CPU</strong>, the best performance is typically achieved by
 using only a <strong>single CPU socket</strong>, with the number of threads matching
 the number of physical cores per socket. In this case, the user is
 responsible for setting the correct number of threads
 (see <a class="reference internal" href="../how_to_run.html"><span class="doc">How to run the code</span></a>).</p>
 </div>
 <div class="admonition important">
-<p class="admonition-title">Important</p>
+<p class="first admonition-title">Important</p>
 <p>FBPIC simulations are most efficient when using <strong>only the intra-device
 parallelization</strong>, i.e. executing on a <strong>single</strong> GPU or
 a <strong>single</strong> multi-core CPU.</p>
@@ -225,13 +225,13 @@ a <strong>single</strong> multi-core CPU.</p>
 with overheads (see next section). In general, using multiple GPUs/CPUs
 (with inter-device parallelization) is only advantageous if:</p>
 <ul class="simple">
-<li><p>The simulation is so large that each PIC iteration takes <strong>more than
+<li>The simulation is so large that each PIC iteration takes <strong>more than
 a hundred milliseconds</strong>. (In this case, the inter-device overheads
-become negligible.)</p></li>
-<li><p>The simulation is so large that it <strong>does not fit</strong> in the memory
-of a single computing device.</p></li>
+become negligible.)</li>
+<li>The simulation is so large that it <strong>does not fit</strong> in the memory
+of a single computing device.</li>
 </ul>
-<p>Note also that you can still use multiple GPUs/CPUs <strong>without</strong>
+<p class="last">Note also that you can still use multiple GPUs/CPUs <strong>without</strong>
 inter-device parallelization, by running <strong>independent</strong> simulations
 in parallel: see <a class="reference internal" href="../advanced/parameter_scans.html"><span class="doc">Performing parameter scans in parallel</span></a>.</p>
 </div>
@@ -248,32 +248,32 @@ information on the fields and particles at the boundaries.</p>
 ensure that fields and particles propagate correctly from one domain to the other:</p>
 <blockquote>
 <div><ul class="simple">
-<li><p>After each iteration, the updated electromagnetic fields of a local
-domain are copied to the neighboring guard region.</p></li>
-<li><p>Similarly, the charge and current density are added between overlapping
-domains as if particles would reside in both domains simultaneously.</p></li>
-<li><p>Particles are transferred to the neighboring domain in regular time
-intervals if they left the local domain.</p></li>
+<li>After each iteration, the updated electromagnetic fields of a local
+domain are copied to the neighboring guard region.</li>
+<li>Similarly, the charge and current density are added between overlapping
+domains as if particles would reside in both domains simultaneously.</li>
+<li>Particles are transferred to the neighboring domain in regular time
+intervals if they left the local domain.</li>
 </ul>
 </div></blockquote>
 <p>Note that FBPIC implements spatial domain decomposition <strong>only in the
 longitudinal direction</strong> (i.e. the <cite>z</cite> axis).</p>
 <div class="admonition note">
-<p class="admonition-title">Note</p>
+<p class="first admonition-title">Note</p>
 <p>Communication between domains occurs via MPI (Message Passing Interface),
 using the <code class="docutils literal notranslate"><span class="pre">mpi4py</span></code> package.</p>
 <ul class="simple">
-<li><p>When running on GPUs, FBPIC should use <strong>one MPI process per GPU</strong>.</p></li>
-<li><p>When running on CPUs, FBPIC should use <strong>one MPI process per CPU socket</strong>
-(and one thread per physical core in each socket, as mentioned above).</p></li>
+<li>When running on GPUs, FBPIC should use <strong>one MPI process per GPU</strong>.</li>
+<li>When running on CPUs, FBPIC should use <strong>one MPI process per CPU socket</strong>
+(and one thread per physical core in each socket, as mentioned above).</li>
 </ul>
-<p>See the section <a class="reference internal" href="../how_to_run.html"><span class="doc">How to run the code</span></a> to learn how to launch a simulation
+<p class="last">See the section <a class="reference internal" href="../how_to_run.html"><span class="doc">How to run the code</span></a> to learn how to launch a simulation
 with MPI. You can also pass <code class="docutils literal notranslate"><span class="pre">verbose_level=2</span></code> to the <a class="reference internal" href="../api_reference/simulation.html#fbpic.main.Simulation" title="fbpic.main.Simulation"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Simulation</span></code></a>
 object to check which CPU/GPU are used by FBPIC.</p>
 </div>
 <div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>For standard simulation sizes, efficient scaling of the inter-node
+<p class="first admonition-title">Warning</p>
+<p class="last">For standard simulation sizes, efficient scaling of the inter-node
 parallelization is typically limited to a few (~4-16) domains. Using too
 many domains will result in poor performance, as the size of a single domain
 becomes too small and/or the overhead of communication too large. Please
@@ -306,8 +306,8 @@ locality which is required to spatially decompose the simulation grid.
 The required size of the overlapping guard region between the individual
 smaller domains is then governed by the order (accuracy) of the solver.</p>
 <div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>A lower order requires less guard cells between the domains, therefore
+<p class="first admonition-title">Note</p>
+<p class="last">A lower order requires less guard cells between the domains, therefore
 lowering the overhead from MPI communication. However, it will also decrease
 the accuracy of the field solver. Similar to finite-difference solvers this
 leads to a <strong>spurious numerical dispersion</strong> of the electromagnetic waves,
@@ -318,8 +318,8 @@ You can learn more about the finite order spectral solver and how to
 identify NCR in a simulation in <a class="reference external" href="https://aip.scitation.org/doi/abs/10.1063/1.4978569">this article</a>.</p>
 </div>
 <div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Although the finite-order spectral solver guarantees locality when advancing
+<p class="first admonition-title">Warning</p>
+<p class="last">Although the finite-order spectral solver guarantees locality when advancing
 the electromagnetic fields in time, this is not necessarily true for the
 standard current correction (<code class="docutils literal notranslate"><span class="pre">curl-free</span></code>) of the PIC algorithm. However,
 in practice, this will typically have no negative influence on the

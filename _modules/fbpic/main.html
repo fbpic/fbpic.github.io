@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fbpic.main &mdash; FBPIC 0.13.2 documentation</title>
+  <title>fbpic.main &mdash; FBPIC 0.13.3 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.13.2
+                0.13.3
               </div>
             
           
@@ -165,7 +165,7 @@
 <span class="c1"># as it sets the cuda context)</span>
 <span class="kn">from</span> <span class="nn">fbpic.utils.mpi</span> <span class="k">import</span> <span class="n">MPI</span>
 <span class="c1"># Check if threading is available</span>
-<span class="kn">from</span> <span class="nn">.utils.threading</span> <span class="k">import</span> <span class="n">threading_enabled</span>
+<span class="kn">from</span> <span class="nn">.utils.threading</span> <span class="k">import</span> <span class="n">threading_enabled</span><span class="p">,</span> <span class="n">numba_minor_version</span>
 <span class="c1"># Check if CUDA is available, then import CUDA functions</span>
 <span class="kn">from</span> <span class="nn">.utils.cuda</span> <span class="k">import</span> <span class="n">cuda_installed</span><span class="p">,</span> <span class="n">cupy_installed</span>
 <span class="k">if</span> <span class="n">cuda_installed</span><span class="p">:</span>
@@ -365,6 +365,11 @@
                 <span class="s1">&#39;In order to run on GPUs, FBPIC version 0.13 and later </span><span class="se">\n</span><span class="s1">&#39;</span>
                 <span class="s1">&#39;require the `cupy` package (version 6).</span><span class="se">\n</span><span class="s1">&#39;</span>
                 <span class="s1">&#39;See the FBPIC documentation in order to install cupy.&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_cuda</span> <span class="ow">and</span> <span class="n">numba_minor_version</span> <span class="o">&gt;</span> <span class="mi">45</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                <span class="s1">&#39;In order to run on GPU, please install numba version 0.45:</span><span class="se">\n</span><span class="s1">&#39;</span>
+                <span class="s1">&#39;  conda install numba=0.45, or:</span><span class="se">\n</span><span class="s1">&#39;</span>
+                <span class="s1">&#39;  pip install numba==0.45&#39;</span><span class="p">)</span>
         <span class="c1"># CPU multi-threading</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">use_threading</span> <span class="o">=</span> <span class="n">threading_enabled</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_threading</span><span class="p">:</span>
@@ -845,9 +850,10 @@
 <span class="sd">        .. note::</span>
 
 <span class="sd">            For the arguments below, it is recommended to have at least</span>
-<span class="sd">            ``p_nt = 4*Nm``, i.e. the required number of macroparticles</span>
-<span class="sd">            along `theta` (in order for the simulation to be properly resolved)</span>
-<span class="sd">            increases with the number of azimuthal modes used.</span>
+<span class="sd">            ``p_nt = 4*Nm`` (except in the case ``Nm=1``, for which</span>
+<span class="sd">            ``p_nt=1`` is sufficient). In other words, the required number of</span>
+<span class="sd">            macroparticles along `theta` (in order for the simulation to be</span>
+<span class="sd">            properly resolved) increases with the number of azimuthal modes used.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>

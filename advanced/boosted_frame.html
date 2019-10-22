@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Running boosted-frame simulations &mdash; FBPIC 0.13.2 documentation</title>
+  <title>Running boosted-frame simulations &mdash; FBPIC 0.13.3 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                0.13.2
+                0.13.3
               </div>
             
           
@@ -178,11 +178,11 @@ which can speed up certain types of PIC simulations by orders of magnitude.</p>
 how to handle the most important aspects of boosted-frame simulations with FBPIC:</p>
 <blockquote>
 <div><ul class="simple">
-<li><p>Converting the input parameters from the lab frame to the boosted frame</p></li>
-<li><p>Converting simulation results from the boosted frame to the lab frame</p></li>
-<li><p>Avoiding the numerical Cherenkov instability (NCI)</p></li>
-<li><p>Estimating the number of iterations to use in the boosted frame</p></li>
-<li><p>Understanding the transformation and resolution of physical objects in the boosted frame</p></li>
+<li>Converting the input parameters from the lab frame to the boosted frame</li>
+<li>Converting simulation results from the boosted frame to the lab frame</li>
+<li>Avoiding the numerical Cherenkov instability (NCI)</li>
+<li>Estimating the number of iterations to use in the boosted frame</li>
+<li>Understanding the transformation and resolution of physical objects in the boosted frame</li>
 </ul>
 </div></blockquote>
 <div class="section" id="principle-of-the-boosted-frame-technique-for-lwfa">
@@ -196,18 +196,18 @@ The boosted frame is characterized by its Lorentz factor <span class="math notra
 computationally favorable:</p>
 <blockquote>
 <div><ul class="simple">
-<li><dl class="simple">
-<dt>In the boosted frame, the laser is stretched and has a lower frequency.</dt><dd><p>This allows the PIC loop to use a larger time step and cell size (in <span class="math notranslate nohighlight">\(z\)</span>)
+<li><dl class="first docutils">
+<dt>In the boosted frame, the laser is stretched and has a lower frequency.</dt>
+<dd>This allows the PIC loop to use a larger time step and cell size (in <span class="math notranslate nohighlight">\(z\)</span>)
 than in the lab frame, while still resolving the laser.
 (More precisely, <span class="math notranslate nohighlight">\(\Delta z_{boosted} \approx 2\gamma_b \Delta z_{lab}\)</span> and
-<span class="math notranslate nohighlight">\(\Delta t_{boosted} \approx 2\gamma_b \Delta t_{lab}\)</span>)</p>
-</dd>
+<span class="math notranslate nohighlight">\(\Delta t_{boosted} \approx 2\gamma_b \Delta t_{lab}\)</span>)</dd>
 </dl>
 </li>
-<li><dl class="simple">
-<dt>In the boosted frame, the plasma is shorter and moves relativistically towards the laser.</dt><dd><p>This implies that the time needed for the laser to propagate through
-the plasma is shorter than in the lab frame, and that similarly the simulation will be shorter.</p>
-</dd>
+<li><dl class="first docutils">
+<dt>In the boosted frame, the plasma is shorter and moves relativistically towards the laser.</dt>
+<dd>This implies that the time needed for the laser to propagate through
+the plasma is shorter than in the lab frame, and that similarly the simulation will be shorter.</dd>
 </dl>
 </li>
 </ul>
@@ -232,7 +232,7 @@ the boosted frame in FBPIC, values lower than <span class="math notranslate nohi
 see the <a class="reference external" href="https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.98.130405">original paper on this technique</a>
 or read a <a class="reference external" href="https://aip.scitation.org/doi/pdf/10.1063/1.3663841">more detailed description of the speedup</a>.</p>
 <div class="admonition note">
-<p class="admonition-title">Note</p>
+<p class="first admonition-title">Note</p>
 <p>In the boosted frame, the plasma has a <strong>higher density</strong>
 (<span class="math notranslate nohighlight">\(n_{boosted} = \gamma_b n_{lab}\)</span>). Because
 of this, and because of the larger cell size, <strong>each plasma macroparticle typically
@@ -244,12 +244,12 @@ and therefore <strong>less statistics</strong> when evaluating e.g. the beam emi
 In extreme cases (when the number of physical particles per macroparticle is
 comparable to the total number of self-injected particles),
 self-injection may not occur at all in the boosted-frame simulation.</p>
-<p>More generally, for simulations involving injection, it is good practice
+<p class="last">More generally, for simulations involving injection, it is good practice
 to occasionally compare the results with different <span class="math notranslate nohighlight">\(\gamma_b\)</span>,
 in order to make sure that the simulation is properly converged.</p>
 </div>
 <div class="admonition warning">
-<p class="admonition-title">Warning</p>
+<p class="first admonition-title">Warning</p>
 <p>In lab-frame simulations, the ions are essentially motionless and the
 current <span class="math notranslate nohighlight">\(\boldsymbol{j}\)</span> that they produce is negligeable compared to
 that of the electrons. For this reason (and because the PIC algorithm
@@ -258,7 +258,7 @@ fields: see <a class="reference internal" href="../overview/pic_algorithm.html">
 in order to save computational time. (And in fact, the argument
 <code class="docutils literal notranslate"><span class="pre">initialize_ions</span></code> in the <a class="reference internal" href="../api_reference/simulation.html#fbpic.main.Simulation" title="fbpic.main.Simulation"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Simulation</span></code></a> object is set to
 <code class="docutils literal notranslate"><span class="pre">False</span></code> by default.)</p>
-<p>However, this is no longer valid in boosted-frame simulation, because
+<p class="last">However, this is no longer valid in boosted-frame simulation, because
 in this case the ions move with relativistic speed and do produce a
 non-negligible current <span class="math notranslate nohighlight">\(\boldsymbol{j}\)</span>. Therefore, <strong>in boosted-frame
 simulations, the ions are required</strong>. Make sure to include them, either
@@ -296,17 +296,17 @@ in the lab frame. See the documentation of the classes
 <a class="reference internal" href="../api_reference/diagnostics.html#fbpic.openpmd_diag.BackTransformedParticleDiagnostic" title="fbpic.openpmd_diag.BackTransformedParticleDiagnostic"><code class="xref py py-class docutils literal notranslate"><span class="pre">fbpic.openpmd_diag.BackTransformedParticleDiagnostic</span></code></a> in order
 to use this feature.</p>
 <div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>When using the regular classes <a class="reference internal" href="../api_reference/diagnostics.html#fbpic.openpmd_diag.FieldDiagnostic" title="fbpic.openpmd_diag.FieldDiagnostic"><code class="xref py py-class docutils literal notranslate"><span class="pre">fbpic.openpmd_diag.FieldDiagnostic</span></code></a>,
+<p class="first admonition-title">Warning</p>
+<p class="last">When using the regular classes <a class="reference internal" href="../api_reference/diagnostics.html#fbpic.openpmd_diag.FieldDiagnostic" title="fbpic.openpmd_diag.FieldDiagnostic"><code class="xref py py-class docutils literal notranslate"><span class="pre">fbpic.openpmd_diag.FieldDiagnostic</span></code></a>,
 and <a class="reference internal" href="../api_reference/diagnostics.html#fbpic.openpmd_diag.ParticleDiagnostic" title="fbpic.openpmd_diag.ParticleDiagnostic"><code class="xref py py-class docutils literal notranslate"><span class="pre">fbpic.openpmd_diag.ParticleDiagnostic</span></code></a>, the corresponding
 diagnostics will contain the fields and macroparticles in the boosted frame.</p>
 </div>
 <div class="admonition note">
-<p class="admonition-title">Note</p>
+<p class="first admonition-title">Note</p>
 <p>By default, the converted diagnostics (i.e. in the lab frame) are stored in the
 folder <code class="docutils literal notranslate"><span class="pre">lab_diags</span></code>, while the raw diagnostics (i.e. in the boosted frame) are
 stored in the folder <code class="docutils literal notranslate"><span class="pre">diags</span></code>.</p>
-<p>Because of non-simultaneity between Lorentz frames, the files in <code class="docutils literal notranslate"><span class="pre">lab_diags</span></code>
+<p class="last">Because of non-simultaneity between Lorentz frames, the files in <code class="docutils literal notranslate"><span class="pre">lab_diags</span></code>
 will be <strong>filled progressively with data</strong>, from the right-hand side of
 the simulation box to its left-hand side, as the simulation runs.
 If the chosen number of PIC iterations is insufficient, then some of these
@@ -329,14 +329,14 @@ class to a velocity close to:</p>
 \[v_{comoving} = -c \sqrt{1 - \frac{1}{\gamma_b^2}}\]</div>
 <p>(Again, see the example in the section <a class="reference internal" href="../how_to_run.html"><span class="doc">How to run the code</span></a>)</p>
 <div class="admonition warning">
-<p class="admonition-title">Warning</p>
+<p class="first admonition-title">Warning</p>
 <p>The suppression of the NCI is only effective in the case where</p>
 <div class="math notranslate nohighlight">
 \[c\Delta t_{boosted} &lt; \Delta r_{boosted}\]</div>
 <p>or in terms of corresponding lab-frame quantities:</p>
 <div class="math notranslate nohighlight">
 \[c\Delta t_{lab} &lt; \frac{\Delta r_{lab}}{2\gamma_b}\]</div>
-<p>In the case where the above condition is not met, there is, to our
+<p class="last">In the case where the above condition is not met, there is, to our
 knowledge, no existing solution to suppress the NCI. Note that FBPIC does
 not check whether the above condition is met in a given simulation ;
 instead the user is responsible for ensuring this.</p>
@@ -395,8 +395,8 @@ for <span class="math notranslate nohighlight">\(\gamma_b \ll \gamma_{wake}\)</s
 occurs at a <span class="math notranslate nohighlight">\(\gamma_b &lt; \gamma_{wake}\)</span> before the simulation
 slows down again.</p>
 <div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>As highlighted in the above example, there is an optimum
+<p class="first admonition-title">Note</p>
+<p class="last">As highlighted in the above example, there is an optimum
 <span class="math notranslate nohighlight">\(\gamma_b\)</span> for which the interaction time is minimized for a
 given simulation setup. The speed up of a boosted frame
 simulation will reverse for too high values of <span class="math notranslate nohighlight">\(\gamma_b\)</span>.
@@ -440,8 +440,8 @@ As shown in the next figure, this will cause a decrease in
 spatial resolution of the plasma wave, as well as a decrease in temporal
 resolution of the laser oscillations, for <span class="math notranslate nohighlight">\(\gamma_b \gtrsim \gamma_{wake}/2\)</span>.</p>
 <img alt="../_images/boosted_frame_resolution_of_physical_objects_in_fbpic.svg" src="../_images/boosted_frame_resolution_of_physical_objects_in_fbpic.svg" /><div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>As explained in the section above, the spatial and temporal scales of
+<p class="first admonition-title">Warning</p>
+<p class="last">As explained in the section above, the spatial and temporal scales of
 the physical objects in the simulation transform differently in the
 boosted frame. Therefore, the relativistic factor of the boosted frame
 should always be much smaller than the plasma wake velocity.

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Checkpoints and restarts &mdash; FBPIC 0.13.2 documentation</title>
+  <title>Checkpoints and restarts &mdash; FBPIC 0.13.3 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.13.2
+                0.13.3
               </div>
             
           
@@ -184,7 +184,7 @@ without having to run it again from the beginning.</p>
 <h2>Setting checkpoints<a class="headerlink" href="#setting-checkpoints" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="fbpic.openpmd_diag.set_periodic_checkpoint">
-<code class="sig-prename descclassname">fbpic.openpmd_diag.</code><code class="sig-name descname">set_periodic_checkpoint</code><span class="sig-paren">(</span><em class="sig-param">sim</em>, <em class="sig-param">period</em>, <em class="sig-param">checkpoint_dir='./checkpoints'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/openpmd_diag/checkpoint_restart.html#set_periodic_checkpoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.openpmd_diag.set_periodic_checkpoint" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">fbpic.openpmd_diag.</code><code class="descname">set_periodic_checkpoint</code><span class="sig-paren">(</span><em>sim</em>, <em>period</em>, <em>checkpoint_dir='./checkpoints'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/openpmd_diag/checkpoint_restart.html#set_periodic_checkpoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.openpmd_diag.set_periodic_checkpoint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set up periodic checkpoints of the simulation</p>
 <p>The checkpoints are saved in openPMD format, in the specified
 directory, with one subdirectory per process.
@@ -192,17 +192,21 @@ The E and B fields and particle information of each processor is saved.</p>
 <p>NB: Checkpoints are registered in the list <cite>checkpoints</cite> of the Simulation
 object <cite>sim</cite>, and written at the end of the PIC loop (whereas regular
 diagnostics are written at the beginning of the PIC loop).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>sim</strong> (<em>a Simulation object</em>) – The simulation that is to be saved in checkpoints</p></li>
-<li><p><strong>period</strong> (<em>integer</em>) – The number of PIC iteration between each checkpoint.</p></li>
-<li><p><strong>checkpoint_dir</strong> (<em>string</em><em>, </em><em>optional</em>) – The path to the directory in which the checkpoints are stored
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>sim</strong> (<em>a Simulation object</em>) – The simulation that is to be saved in checkpoints</li>
+<li><strong>period</strong> (<em>integer</em>) – The number of PIC iteration between each checkpoint.</li>
+<li><strong>checkpoint_dir</strong> (<em>string</em><em>, </em><em>optional</em>) – The path to the directory in which the checkpoints are stored
 (When running a simulation with several MPI ranks, use the
-same path for all ranks.)</p></li>
+same path for all ranks.)</li>
 </ul>
-</dd>
-</dl>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
@@ -210,14 +214,14 @@ same path for all ranks.)</p></li>
 <h2>Restarting a simulation<a class="headerlink" href="#restarting-a-simulation" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="fbpic.openpmd_diag.restart_from_checkpoint">
-<code class="sig-prename descclassname">fbpic.openpmd_diag.</code><code class="sig-name descname">restart_from_checkpoint</code><span class="sig-paren">(</span><em class="sig-param">sim</em>, <em class="sig-param">iteration=None</em>, <em class="sig-param">checkpoint_dir='./checkpoints'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/openpmd_diag/checkpoint_restart.html#restart_from_checkpoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.openpmd_diag.restart_from_checkpoint" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">fbpic.openpmd_diag.</code><code class="descname">restart_from_checkpoint</code><span class="sig-paren">(</span><em>sim</em>, <em>iteration=None</em>, <em>checkpoint_dir='./checkpoints'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/openpmd_diag/checkpoint_restart.html#restart_from_checkpoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.openpmd_diag.restart_from_checkpoint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fills the Simulation object <cite>sim</cite> with data saved in a checkpoint.</p>
 <p>More precisely, the following data from <cite>sim</cite> is overwritten:</p>
 <ul class="simple">
-<li><p>Current time and iteration number of the simulation</p></li>
-<li><p>Position of the boundaries of the simulation box</p></li>
-<li><p>Values of the field arrays</p></li>
-<li><p>Size and values of the particle arrays</p></li>
+<li>Current time and iteration number of the simulation</li>
+<li>Position of the boundaries of the simulation box</li>
+<li>Values of the field arrays</li>
+<li>Size and values of the particle arrays</li>
 </ul>
 <p>Any other information (e.g. diagnostics of the simulation, presence of a
 moving window, presence of a laser antenna, etc.) need to be set by hand.</p>
@@ -227,18 +231,22 @@ a new input script from scratch.</p>
 <p>NB: This function should always be called <em>before</em> the initialization
 of the moving window, since the moving window infers the position of
 particle injection from the existing particle data.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>sim</strong> (<em>a Simulation object</em>) – The Simulation object into which the checkpoint should be loaded</p></li>
-<li><p><strong>iteration</strong> (<em>integer</em><em>, </em><em>optional</em>) – The iteration number of the checkpoint from which to restart
-If None, the latest checkpoint available will be used.</p></li>
-<li><p><strong>checkpoint_dir</strong> (<em>string</em><em>, </em><em>optional</em>) – The path to the directory that contains the checkpoints to be loaded.
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>sim</strong> (<em>a Simulation object</em>) – The Simulation object into which the checkpoint should be loaded</li>
+<li><strong>iteration</strong> (<em>integer</em><em>, </em><em>optional</em>) – The iteration number of the checkpoint from which to restart
+If None, the latest checkpoint available will be used.</li>
+<li><strong>checkpoint_dir</strong> (<em>string</em><em>, </em><em>optional</em>) – The path to the directory that contains the checkpoints to be loaded.
 (When running a simulation with several MPI ranks, use the
-same path for all ranks.)</p></li>
+same path for all ranks.)</li>
 </ul>
-</dd>
-</dl>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

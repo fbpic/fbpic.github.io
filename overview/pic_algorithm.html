@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>FBPIC algorithm &amp; features &mdash; FBPIC 0.13.2 documentation</title>
+  <title>FBPIC algorithm &amp; features &mdash; FBPIC 0.13.3 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.13.2
+                0.13.3
               </div>
             
           
@@ -183,10 +183,10 @@ on a <strong>grid</strong>. The time evolution of the system is simulated by tak
 time steps</strong>. At each timestep:</p>
 <blockquote>
 <div><ul class="simple">
-<li><p>The values of E and B are gathered from the grid onto the macroparticles.</p></li>
-<li><p>The particles are pushed in time.</p></li>
-<li><p>The charge and current of the macroparticles are deposited onto the grid.</p></li>
-<li><p>The fields E and B are pushed in time.</p></li>
+<li>The values of E and B are gathered from the grid onto the macroparticles.</li>
+<li>The particles are pushed in time.</li>
+<li>The charge and current of the macroparticles are deposited onto the grid.</li>
+<li>The fields E and B are pushed in time.</li>
 </ul>
 </div></blockquote>
 <img alt="../_images/pic_loop.png" src="../_images/pic_loop.png" />
@@ -207,30 +207,30 @@ Cartesian grid</strong>, FBPIC (and other PIC codes such as <a class="reference 
 use <strong>a set of 2D radial grids</strong>, as represented below. Each 2D radial grid represents <strong>an azimuthal mode</strong> (labeled by an integer <span class="math notranslate nohighlight">\(m\)</span>):</p>
 <img alt="../_images/cylindrical_grid.png" src="../_images/cylindrical_grid.png" />
 <ul class="simple">
-<li><p>The grid for <span class="math notranslate nohighlight">\(m=0\)</span> represents the fields that are <strong>independent of</strong>
+<li>The grid for <span class="math notranslate nohighlight">\(m=0\)</span> represents the fields that are <strong>independent of</strong>
 <span class="math notranslate nohighlight">\(\theta\)</span>. (In idealized laser-wakefield acceleration, this is
-for instance the case for the wakefield.)</p></li>
-<li><p>The grid for <span class="math notranslate nohighlight">\(m=1\)</span> represents the fields that <strong>vary
+for instance the case for the wakefield.)</li>
+<li>The grid for <span class="math notranslate nohighlight">\(m=1\)</span> represents the fields that <strong>vary
 proportionally to</strong> <span class="math notranslate nohighlight">\(\cos(\theta)\)</span> and <span class="math notranslate nohighlight">\(\sin(\theta)\)</span>. (In
 idealized laser-wakefield acceleration, this is the case of a
 linearly-polarized laser field, when expressed in cylindrical coordinates,
-as <span class="math notranslate nohighlight">\(E_r\)</span> and <span class="math notranslate nohighlight">\(E_{\theta}\)</span>.)</p></li>
-<li><p>The grids for higher values of <span class="math notranslate nohighlight">\(m\)</span> represent the fields that
+as <span class="math notranslate nohighlight">\(E_r\)</span> and <span class="math notranslate nohighlight">\(E_{\theta}\)</span>.)</li>
+<li>The grids for higher values of <span class="math notranslate nohighlight">\(m\)</span> represent the fields that
 <strong>vary proportionally to</strong> <span class="math notranslate nohighlight">\(\cos(m\theta)\)</span> and
 <span class="math notranslate nohighlight">\(\sin(m\theta)\)</span>. These modes take into account
-further departures from the cylindrical symmetry.</p></li>
+further departures from the cylindrical symmetry.</li>
 </ul>
 <p>For more details on the cylindrical representation with azimuthal
 decomposition, see the <a class="reference external" href="http://www.sciencedirect.com/science/article/pii/S0021999108005950">original paper</a> of the PIC
 code Calder Circ.</p>
 <div class="admonition note">
-<p class="admonition-title">Note</p>
+<p class="first admonition-title">Note</p>
 <p>The user chooses the number of azimuthal modes used in an FBPIC simulation.
 Thus, you should make sure that you choose <strong>enough modes</strong> to resolve the
 physics at stake (e.g. typically 2 modes for idealized laser-wakefield
 acceleration - although non-linear effects such as self-injection
 may sometimes require 3 modes).</p>
-<p>The fact that only a few 2D grids are used (one per azimuthal mode),
+<p class="last">The fact that only a few 2D grids are used (one per azimuthal mode),
 instead of a full 3D grid, implies that the code uses <strong>vastly less memory</strong>,
 and runs <strong>faster by orders of magnitude</strong> compared to a 3D Cartesian code.
 Nonetheless, the computational cost of an FBPIC simulation does of course
@@ -240,24 +240,24 @@ Nonetheless, the computational cost of an FBPIC simulation does of course
 charge and current on each radial grid, and gather the sum of the
 fields from each grid.</p>
 <div class="admonition note">
-<p class="admonition-title">Note</p>
+<p class="first admonition-title">Note</p>
 <p>Due to details of the algorithm, the charge deposition in the
 very first radial cell can be problematic <strong>if</strong> all the particles
 of this cell are <strong>on the axis</strong> instead of being <strong>roughly uniformly distributed</strong>
 over this cell.</p>
-<p>Thus, always make sure that the radial resolution of your simulation is
+<p class="last">Thus, always make sure that the radial resolution of your simulation is
 sufficient for the structures that are near the axis
 (e.g. electron beam) to be at least resolved by a few radial cells,
 so that the macroparticles are roughly uniformly distributed within
 the first cell.</p>
 </div>
 <div class="admonition note">
-<p class="admonition-title">Note</p>
+<p class="first admonition-title">Note</p>
 <p>Because of the cylindrical representation, the macroparticles have
 <strong>different weights</strong> (i.e. they represent a different number of
 physical particles): e.g. macroparticles that were initialized far
 from the axis have a larger weight.</p>
-<p>The diagnostics of an FBPIC simulation output the macroparticles
+<p class="last">The diagnostics of an FBPIC simulation output the macroparticles
 along with their weights (denoted as <cite>w</cite>) ; be sure to take them into account in
 your post-analysis.</p>
 </div>
@@ -276,8 +276,8 @@ algorithm <strong>dispersion-free in all directions</strong>. For more details
 on the algorithm and the artifacts that it avoids, see the <a class="reference external" href="http://www.sciencedirect.com/science/article/pii/S0010465516300224">original article</a>
 of FBPIC (arxiv version <a class="reference external" href="https://arxiv.org/abs/1507.04790">here</a>).</p>
 <div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Thanks to the above algorithm, the field solver in
+<p class="first admonition-title">Note</p>
+<p class="last">Thanks to the above algorithm, the field solver in
 FBPIC has <strong>no Courant limit</strong>, and thus the timestep <span class="math notranslate nohighlight">\(\Delta t\)</span> can be
 chosen freely. In practice, it is common to choose <span class="math notranslate nohighlight">\(\Delta t =
 \Delta z/c\)</span> where <span class="math notranslate nohighlight">\(\Delta z\)</span> in the resolution along <span class="math notranslate nohighlight">\(z\)</span>.</p>
@@ -288,8 +288,8 @@ space. Because of the cylindrical geometry, the spectral
 transformations consist of a <strong>Fourier transform</strong> along <span class="math notranslate nohighlight">\(z\)</span>
 and a <strong>Hankel transform</strong> along <span class="math notranslate nohighlight">\(r\)</span>.</p>
 <div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>While the computational cost of the Fourier transform scales as
+<p class="first admonition-title">Note</p>
+<p class="last">While the computational cost of the Fourier transform scales as
 <span class="math notranslate nohighlight">\(N_z \log(N_z)\)</span>, the cost of the Hankel transform scales as <span class="math notranslate nohighlight">\(N_r^2\)</span>. Thus, be aware that, when
 using a large number of gridpoints along <span class="math notranslate nohighlight">\(r\)</span> (<span class="math notranslate nohighlight">\(N_r\sim 1000\)</span>),
 the Hankel transforms may dominate the computational time.</p>

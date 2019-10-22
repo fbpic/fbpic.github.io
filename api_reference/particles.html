@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>The Particles class &mdash; FBPIC 0.13.2 documentation</title>
+  <title>The Particles class &mdash; FBPIC 0.13.3 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.13.2
+                0.13.3
               </div>
             
           
@@ -172,8 +172,8 @@
 represented by an instance of the <a class="reference internal" href="#fbpic.particles.Particles" title="fbpic.particles.Particles"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Particles</span></code></a> class, and is stored in
 the list <code class="docutils literal notranslate"><span class="pre">Simulation.ptcl</span></code>.</p>
 <div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>It is <strong>not</strong> recommended to initialize a <a class="reference internal" href="#fbpic.particles.Particles" title="fbpic.particles.Particles"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Particles</span></code></a> object directly.
+<p class="first admonition-title">Note</p>
+<p class="last">It is <strong>not</strong> recommended to initialize a <a class="reference internal" href="#fbpic.particles.Particles" title="fbpic.particles.Particles"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Particles</span></code></a> object directly.
 Instead, use the method <a class="reference internal" href="simulation.html#fbpic.main.Simulation.add_new_species" title="fbpic.main.Simulation.add_new_species"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">Simulation.add_new_species</span></code></a>. This will
 append a new instance of <a class="reference internal" href="#fbpic.particles.Particles" title="fbpic.particles.Particles"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Particles</span></code></a> to the list <code class="docutils literal notranslate"><span class="pre">Simulation.ptcl</span></code>.
 This new instance will also be directly returned by the function, so
@@ -181,29 +181,31 @@ that you can use its methods below.</p>
 </div>
 <dl class="class">
 <dt id="fbpic.particles.Particles">
-<em class="property">class </em><code class="sig-prename descclassname">fbpic.particles.</code><code class="sig-name descname">Particles</code><a class="headerlink" href="#fbpic.particles.Particles" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">fbpic.particles.</code><code class="descname">Particles</code><a class="headerlink" href="#fbpic.particles.Particles" title="Permalink to this definition">¶</a></dt>
 <dd><blockquote>
-<div><p>An instance of <cite>Particles</cite> stores a set of macroparticles that have the
+<div>An instance of <cite>Particles</cite> stores a set of macroparticles that have the
 same charge and mass. (Note that for ionizable species, ions in different
 states of ionization - i.e. different levels - are stored in
-the same <cite>Particles</cite> object.)</p>
-</div></blockquote>
+the same <cite>Particles</cite> object.)</div></blockquote>
 <dl class="method">
 <dt id="fbpic.particles.fbpic.particles.Particles.Particles.track">
-<code class="sig-prename descclassname">Particles.</code><code class="sig-name descname">track</code><span class="sig-paren">(</span><em class="sig-param">comm</em><span class="sig-paren">)</span><a class="headerlink" href="#fbpic.particles.fbpic.particles.Particles.Particles.track" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Particles.</code><code class="descname">track</code><span class="sig-paren">(</span><em>comm</em><span class="sig-paren">)</span><a class="headerlink" href="#fbpic.particles.fbpic.particles.Particles.Particles.track" title="Permalink to this definition">¶</a></dt>
 <dd><p>Activate particle tracking for the current species
 (i.e. allocates an array of unique IDs for each macroparticle;
 these IDs are written in the openPMD file)</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>comm</strong> (<em>an fbpic.BoundaryCommunicator object</em>) – Contains information about the number of processors</p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>comm</strong> (<em>an fbpic.BoundaryCommunicator object</em>) – Contains information about the number of processors</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="fbpic.particles.fbpic.particles.Particles.Particles.make_ionizable">
-<code class="sig-prename descclassname">Particles.</code><code class="sig-name descname">make_ionizable</code><span class="sig-paren">(</span><em class="sig-param">element</em>, <em class="sig-param">target_species</em>, <em class="sig-param">level_start=0</em>, <em class="sig-param">level_max=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fbpic.particles.fbpic.particles.Particles.Particles.make_ionizable" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Particles.</code><code class="descname">make_ionizable</code><span class="sig-paren">(</span><em>element</em>, <em>target_species</em>, <em>level_start=0</em>, <em>level_max=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fbpic.particles.fbpic.particles.Particles.Particles.make_ionizable" title="Permalink to this definition">¶</a></dt>
 <dd><p>Make this species ionizable.</p>
 <p>The implemented ionization model is the <strong>ADK model</strong>
 (using the <strong>instantaneous</strong> electric field, i.e. <strong>without</strong> averaging
@@ -213,12 +215,14 @@ over the laser period).</p>
 <p>Note that the implementation in FBPIC evaluates this ionization rate
 <em>in the reference frame of each macroparticle</em>, and is thus valid
 in lab-frame simulations as well as boosted-frame simulation.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>element</strong> (<em>string</em>) – The atomic symbol of the considered ionizable species
-(e.g. ‘He’, ‘N’ ;  do not use ‘Helium’ or ‘Nitrogen’)</p></li>
-<li><p><strong>target_species</strong> (a <cite>Particles</cite> object, or a dictionary of <cite>Particles</cite>) – Stores the electron macroparticles that are created in
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>element</strong> (<em>string</em>) – The atomic symbol of the considered ionizable species
+(e.g. ‘He’, ‘N’ ;  do not use ‘Helium’ or ‘Nitrogen’)</li>
+<li><strong>target_species</strong> (a <cite>Particles</cite> object, or a dictionary of <cite>Particles</cite>) – Stores the electron macroparticles that are created in
 the ionization process. If a single <cite>Particles</cite> object is passed,
 then electrons from all ionization levels are stored into this
 object. If a dictionary is passed, then its keys should be integers
@@ -226,15 +230,17 @@ object. If a dictionary is passed, then its keys should be integers
 at <cite>level_start</cite>), and its values should be <cite>Particles</cite> objects.
 In this case, the electrons from each distinct ionizable level
 will be stored into these separate objects. Note that using
-separate objects will typically require longer computing time.</p></li>
-<li><p><strong>level_start</strong> (<em>int</em>) – The ionization level at which the macroparticles are initially
-(e.g. 0 for initially neutral atoms)</p></li>
-<li><p><strong>level_max</strong> (<em>int</em><em>, </em><em>optional</em>) – If not None, defines the maximum ionization level that
+separate objects will typically require longer computing time.</li>
+<li><strong>level_start</strong> (<em>int</em>) – The ionization level at which the macroparticles are initially
+(e.g. 0 for initially neutral atoms)</li>
+<li><strong>level_max</strong> (<em>int</em><em>, </em><em>optional</em>) – If not None, defines the maximum ionization level that
 macroparticles can reach. Should not exceed the physical
-limit for the chosen element.</p></li>
+limit for the chosen element.</li>
 </ul>
-</dd>
-</dl>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
