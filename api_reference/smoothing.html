@@ -170,32 +170,28 @@
 <h1>Field smoothing<a class="headerlink" href="#field-smoothing" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="fbpic.fields.smoothing.BinomialSmoother">
-<em class="property">class </em><code class="descclassname">fbpic.fields.smoothing.</code><code class="descname">BinomialSmoother</code><span class="sig-paren">(</span><em>n_passes=1</em>, <em>compensator=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/fields/smoothing.html#BinomialSmoother"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.fields.smoothing.BinomialSmoother" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">fbpic.fields.smoothing.</code><code class="sig-name descname">BinomialSmoother</code><span class="sig-paren">(</span><em class="sig-param">n_passes=1</em>, <em class="sig-param">compensator=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/fields/smoothing.html#BinomialSmoother"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.fields.smoothing.BinomialSmoother" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize a binomial smoother</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>n_passes</strong> (<em>int</em><em> or </em><em>dictionary of ints</em>) – Number of passes of binomial smoothing in r and z.
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n_passes</strong> (<em>int</em><em> or </em><em>dictionary of ints</em>) – Number of passes of binomial smoothing in r and z.
 (More passes results in smoother fields)
 If <cite>n_passes</cite> is an integer, than the same number of passes
 are applied in r and z.
 If <cite>n_passes</cite> is a dictionary, it should be of the form
 {‘z’: &lt;int&gt;, ‘r’: &lt;int&gt;} to indicate the number of passes
-in each direction.</li>
-<li><strong>compensator</strong> (<em>bool</em><em>, or </em><em>dictionary of bools</em>) – Whether to apply a compensator in r and z.
+in each direction.</p></li>
+<li><p><strong>compensator</strong> (<em>bool</em><em>, or </em><em>dictionary of bools</em>) – Whether to apply a compensator in r and z.
 (Applying a compensator mitigates the impact of the smoother
 on low and intermediate frequencies)
 If <cite>compensator</cite> is a boolean, than this applies to r and z.
 If <cite>n_passes</cite> is a dictionary, it should be of the form
 {‘z’: &lt;bool&gt;, ‘r’: &lt;bool&gt;} to indicate whether a compensator
-is applied in r and/or in z.</li>
+is applied in r and/or in z.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 </div>

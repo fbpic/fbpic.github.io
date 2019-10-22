@@ -243,19 +243,19 @@ using binary output:</p>
 </div>
 <p>And click <code class="docutils literal notranslate"><span class="pre">File</span> <span class="pre">&gt;</span> <span class="pre">Open</span></code>, in order to select the file <code class="docutils literal notranslate"><span class="pre">gpu.prof</span></code>.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
+<p class="admonition-title">Note</p>
 <p>You do not need to run <strong>snakeviz</strong> or <strong>nvvp</strong> on the same machine on
 which the simulation was run. (In particular, <strong>nvvp</strong> does not need to
 have access to a GPU.) This means for example that, if your simulation
 was run on a remote cluster, you can simply transfer the
 files <strong>cpu.prof</strong> and/or <strong>gpu.prof</strong> to your local computer, and run
 <strong>snakeviz</strong> or <strong>nvvp</strong> locally.</p>
-<p class="last">You can install <strong>nvvp</strong> on your local computer by installing the
+<p>You can install <strong>nvvp</strong> on your local computer by installing the
 <a class="reference external" href="http://developer.nvidia.com/cuda-downloads">cuda toolkit</a>.</p>
 </div>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">When profiling the code with <strong>nvprof</strong>, the profiling data can quickly
+<p class="admonition-title">Note</p>
+<p>When profiling the code with <strong>nvprof</strong>, the profiling data can quickly
 become very large. Therefore we recommend to profile the code only
 on a small number of PIC iterations (&lt;1000).</p>
 </div>
@@ -271,7 +271,7 @@ MPI process.</p>
 <p>One way to create one file per MPI rank is to <strong>modify your FBPIC script</strong>,
 in the following way:</p>
 <ul>
-<li><p class="first">Add the following lines at the beginning of the file:</p>
+<li><p>Add the following lines at the beginning of the file:</p>
 <blockquote>
 <div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">cProfile</span><span class="o">,</span> <span class="nn">sys</span>
 <span class="kn">from</span> <span class="nn">mpi4py.MPI</span> <span class="k">import</span> <span class="n">COMM_WORLD</span> <span class="k">as</span> <span class="n">comm</span>
@@ -279,7 +279,7 @@ in the following way:</p>
 </div>
 </div></blockquote>
 </li>
-<li><p class="first">Replace the line:</p>
+<li><p>Replace the line:</p>
 <blockquote>
 <div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sim</span><span class="o">.</span><span class="n">step</span><span class="p">(</span> <span class="n">N_step</span> <span class="p">)</span>
 </pre></div>
@@ -326,8 +326,8 @@ in the following way:</p>
 your MPI distribution:</p>
 <blockquote>
 <div><ul class="simple">
-<li>For openmpi: <code class="docutils literal notranslate"><span class="pre">OMPI_COMM_WORLD_RANK</span></code></li>
-<li>For mpich: <code class="docutils literal notranslate"><span class="pre">PMI_RANK</span></code></li>
+<li><p>For openmpi: <code class="docutils literal notranslate"><span class="pre">OMPI_COMM_WORLD_RANK</span></code></p></li>
+<li><p>For mpich: <code class="docutils literal notranslate"><span class="pre">PMI_RANK</span></code></p></li>
 </ul>
 </div></blockquote>
 <p>(If you are unsure which name to use, type <code class="docutils literal notranslate"><span class="pre">mpirun</span> <span class="pre">-np</span> <span class="pre">2</span> <span class="pre">printenv</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">RANK</span></code>.)</p>
