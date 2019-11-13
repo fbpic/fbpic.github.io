@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Flattened Gaussian profile &mdash; FBPIC 0.13.3 documentation</title>
+  <title>Flattened Gaussian profile &mdash; FBPIC 0.14.0 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.13.3
+                0.14.0
               </div>
             
           
@@ -184,7 +184,7 @@
 <h1>Flattened Gaussian profile<a class="headerlink" href="#flattened-gaussian-profile" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="fbpic.lpa_utils.laser.FlattenedGaussianLaser">
-<em class="property">class </em><code class="sig-prename descclassname">fbpic.lpa_utils.laser.</code><code class="sig-name descname">FlattenedGaussianLaser</code><span class="sig-paren">(</span><em class="sig-param">a0</em>, <em class="sig-param">w0</em>, <em class="sig-param">tau</em>, <em class="sig-param">z0</em>, <em class="sig-param">N=6</em>, <em class="sig-param">zf=None</em>, <em class="sig-param">theta_pol=0.0</em>, <em class="sig-param">lambda0=8e-07</em>, <em class="sig-param">cep_phase=0.0</em>, <em class="sig-param">propagation_direction=1</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/fbpic/lpa_utils/laser/laser_profiles.html#FlattenedGaussianLaser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.laser.FlattenedGaussianLaser" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">fbpic.lpa_utils.laser.</code><code class="descname">FlattenedGaussianLaser</code><span class="sig-paren">(</span><em>a0</em>, <em>w0</em>, <em>tau</em>, <em>z0</em>, <em>N=6</em>, <em>zf=None</em>, <em>theta_pol=0.0</em>, <em>lambda0=8e-07</em>, <em>cep_phase=0.0</em>, <em>propagation_direction=1</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/fbpic/lpa_utils/laser/laser_profiles.html#FlattenedGaussianLaser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.laser.FlattenedGaussianLaser" title="Permalink to this definition">¶</a></dt>
 <dd><p>Define a linearly-polarized laser such that the transverse intensity
 profile is a flattened Gaussian <strong>far from focus</strong>, and a distribution
 with rings <strong>in the focal plane</strong>. (See <a class="reference external" href="http://doi.org/10.1080/09500349708232927">Santarsiero et al., J.
@@ -199,8 +199,8 @@ Laguerre polynomials <span class="math notranslate nohighlight">\(L^0_n\)</span>
 \exp\left(-\frac{r^2}{(N+1)w_0^2}\right)
 \sum_{n=0}^N c'_n L^0_n\left(\frac{2\,r^2}{(N+1)w_0^2}\right)\\\mathrm{with} \qquad c'_n = \sum_{m=n}^{N}\frac{1}{2^m}\binom{m}{n}\end{aligned}\end{align} \]</div>
 <ul class="simple">
-<li><p>For <span class="math notranslate nohighlight">\(N=0\)</span>, this is a Gaussian profile: <span class="math notranslate nohighlight">\(E\propto\exp\left(-\frac{r^2}{w_0^2}\right)\)</span>.</p></li>
-<li><p>For <span class="math notranslate nohighlight">\(N\rightarrow\infty\)</span>, this is a Jinc profile: <span class="math notranslate nohighlight">\(E\propto \frac{J_1(r/w_0)}{r/w_0}\)</span>.</p></li>
+<li>For <span class="math notranslate nohighlight">\(N=0\)</span>, this is a Gaussian profile: <span class="math notranslate nohighlight">\(E\propto\exp\left(-\frac{r^2}{w_0^2}\right)\)</span>.</li>
+<li>For <span class="math notranslate nohighlight">\(N\rightarrow\infty\)</span>, this is a Jinc profile: <span class="math notranslate nohighlight">\(E\propto \frac{J_1(r/w_0)}{r/w_0}\)</span>.</li>
 </ul>
 <p>The expression <strong>far from focus</strong> is</p>
 <div class="math notranslate nohighlight">
@@ -208,35 +208,39 @@ Laguerre polynomials <span class="math notranslate nohighlight">\(L^0_n\)</span>
 \exp\left(-\frac{(N+1)r^2}{w(z)^2}\right)
 \sum_{n=0}^N \frac{1}{n!}\left(\frac{(N+1)\,r^2}{w(z)^2}\right)^n\\\mathrm{with} \qquad w(z) = \frac{\lambda_0}{\pi w_0}|z-z_{foc}|\end{aligned}\end{align} \]</div>
 <ul class="simple">
-<li><p>For <span class="math notranslate nohighlight">\(N=0\)</span>, this is a Gaussian profile: <span class="math notranslate nohighlight">\(E\propto\exp\left(-\frac{r^2}{w_(z)^2}\right)\)</span>.</p></li>
-<li><p>For <span class="math notranslate nohighlight">\(N\rightarrow\infty\)</span>, this is a flat profile: <span class="math notranslate nohighlight">\(E\propto \Theta(w(z)-r)\)</span>.</p></li>
+<li>For <span class="math notranslate nohighlight">\(N=0\)</span>, this is a Gaussian profile: <span class="math notranslate nohighlight">\(E\propto\exp\left(-\frac{r^2}{w_(z)^2}\right)\)</span>.</li>
+<li>For <span class="math notranslate nohighlight">\(N\rightarrow\infty\)</span>, this is a flat profile: <span class="math notranslate nohighlight">\(E\propto \Theta(w(z)-r)\)</span>.</li>
 </ul>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>a0</strong> (<em>float</em><em> (</em><em>dimensionless</em><em>)</em>) – The peak normalized vector potential at the focal plane.</p></li>
-<li><p><strong>w0</strong> (<em>float</em><em> (</em><em>in meter</em><em>)</em>) – Laser spot size in the focal plane, defined as <span class="math notranslate nohighlight">\(w_0\)</span> in the
-above formula.</p></li>
-<li><p><strong>tau</strong> (<em>float</em><em> (</em><em>in second</em><em>)</em>) – The duration of the laser (in the lab frame)</p></li>
-<li><p><strong>z0</strong> (<em>float</em><em> (</em><em>in meter</em><em>)</em>) – The initial position of the centroid of the laser
-(in the lab frame)</p></li>
-<li><p><strong>N</strong> (<em>int</em>) – Determines the “flatness” of the transverse profile, far from
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>a0</strong> (<em>float</em><em> (</em><em>dimensionless</em><em>)</em>) – The peak normalized vector potential at the focal plane.</li>
+<li><strong>w0</strong> (<em>float</em><em> (</em><em>in meter</em><em>)</em>) – Laser spot size in the focal plane, defined as <span class="math notranslate nohighlight">\(w_0\)</span> in the
+above formula.</li>
+<li><strong>tau</strong> (<em>float</em><em> (</em><em>in second</em><em>)</em>) – The duration of the laser (in the lab frame)</li>
+<li><strong>z0</strong> (<em>float</em><em> (</em><em>in meter</em><em>)</em>) – The initial position of the centroid of the laser
+(in the lab frame)</li>
+<li><strong>N</strong> (<em>int</em>) – Determines the “flatness” of the transverse profile, far from
 focus (see the above formula).
-Default: <code class="docutils literal notranslate"><span class="pre">N=6</span></code> ; somewhat close to an 8th order supergaussian.</p></li>
-<li><p><strong>zf</strong> (<em>float</em><em> (</em><em>in meter</em><em>)</em><em>, </em><em>optional</em>) – The position of the focal plane (in the lab frame).
+Default: <code class="docutils literal notranslate"><span class="pre">N=6</span></code> ; somewhat close to an 8th order supergaussian.</li>
+<li><strong>zf</strong> (<em>float</em><em> (</em><em>in meter</em><em>)</em><em>, </em><em>optional</em>) – The position of the focal plane (in the lab frame).
 If <code class="docutils literal notranslate"><span class="pre">zf</span></code> is not provided, the code assumes that <code class="docutils literal notranslate"><span class="pre">zf=z0</span></code>, i.e.
-that the laser pulse is at the focal plane initially.</p></li>
-<li><p><strong>theta_pol</strong> (<em>float</em><em> (</em><em>in radian</em><em>)</em><em>, </em><em>optional</em>) – The angle of polarization with respect to the x axis.</p></li>
-<li><p><strong>lambda0</strong> (<em>float</em><em> (</em><em>in meter</em><em>)</em><em>, </em><em>optional</em>) – The wavelength of the laser (in the lab frame)
-Default: 0.8 microns (Ti:Sapph laser).</p></li>
-<li><p><strong>cep_phase</strong> (<em>float</em><em> (</em><em>in radian</em><em>)</em><em>, </em><em>optional</em>) – The Carrier Enveloppe Phase (CEP, i.e. the phase of the laser
-oscillation, at the position where the laser enveloppe is maximum)</p></li>
-<li><p><strong>propagation_direction</strong> (<em>int</em><em>, </em><em>optional</em>) – Indicates in which direction the laser propagates.
+that the laser pulse is at the focal plane initially.</li>
+<li><strong>theta_pol</strong> (<em>float</em><em> (</em><em>in radian</em><em>)</em><em>, </em><em>optional</em>) – The angle of polarization with respect to the x axis.</li>
+<li><strong>lambda0</strong> (<em>float</em><em> (</em><em>in meter</em><em>)</em><em>, </em><em>optional</em>) – The wavelength of the laser (in the lab frame)
+Default: 0.8 microns (Ti:Sapph laser).</li>
+<li><strong>cep_phase</strong> (<em>float</em><em> (</em><em>in radian</em><em>)</em><em>, </em><em>optional</em>) – The Carrier Enveloppe Phase (CEP, i.e. the phase of the laser
+oscillation, at the position where the laser enveloppe is maximum)</li>
+<li><strong>propagation_direction</strong> (<em>int</em><em>, </em><em>optional</em>) – Indicates in which direction the laser propagates.
 This should be either 1 (laser propagates towards positive z)
-or -1 (laser propagates towards negative z).</p></li>
+or -1 (laser propagates towards negative z).</li>
 </ul>
-</dd>
-</dl>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fbpic.main &mdash; FBPIC 0.13.3 documentation</title>
+  <title>fbpic.main &mdash; FBPIC 0.14.0 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.13.3
+                0.14.0
               </div>
             
           
@@ -554,6 +554,10 @@
             <span class="c1"># Main PIC iteration</span>
             <span class="c1"># ------------------</span>
 
+            <span class="c1"># Keep field arrays sorted throughout gathering+push</span>
+            <span class="k">for</span> <span class="n">species</span> <span class="ow">in</span> <span class="n">ptcl</span><span class="p">:</span>
+                <span class="n">species</span><span class="o">.</span><span class="n">keep_fields_sorted</span> <span class="o">=</span> <span class="kc">True</span>
+
             <span class="c1"># Gather the fields from the grid at t = n dt</span>
             <span class="k">for</span> <span class="n">species</span> <span class="ow">in</span> <span class="n">ptcl</span><span class="p">:</span>
                 <span class="n">species</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span> <span class="n">fld</span><span class="o">.</span><span class="n">interp</span> <span class="p">)</span>
@@ -585,18 +589,22 @@
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_galilean</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">shift_galilean_boundaries</span><span class="p">(</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">dt</span> <span class="p">)</span>
 
+            <span class="c1"># Handle elementary processes at t = (n + 1/2)dt</span>
+            <span class="c1"># i.e. when the particles&#39; velocity and position are synchronized</span>
+            <span class="c1"># (e.g. ionization, Compton scattering, ...)</span>
+            <span class="k">for</span> <span class="n">species</span> <span class="ow">in</span> <span class="n">ptcl</span><span class="p">:</span>
+                <span class="n">species</span><span class="o">.</span><span class="n">handle_elementary_processes</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">dt</span> <span class="p">)</span>
+
+            <span class="c1"># Fields are not used beyond this point ; no need to keep sorted</span>
+            <span class="k">for</span> <span class="n">species</span> <span class="ow">in</span> <span class="n">ptcl</span><span class="p">:</span>
+                <span class="n">species</span><span class="o">.</span><span class="n">keep_fields_sorted</span> <span class="o">=</span> <span class="kc">False</span>
+
             <span class="c1"># Get the current at t = (n+1/2) dt</span>
             <span class="c1"># (Guard cell exchange done either now or after current correction)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">deposit</span><span class="p">(</span><span class="s1">&#39;J&#39;</span><span class="p">,</span> <span class="n">exchange</span><span class="o">=</span><span class="p">(</span><span class="n">correct_currents</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">))</span>
             <span class="c1"># Perform cross-deposition if needed</span>
             <span class="k">if</span> <span class="n">correct_currents</span> <span class="ow">and</span> <span class="n">fld</span><span class="o">.</span><span class="n">current_correction</span><span class="o">==</span><span class="s1">&#39;cross-deposition&#39;</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">cross_deposit</span><span class="p">(</span> <span class="n">move_positions</span> <span class="p">)</span>
-
-            <span class="c1"># Handle elementary processes at t = (n + 1/2)dt</span>
-            <span class="c1"># i.e. when the particles&#39; velocity and position are synchronized</span>
-            <span class="c1"># (e.g. ionization, Compton scattering, ...)</span>
-            <span class="k">for</span> <span class="n">species</span> <span class="ow">in</span> <span class="n">ptcl</span><span class="p">:</span>
-                <span class="n">species</span><span class="o">.</span><span class="n">handle_elementary_processes</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">dt</span> <span class="p">)</span>
 
             <span class="c1"># Push the particles&#39; positions to t = (n+1) dt</span>
             <span class="k">if</span> <span class="n">move_positions</span><span class="p">:</span>

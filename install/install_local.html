@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Installation on a local computer &mdash; FBPIC 0.13.3 documentation</title>
+  <title>Installation on a local computer &mdash; FBPIC 0.14.0 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.13.3
+                0.14.0
               </div>
             
           
@@ -179,13 +179,13 @@
 Python. If Anaconda is not your default Python distribution, download and install it from <a class="reference external" href="https://www.continuum.io/downloads">here</a>.</p>
 <p><strong>Installation steps</strong>:</p>
 <ul>
-<li><p>Install the dependencies of FBPIC. This can be done in two lines:</p>
+<li><p class="first">Install the dependencies of FBPIC. This can be done in two lines:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">numba</span> <span class="n">scipy</span> <span class="n">h5py</span> <span class="n">mkl</span>
 <span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">mpi4py</span>
 </pre></div>
 </div>
 </li>
-<li><p>Install <code class="docutils literal notranslate"><span class="pre">fbpic</span></code></p>
+<li><p class="first">Install <code class="docutils literal notranslate"><span class="pre">fbpic</span></code></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">fbpic</span>
 </pre></div>
 </div>
@@ -193,7 +193,7 @@ Python. If Anaconda is not your default Python distribution, download and instal
 from the souces, by cloning the <a class="reference external" href="https://github.com/fbpic/fbpic">code from Github</a>, and typing <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">setup.py</span>
 <span class="pre">install</span></code>.</p>
 </li>
-<li><p><strong>Optional:</strong> In order to be able to run the code on a GPU,
+<li><p class="first"><strong>Optional:</strong> In order to be able to run the code on a GPU,
 install the additional package <code class="docutils literal notranslate"><span class="pre">cudatoolkit</span></code> and <code class="docutils literal notranslate"><span class="pre">cupy</span></code> –
 e.g. using CUDA version 10.0:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">cudatoolkit</span><span class="o">=</span><span class="mf">10.0</span>
@@ -201,14 +201,14 @@ e.g. using CUDA version 10.0:</p>
 </pre></div>
 </div>
 <div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>In the above command, you should choose a CUDA version that is <strong>compatible
+<p class="first admonition-title">Warning</p>
+<p class="last">In the above command, you should choose a CUDA version that is <strong>compatible
 with your GPU driver</strong>. You can see the version of your GPU driver by typing
 the command <code class="docutils literal notranslate"><span class="pre">nvidia-smi</span></code>. You can then find the compatible CUDA
 versions using <a class="reference external" href="https://docs.nvidia.com/cuda/cuda-toolkit-release-notes/index.html#major-components__table-cuda-toolkit-driver-versions">this table</a>.</p>
 </div>
 </li>
-<li><p><strong>Optional:</strong> In order to run on a CPU which is <strong>not</strong> an Intel model, you need to install <cite>pyfftw</cite>, in order to replace the MKL FFT:</p>
+<li><p class="first"><strong>Optional:</strong> In order to run on a CPU which is <strong>not</strong> an Intel model, you need to install <cite>pyfftw</cite>, in order to replace the MKL FFT:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">pyfftw</span>
 </pre></div>
 </div>
