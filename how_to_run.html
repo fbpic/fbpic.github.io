@@ -202,20 +202,20 @@ processes (e.g. 4) by running</p>
 </pre></div>
 </div>
 <div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Note that, depending on the size of the simulation, running with
+<p class="first admonition-title">Warning</p>
+<p class="last">Note that, depending on the size of the simulation, running with
 multiple MPI processes is not necessarily faster. In addition,
 MPI simulations require using a finite order (e.g. <code class="docutils literal notranslate"><span class="pre">n_order=32</span></code>)
 for the field solver. Please read the
 documentation on the <a class="reference internal" href="overview/parallelisation.html"><span class="doc">parallelisation of FBPIC</span></a> before using this feature.</p>
 </div>
 <div class="admonition note">
-<p class="admonition-title">Note</p>
+<p class="first admonition-title">Note</p>
 <p>When running on CPU, <strong>multi-threading</strong> is enabled by default, and the
 default number of threads is the number of (virtual) cores on your system.
 You can modify this with environment variables:</p>
 <ul class="simple">
-<li><p>To modify the number of threads (e.g. set it to 8 threads):</p></li>
+<li>To modify the number of threads (e.g. set it to 8 threads):</li>
 </ul>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">export</span> <span class="n">MKL_NUM_THREADS</span><span class="o">=</span><span class="mi">8</span>
 <span class="n">export</span> <span class="n">NUMBA_NUM_THREADS</span><span class="o">=</span><span class="mi">8</span>
@@ -223,7 +223,7 @@ You can modify this with environment variables:</p>
 </pre></div>
 </div>
 <ul class="simple">
-<li><p>To disable multi-threading altogether:</p></li>
+<li>To disable multi-threading altogether:</li>
 </ul>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">export</span> <span class="n">FBPIC_DISABLE_THREADING</span><span class="o">=</span><span class="mi">1</span>
 <span class="n">export</span> <span class="n">MKL_NUM_THREADS</span><span class="o">=</span><span class="mi">1</span>
@@ -236,13 +236,13 @@ during installation. It is therefore sometimes required to set
 <code class="docutils literal notranslate"><span class="pre">OMP_NUM_THREADS</span></code> in addition to (or instead of) <code class="docutils literal notranslate"><span class="pre">MKL_NUM_THREADS</span></code>.</p>
 <p>When running in a Jupyter notebook, environment variables can be set by
 executing the following command at the beginning of the notebook:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
 <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;MKL_NUM_THREADS&#39;</span><span class="p">]</span><span class="o">=</span><span class="s1">&#39;1&#39;</span>
 </pre></div>
 </div>
 </div>
 <div class="admonition note">
-<p class="admonition-title">Note</p>
+<p class="first admonition-title">Note</p>
 <p>On systems with more than one CPU socket per node, multi-threading
 can become inefficient if the threads are distributed across sockets.
 It can be advantageous to use one MPI process per socket and to limit the
@@ -251,15 +251,15 @@ it can be necessary to explicitly bind all threads of an MPI process to the
 same socket.</p>
 <p>On a machine with 2 sockets and 12 physical cores per socket, the following
 commands spawn 2 MPI processes each with 12 threads bound to a single socket:</p>
-<ul>
-<li><p>Using the SLURM workload manager:</p>
+<ul class="last">
+<li><p class="first">Using the SLURM workload manager:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">export</span> <span class="n">MKL_NUM_THREADS</span><span class="o">=</span><span class="mi">12</span>
 <span class="n">export</span> <span class="n">NUMBA_NUM_THREADS</span><span class="o">=</span><span class="mi">12</span>
 <span class="n">srun</span> <span class="o">-</span><span class="n">n</span> <span class="mi">2</span> <span class="o">--</span><span class="n">cpu_bind</span><span class="o">=</span><span class="n">socket</span> <span class="n">python</span> <span class="n">fbpic_script</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
 </li>
-<li><p>Using the <code class="docutils literal notranslate"><span class="pre">mpirun</span></code> executable:</p>
+<li><p class="first">Using the <code class="docutils literal notranslate"><span class="pre">mpirun</span></code> executable:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">export</span> <span class="n">MKL_NUM_THREADS</span><span class="o">=</span><span class="mi">12</span>
 <span class="n">export</span> <span class="n">NUMBA_NUM_THREADS</span><span class="o">=</span><span class="mi">12</span>
 <span class="n">mpirun</span> <span class="o">-</span><span class="n">n</span> <span class="mi">2</span> <span class="o">--</span><span class="n">bind</span><span class="o">-</span><span class="n">to</span> <span class="n">socket</span> <span class="n">python</span> <span class="n">fbpic_script</span><span class="o">.</span><span class="n">py</span>
@@ -269,7 +269,7 @@ commands spawn 2 MPI processes each with 12 threads bound to a single socket:</p
 </ul>
 </div>
 <div class="admonition note">
-<p class="admonition-title">Note</p>
+<p class="first admonition-title">Note</p>
 <p>When running on GPU with MPI domain decomposition, it is possible to enable
 the CUDA GPUDirect technology. GPUDirect enables direct communication of
 CUDA device arrays between GPUs over MPI without explicitly copying the data
@@ -278,7 +278,7 @@ feature requires a CUDA-aware MPI implementation that supports GPUDirect,
 it is disabled by default and should be used with care.</p>
 <p>To activate this feature, the user needs to set the following
 environment variable:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">export</span> <span class="n">FBPIC_ENABLE_GPUDIRECT</span><span class="o">=</span><span class="mi">1</span>
+<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">export</span> <span class="n">FBPIC_ENABLE_GPUDIRECT</span><span class="o">=</span><span class="mi">1</span>
 </pre></div>
 </div>
 </div>

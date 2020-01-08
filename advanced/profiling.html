@@ -216,15 +216,15 @@ a graphical user interface).</p>
 <p>Two profiling tools exists for GPU:</p>
 <blockquote>
 <div><ul class="simple">
-<li><p><a class="reference external" href="http://docs.nvidia.com/cuda/profiler-users-guide/index.html#nvprof-overview">nvprof</a></p></li>
-<li><p><a class="reference external" href="https://docs.nvidia.com/nsight-systems/">Nsight Systems</a> (which can be installed from <a class="reference external" href="https://developer.nvidia.com/gameworksdownload#?dn=nsight-systems-2019-5">this page</a>)</p></li>
+<li><a class="reference external" href="http://docs.nvidia.com/cuda/profiler-users-guide/index.html#nvprof-overview">nvprof</a></li>
+<li><a class="reference external" href="https://docs.nvidia.com/nsight-systems/">Nsight Systems</a> (which can be installed from <a class="reference external" href="https://developer.nvidia.com/gameworksdownload#?dn=nsight-systems-2019-5">this page</a>)</li>
 </ul>
 </div></blockquote>
 <p>Instructions here are given for both tools.</p>
 <div class="section" id="id1">
 <h3>Getting the results in a simple text file<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <ul>
-<li><p>For <strong>nvprof</strong>: First run the code with <code class="docutils literal notranslate"><span class="pre">nvprof</span></code></p>
+<li><p class="first">For <strong>nvprof</strong>: First run the code with <code class="docutils literal notranslate"><span class="pre">nvprof</span></code></p>
 <blockquote>
 <div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">nvprof</span> <span class="o">--</span><span class="n">log</span><span class="o">-</span><span class="n">file</span> <span class="n">gpu</span><span class="o">.</span><span class="n">log</span> <span class="n">python</span> <span class="n">fbpic_script</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
@@ -232,7 +232,7 @@ a graphical user interface).</p>
 <p>and then open the file <code class="docutils literal notranslate"><span class="pre">gpu.log</span></code> with a standard text editor.</p>
 </div></blockquote>
 </li>
-<li><p>For <strong>Nsight Systems</strong>: Run the code with <code class="docutils literal notranslate"><span class="pre">nsys</span> <span class="pre">profile</span></code></p>
+<li><p class="first">For <strong>Nsight Systems</strong>: Run the code with <code class="docutils literal notranslate"><span class="pre">nsys</span> <span class="pre">profile</span></code></p>
 <blockquote>
 <div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">nsys</span> <span class="n">profile</span> <span class="o">--</span><span class="n">stats</span><span class="o">=</span><span class="n">true</span> <span class="n">python</span> <span class="n">fbpic_script</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
@@ -242,10 +242,10 @@ a graphical user interface).</p>
 </li>
 </ul>
 <div class="admonition note">
-<p class="admonition-title">Note</p>
+<p class="first admonition-title">Note</p>
 <p>In order to simultaneously profile the device-side (i.e. GPU-side)
 and host-side (i.e. CPU-side) code, you can use:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">nvprof</span> <span class="o">--</span><span class="n">log</span><span class="o">-</span><span class="n">file</span> <span class="n">gpu</span><span class="o">.</span><span class="n">log</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">cProfile</span> <span class="o">-</span><span class="n">s</span> <span class="n">time</span> <span class="n">fbpic_script</span><span class="o">.</span><span class="n">py</span> <span class="o">&gt;</span> <span class="n">cpu</span><span class="o">.</span><span class="n">log</span>
+<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">nvprof</span> <span class="o">--</span><span class="n">log</span><span class="o">-</span><span class="n">file</span> <span class="n">gpu</span><span class="o">.</span><span class="n">log</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">cProfile</span> <span class="o">-</span><span class="n">s</span> <span class="n">time</span> <span class="n">fbpic_script</span><span class="o">.</span><span class="n">py</span> <span class="o">&gt;</span> <span class="n">cpu</span><span class="o">.</span><span class="n">log</span>
 </pre></div>
 </div>
 </div>
@@ -253,7 +253,7 @@ and host-side (i.e. CPU-side) code, you can use:</p>
 <div class="section" id="id2">
 <h3>Using a visual profiler<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
 <ul>
-<li><p>For <strong>nvprof</strong>: First run the code with <code class="docutils literal notranslate"><span class="pre">nvprof</span></code></p>
+<li><p class="first">For <strong>nvprof</strong>: First run the code with <code class="docutils literal notranslate"><span class="pre">nvprof</span></code></p>
 <blockquote>
 <div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">nvprof</span> <span class="o">-</span><span class="n">o</span> <span class="n">gpu</span><span class="o">.</span><span class="n">prof</span> <span class="n">python</span> <span class="n">fbpic_script</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
@@ -266,7 +266,7 @@ and host-side (i.e. CPU-side) code, you can use:</p>
 <p>And click <code class="docutils literal notranslate"><span class="pre">File</span> <span class="pre">&gt;</span> <span class="pre">Open</span></code>, in order to select the file <code class="docutils literal notranslate"><span class="pre">gpu.prof</span></code>.</p>
 </div></blockquote>
 </li>
-<li><p>For <strong>Nsight System</strong>: First run the code with <code class="docutils literal notranslate"><span class="pre">nsys</span> <span class="pre">profile</span></code></p>
+<li><p class="first">For <strong>Nsight System</strong>: First run the code with <code class="docutils literal notranslate"><span class="pre">nsys</span> <span class="pre">profile</span></code></p>
 <blockquote>
 <div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">nsys</span> <span class="n">profile</span> <span class="n">python</span> <span class="n">fbpic_script</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
@@ -281,19 +281,19 @@ and open the file that ends in <code class="docutils literal notranslate"><span 
 </li>
 </ul>
 <div class="admonition note">
-<p class="admonition-title">Note</p>
+<p class="first admonition-title">Note</p>
 <p>You do not need to run <strong>snakeviz</strong> or <strong>nvvp</strong>/<strong>nsight-sys</strong> on the same machine on
 which the simulation was run. (In particular, <strong>nvvp</strong>/<strong>nsight-sys</strong> does not need to
 have access to a GPU.) This means for example that, if your simulation
 was run on a remote cluster, you can simply transfer the
 files <strong>cpu.prof</strong> and/or <strong>gpu.prof</strong> to your local computer, and run
 <strong>snakeviz</strong> or <strong>nvvp</strong> locally.</p>
-<p>You can install <strong>nvvp</strong> on your local computer by installing the
+<p class="last">You can install <strong>nvvp</strong> on your local computer by installing the
 <a class="reference external" href="http://developer.nvidia.com/cuda-downloads">cuda toolkit</a>.</p>
 </div>
 <div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>When profiling the code with <strong>nvprof</strong> or <strong>nsys</strong>, the profiling data can
+<p class="first admonition-title">Note</p>
+<p class="last">When profiling the code with <strong>nvprof</strong> or <strong>nsys</strong>, the profiling data can
 quickly become very large. Therefore we recommend to profile the code only
 on a small number of PIC iterations (&lt;1000).</p>
 </div>
@@ -309,7 +309,7 @@ MPI process.</p>
 <p>One way to create one file per MPI rank is to <strong>modify your FBPIC script</strong>,
 in the following way:</p>
 <ul>
-<li><p>Add the following lines at the beginning of the file:</p>
+<li><p class="first">Add the following lines at the beginning of the file:</p>
 <blockquote>
 <div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">cProfile</span><span class="o">,</span> <span class="nn">sys</span>
 <span class="kn">from</span> <span class="nn">mpi4py.MPI</span> <span class="kn">import</span> <span class="n">COMM_WORLD</span> <span class="k">as</span> <span class="n">comm</span>
@@ -317,7 +317,7 @@ in the following way:</p>
 </div>
 </div></blockquote>
 </li>
-<li><p>Replace the line:</p>
+<li><p class="first">Replace the line:</p>
 <blockquote>
 <div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sim</span><span class="o">.</span><span class="n">step</span><span class="p">(</span> <span class="n">N_step</span> <span class="p">)</span>
 </pre></div>
@@ -364,8 +364,8 @@ in the following way:</p>
 your MPI distribution:</p>
 <blockquote>
 <div><ul class="simple">
-<li><p>For openmpi: <code class="docutils literal notranslate"><span class="pre">OMPI_COMM_WORLD_RANK</span></code></p></li>
-<li><p>For mpich: <code class="docutils literal notranslate"><span class="pre">PMI_RANK</span></code></p></li>
+<li>For openmpi: <code class="docutils literal notranslate"><span class="pre">OMPI_COMM_WORLD_RANK</span></code></li>
+<li>For mpich: <code class="docutils literal notranslate"><span class="pre">PMI_RANK</span></code></li>
 </ul>
 </div></blockquote>
 <p>(If you are unsure which name to use, type <code class="docutils literal notranslate"><span class="pre">mpirun</span> <span class="pre">-np</span> <span class="pre">2</span> <span class="pre">printenv</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">RANK</span></code>.)</p>
