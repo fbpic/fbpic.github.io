@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Laser-wakefield acceleration with ionization &mdash; FBPIC 0.14.0 documentation</title>
+  <title>Laser-wakefield acceleration with ionization &mdash; FBPIC 0.15.0 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.14.0
+                0.15.0
               </div>
             
           
@@ -193,7 +193,7 @@
 <span class="c1"># -------</span>
 <span class="c1"># Imports</span>
 <span class="c1"># -------</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">scipy.constants</span> <span class="kn">import</span> <span class="n">c</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">m_e</span><span class="p">,</span> <span class="n">m_p</span>
 <span class="c1"># Import the relevant structures from fbpic</span>
 <span class="kn">from</span> <span class="nn">fbpic.main</span> <span class="kn">import</span> <span class="n">Simulation</span>
@@ -207,7 +207,7 @@
 <span class="c1"># ----------</span>
 
 <span class="c1"># Whether to use the GPU</span>
-<span class="n">use_cuda</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="n">use_cuda</span> <span class="o">=</span> <span class="kc">True</span>
 
 <span class="c1"># Order of the stencil for z derivatives in the Maxwell solver.</span>
 <span class="c1"># Use -1 for infinite order, i.e. for exact dispersion relation in</span>
@@ -251,10 +251,10 @@
 
 <span class="c1"># The diagnostics and the checkpoints/restarts</span>
 <span class="n">diag_period</span> <span class="o">=</span> <span class="mi">50</span>         <span class="c1"># Period of the diagnostics in number of timesteps</span>
-<span class="n">save_checkpoints</span> <span class="o">=</span> <span class="bp">False</span> <span class="c1"># Whether to write checkpoint files</span>
+<span class="n">save_checkpoints</span> <span class="o">=</span> <span class="kc">False</span> <span class="c1"># Whether to write checkpoint files</span>
 <span class="n">checkpoint_period</span> <span class="o">=</span> <span class="mi">100</span>  <span class="c1"># Period for writing the checkpoints</span>
-<span class="n">use_restart</span> <span class="o">=</span> <span class="bp">False</span>      <span class="c1"># Whether to restart from a previous checkpoint</span>
-<span class="n">track_electrons</span> <span class="o">=</span> <span class="bp">False</span>  <span class="c1"># Whether to track and write particle ids</span>
+<span class="n">use_restart</span> <span class="o">=</span> <span class="kc">False</span>      <span class="c1"># Whether to restart from a previous checkpoint</span>
+<span class="n">track_electrons</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># Whether to track and write particle ids</span>
 
 <span class="c1"># The density profile</span>
 <span class="n">ramp_length</span> <span class="o">=</span> <span class="mf">20.e-6</span>
@@ -282,7 +282,9 @@
 
     <span class="c1"># Initialize the simulation object</span>
     <span class="n">sim</span> <span class="o">=</span> <span class="n">Simulation</span><span class="p">(</span> <span class="n">Nz</span><span class="p">,</span> <span class="n">zmax</span><span class="p">,</span> <span class="n">Nr</span><span class="p">,</span> <span class="n">rmax</span><span class="p">,</span> <span class="n">Nm</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">zmin</span><span class="o">=</span><span class="n">zmin</span><span class="p">,</span>
-        <span class="n">boundaries</span><span class="o">=</span><span class="s1">&#39;open&#39;</span><span class="p">,</span> <span class="n">n_order</span><span class="o">=</span><span class="n">n_order</span><span class="p">,</span> <span class="n">use_cuda</span><span class="o">=</span><span class="n">use_cuda</span> <span class="p">)</span>
+         <span class="n">n_order</span><span class="o">=</span><span class="n">n_order</span><span class="p">,</span> <span class="n">use_cuda</span><span class="o">=</span><span class="n">use_cuda</span><span class="p">,</span>
+         <span class="n">boundaries</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;z&#39;</span><span class="p">:</span><span class="s1">&#39;open&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">:</span><span class="s1">&#39;reflective&#39;</span><span class="p">})</span>
+         <span class="c1"># &#39;r&#39;: &#39;open&#39; can also be used, but is more computationally expensive</span>
 
     <span class="c1"># Add the Helium ions (pre-ionized up to level 1),</span>
     <span class="c1"># the Nitrogen ions (pre-ionized up to level 5)</span>
@@ -309,7 +311,7 @@
     <span class="c1"># Add a laser to the fields of the simulation</span>
     <span class="n">add_laser</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">a0</span><span class="p">,</span> <span class="n">w0</span><span class="p">,</span> <span class="n">ctau</span><span class="p">,</span> <span class="n">z0</span><span class="p">,</span> <span class="n">zf</span><span class="o">=</span><span class="n">z_foc</span> <span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">use_restart</span> <span class="ow">is</span> <span class="bp">False</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">use_restart</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
         <span class="c1"># Track electrons if required (species 0 correspond to the electrons)</span>
         <span class="k">if</span> <span class="n">track_electrons</span><span class="p">:</span>
             <span class="n">elec</span><span class="o">.</span><span class="n">track</span><span class="p">(</span> <span class="n">sim</span><span class="o">.</span><span class="n">comm</span> <span class="p">)</span>
@@ -341,7 +343,7 @@
 
     <span class="c1">### Run the simulation</span>
     <span class="n">sim</span><span class="o">.</span><span class="n">step</span><span class="p">(</span> <span class="n">N_step</span> <span class="p">)</span>
-    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>

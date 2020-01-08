@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fbpic.main &mdash; FBPIC 0.14.0 documentation</title>
+  <title>fbpic.main &mdash; FBPIC 0.15.0 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.14.0
+                0.15.0
               </div>
             
           
@@ -163,13 +163,13 @@
 <span class="c1"># When cuda is available, select one GPU per mpi process</span>
 <span class="c1"># (This needs to be done before the other imports,</span>
 <span class="c1"># as it sets the cuda context)</span>
-<span class="kn">from</span> <span class="nn">fbpic.utils.mpi</span> <span class="k">import</span> <span class="n">MPI</span>
+<span class="kn">from</span> <span class="nn">fbpic.utils.mpi</span> <span class="kn">import</span> <span class="n">MPI</span>
 <span class="c1"># Check if threading is available</span>
-<span class="kn">from</span> <span class="nn">.utils.threading</span> <span class="k">import</span> <span class="n">threading_enabled</span><span class="p">,</span> <span class="n">numba_minor_version</span>
+<span class="kn">from</span> <span class="nn">.utils.threading</span> <span class="kn">import</span> <span class="n">threading_enabled</span><span class="p">,</span> <span class="n">numba_minor_version</span>
 <span class="c1"># Check if CUDA is available, then import CUDA functions</span>
-<span class="kn">from</span> <span class="nn">.utils.cuda</span> <span class="k">import</span> <span class="n">cuda_installed</span><span class="p">,</span> <span class="n">cupy_installed</span>
+<span class="kn">from</span> <span class="nn">.utils.cuda</span> <span class="kn">import</span> <span class="n">cuda_installed</span><span class="p">,</span> <span class="n">cupy_installed</span><span class="p">,</span> <span class="n">cupy_major_version</span>
 <span class="k">if</span> <span class="n">cuda_installed</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">.utils.cuda</span> <span class="k">import</span> <span class="n">send_data_to_gpu</span><span class="p">,</span> \
+    <span class="kn">from</span> <span class="nn">.utils.cuda</span> <span class="kn">import</span> <span class="n">send_data_to_gpu</span><span class="p">,</span> \
                 <span class="n">receive_data_from_gpu</span><span class="p">,</span> <span class="n">mpi_select_gpus</span>
     <span class="n">mpi_select_gpus</span><span class="p">(</span> <span class="n">MPI</span> <span class="p">)</span>
 
@@ -177,12 +177,12 @@
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">import</span> <span class="nn">numba</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">scipy.constants</span> <span class="k">import</span> <span class="n">m_e</span><span class="p">,</span> <span class="n">m_p</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">c</span>
-<span class="kn">from</span> <span class="nn">.utils.printing</span> <span class="k">import</span> <span class="n">ProgressBar</span><span class="p">,</span> <span class="n">print_simulation_setup</span>
-<span class="kn">from</span> <span class="nn">.particles</span> <span class="k">import</span> <span class="n">Particles</span>
-<span class="kn">from</span> <span class="nn">.lpa_utils.boosted_frame</span> <span class="k">import</span> <span class="n">BoostConverter</span>
-<span class="kn">from</span> <span class="nn">.fields</span> <span class="k">import</span> <span class="n">Fields</span>
-<span class="kn">from</span> <span class="nn">.boundaries</span> <span class="k">import</span> <span class="n">BoundaryCommunicator</span><span class="p">,</span> <span class="n">MovingWindow</span>
+<span class="kn">from</span> <span class="nn">scipy.constants</span> <span class="kn">import</span> <span class="n">m_e</span><span class="p">,</span> <span class="n">m_p</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">c</span>
+<span class="kn">from</span> <span class="nn">.utils.printing</span> <span class="kn">import</span> <span class="n">ProgressBar</span><span class="p">,</span> <span class="n">print_simulation_setup</span>
+<span class="kn">from</span> <span class="nn">.particles</span> <span class="kn">import</span> <span class="n">Particles</span>
+<span class="kn">from</span> <span class="nn">.lpa_utils.boosted_frame</span> <span class="kn">import</span> <span class="n">BoostConverter</span>
+<span class="kn">from</span> <span class="nn">.fields</span> <span class="kn">import</span> <span class="n">Fields</span>
+<span class="kn">from</span> <span class="nn">.boundaries</span> <span class="kn">import</span> <span class="n">BoundaryCommunicator</span><span class="p">,</span> <span class="n">MovingWindow</span>
 
 <div class="viewcode-block" id="Simulation"><a class="viewcode-back" href="../../api_reference/simulation.html#fbpic.main.Simulation">[docs]</a><span class="k">class</span> <span class="nc">Simulation</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -197,14 +197,16 @@
 <span class="sd">    - `comm`, a `BoundaryCommunicator`, which contains the MPI decomposition</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Nz</span><span class="p">,</span> <span class="n">zmax</span><span class="p">,</span> <span class="n">Nr</span><span class="p">,</span> <span class="n">rmax</span><span class="p">,</span> <span class="n">Nm</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Nz</span><span class="p">,</span> <span class="n">zmax</span><span class="p">,</span> <span class="n">Nr</span><span class="p">,</span> <span class="n">rmax</span><span class="p">,</span> <span class="n">Nm</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span>
                  <span class="n">p_zmin</span><span class="o">=-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="n">p_zmax</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="n">p_rmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">p_rmax</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>
                  <span class="n">p_nz</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">p_nr</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">p_nt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_e</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">zmin</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
                  <span class="n">n_order</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">dens_func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filter_currents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                  <span class="n">v_comoving</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">use_galilean</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                 <span class="n">initialize_ions</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">use_cuda</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                 <span class="n">n_guard</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_damp</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">exchange_period</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">current_correction</span><span class="o">=</span><span class="s1">&#39;curl-free&#39;</span><span class="p">,</span> <span class="n">boundaries</span><span class="o">=</span><span class="s1">&#39;periodic&#39;</span><span class="p">,</span>
+                 <span class="n">initialize_ions</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">use_cuda</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">n_guard</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">n_damp</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;z&#39;</span><span class="p">:</span><span class="mi">64</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">:</span><span class="mi">32</span><span class="p">},</span>
+                 <span class="n">exchange_period</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">current_correction</span><span class="o">=</span><span class="s1">&#39;curl-free&#39;</span><span class="p">,</span>
+                 <span class="n">boundaries</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;z&#39;</span><span class="p">:</span><span class="s1">&#39;periodic&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">:</span><span class="s1">&#39;reflective&#39;</span><span class="p">},</span>
                  <span class="n">gamma_boost</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">use_all_mpi_ranks</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                  <span class="n">particle_shape</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">verbose_level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                  <span class="n">smoother</span><span class="o">=</span><span class="kc">None</span> <span class="p">):</span>
@@ -293,14 +295,16 @@
 <span class="sd">            automatically (approx 2*n_order). If no MPI is used and</span>
 <span class="sd">            in the case of open boundaries with an infinite order stencil,</span>
 <span class="sd">            n_guard defaults to 64, if not set otherwise.</span>
-<span class="sd">        n_damp : int, optional</span>
-<span class="sd">            Number of damping guard cells at the left and right of a</span>
-<span class="sd">            simulation box if a moving window is attached. The guard</span>
-<span class="sd">            region at these areas (left / right of moving window) is</span>
-<span class="sd">            extended by n_damp in order to smoothly damp the fields such</span>
-<span class="sd">            that they do not wrap around. Additionally, this region is</span>
-<span class="sd">            extended by an injection area of size n_guard/2 automatically.</span>
-<span class="sd">            (Defaults to 64)</span>
+<span class="sd">        n_damp: dict, optional</span>
+<span class="sd">            A dictionary with &#39;z&#39; and &#39;r&#39; as keys, and integers as values.</span>
+<span class="sd">            The integers represent the number of damping cells in the</span>
+<span class="sd">            longitudinal (z) and transverse (r) directions, respectively.</span>
+<span class="sd">            The damping cells in z are only used if `boundaries[&#39;z&#39;]` is</span>
+<span class="sd">            `&#39;open&#39;`, and are added at the left and right edge of the</span>
+<span class="sd">            simulation domain. The damping cells in r are used only if</span>
+<span class="sd">            `boundaries[&#39;r&#39;]` is `&#39;open&#39;`, and are added at upper</span>
+<span class="sd">            radial boundary (at `rmax`).</span>
+
 <span class="sd">        exchange_period: int, optional</span>
 <span class="sd">            Number of iterations before which the particles are exchanged.</span>
 <span class="sd">            If set to None, the maximum exchange period is calculated</span>
@@ -309,10 +313,16 @@
 <span class="sd">            (n_guard/2 - particle_shape order) cells. (Setting exchange_period</span>
 <span class="sd">            to small values can substantially affect the performance)</span>
 
-<span class="sd">        boundaries: string, optional</span>
-<span class="sd">            Indicates how to exchange the fields at the left and right</span>
-<span class="sd">            boundaries of the global simulation box.</span>
-<span class="sd">            (Either &#39;periodic&#39; or &#39;open&#39;)</span>
+<span class="sd">        boundaries: dict, optional</span>
+<span class="sd">            A dictionary with &#39;z&#39; and &#39;r&#39; as keys, and strings as values.</span>
+<span class="sd">            This specifies the field boundary in the longitudinal (z) and</span>
+<span class="sd">            transverse (r) direction respectively:</span>
+<span class="sd">              - `boundaries[&#39;z&#39;]` can be either `&#39;periodic&#39;` or `&#39;open&#39;`</span>
+<span class="sd">                (for field-absorbing boundary).</span>
+<span class="sd">              - `boundaries[&#39;r&#39;]` can be either `&#39;reflective&#39;` or `&#39;open&#39;`</span>
+<span class="sd">                (for field-absorbing boundary). For `&#39;open&#39;`, this adds</span>
+<span class="sd">                Perfectly-Matched-Layers in the radial direction ; note that</span>
+<span class="sd">                the computation is significantly more costly in this case.</span>
 
 <span class="sd">        current_correction: string, optional</span>
 <span class="sd">            The method used in order to ensure that the continuity equation</span>
@@ -360,16 +370,28 @@
                 <span class="s1">&#39;Cuda not available for the simulation.</span><span class="se">\n</span><span class="s1">&#39;</span>
                 <span class="s1">&#39;Performing the simulation on CPU.&#39;</span> <span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">use_cuda</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_cuda</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">cupy_installed</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-                <span class="s1">&#39;In order to run on GPUs, FBPIC version 0.13 and later </span><span class="se">\n</span><span class="s1">&#39;</span>
-                <span class="s1">&#39;require the `cupy` package (version 6).</span><span class="se">\n</span><span class="s1">&#39;</span>
-                <span class="s1">&#39;See the FBPIC documentation in order to install cupy.&#39;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_cuda</span> <span class="ow">and</span> <span class="n">numba_minor_version</span> <span class="o">&gt;</span> <span class="mi">45</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-                <span class="s1">&#39;In order to run on GPU, please install numba version 0.45:</span><span class="se">\n</span><span class="s1">&#39;</span>
-                <span class="s1">&#39;  conda install numba=0.45, or:</span><span class="se">\n</span><span class="s1">&#39;</span>
-                <span class="s1">&#39;  pip install numba==0.45&#39;</span><span class="p">)</span>
+        <span class="c1"># Check that cupy and numba have the right version</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_cuda</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">cupy_installed</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                    <span class="s1">&#39;In order to run on GPUs, FBPIC version 0.13 and later </span><span class="se">\n</span><span class="s1">&#39;</span>
+                    <span class="s1">&#39;require the `cupy` package.</span><span class="se">\n</span><span class="s1">&#39;</span>
+                    <span class="s1">&#39;See the FBPIC documentation in order to install cupy.&#39;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="p">(</span><span class="n">cupy_major_version</span> <span class="o">&gt;=</span> <span class="mi">7</span> <span class="ow">and</span> <span class="n">numba_minor_version</span> <span class="o">&lt;</span> <span class="mi">46</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                    <span class="s1">&#39;You are using cupy version </span><span class="si">%d</span><span class="s1">.</span><span class="se">\n</span><span class="s1">For compatibility, &#39;</span>
+                    <span class="s1">&#39;you need to install numba 0.46 or later.</span><span class="se">\n</span><span class="s1">&#39;</span>
+                    <span class="s1">&#39;(Your current version is numba 0.</span><span class="si">%d</span><span class="s1">.)</span><span class="se">\n</span><span class="s1">&#39;</span>
+                    <span class="s1">&#39;e.g. with `conda uninstall numba; conda install numba`.&#39;</span>
+                    <span class="o">%</span><span class="p">(</span><span class="n">cupy_major_version</span><span class="p">,</span><span class="n">numba_minor_version</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="p">(</span><span class="n">cupy_major_version</span> <span class="o">&lt;</span> <span class="mi">7</span> <span class="ow">and</span> <span class="n">numba_minor_version</span> <span class="o">&gt;=</span> <span class="mi">46</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                    <span class="s1">&#39;You are using numba version 0.</span><span class="si">%d</span><span class="s1">.</span><span class="se">\n</span><span class="s1">For compatibility, &#39;</span>
+                    <span class="s1">&#39;you need to install cupy 7 or later.</span><span class="se">\n</span><span class="s1">&#39;</span>
+                    <span class="s1">&#39;(Your current version is cupy </span><span class="si">%d</span><span class="s1">.)</span><span class="se">\n</span><span class="s1">&#39;</span>
+                    <span class="s1">&#39;e.g. with `pip install --upgrade cupy-cudaXXX`</span><span class="se">\n</span><span class="s1">&#39;</span>
+                    <span class="s1">&#39;where `XXX` should be replaced by your cuda version.&#39;</span>
+                    <span class="o">%</span><span class="p">(</span><span class="n">numba_minor_version</span><span class="p">,</span><span class="n">cupy_major_version</span><span class="p">))</span>
         <span class="c1"># CPU multi-threading</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">use_threading</span> <span class="o">=</span> <span class="n">threading_enabled</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_threading</span><span class="p">:</span>
@@ -393,15 +415,21 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">=</span> <span class="n">dt</span>
 
         <span class="c1"># Initialize the boundary communicator</span>
+        <span class="n">cdt_over_dr</span> <span class="o">=</span> <span class="n">c</span><span class="o">*</span><span class="n">dt</span> <span class="o">/</span> <span class="p">(</span><span class="n">rmax</span><span class="o">/</span><span class="n">Nr</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">comm</span> <span class="o">=</span> <span class="n">BoundaryCommunicator</span><span class="p">(</span> <span class="n">Nz</span><span class="p">,</span> <span class="n">zmin</span><span class="p">,</span> <span class="n">zmax</span><span class="p">,</span> <span class="n">Nr</span><span class="p">,</span> <span class="n">rmax</span><span class="p">,</span> <span class="n">Nm</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">v_comoving</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_galilean</span><span class="p">,</span> <span class="n">boundaries</span><span class="p">,</span> <span class="n">n_order</span><span class="p">,</span>
-            <span class="n">n_guard</span><span class="p">,</span> <span class="n">n_damp</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">exchange_period</span><span class="p">,</span> <span class="n">use_all_mpi_ranks</span> <span class="p">)</span>
+            <span class="n">n_guard</span><span class="p">,</span> <span class="n">n_damp</span><span class="p">,</span> <span class="n">cdt_over_dr</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">exchange_period</span><span class="p">,</span>
+            <span class="n">use_all_mpi_ranks</span> <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">use_pml</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">use_pml</span>
         <span class="c1"># Modify domain region</span>
         <span class="n">zmin</span><span class="p">,</span> <span class="n">zmax</span><span class="p">,</span> <span class="n">Nz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">divide_into_domain</span><span class="p">()</span>
+        <span class="n">Nr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">get_Nr</span><span class="p">(</span> <span class="n">with_damp</span><span class="o">=</span><span class="kc">True</span> <span class="p">)</span>
+        <span class="n">rmax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">get_rmax</span><span class="p">(</span> <span class="n">with_damp</span><span class="o">=</span><span class="kc">True</span> <span class="p">)</span>
         <span class="c1"># Initialize the field structure</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fld</span> <span class="o">=</span> <span class="n">Fields</span><span class="p">(</span> <span class="n">Nz</span><span class="p">,</span> <span class="n">zmax</span><span class="p">,</span> <span class="n">Nr</span><span class="p">,</span> <span class="n">rmax</span><span class="p">,</span> <span class="n">Nm</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span>
                     <span class="n">n_order</span><span class="o">=</span><span class="n">n_order</span><span class="p">,</span> <span class="n">zmin</span><span class="o">=</span><span class="n">zmin</span><span class="p">,</span>
                     <span class="n">v_comoving</span><span class="o">=</span><span class="n">v_comoving</span><span class="p">,</span>
+                    <span class="n">use_pml</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">use_pml</span><span class="p">,</span>
                     <span class="n">use_galilean</span><span class="o">=</span><span class="n">use_galilean</span><span class="p">,</span>
                     <span class="n">current_correction</span><span class="o">=</span><span class="n">current_correction</span><span class="p">,</span>
                     <span class="n">use_cuda</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">use_cuda</span><span class="p">,</span>
@@ -511,6 +539,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">damp_EB_open_boundary</span><span class="p">(</span> <span class="n">fld</span><span class="o">.</span><span class="n">interp</span> <span class="p">)</span>
         <span class="n">fld</span><span class="o">.</span><span class="n">interp2spect</span><span class="p">(</span><span class="s1">&#39;E&#39;</span><span class="p">)</span>
         <span class="n">fld</span><span class="o">.</span><span class="n">interp2spect</span><span class="p">(</span><span class="s1">&#39;B&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_pml</span><span class="p">:</span>
+            <span class="n">fld</span><span class="o">.</span><span class="n">interp2spect</span><span class="p">(</span><span class="s1">&#39;E_pml&#39;</span><span class="p">)</span>
+            <span class="n">fld</span><span class="o">.</span><span class="n">interp2spect</span><span class="p">(</span><span class="s1">&#39;B_pml&#39;</span><span class="p">)</span>
 
         <span class="c1"># Beginning of the N iterations</span>
         <span class="c1"># -----------------------------</span>
@@ -641,20 +672,12 @@
                 <span class="c1"># the interpolation grids</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">move_grids</span><span class="p">(</span><span class="n">fld</span><span class="p">,</span> <span class="n">ptcl</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
 
-            <span class="c1"># Get the MPI-exchanged and damped E and B field in both</span>
-            <span class="c1"># spectral space and interpolation space</span>
-            <span class="c1"># (Since exchange/damp operation is purely along z, spectral fields</span>
-            <span class="c1"># are updated by doing an iFFT/FFT instead of a full transform)</span>
-            <span class="n">fld</span><span class="o">.</span><span class="n">spect2partial_interp</span><span class="p">(</span><span class="s1">&#39;E&#39;</span><span class="p">)</span>
-            <span class="n">fld</span><span class="o">.</span><span class="n">spect2partial_interp</span><span class="p">(</span><span class="s1">&#39;B&#39;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">exchange_fields</span><span class="p">(</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">,</span> <span class="s1">&#39;E&#39;</span><span class="p">,</span> <span class="s1">&#39;replace&#39;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">exchange_fields</span><span class="p">(</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;replace&#39;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">damp_EB_open_boundary</span><span class="p">(</span> <span class="n">fld</span><span class="o">.</span><span class="n">interp</span> <span class="p">)</span>
-            <span class="n">fld</span><span class="o">.</span><span class="n">partial_interp2spect</span><span class="p">(</span><span class="s1">&#39;E&#39;</span><span class="p">)</span>
-            <span class="n">fld</span><span class="o">.</span><span class="n">partial_interp2spect</span><span class="p">(</span><span class="s1">&#39;B&#39;</span><span class="p">)</span>
-            <span class="c1"># Get the corresponding fields in interpolation space</span>
-            <span class="n">fld</span><span class="o">.</span><span class="n">spect2interp</span><span class="p">(</span><span class="s1">&#39;E&#39;</span><span class="p">)</span>
-            <span class="n">fld</span><span class="o">.</span><span class="n">spect2interp</span><span class="p">(</span><span class="s1">&#39;B&#39;</span><span class="p">)</span>
+            <span class="c1"># Handle boundaries for the E and B fields:</span>
+            <span class="c1"># - MPI exchanges for guard cells</span>
+            <span class="c1"># - Damp fields in damping cells</span>
+            <span class="c1"># - Update the fields in interpolation space</span>
+            <span class="c1">#  (needed for the field gathering at the next iteration)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">exchange_and_damp_EB</span><span class="p">()</span>
 
             <span class="c1"># Increment the global time and iteration</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="o">+=</span> <span class="n">dt</span>
@@ -814,6 +837,55 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_galilean</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">shift_galilean_boundaries</span><span class="p">(</span> <span class="o">-</span><span class="mf">0.5</span><span class="o">*</span><span class="n">dt</span> <span class="p">)</span>
 
+
+    <span class="k">def</span> <span class="nf">exchange_and_damp_EB</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Handle boundaries for the E and B fields:</span>
+<span class="sd">         - MPI exchanges for guard cells</span>
+<span class="sd">         - Damp fields in damping cells (in z, and in r if PML are used)</span>
+<span class="sd">         - Update the fields in interpolation space</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Shortcut</span>
+        <span class="n">fld</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fld</span>
+
+        <span class="c1"># - Get fields in interpolation space (or partial interpolation space)</span>
+        <span class="c1">#   to prepare for damp/exchange</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_pml</span><span class="p">:</span>
+            <span class="c1"># Exchange/damp operation in z and r ; do full transform</span>
+            <span class="n">fld</span><span class="o">.</span><span class="n">spect2interp</span><span class="p">(</span><span class="s1">&#39;E&#39;</span><span class="p">)</span>
+            <span class="n">fld</span><span class="o">.</span><span class="n">spect2interp</span><span class="p">(</span><span class="s1">&#39;B&#39;</span><span class="p">)</span>
+            <span class="n">fld</span><span class="o">.</span><span class="n">spect2interp</span><span class="p">(</span><span class="s1">&#39;E_pml&#39;</span><span class="p">)</span>
+            <span class="n">fld</span><span class="o">.</span><span class="n">spect2interp</span><span class="p">(</span><span class="s1">&#39;B_pml&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Exchange/damp operation is purely along z; spectral fields</span>
+            <span class="c1"># are updated by doing an iFFT/FFT instead of a full transform</span>
+            <span class="n">fld</span><span class="o">.</span><span class="n">spect2partial_interp</span><span class="p">(</span><span class="s1">&#39;E&#39;</span><span class="p">)</span>
+            <span class="n">fld</span><span class="o">.</span><span class="n">spect2partial_interp</span><span class="p">(</span><span class="s1">&#39;B&#39;</span><span class="p">)</span>
+
+        <span class="c1"># - Exchange guard cells and damp fields</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">exchange_fields</span><span class="p">(</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">,</span> <span class="s1">&#39;E&#39;</span><span class="p">,</span> <span class="s1">&#39;replace&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">exchange_fields</span><span class="p">(</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;replace&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">damp_EB_open_boundary</span><span class="p">(</span> <span class="n">fld</span><span class="o">.</span><span class="n">interp</span> <span class="p">)</span> <span class="c1"># Damp along z</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_pml</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">damp_pml_EB</span><span class="p">(</span> <span class="n">fld</span><span class="o">.</span><span class="n">interp</span> <span class="p">)</span> <span class="c1"># Damp in radial PML</span>
+
+        <span class="c1"># - Update spectral space (and interpolation space if needed)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_pml</span><span class="p">:</span>
+            <span class="c1"># Exchange/damp operation in z and r ; do full transform back</span>
+            <span class="n">fld</span><span class="o">.</span><span class="n">interp2spect</span><span class="p">(</span><span class="s1">&#39;E&#39;</span><span class="p">)</span>
+            <span class="n">fld</span><span class="o">.</span><span class="n">interp2spect</span><span class="p">(</span><span class="s1">&#39;B&#39;</span><span class="p">)</span>
+            <span class="n">fld</span><span class="o">.</span><span class="n">interp2spect</span><span class="p">(</span><span class="s1">&#39;E_pml&#39;</span><span class="p">)</span>
+            <span class="n">fld</span><span class="o">.</span><span class="n">interp2spect</span><span class="p">(</span><span class="s1">&#39;B_pml&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Exchange/damp operation is purely along z; spectral fields</span>
+            <span class="c1"># are updated by doing an iFFT/FFT instead of a full transform</span>
+            <span class="n">fld</span><span class="o">.</span><span class="n">partial_interp2spect</span><span class="p">(</span><span class="s1">&#39;E&#39;</span><span class="p">)</span>
+            <span class="n">fld</span><span class="o">.</span><span class="n">partial_interp2spect</span><span class="p">(</span><span class="s1">&#39;B&#39;</span><span class="p">)</span>
+            <span class="c1"># Get the corresponding fields in interpolation space</span>
+            <span class="n">fld</span><span class="o">.</span><span class="n">spect2interp</span><span class="p">(</span><span class="s1">&#39;E&#39;</span><span class="p">)</span>
+            <span class="n">fld</span><span class="o">.</span><span class="n">spect2interp</span><span class="p">(</span><span class="s1">&#39;B&#39;</span><span class="p">)</span>
+
+
     <span class="k">def</span> <span class="nf">shift_galilean_boundaries</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Shift the interpolation grids by v_comoving * dt.</span>
@@ -965,6 +1037,9 @@
                                         <span class="n">with_damp</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">with_guard</span><span class="o">=</span><span class="kc">False</span> <span class="p">)</span>
             <span class="n">p_zmin</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span> <span class="n">zmin_local_domain</span><span class="p">,</span> <span class="n">p_zmin</span> <span class="p">)</span>
             <span class="n">p_zmax</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span> <span class="n">zmax_local_domain</span><span class="p">,</span> <span class="n">p_zmax</span> <span class="p">)</span>
+            <span class="c1"># Avoid that particles get initialized in the radial PML cells</span>
+            <span class="n">rmax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">get_rmax</span><span class="p">(</span> <span class="n">with_damp</span><span class="o">=</span><span class="kc">False</span> <span class="p">)</span>
+            <span class="n">p_rmax</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span> <span class="n">rmax</span><span class="p">,</span> <span class="n">p_rmax</span> <span class="p">)</span>
 
             <span class="c1"># Modify again the input particle bounds, so that</span>
             <span class="c1"># they fall exactly on the grid, and infer the number of particles</span>

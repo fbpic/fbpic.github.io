@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fbpic.lpa_utils.laser.laser &mdash; FBPIC 0.14.0 documentation</title>
+  <title>fbpic.lpa_utils.laser.laser &mdash; FBPIC 0.15.0 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.14.0
+                0.15.0
               </div>
             
           
@@ -159,11 +159,11 @@
 <span class="sd">This file is part of the Fourier-Bessel Particle-In-Cell code (FB-PIC)</span>
 <span class="sd">It defines a set of utilities for laser initialization</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">scipy.constants</span> <span class="k">import</span> <span class="n">c</span>
-<span class="kn">from</span> <span class="nn">fbpic.lpa_utils.boosted_frame</span> <span class="k">import</span> <span class="n">BoostConverter</span>
-<span class="kn">from</span> <span class="nn">.laser_profiles</span> <span class="k">import</span> <span class="n">GaussianLaser</span>
-<span class="kn">from</span> <span class="nn">.direct_injection</span> <span class="k">import</span> <span class="n">add_laser_direct</span>
-<span class="kn">from</span> <span class="nn">.antenna_injection</span> <span class="k">import</span> <span class="n">LaserAntenna</span>
+<span class="kn">from</span> <span class="nn">scipy.constants</span> <span class="kn">import</span> <span class="n">c</span>
+<span class="kn">from</span> <span class="nn">fbpic.lpa_utils.boosted_frame</span> <span class="kn">import</span> <span class="n">BoostConverter</span>
+<span class="kn">from</span> <span class="nn">.laser_profiles</span> <span class="kn">import</span> <span class="n">GaussianLaser</span>
+<span class="kn">from</span> <span class="nn">.direct_injection</span> <span class="kn">import</span> <span class="n">add_laser_direct</span>
+<span class="kn">from</span> <span class="nn">.antenna_injection</span> <span class="kn">import</span> <span class="n">LaserAntenna</span>
 
 <div class="viewcode-block" id="add_laser_pulse"><a class="viewcode-back" href="../../../../api_reference/lpa_utilities/laser.html#fbpic.lpa_utils.laser.add_laser_pulse">[docs]</a><span class="k">def</span> <span class="nf">add_laser_pulse</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">laser_profile</span><span class="p">,</span> <span class="n">gamma_boost</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                 <span class="n">method</span><span class="o">=</span><span class="s1">&#39;direct&#39;</span><span class="p">,</span> <span class="n">z0_antenna</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">v_antenna</span><span class="o">=</span><span class="mf">0.</span><span class="p">):</span>

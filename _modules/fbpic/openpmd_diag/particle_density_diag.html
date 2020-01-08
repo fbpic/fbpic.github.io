@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fbpic.openpmd_diag.particle_density_diag &mdash; FBPIC 0.14.0 documentation</title>
+  <title>fbpic.openpmd_diag.particle_density_diag &mdash; FBPIC 0.15.0 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.14.0
+                0.15.0
               </div>
             
           
@@ -160,14 +160,14 @@
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">.field_diag</span> <span class="k">import</span> <span class="n">FieldDiagnostic</span>
+<span class="kn">from</span> <span class="nn">.field_diag</span> <span class="kn">import</span> <span class="n">FieldDiagnostic</span>
 
 <div class="viewcode-block" id="ParticleChargeDensityDiagnostic"><a class="viewcode-back" href="../../../api_reference/diagnostics.html#fbpic.openpmd_diag.ParticleChargeDensityDiagnostic">[docs]</a><span class="k">class</span> <span class="nc">ParticleChargeDensityDiagnostic</span><span class="p">(</span><span class="n">FieldDiagnostic</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Class that defines a diagnostic for particle density</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">period</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">species</span><span class="o">=</span><span class="p">{},</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">period</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">species</span><span class="o">=</span><span class="p">{},</span>
                 <span class="n">write_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration_min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">iteration_max</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>
                 <span class="n">dt_period</span><span class="o">=</span><span class="kc">None</span> <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -242,12 +242,13 @@
                 <span class="n">local</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">with_damp</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">with_guard</span><span class="o">=</span><span class="kc">False</span> <span class="p">)</span>
         <span class="n">Nz</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">get_Nz_and_iz</span><span class="p">(</span>
                 <span class="n">local</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">with_damp</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">with_guard</span><span class="o">=</span><span class="kc">False</span> <span class="p">)</span>
+        <span class="n">Nr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">get_Nr</span><span class="p">(</span><span class="n">with_damp</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
         <span class="c1"># Create the file with these attributes</span>
         <span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;data</span><span class="si">%08d</span><span class="s2">.h5&quot;</span> <span class="o">%</span><span class="n">iteration</span>
         <span class="n">fullpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_dir</span><span class="p">,</span> <span class="s2">&quot;hdf5&quot;</span><span class="p">,</span> <span class="n">filename</span> <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">create_file_empty_meshes</span><span class="p">(</span>
-            <span class="n">fullpath</span><span class="p">,</span> <span class="n">iteration</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">Nz</span><span class="p">,</span> <span class="n">zmin</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">dt</span> <span class="p">)</span>
+            <span class="n">fullpath</span><span class="p">,</span> <span class="n">iteration</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">Nr</span><span class="p">,</span> <span class="n">Nz</span><span class="p">,</span> <span class="n">zmin</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">dt</span> <span class="p">)</span>
 
         <span class="c1"># Loop over the requested species</span>
         <span class="k">for</span> <span class="n">species_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">species</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>

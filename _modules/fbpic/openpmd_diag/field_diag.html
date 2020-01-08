@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fbpic.openpmd_diag.field_diag &mdash; FBPIC 0.14.0 documentation</title>
+  <title>fbpic.openpmd_diag.field_diag &mdash; FBPIC 0.15.0 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.14.0
+                0.15.0
               </div>
             
           
@@ -160,14 +160,14 @@
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">.generic_diag</span> <span class="k">import</span> <span class="n">OpenPMDDiagnostic</span>
+<span class="kn">from</span> <span class="nn">.generic_diag</span> <span class="kn">import</span> <span class="n">OpenPMDDiagnostic</span>
 
 <div class="viewcode-block" id="FieldDiagnostic"><a class="viewcode-back" href="../../../api_reference/diagnostics.html#fbpic.openpmd_diag.FieldDiagnostic">[docs]</a><span class="k">class</span> <span class="nc">FieldDiagnostic</span><span class="p">(</span><span class="n">OpenPMDDiagnostic</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Class that defines the field diagnostics to be performed.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">period</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fldobject</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">comm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">period</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fldobject</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">comm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">fieldtypes</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;rho&quot;</span><span class="p">,</span> <span class="s2">&quot;E&quot;</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="s2">&quot;J&quot;</span><span class="p">],</span> <span class="n">write_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">iteration_min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">iteration_max</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="n">dt_period</span><span class="o">=</span><span class="kc">None</span> <span class="p">)</span> <span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -258,19 +258,23 @@
         <span class="n">dz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">dz</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="c1"># No communicator: dump all the present subdomain</span>
+            <span class="c1"># (including damp cells and guard cells)</span>
             <span class="n">zmin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">zmin</span>
             <span class="n">Nz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">Nz</span>
+            <span class="n">Nr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">Nr</span>
         <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Communicator present: only dump physical cells</span>
             <span class="n">zmin</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">get_zmin_zmax</span><span class="p">(</span>
                     <span class="n">local</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">with_damp</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">with_guard</span><span class="o">=</span><span class="kc">False</span> <span class="p">)</span>
             <span class="n">Nz</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">get_Nz_and_iz</span><span class="p">(</span>
                     <span class="n">local</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">with_damp</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">with_guard</span><span class="o">=</span><span class="kc">False</span> <span class="p">)</span>
+            <span class="n">Nr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">get_Nr</span><span class="p">(</span> <span class="n">with_damp</span><span class="o">=</span><span class="kc">False</span> <span class="p">)</span>
 
         <span class="c1"># Create the file with these attributes</span>
         <span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;data</span><span class="si">%08d</span><span class="s2">.h5&quot;</span> <span class="o">%</span><span class="n">iteration</span>
         <span class="n">fullpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_dir</span><span class="p">,</span> <span class="s2">&quot;hdf5&quot;</span><span class="p">,</span> <span class="n">filename</span> <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">create_file_empty_meshes</span><span class="p">(</span>
-            <span class="n">fullpath</span><span class="p">,</span> <span class="n">iteration</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">Nz</span><span class="p">,</span> <span class="n">zmin</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">dt</span> <span class="p">)</span>
+            <span class="n">fullpath</span><span class="p">,</span> <span class="n">iteration</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">Nr</span><span class="p">,</span> <span class="n">Nz</span><span class="p">,</span> <span class="n">zmin</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">dt</span> <span class="p">)</span>
 
         <span class="c1"># Open the file again, and get the field path</span>
         <span class="n">f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">open_file</span><span class="p">(</span> <span class="n">fullpath</span> <span class="p">)</span>
@@ -284,15 +288,18 @@
         <span class="c1"># Loop over the different quantities that should be written</span>
         <span class="k">for</span> <span class="n">fieldtype</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fieldtypes</span><span class="p">:</span>
             <span class="c1"># Scalar field</span>
-            <span class="k">if</span> <span class="n">fieldtype</span> <span class="o">==</span> <span class="s2">&quot;rho&quot;</span> <span class="p">:</span>
+            <span class="k">if</span> <span class="n">fieldtype</span> <span class="o">==</span> <span class="s2">&quot;rho&quot;</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">write_dataset</span><span class="p">(</span> <span class="n">field_grp</span><span class="p">,</span> <span class="s2">&quot;rho&quot;</span><span class="p">,</span> <span class="s2">&quot;rho&quot;</span> <span class="p">)</span>
             <span class="c1"># Vector field</span>
-            <span class="k">elif</span> <span class="n">fieldtype</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;E&quot;</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="s2">&quot;J&quot;</span><span class="p">]</span> <span class="p">:</span>
+            <span class="k">elif</span> <span class="n">fieldtype</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;E&quot;</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="s2">&quot;J&quot;</span><span class="p">]:</span>
                 <span class="k">for</span> <span class="n">coord</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coords</span><span class="p">:</span>
                     <span class="n">quantity</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s%s</span><span class="s2">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">fieldtype</span><span class="p">,</span> <span class="n">coord</span><span class="p">)</span>
                     <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">fieldtype</span><span class="p">,</span> <span class="n">coord</span><span class="p">)</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">write_dataset</span><span class="p">(</span> <span class="n">field_grp</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">quantity</span> <span class="p">)</span>
-            <span class="k">else</span> <span class="p">:</span>
+            <span class="c1"># PML field (save as scalar field)</span>
+            <span class="k">elif</span> <span class="n">fieldtype</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;_pml&quot;</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">write_dataset</span><span class="p">(</span> <span class="n">field_grp</span><span class="p">,</span> <span class="n">fieldtype</span><span class="p">,</span> <span class="n">fieldtype</span> <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid string in fieldtypes: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span><span class="n">fieldtype</span><span class="p">)</span>
 
         <span class="c1"># Close the file (only the first proc does this)</span>
@@ -371,7 +378,7 @@
     <span class="c1"># ---------------------</span>
 
     <span class="k">def</span> <span class="nf">create_file_empty_meshes</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">fullpath</span><span class="p">,</span> <span class="n">iteration</span><span class="p">,</span>
-                                   <span class="n">time</span><span class="p">,</span> <span class="n">Nz</span><span class="p">,</span> <span class="n">zmin</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">dt</span> <span class="p">):</span>
+                                   <span class="n">time</span><span class="p">,</span> <span class="n">Nr</span><span class="p">,</span> <span class="n">Nz</span><span class="p">,</span> <span class="n">zmin</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">dt</span> <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create an openPMD file with empty meshes and setup all its attributes</span>
 
@@ -386,8 +393,8 @@
 <span class="sd">        time: float (seconds)</span>
 <span class="sd">            The physical time at this iteration</span>
 
-<span class="sd">        Nz: int</span>
-<span class="sd">            The number of gridpoints along z in this diagnostics</span>
+<span class="sd">        Nr, Nz: int</span>
+<span class="sd">            The number of gridpoints along r and z in this diagnostics</span>
 
 <span class="sd">        zmin: float (meters)</span>
 <span class="sd">            The position of the left end of the box</span>
@@ -400,7 +407,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Determine the shape of the datasets that will be written</span>
         <span class="c1"># First write real part mode 0, then imaginary part of higher modes</span>
-        <span class="n">data_shape</span> <span class="o">=</span> <span class="p">(</span> <span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">Nm</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">Nr</span><span class="p">,</span> <span class="n">Nz</span> <span class="p">)</span>
+        <span class="n">data_shape</span> <span class="o">=</span> <span class="p">(</span> <span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">Nm</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">Nr</span><span class="p">,</span> <span class="n">Nz</span> <span class="p">)</span>
 
         <span class="c1"># Create the file</span>
         <span class="n">f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">open_file</span><span class="p">(</span> <span class="n">fullpath</span> <span class="p">)</span>
@@ -424,7 +431,8 @@
                 <span class="c1"># Scalar field</span>
                 <span class="c1"># e.g. &#39;rho&#39;, but also &#39;rho_electron&#39; in the case of</span>
                 <span class="c1"># the sub-class ParticleDensityDiagnostic</span>
-                <span class="k">if</span> <span class="n">fieldtype</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;rho&quot;</span><span class="p">):</span>
+                <span class="c1"># or PML component (saved as scalar field as well)</span>
+                <span class="k">if</span> <span class="n">fieldtype</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;rho&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">fieldtype</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;_pml&quot;</span><span class="p">):</span>
                     <span class="c1"># Setup the dataset</span>
                     <span class="n">dset</span> <span class="o">=</span> <span class="n">field_grp</span><span class="o">.</span><span class="n">require_dataset</span><span class="p">(</span>
                         <span class="n">fieldtype</span><span class="p">,</span> <span class="n">data_shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;f8&#39;</span><span class="p">)</span>

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Laguerre-Gauss profile &mdash; FBPIC 0.15.0 documentation</title>
+  <title>Few-cycle profile &mdash; FBPIC 0.15.0 documentation</title>
   
 
   
@@ -36,8 +36,8 @@
   <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="Donut-like Laguerre-Gauss profile" href="donut_laguerre.html" />
-    <link rel="prev" title="Gaussian profile" href="gaussian.html" /> 
+    <link rel="next" title="Beam initialization" href="../beam.html" />
+    <link rel="prev" title="Flattened Gaussian profile" href="flattened.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -161,13 +161,13 @@
         
           <li><a href="../laser.html">Laser initialization</a> &raquo;</li>
         
-      <li>Laguerre-Gauss profile</li>
+      <li>Few-cycle profile</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../../../_sources/api_reference/lpa_utilities/laser_profiles/laguerre.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../../../_sources/api_reference/lpa_utilities/laser_profiles/few_cycle.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -180,66 +180,49 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="laguerre-gauss-profile">
-<h1>Laguerre-Gauss profile<a class="headerlink" href="#laguerre-gauss-profile" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="few-cycle-profile">
+<h1>Few-cycle profile<a class="headerlink" href="#few-cycle-profile" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
-<dt id="fbpic.lpa_utils.laser.LaguerreGaussLaser">
-<em class="property">class </em><code class="sig-prename descclassname">fbpic.lpa_utils.laser.</code><code class="sig-name descname">LaguerreGaussLaser</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">m</em>, <em class="sig-param">a0</em>, <em class="sig-param">waist</em>, <em class="sig-param">tau</em>, <em class="sig-param">z0</em>, <em class="sig-param">zf=None</em>, <em class="sig-param">theta_pol=0.0</em>, <em class="sig-param">lambda0=8e-07</em>, <em class="sig-param">cep_phase=0.0</em>, <em class="sig-param">theta0=0.0</em>, <em class="sig-param">propagation_direction=1</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/fbpic/lpa_utils/laser/laser_profiles.html#LaguerreGaussLaser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.laser.LaguerreGaussLaser" title="Permalink to this definition">¶</a></dt>
-<dd><p>Define a linearly-polarized Laguerre-Gauss laser profile.</p>
-<p>Unlike the <a class="reference internal" href="donut_laguerre.html#fbpic.lpa_utils.laser.DonutLikeLaguerreGaussLaser" title="fbpic.lpa_utils.laser.DonutLikeLaguerreGaussLaser"><code class="xref any py py-class docutils literal notranslate"><span class="pre">DonutLikeLaguerreGaussLaser</span></code></a> profile, this
-profile has a phase which is independent of the azimuthal angle
-<span class="math notranslate nohighlight">\(theta\)</span>, and an intensity profile which does depend on
-<span class="math notranslate nohighlight">\(theta\)</span>.</p>
-<p>More precisely, the electric field <strong>near the focal plane</strong>
-is given by:</p>
+<dt id="fbpic.lpa_utils.laser.FewCycleLaser">
+<em class="property">class </em><code class="sig-prename descclassname">fbpic.lpa_utils.laser.</code><code class="sig-name descname">FewCycleLaser</code><span class="sig-paren">(</span><em class="sig-param">a0</em>, <em class="sig-param">waist</em>, <em class="sig-param">tau_fwhm</em>, <em class="sig-param">z0</em>, <em class="sig-param">zf=None</em>, <em class="sig-param">theta_pol=0.0</em>, <em class="sig-param">lambda0=8e-07</em>, <em class="sig-param">cep_phase=0.0</em>, <em class="sig-param">propagation_direction=1</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/fbpic/lpa_utils/laser/laser_profiles.html#FewCycleLaser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.laser.FewCycleLaser" title="Permalink to this definition">¶</a></dt>
+<dd><p>When a laser pulse is so short that it contains <strong>only a few laser cycles</strong>,
+the standard Gaussian profile <a class="reference internal" href="gaussian.html#fbpic.lpa_utils.laser.GaussianLaser" title="fbpic.lpa_utils.laser.GaussianLaser"><code class="xref any py py-class docutils literal notranslate"><span class="pre">GaussianLaser</span></code></a> is not well-adapted.
+This is because <a class="reference internal" href="gaussian.html#fbpic.lpa_utils.laser.GaussianLaser" title="fbpic.lpa_utils.laser.GaussianLaser"><code class="xref any py py-class docutils literal notranslate"><span class="pre">GaussianLaser</span></code></a> neglects the fact that different
+frequencies focus in different ways. In particular, when initializing
+a <a class="reference internal" href="gaussian.html#fbpic.lpa_utils.laser.GaussianLaser" title="fbpic.lpa_utils.laser.GaussianLaser"><code class="xref any py py-class docutils literal notranslate"><span class="pre">GaussianLaser</span></code></a> (with a short duration <span class="math notranslate nohighlight">\(\tau\)</span>) out of
+focus, the profile at focus will not be the expected one.</p>
+<p>Instead, the <a class="reference internal" href="#fbpic.lpa_utils.laser.FewCycleLaser" title="fbpic.lpa_utils.laser.FewCycleLaser"><code class="xref any py py-class docutils literal notranslate"><span class="pre">FewCycleLaser</span></code></a> profile overcomes this limitation.
+The electric field for this profile is given by (see
+<a class="reference external" href="https://www.tandfonline.com/doi/abs/10.1080/09500349908231378">Caron &amp; Potvilege, Journal of Modern Optics 46, 1881 (1999)</a>):</p>
 <div class="math notranslate nohighlight">
-\[ \begin{align}\begin{aligned}E(\boldsymbol{x},t) = a_0\times E_0 \, f(r, \theta) \,
-\exp\left( -\frac{r^2}{w_0^2} - \frac{(z-z_0-ct)^2}{c^2\tau^2}
-\right) \cos[ k_0( z - z_0 - ct ) - \phi_{cep} ]\\\mathrm{with} \qquad f(r, \theta) =
-\sqrt{\frac{p!(2-\delta_{m,0})}{(m+p)!}}
-\left( \frac{\sqrt{2}r}{w_0} \right)^m
-L^m_p\left( \frac{2 r^2}{w_0^2} \right)
-\cos[ m(\theta - \theta_0)]\end{aligned}\end{align} \]</div>
-<p>where <span class="math notranslate nohighlight">\(L^m_p\)</span> is a Laguerre polynomial,
-<span class="math notranslate nohighlight">\(k_0 = 2\pi/\lambda_0\)</span> is the wavevector and where
-<span class="math notranslate nohighlight">\(E_0 = m_e c^2 k_0 / q_e\)</span>.</p>
-<p>(For more info, see
-<a class="reference external" href="https://www.osapublishing.org/books/bookshelf/lasers.cfm">Siegman, Lasers (1986)</a>,
-Chapter 16: Wave optics and Gaussian beams)</p>
+\[E(\boldsymbol{x},t) = Re\left[ a_0\times E_0\,
+e^{i\phi_{cep}} \frac{i Z_R}{q(z)}
+\left( 1 + \frac{ik_0}{s}\left(z-z_0-ct+
+\frac{r^2}{2q(z)}\right)\right)^{-(s+1)} \right]\]</div>
+<p>where <span class="math notranslate nohighlight">\(k_0 = 2\pi/\lambda_0\)</span> is the wavevector,
+<span class="math notranslate nohighlight">\(E_0 = m_e c^2 k_0 / q_e\)</span> is the field amplitude for <span class="math notranslate nohighlight">\(a_0=1\)</span>,
+<span class="math notranslate nohighlight">\(Z_R = k_0 w_0^2/2\)</span> is the Rayleigh length,
+<span class="math notranslate nohighlight">\(q(z) = z-z_f + iZ_R\)</span>, and where <span class="math notranslate nohighlight">\(s\)</span>
+controls the duration of the pulse and is given by:</p>
+<div class="math notranslate nohighlight">
+\[\omega_0 \tau_{FWHM} = s\sqrt{2(4^{1/(s+1)}-1)}\]</div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The additional terms that arise <strong>far from the focal plane</strong>
-(Gouy phase, wavefront curvature, …) are not included in the above
-formula for simplicity, but are of course taken into account by
-the code, when initializing the laser pulse away from the focal plane.</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>The above formula depends on a parameter <span class="math notranslate nohighlight">\(m\)</span>
-(see documentation below). In order to be properly resolved by
-the simulation, a Laguerre-Gauss profile with a given <span class="math notranslate nohighlight">\(m\)</span>
-requires the azimuthal modes from <span class="math notranslate nohighlight">\(0\)</span> to <span class="math notranslate nohighlight">\(m+1\)</span>.
-(i.e. the number of required azimuthal modes is <code class="docutils literal notranslate"><span class="pre">Nm=m+2</span></code>)</p>
-<p>The non-linear plasma response for this profile (e.g.
-wakefield driven by the ponderomotive force) may require
-even more azimuthal modes.</p>
+<p>In the case of <span class="math notranslate nohighlight">\(\omega_0 \tau_{FWHM} \gg 1\)</span> (i.e. many
+laser cycles within the envelope), the above expression approaches
+that of a standard Gaussian laser pulse, and thus the <a class="reference internal" href="#fbpic.lpa_utils.laser.FewCycleLaser" title="fbpic.lpa_utils.laser.FewCycleLaser"><code class="xref any py py-class docutils literal notranslate"><span class="pre">FewCycleLaser</span></code></a>
+profile becomes equivalent to the <a class="reference internal" href="gaussian.html#fbpic.lpa_utils.laser.GaussianLaser" title="fbpic.lpa_utils.laser.GaussianLaser"><code class="xref any py py-class docutils literal notranslate"><span class="pre">GaussianLaser</span></code></a> profile
+(with <span class="math notranslate nohighlight">\(\tau_{FWHM} = \sqrt{2\log(2)}\tau\)</span>).</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>p</strong> (<em>int</em><em> (</em><em>positive</em><em>)</em>) – The order of the Laguerre polynomial. (Increasing <code class="docutils literal notranslate"><span class="pre">p</span></code> increases
-the number of “rings” in the radial intensity profile of the laser.)</p></li>
-<li><p><strong>m</strong> (<em>int</em><em> (</em><em>positive</em><em>)</em>) – The azimuthal order of the pulse.
-(In the transverse plane, the field of the pulse varies as
-<span class="math notranslate nohighlight">\(\cos[m(\theta-\theta_0)]\)</span>.)</p></li>
-<li><p><strong>a0</strong> (<em>float</em><em> (</em><em>dimensionless</em><em>)</em>) – The amplitude of the pulse, defined so that the total
-energy of the pulse is the same as that of a Gaussian pulse
-with the same <span class="math notranslate nohighlight">\(a_0\)</span>, <span class="math notranslate nohighlight">\(w_0\)</span> and <span class="math notranslate nohighlight">\(\tau\)</span>.
-(i.e. The energy of the pulse is independent of <code class="docutils literal notranslate"><span class="pre">p</span></code> and <code class="docutils literal notranslate"><span class="pre">m</span></code>.)</p></li>
+<li><p><strong>a0</strong> (<em>float</em><em> (</em><em>dimensionless</em><em>)</em>) – The peak normalized vector potential at the focal plane, defined
+as <span class="math notranslate nohighlight">\(a_0\)</span> in the above formula.</p></li>
 <li><p><strong>waist</strong> (<em>float</em><em> (</em><em>in meter</em><em>)</em>) – Laser waist at the focal plane, defined as <span class="math notranslate nohighlight">\(w_0\)</span> in the
 above formula.</p></li>
-<li><p><strong>tau</strong> (<em>float</em><em> (</em><em>in second</em><em>)</em>) – The duration of the laser (in the lab frame),
-defined as <span class="math notranslate nohighlight">\(\tau\)</span> in the above formula.</p></li>
+<li><p><strong>tau_FWHM</strong> (<em>float</em><em> (</em><em>in second</em><em>)</em>) – The full-width half-maximum duration of the <strong>envelope intensity</strong> (in
+the lab frame), defined as <span class="math notranslate nohighlight">\(\tau_{FWHM}\)</span> in the above formula.</p></li>
 <li><p><strong>z0</strong> (<em>float</em><em> (</em><em>in meter</em><em>)</em>) – The initial position of the centroid of the laser
 (in the lab frame), defined as <span class="math notranslate nohighlight">\(z_0\)</span> in the above formula.</p></li>
 <li><p><strong>zf</strong> (<em>float</em><em> (</em><em>in meter</em><em>)</em><em>, </em><em>optional</em>) – The position of the focal plane (in the lab frame).
@@ -252,10 +235,6 @@ Default: 0.8 microns (Ti:Sapph laser).</p></li>
 <li><p><strong>cep_phase</strong> (<em>float</em><em> (</em><em>in radian</em><em>)</em><em>, </em><em>optional</em>) – The Carrier Enveloppe Phase (CEP), defined as <span class="math notranslate nohighlight">\(\phi_{cep}\)</span>
 in the above formula (i.e. the phase of the laser
 oscillation, at the position where the laser enveloppe is maximum)</p></li>
-<li><p><strong>theta0</strong> (<em>float</em><em> (</em><em>in radian</em><em>)</em><em>, </em><em>optional</em>) – The azimuthal position of (one of) the maxima of intensity, in the
-transverse plane.
-(In the transverse plane, the field of the pulse varies as
-<span class="math notranslate nohighlight">\(\cos[m(\theta-\theta_0)]\)</span>.)</p></li>
 <li><p><strong>propagation_direction</strong> (<em>int</em><em>, </em><em>optional</em>) – Indicates in which direction the laser propagates.
 This should be either 1 (laser propagates towards positive z)
 or -1 (laser propagates towards negative z).</p></li>
@@ -274,10 +253,10 @@ or -1 (laser propagates towards negative z).</p></li>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="donut_laguerre.html" class="btn btn-neutral float-right" title="Donut-like Laguerre-Gauss profile" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="../beam.html" class="btn btn-neutral float-right" title="Beam initialization" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="gaussian.html" class="btn btn-neutral float-left" title="Gaussian profile" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="flattened.html" class="btn btn-neutral float-left" title="Flattened Gaussian profile" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

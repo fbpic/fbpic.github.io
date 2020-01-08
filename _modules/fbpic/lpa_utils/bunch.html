@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fbpic.lpa_utils.bunch &mdash; FBPIC 0.14.0 documentation</title>
+  <title>fbpic.lpa_utils.bunch &mdash; FBPIC 0.15.0 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.14.0
+                0.15.0
               </div>
             
           
@@ -160,11 +160,11 @@
 <span class="sd">It defines a set of utilities for the initialization of an electron bunch.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">scipy.constants</span> <span class="k">import</span> <span class="n">m_e</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">epsilon_0</span><span class="p">,</span> <span class="n">mu_0</span>
-<span class="kn">from</span> <span class="nn">fbpic.fields</span> <span class="k">import</span> <span class="n">Fields</span>
-<span class="kn">from</span> <span class="nn">fbpic.particles.elementary_process.cuda_numba_utils</span> <span class="k">import</span> \
+<span class="kn">from</span> <span class="nn">scipy.constants</span> <span class="kn">import</span> <span class="n">m_e</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">epsilon_0</span><span class="p">,</span> <span class="n">mu_0</span>
+<span class="kn">from</span> <span class="nn">fbpic.fields</span> <span class="kn">import</span> <span class="n">Fields</span>
+<span class="kn">from</span> <span class="nn">fbpic.particles.elementary_process.cuda_numba_utils</span> <span class="kn">import</span> \
     <span class="n">reallocate_and_copy_old</span>
-<span class="kn">from</span> <span class="nn">fbpic.particles.injection</span> <span class="k">import</span> <span class="n">BallisticBeforePlane</span>
+<span class="kn">from</span> <span class="nn">fbpic.particles.injection</span> <span class="kn">import</span> <span class="n">BallisticBeforePlane</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 
 
@@ -537,7 +537,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Import openPMD viewer</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="kn">from</span> <span class="nn">opmd_viewer</span> <span class="k">import</span> <span class="n">OpenPMDTimeSeries</span>
+        <span class="kn">from</span> <span class="nn">opmd_viewer</span> <span class="kn">import</span> <span class="n">OpenPMDTimeSeries</span>
     <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
         <span class="s1">&#39;The package `opmd_viewer` is required to restart from checkpoints.&#39;</span>
