@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fbpic.main &mdash; FBPIC 0.15.0 documentation</title>
+  <title>fbpic.main &mdash; FBPIC 0.15.1 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.15.0
+                0.15.1
               </div>
             
           
@@ -591,7 +591,7 @@
 
             <span class="c1"># Gather the fields from the grid at t = n dt</span>
             <span class="k">for</span> <span class="n">species</span> <span class="ow">in</span> <span class="n">ptcl</span><span class="p">:</span>
-                <span class="n">species</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span> <span class="n">fld</span><span class="o">.</span><span class="n">interp</span> <span class="p">)</span>
+                <span class="n">species</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span> <span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span> <span class="p">)</span>
             <span class="c1"># Apply the external fields at t = n dt</span>
             <span class="k">for</span> <span class="n">ext_field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">external_fields</span><span class="p">:</span>
                 <span class="n">ext_field</span><span class="o">.</span><span class="n">apply_expression</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">ptcl</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="p">)</span>

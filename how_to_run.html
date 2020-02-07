@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>How to run the code &mdash; FBPIC 0.15.0 documentation</title>
+  <title>How to run the code &mdash; FBPIC 0.15.1 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.15.0
+                0.15.1
               </div>
             
           
@@ -289,7 +289,11 @@ environment variable:</p>
 <a class="reference external" href="http://www.openpmd.org/#/start">openPMD standard</a>. As such, they
 can be visualized for instance with the <a class="reference external" href="https://github.com/openPMD/openPMD-viewer">openPMD-viewer</a>). To do so, first
 install the openPMD-viewer by typing</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">rlehe</span> <span class="n">openpmd_viewer</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">openpmd</span><span class="o">-</span><span class="n">viewer</span>
+</pre></div>
+</div>
+<p>or</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">openpmd</span><span class="o">-</span><span class="n">viewer</span>
 </pre></div>
 </div>
 <p>And then type</p>
@@ -299,6 +303,8 @@ install the openPMD-viewer by typing</p>
 <p>and follow the instructions in the notebook that pops up. (NB: the
 notebook only shows some of the capabilities of the openPMD-viewer. To
 learn more, see the tutorial notebook on the  <a class="reference external" href="https://github.com/openPMD/openPMD-viewer">Github repository</a> of openPMD-viewer).</p>
+<p>If you want to render your simulation results in 3D, see the section
+<a class="reference internal" href="advanced/3d_visualization.html"><span class="doc">3D visualization using PyVista</span></a>.</p>
 </div>
 </div>
 

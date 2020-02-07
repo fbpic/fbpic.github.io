@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fbpic.lpa_utils.bunch &mdash; FBPIC 0.15.0 documentation</title>
+  <title>fbpic.lpa_utils.bunch &mdash; FBPIC 0.15.1 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.15.0
+                0.15.1
               </div>
             
           
@@ -535,12 +535,21 @@
 <span class="sd">       Whether to calculate the initial space charge fields of the bunch</span>
 <span class="sd">       and add these fields to the fields on the grid (Default: True)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># Import openPMD viewer</span>
+    <span class="c1"># Try to import openPMD-viewer, version 1</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="kn">from</span> <span class="nn">opmd_viewer</span> <span class="kn">import</span> <span class="n">OpenPMDTimeSeries</span>
+        <span class="kn">from</span> <span class="nn">openpmd_viewer</span> <span class="kn">import</span> <span class="n">OpenPMDTimeSeries</span>
+        <span class="n">openpmd_viewer_version</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="c1"># If not available, try to import openPMD-viewer, version 0</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">opmd_viewer</span> <span class="kn">import</span> <span class="n">OpenPMDTimeSeries</span>
+            <span class="n">openpmd_viewer_version</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+            <span class="n">openpmd_viewer_version</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="c1"># Otherwise, raise an error</span>
+    <span class="k">if</span> <span class="n">openpmd_viewer_version</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
-        <span class="s1">&#39;The package `opmd_viewer` is required to restart from checkpoints.&#39;</span>
+        <span class="s1">&#39;The package openPMD-viewer is required to load a particle bunch from on openPMD file.&#39;</span>
         <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Please install it from https://github.com/openPMD/openPMD-viewer&#39;</span><span class="p">)</span>
     <span class="n">ts</span> <span class="o">=</span> <span class="n">OpenPMDTimeSeries</span><span class="p">(</span><span class="n">ts_path</span><span class="p">)</span>
     <span class="c1"># Extract phasespace and particle weights</span>
@@ -548,10 +557,11 @@
                                 <span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">,</span> <span class="s1">&#39;ux&#39;</span><span class="p">,</span> <span class="s1">&#39;uy&#39;</span><span class="p">,</span> <span class="s1">&#39;uz&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">],</span>
                                 <span class="n">iteration</span><span class="o">=</span><span class="n">iteration</span><span class="p">,</span> <span class="n">species</span><span class="o">=</span><span class="n">species</span><span class="p">,</span>
                                 <span class="n">select</span><span class="o">=</span><span class="n">select</span><span class="p">)</span>
-    <span class="c1"># Convert the positions from microns to meters</span>
-    <span class="n">x</span> <span class="o">*=</span> <span class="mf">1.e-6</span>
-    <span class="n">y</span> <span class="o">*=</span> <span class="mf">1.e-6</span>
-    <span class="n">z</span> <span class="o">*=</span> <span class="mf">1.e-6</span>
+    <span class="k">if</span> <span class="n">openpmd_viewer_version</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="c1"># Convert the positions from microns to meters</span>
+        <span class="n">x</span> <span class="o">*=</span> <span class="mf">1.e-6</span>
+        <span class="n">y</span> <span class="o">*=</span> <span class="mf">1.e-6</span>
+        <span class="n">z</span> <span class="o">*=</span> <span class="mf">1.e-6</span>
     <span class="c1"># Shift the center of the phasespace to z_off</span>
     <span class="n">z</span> <span class="o">=</span> <span class="n">z</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="n">w</span><span class="p">)</span> <span class="o">+</span> <span class="n">z_off</span>
 
