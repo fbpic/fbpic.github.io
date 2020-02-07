@@ -188,8 +188,8 @@ is a local cluster at the <a class="reference external" href="http://www.lbl.gov
 <p>It has 24 nodes with GPUs:</p>
 <blockquote>
 <div><ul class="simple">
-<li>12 nodes with four GTX 1080Ti GPUs each</li>
-<li>12 nodes with two V100 GPUs each</li>
+<li><p>12 nodes with four GTX 1080Ti GPUs each</p></li>
+<li><p>12 nodes with two V100 GPUs each</p></li>
 </ul>
 </div></blockquote>
 <div class="section" id="connecting-to-lawrencium">
@@ -208,7 +208,7 @@ instructions</a>.</p>
 <div class="section" id="setting-up-anaconda">
 <h3>Setting up Anaconda<a class="headerlink" href="#setting-up-anaconda" title="Permalink to this headline">¶</a></h3>
 <ul>
-<li><p class="first">Add the following lines in your <code class="docutils literal notranslate"><span class="pre">~/.bashrc</span></code></p>
+<li><p>Add the following lines in your <code class="docutils literal notranslate"><span class="pre">~/.bashrc</span></code></p>
 <blockquote>
 <div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">module</span> <span class="n">load</span> <span class="n">python</span>
 <span class="o">.</span> <span class="o">/</span><span class="k">global</span><span class="o">/</span><span class="n">software</span><span class="o">/</span><span class="n">sl</span><span class="o">-</span><span class="mf">7.</span><span class="n">x86_64</span><span class="o">/</span><span class="n">modules</span><span class="o">/</span><span class="n">langs</span><span class="o">/</span><span class="n">python</span><span class="o">/</span><span class="mf">3.6</span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">profile</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">conda</span><span class="o">.</span><span class="n">sh</span>
@@ -217,7 +217,7 @@ instructions</a>.</p>
 </div></blockquote>
 <p>Then log off and log in again in order for these changes to be active.</p>
 </li>
-<li><p class="first">Create a new conda environment and activate it.</p>
+<li><p>Create a new conda environment and activate it.</p>
 <blockquote>
 <div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">create</span> <span class="o">-</span><span class="n">n</span> <span class="n">fbpic</span> <span class="n">python</span><span class="o">=</span><span class="mi">3</span>
 <span class="n">conda</span> <span class="n">activate</span> <span class="n">fbpic</span>
@@ -230,13 +230,13 @@ instructions</a>.</p>
 <div class="section" id="installation-of-fbpic-and-its-dependencies">
 <h3>Installation of FBPIC and its dependencies<a class="headerlink" href="#installation-of-fbpic-and-its-dependencies" title="Permalink to this headline">¶</a></h3>
 <ul>
-<li><p class="first">Install the dependencies of <code class="docutils literal notranslate"><span class="pre">fbpic</span></code></p>
+<li><p>Install the dependencies of <code class="docutils literal notranslate"><span class="pre">fbpic</span></code></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">numba</span> <span class="n">scipy</span> <span class="n">h5py</span> <span class="n">mkl</span> <span class="n">cudatoolkit</span><span class="o">=</span><span class="mf">10.0</span> <span class="n">mpi4py</span><span class="o">=*=*</span><span class="n">mpich</span><span class="o">*</span>
 <span class="n">pip</span> <span class="n">install</span> <span class="n">cupy</span><span class="o">-</span><span class="n">cuda100</span>
 </pre></div>
 </div>
 </li>
-<li><p class="first">Install <code class="docutils literal notranslate"><span class="pre">fbpic</span></code></p>
+<li><p>Install <code class="docutils literal notranslate"><span class="pre">fbpic</span></code></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">fbpic</span>
 </pre></div>
 </div>
@@ -296,8 +296,8 @@ following text (and replace the bracketed text by the proper values).</p>
 <p>where <code class="docutils literal notranslate"><span class="pre">&lt;gpuConstraint&gt;</span></code> and <code class="docutils literal notranslate"><span class="pre">&lt;gpuPerNode&gt;</span></code> should be:</p>
 <blockquote>
 <div><ul class="simple">
-<li>For the nodes with four GTX 1080Ti GPUs, <code class="docutils literal notranslate"><span class="pre">gpuConstraint=es1_1080ti</span></code>, <code class="docutils literal notranslate"><span class="pre">gpuPerNode=4</span></code> and <code class="docutils literal notranslate"><span class="pre">cpuPerTask=2</span></code></li>
-<li>For the nodes with two V100 GPUs, <code class="docutils literal notranslate"><span class="pre">gpuConstraint=es1_v100</span></code>, <code class="docutils literal notranslate"><span class="pre">gpuPerNode=2</span></code> and <code class="docutils literal notranslate"><span class="pre">cpuPerTask=4</span></code></li>
+<li><p>For the nodes with four GTX 1080Ti GPUs, <code class="docutils literal notranslate"><span class="pre">gpuConstraint=es1_1080ti</span></code>, <code class="docutils literal notranslate"><span class="pre">gpuPerNode=4</span></code> and <code class="docutils literal notranslate"><span class="pre">cpuPerTask=2</span></code></p></li>
+<li><p>For the nodes with two V100 GPUs, <code class="docutils literal notranslate"><span class="pre">gpuConstraint=es1_v100</span></code>, <code class="docutils literal notranslate"><span class="pre">gpuPerNode=2</span></code> and <code class="docutils literal notranslate"><span class="pre">cpuPerTask=4</span></code></p></li>
 </ul>
 </div></blockquote>
 <p>for more information on the available nodes, see

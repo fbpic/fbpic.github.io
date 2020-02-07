@@ -184,7 +184,7 @@
 <h1>Gaussian profile<a class="headerlink" href="#gaussian-profile" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="fbpic.lpa_utils.laser.GaussianLaser">
-<em class="property">class </em><code class="descclassname">fbpic.lpa_utils.laser.</code><code class="descname">GaussianLaser</code><span class="sig-paren">(</span><em>a0</em>, <em>waist</em>, <em>tau</em>, <em>z0</em>, <em>zf=None</em>, <em>theta_pol=0.0</em>, <em>lambda0=8e-07</em>, <em>cep_phase=0.0</em>, <em>phi2_chirp=0.0</em>, <em>propagation_direction=1</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/fbpic/lpa_utils/laser/laser_profiles.html#GaussianLaser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.laser.GaussianLaser" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">fbpic.lpa_utils.laser.</code><code class="sig-name descname">GaussianLaser</code><span class="sig-paren">(</span><em class="sig-param">a0</em>, <em class="sig-param">waist</em>, <em class="sig-param">tau</em>, <em class="sig-param">z0</em>, <em class="sig-param">zf=None</em>, <em class="sig-param">theta_pol=0.0</em>, <em class="sig-param">lambda0=8e-07</em>, <em class="sig-param">cep_phase=0.0</em>, <em class="sig-param">phi2_chirp=0.0</em>, <em class="sig-param">propagation_direction=1</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/fbpic/lpa_utils/laser/laser_profiles.html#GaussianLaser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.laser.GaussianLaser" title="Permalink to this definition">¶</a></dt>
 <dd><p>Define a linearly-polarized Gaussian laser profile.</p>
 <p>More precisely, the electric field <strong>near the focal plane</strong>
 is given by:</p>
@@ -195,50 +195,46 @@ is given by:</p>
 <p>where <span class="math notranslate nohighlight">\(k_0 = 2\pi/\lambda_0\)</span> is the wavevector and where
 <span class="math notranslate nohighlight">\(E_0 = m_e c^2 k_0 / q_e\)</span> is the field amplitude for <span class="math notranslate nohighlight">\(a_0=1\)</span>.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">The additional terms that arise <strong>far from the focal plane</strong>
+<p class="admonition-title">Note</p>
+<p>The additional terms that arise <strong>far from the focal plane</strong>
 (Gouy phase, wavefront curvature, …) are not included in the above
 formula for simplicity, but are of course taken into account by
 the code, when initializing the laser pulse away from the focal plane.</p>
 </div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>a0</strong> (<em>float</em><em> (</em><em>dimensionless</em><em>)</em>) – The peak normalized vector potential at the focal plane, defined
-as <span class="math notranslate nohighlight">\(a_0\)</span> in the above formula.</li>
-<li><strong>waist</strong> (<em>float</em><em> (</em><em>in meter</em><em>)</em>) – Laser waist at the focal plane, defined as <span class="math notranslate nohighlight">\(w_0\)</span> in the
-above formula.</li>
-<li><strong>tau</strong> (<em>float</em><em> (</em><em>in second</em><em>)</em>) – The duration of the laser (in the lab frame),
-defined as <span class="math notranslate nohighlight">\(\tau\)</span> in the above formula.</li>
-<li><strong>z0</strong> (<em>float</em><em> (</em><em>in meter</em><em>)</em>) – The initial position of the centroid of the laser
-(in the lab frame), defined as <span class="math notranslate nohighlight">\(z_0\)</span> in the above formula.</li>
-<li><strong>zf</strong> (<em>float</em><em> (</em><em>in meter</em><em>)</em><em>, </em><em>optional</em>) – The position of the focal plane (in the lab frame).
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a0</strong> (<em>float</em><em> (</em><em>dimensionless</em><em>)</em>) – The peak normalized vector potential at the focal plane, defined
+as <span class="math notranslate nohighlight">\(a_0\)</span> in the above formula.</p></li>
+<li><p><strong>waist</strong> (<em>float</em><em> (</em><em>in meter</em><em>)</em>) – Laser waist at the focal plane, defined as <span class="math notranslate nohighlight">\(w_0\)</span> in the
+above formula.</p></li>
+<li><p><strong>tau</strong> (<em>float</em><em> (</em><em>in second</em><em>)</em>) – The duration of the laser (in the lab frame),
+defined as <span class="math notranslate nohighlight">\(\tau\)</span> in the above formula.</p></li>
+<li><p><strong>z0</strong> (<em>float</em><em> (</em><em>in meter</em><em>)</em>) – The initial position of the centroid of the laser
+(in the lab frame), defined as <span class="math notranslate nohighlight">\(z_0\)</span> in the above formula.</p></li>
+<li><p><strong>zf</strong> (<em>float</em><em> (</em><em>in meter</em><em>)</em><em>, </em><em>optional</em>) – The position of the focal plane (in the lab frame).
 If <code class="docutils literal notranslate"><span class="pre">zf</span></code> is not provided, the code assumes that <code class="docutils literal notranslate"><span class="pre">zf=z0</span></code>, i.e.
-that the laser pulse is at the focal plane initially.</li>
-<li><strong>theta_pol</strong> (<em>float</em><em> (</em><em>in radian</em><em>)</em><em>, </em><em>optional</em>) – The angle of polarization with respect to the x axis.</li>
-<li><strong>lambda0</strong> (<em>float</em><em> (</em><em>in meter</em><em>)</em><em>, </em><em>optional</em>) – The wavelength of the laser (in the lab frame), defined as
+that the laser pulse is at the focal plane initially.</p></li>
+<li><p><strong>theta_pol</strong> (<em>float</em><em> (</em><em>in radian</em><em>)</em><em>, </em><em>optional</em>) – The angle of polarization with respect to the x axis.</p></li>
+<li><p><strong>lambda0</strong> (<em>float</em><em> (</em><em>in meter</em><em>)</em><em>, </em><em>optional</em>) – The wavelength of the laser (in the lab frame), defined as
 <span class="math notranslate nohighlight">\(\lambda_0\)</span> in the above formula.
-Default: 0.8 microns (Ti:Sapph laser).</li>
-<li><strong>cep_phase</strong> (<em>float</em><em> (</em><em>in radian</em><em>)</em><em>, </em><em>optional</em>) – The Carrier Enveloppe Phase (CEP), defined as <span class="math notranslate nohighlight">\(\phi_{cep}\)</span>
+Default: 0.8 microns (Ti:Sapph laser).</p></li>
+<li><p><strong>cep_phase</strong> (<em>float</em><em> (</em><em>in radian</em><em>)</em><em>, </em><em>optional</em>) – The Carrier Enveloppe Phase (CEP), defined as <span class="math notranslate nohighlight">\(\phi_{cep}\)</span>
 in the above formula (i.e. the phase of the laser
-oscillation, at the position where the laser enveloppe is maximum)</li>
-<li><strong>phi2_chirp</strong> (<em>float</em><em> (</em><em>in second^2</em><em>)</em>) – The amount of temporal chirp, at focus (in the lab frame)
+oscillation, at the position where the laser enveloppe is maximum)</p></li>
+<li><p><strong>phi2_chirp</strong> (<em>float</em><em> (</em><em>in second^2</em><em>)</em>) – The amount of temporal chirp, at focus (in the lab frame)
 Namely, a wave packet centered on the frequency
 <span class="math notranslate nohighlight">\((\omega_0 + \delta \omega)\)</span> will reach its peak intensity
 at <span class="math notranslate nohighlight">\(z(\delta \omega) = z_0 - c \phi^{(2)} \, \delta \omega\)</span>.
 Thus, a positive <span class="math notranslate nohighlight">\(\phi^{(2)}\)</span> corresponds to positive chirp,
 i.e. red part of the spectrum in the front of the pulse and blue
-part of the spectrum in the back.</li>
-<li><strong>propagation_direction</strong> (<em>int</em><em>, </em><em>optional</em>) – Indicates in which direction the laser propagates.
+part of the spectrum in the back.</p></li>
+<li><p><strong>propagation_direction</strong> (<em>int</em><em>, </em><em>optional</em>) – Indicates in which direction the laser propagates.
 This should be either 1 (laser propagates towards positive z)
-or -1 (laser propagates towards negative z).</li>
+or -1 (laser propagates towards negative z).</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
