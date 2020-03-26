@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fbpic.openpmd_diag.checkpoint_restart &mdash; FBPIC 0.15.1 documentation</title>
+  <title>fbpic.openpmd_diag.checkpoint_restart &mdash; FBPIC 0.16.0 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.15.1
+                0.16.0
               </div>
             
           
@@ -169,9 +169,9 @@
 <span class="kn">from</span> <span class="nn">fbpic.utils.mpi</span> <span class="kn">import</span> <span class="n">comm</span>
 
 <span class="c1"># Check if CUDA is available, then import CUDA</span>
-<span class="kn">from</span> <span class="nn">fbpic.utils.cuda</span> <span class="kn">import</span> <span class="n">cuda_installed</span>
-<span class="k">if</span> <span class="n">cuda_installed</span><span class="p">:</span>
-        <span class="kn">from</span> <span class="nn">fbpic.utils.cuda</span> <span class="kn">import</span> <span class="n">cuda</span>
+<span class="kn">from</span> <span class="nn">fbpic.utils.cuda</span> <span class="kn">import</span> <span class="n">cupy_installed</span>
+<span class="k">if</span> <span class="n">cupy_installed</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">cupy</span>
 
 <div class="viewcode-block" id="set_periodic_checkpoint"><a class="viewcode-back" href="../../../api_reference/checkpoint_restart.html#fbpic.openpmd_diag.set_periodic_checkpoint">[docs]</a><span class="k">def</span> <span class="nf">set_periodic_checkpoint</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">period</span><span class="p">,</span> <span class="n">checkpoint_dir</span><span class="o">=</span><span class="s1">&#39;./checkpoints&#39;</span> <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -514,8 +514,8 @@
     <span class="c1"># Sorting arrays</span>
     <span class="k">if</span> <span class="n">species</span><span class="o">.</span><span class="n">use_cuda</span><span class="p">:</span>
         <span class="c1"># cell_idx and sorted_idx always stay on GPU</span>
-        <span class="n">species</span><span class="o">.</span><span class="n">cell_idx</span> <span class="o">=</span> <span class="n">cuda</span><span class="o">.</span><span class="n">device_array</span><span class="p">(</span> <span class="n">Ntot</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
-        <span class="n">species</span><span class="o">.</span><span class="n">sorted_idx</span> <span class="o">=</span> <span class="n">cuda</span><span class="o">.</span><span class="n">device_array</span><span class="p">(</span> <span class="n">Ntot</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">intp</span><span class="p">)</span>
+        <span class="n">species</span><span class="o">.</span><span class="n">cell_idx</span> <span class="o">=</span> <span class="n">cupy</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span> <span class="n">Ntot</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+        <span class="n">species</span><span class="o">.</span><span class="n">sorted_idx</span> <span class="o">=</span> <span class="n">cupy</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span> <span class="n">Ntot</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">intp</span><span class="p">)</span>
         <span class="c1"># sorting buffers are initialized on CPU</span>
         <span class="c1"># (because they are swapped with other particle arrays during sorting)</span>
         <span class="n">species</span><span class="o">.</span><span class="n">sorting_buffer</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span> <span class="n">Ntot</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>

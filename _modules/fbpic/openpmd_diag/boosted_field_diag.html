@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fbpic.openpmd_diag.boosted_field_diag &mdash; FBPIC 0.15.1 documentation</title>
+  <title>fbpic.openpmd_diag.boosted_field_diag &mdash; FBPIC 0.16.0 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.15.1
+                0.16.0
               </div>
             
           
@@ -171,9 +171,11 @@
 <span class="kn">from</span> <span class="nn">.field_diag</span> <span class="kn">import</span> <span class="n">FieldDiagnostic</span>
 
 <span class="c1"># Check if CUDA is available, then import CUDA functions</span>
-<span class="kn">from</span> <span class="nn">fbpic.utils.cuda</span> <span class="kn">import</span> <span class="n">cuda_installed</span>
+<span class="kn">from</span> <span class="nn">fbpic.utils.cuda</span> <span class="kn">import</span> <span class="n">cupy_installed</span><span class="p">,</span> <span class="n">cuda_installed</span>
+<span class="k">if</span> <span class="n">cupy_installed</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">cupy</span>
 <span class="k">if</span> <span class="n">cuda_installed</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">fbpic.utils.cuda</span> <span class="kn">import</span> <span class="n">cuda</span><span class="p">,</span> <span class="n">cuda_tpb_bpg_1d</span>
+    <span class="kn">from</span> <span class="nn">fbpic.utils.cuda</span> <span class="kn">import</span> <span class="n">cuda</span><span class="p">,</span> <span class="n">cuda_tpb_bpg_1d</span><span class="p">,</span> <span class="n">compile_cupy</span>
 
 <div class="viewcode-block" id="BackTransformedFieldDiagnostic"><a class="viewcode-back" href="../../../api_reference/diagnostics.html#fbpic.openpmd_diag.BackTransformedFieldDiagnostic">[docs]</a><span class="k">class</span> <span class="nc">BackTransformedFieldDiagnostic</span><span class="p">(</span><span class="n">FieldDiagnostic</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -574,7 +576,7 @@
         <span class="k">if</span> <span class="n">fld</span><span class="o">.</span><span class="n">use_cuda</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">slice_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span> <span class="n">data_shape</span> <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">slice_array</span> <span class="o">=</span> <span class="n">cuda</span><span class="o">.</span><span class="n">device_array</span><span class="p">(</span> <span class="n">data_shape</span> <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">slice_array</span> <span class="o">=</span> <span class="n">cupy</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span> <span class="n">data_shape</span> <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">update_current_output_positions</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">t_boost</span><span class="p">,</span> <span class="n">inv_gamma</span><span class="p">,</span> <span class="n">inv_beta</span> <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -625,7 +627,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">buffered_slices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">slice_array</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="p">)</span>
         <span class="c1"># or copy from the GPU</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">buffered_slices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">slice_array</span><span class="o">.</span><span class="n">copy_to_host</span><span class="p">()</span> <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">buffered_slices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">slice_array</span><span class="o">.</span><span class="n">get</span><span class="p">()</span> <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">compact_slices</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -888,7 +890,7 @@
 
 <span class="k">if</span> <span class="n">cuda_installed</span><span class="p">:</span>
 
-    <span class="nd">@cuda</span><span class="o">.</span><span class="n">jit</span>
+    <span class="nd">@compile_cupy</span>
     <span class="k">def</span> <span class="nf">extract_slice_cuda</span><span class="p">(</span> <span class="n">Nr</span><span class="p">,</span> <span class="n">iz</span><span class="p">,</span> <span class="n">Sz</span><span class="p">,</span> <span class="n">slice_arr</span><span class="p">,</span>
         <span class="n">Er</span><span class="p">,</span> <span class="n">Et</span><span class="p">,</span> <span class="n">Ez</span><span class="p">,</span> <span class="n">Br</span><span class="p">,</span> <span class="n">Bt</span><span class="p">,</span> <span class="n">Bz</span><span class="p">,</span> <span class="n">Jr</span><span class="p">,</span> <span class="n">Jt</span><span class="p">,</span> <span class="n">Jz</span><span class="p">,</span> <span class="n">rho</span><span class="p">,</span> <span class="n">m</span> <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -906,10 +908,10 @@
 <span class="sd">        Sz: float</span>
 <span class="sd">            Interpolation shape factor used at iz</span>
 
-<span class="sd">        slice_arr: cuda.device_array</span>
+<span class="sd">        slice_arr: cupy.empty</span>
 <span class="sd">            Array of floats of shape (10, 2*Nm-1, Nr)</span>
 
-<span class="sd">        Er, Et, etc...: cuda.device_array</span>
+<span class="sd">        Er, Et, etc...: cupy.empty</span>
 <span class="sd">            Array of complexs of shape (Nz, Nr), for the azimuthal mode m</span>
 
 <span class="sd">        m: int</span>

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fbpic.openpmd_diag.boosted_particle_diag &mdash; FBPIC 0.15.1 documentation</title>
+  <title>fbpic.openpmd_diag.boosted_particle_diag &mdash; FBPIC 0.16.0 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.15.1
+                0.16.0
               </div>
             
           
@@ -839,14 +839,14 @@
             <span class="k">elif</span> <span class="n">z_cell_curr</span> <span class="o">&gt;</span> <span class="n">Nz</span><span class="p">:</span>
                 <span class="n">pref_sum_curr</span> <span class="o">=</span> <span class="n">species</span><span class="o">.</span><span class="n">Ntot</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">pref_sum_curr</span> <span class="o">=</span> <span class="n">pref_sum</span><span class="o">.</span><span class="n">getitem</span><span class="p">(</span> <span class="n">z_cell_curr</span><span class="o">*</span><span class="p">(</span><span class="n">Nr</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">)</span>
+                <span class="n">pref_sum_curr</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">pref_sum</span><span class="p">[</span> <span class="n">z_cell_curr</span><span class="o">*</span><span class="p">(</span><span class="n">Nr</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">])</span>
             <span class="n">z_cell_prev</span> <span class="o">=</span> <span class="n">iz_prev</span> <span class="o">+</span> <span class="n">pref_sum_shift</span>
             <span class="k">if</span> <span class="n">z_cell_prev</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="n">pref_sum_prev</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="k">elif</span> <span class="n">z_cell_prev</span> <span class="o">&gt;</span> <span class="n">Nz</span><span class="p">:</span>
                 <span class="n">pref_sum_prev</span> <span class="o">=</span> <span class="n">species</span><span class="o">.</span><span class="n">Ntot</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">pref_sum_prev</span> <span class="o">=</span> <span class="n">pref_sum</span><span class="o">.</span><span class="n">getitem</span><span class="p">(</span> <span class="n">z_cell_prev</span><span class="o">*</span><span class="p">(</span><span class="n">Nr</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">)</span>
+                <span class="n">pref_sum_prev</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">pref_sum</span><span class="p">[</span> <span class="n">z_cell_prev</span><span class="o">*</span><span class="p">(</span><span class="n">Nr</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">])</span>
             <span class="c1"># Calculate number of particles in this area (N_area)</span>
             <span class="n">N_area</span> <span class="o">=</span> <span class="n">pref_sum_prev</span> <span class="o">-</span> <span class="n">pref_sum_curr</span>
             <span class="c1"># Check if there are particles to extract</span>
