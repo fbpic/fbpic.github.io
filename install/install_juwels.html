@@ -1,39 +1,40 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Installation on JUWELS (JSC) &mdash; FBPIC 0.16.0 documentation</title>
+  <title>Installation on JUWELS (JSC) &mdash; FBPIC 0.17.0 documentation</title>
   
-
-  
-  
-  
-  
-
-  
-  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-
-    
 
   
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Installation on Lawrencium (LBNL)" href="install_lawrencium.html" />
@@ -51,7 +52,7 @@
           
 
           
-            <a href="../index.html" class="icon icon-home"> FBPIC
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> FBPIC
           
 
           
@@ -61,7 +62,7 @@
             
             
               <div class="version">
-                0.16.0
+                0.17.0
               </div>
             
           
@@ -78,6 +79,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -110,6 +112,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -148,7 +151,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../index.html">Docs</a> &raquo;</li>
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
           <li><a href="installation.html">Installation</a> &raquo;</li>
         
@@ -185,7 +188,8 @@ is a supercomputer at the <a class="reference external" href="http://www.fz-juel
 <div class="section" id="loading-the-cluster-modules">
 <h2>Loading the cluster modules<a class="headerlink" href="#loading-the-cluster-modules" title="Permalink to this headline">¶</a></h2>
 <p>To load the standard modules the <code class="docutils literal notranslate"><span class="pre">.bashrc</span></code> should contain the following:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">module</span> <span class="n">load</span> <span class="n">intel</span><span class="o">-</span><span class="n">para</span><span class="o">/</span><span class="mi">2019</span><span class="n">a</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">module</span> <span class="n">load</span> <span class="n">GCC</span><span class="o">/</span><span class="mf">8.3</span><span class="o">.</span><span class="mi">0</span>
+<span class="n">module</span> <span class="n">load</span> <span class="n">MVAPICH2</span><span class="o">/</span><span class="mf">2.3</span><span class="o">.</span><span class="mi">3</span><span class="o">-</span><span class="n">GDR</span>
 </pre></div>
 </div>
 </div>
@@ -197,7 +201,7 @@ is a supercomputer at the <a class="reference external" href="http://www.fz-juel
 </pre></div>
 </div>
 <p>Then install the dependencies of FBPIC:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">numba</span> <span class="n">scipy</span> <span class="n">h5py</span> <span class="n">mkl</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">numba</span><span class="o">==</span><span class="mf">0.49</span> <span class="n">scipy</span> <span class="n">h5py</span> <span class="n">mkl</span>
 <span class="n">conda</span> <span class="n">install</span> <span class="n">cudatoolkit</span><span class="o">=</span><span class="mf">10.0</span>
 <span class="n">pip</span> <span class="n">install</span> <span class="n">cupy</span><span class="o">-</span><span class="n">cuda100</span>
 </pre></div>
@@ -207,6 +211,10 @@ directly with Anaconda: <code class="docutils literal notranslate"><span class="
 <p>You can install mpi4py directly with pip and it will be built against the MPI
 library that is loaded on the cluster via the modules.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">mpi4py</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">cache</span><span class="o">-</span><span class="nb">dir</span>
+</pre></div>
+</div>
+<p>If you want to use GPUdirect, you instead need the development version:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">git</span><span class="o">+</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">bitbucket</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">mpi4py</span><span class="o">/</span><span class="n">mpi4py</span><span class="o">.</span><span class="n">git</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">cache</span><span class="o">-</span><span class="nb">dir</span>
 </pre></div>
 </div>
 <p>You can check if the correct MPI is linked by opening a <code class="docutils literal notranslate"><span class="pre">python</span></code> shell
@@ -255,6 +263,11 @@ tasks (e.g. 8 GPUs). <code class="docutils literal notranslate"><span class="pre
 <code class="docutils literal notranslate"><span class="pre">--forward-x</span></code>enables X-forwarding if the connection to JURECA was
 established with <code class="docutils literal notranslate"><span class="pre">ssh</span> <span class="pre">-Y</span> <span class="pre">username&#64;juwels.fz-juelich.de</span></code>.</p>
 <p><code class="docutils literal notranslate"><span class="pre">srun</span> <span class="pre">--ntasks=8</span> <span class="pre">--forward-x</span> <span class="pre">--pty</span> <span class="pre">python</span> <span class="pre">run_file.py</span></code></p>
+<p><strong>Using GPUdirect</strong></p>
+<p>To take advantage of direct communication between MPI and the GPUs, run:</p>
+<p><code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">FBPIC_ENABLE_GPUDIRECT=1</span></code></p>
+<p>Note that this will only work with the correct MPI implementation (i.e. the
+cluster modules above) and requires the development version of <code class="docutils literal notranslate"><span class="pre">mpi4py</span></code>.</p>
 </div>
 </div>
 
@@ -278,11 +291,19 @@ established with <code class="docutils literal notranslate"><span class="pre">ss
 
   <div role="contentinfo">
     <p>
+        
         &copy; Copyright 2016, FBPIC contributors
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -293,7 +314,6 @@ established with <code class="docutils literal notranslate"><span class="pre">ss
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {

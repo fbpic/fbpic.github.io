@@ -1,39 +1,40 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Beam initialization &mdash; FBPIC 0.16.0 documentation</title>
+  <title>Beam initialization &mdash; FBPIC 0.17.0 documentation</title>
   
-
-  
-  
-  
-  
-
-  
-  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../_static/doctools.js"></script>
-        <script type="text/javascript" src="../../_static/language_data.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-    <script type="text/javascript" src="../../_static/js/theme.js"></script>
-
-    
 
   
   <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="External fields" href="external_fields.html" />
@@ -51,7 +52,7 @@
           
 
           
-            <a href="../../index.html" class="icon icon-home"> FBPIC
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> FBPIC
           
 
           
@@ -61,7 +62,7 @@
             
             
               <div class="version">
-                0.16.0
+                0.17.0
               </div>
             
           
@@ -78,6 +79,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -110,6 +112,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -148,7 +151,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../../index.html">Docs</a> &raquo;</li>
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
         
           <li><a href="../api_reference.html">API reference</a> &raquo;</li>
         
@@ -179,9 +182,9 @@
 with various distributions in space (e.g. Gaussian, flat-top, from a file,
 etc.). In each case, the <strong>self-consistent space-charge fields</strong> are
 automatically calculated by the code, and added to the simulation.</p>
-<dl class="function">
+<dl class="py function">
 <dt id="fbpic.lpa_utils.bunch.add_particle_bunch">
-<code class="sig-prename descclassname">fbpic.lpa_utils.bunch.</code><code class="sig-name descname">add_particle_bunch</code><span class="sig-paren">(</span><em class="sig-param">sim</em>, <em class="sig-param">q</em>, <em class="sig-param">m</em>, <em class="sig-param">gamma0</em>, <em class="sig-param">n</em>, <em class="sig-param">p_zmin</em>, <em class="sig-param">p_zmax</em>, <em class="sig-param">p_rmin</em>, <em class="sig-param">p_rmax</em>, <em class="sig-param">p_nr=2</em>, <em class="sig-param">p_nz=2</em>, <em class="sig-param">p_nt=4</em>, <em class="sig-param">dens_func=None</em>, <em class="sig-param">boost=None</em>, <em class="sig-param">direction='forward'</em>, <em class="sig-param">z_injection_plane=None</em>, <em class="sig-param">initialize_self_field=True</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fbpic/lpa_utils/bunch.html#add_particle_bunch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.bunch.add_particle_bunch" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">fbpic.lpa_utils.bunch.</code><code class="sig-name descname">add_particle_bunch</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sim</span></em>, <em class="sig-param"><span class="n">q</span></em>, <em class="sig-param"><span class="n">m</span></em>, <em class="sig-param"><span class="n">gamma0</span></em>, <em class="sig-param"><span class="n">n</span></em>, <em class="sig-param"><span class="n">p_zmin</span></em>, <em class="sig-param"><span class="n">p_zmax</span></em>, <em class="sig-param"><span class="n">p_rmin</span></em>, <em class="sig-param"><span class="n">p_rmax</span></em>, <em class="sig-param"><span class="n">p_nr</span><span class="o">=</span><span class="default_value">2</span></em>, <em class="sig-param"><span class="n">p_nz</span><span class="o">=</span><span class="default_value">2</span></em>, <em class="sig-param"><span class="n">p_nt</span><span class="o">=</span><span class="default_value">4</span></em>, <em class="sig-param"><span class="n">dens_func</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">boost</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">direction</span><span class="o">=</span><span class="default_value">'forward'</span></em>, <em class="sig-param"><span class="n">z_injection_plane</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">initialize_self_field</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fbpic/lpa_utils/bunch.html#add_particle_bunch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.bunch.add_particle_bunch" title="Permalink to this definition">¶</a></dt>
 <dd><p>Introduce a simple relativistic particle bunch in the simulation,
 along with its space charge field.</p>
 <p>Uniform particle distribution with weights according to density function.</p>
@@ -220,9 +223,9 @@ and add these fields to the fields on the grid (Default: True)</p></li>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="fbpic.lpa_utils.bunch.add_particle_bunch_gaussian">
-<code class="sig-prename descclassname">fbpic.lpa_utils.bunch.</code><code class="sig-name descname">add_particle_bunch_gaussian</code><span class="sig-paren">(</span><em class="sig-param">sim</em>, <em class="sig-param">q</em>, <em class="sig-param">m</em>, <em class="sig-param">sig_r</em>, <em class="sig-param">sig_z</em>, <em class="sig-param">n_emit</em>, <em class="sig-param">gamma0</em>, <em class="sig-param">sig_gamma</em>, <em class="sig-param">n_physical_particles</em>, <em class="sig-param">n_macroparticles</em>, <em class="sig-param">tf=0.0</em>, <em class="sig-param">zf=0.0</em>, <em class="sig-param">boost=None</em>, <em class="sig-param">save_beam=None</em>, <em class="sig-param">z_injection_plane=None</em>, <em class="sig-param">initialize_self_field=True</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fbpic/lpa_utils/bunch.html#add_particle_bunch_gaussian"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.bunch.add_particle_bunch_gaussian" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">fbpic.lpa_utils.bunch.</code><code class="sig-name descname">add_particle_bunch_gaussian</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sim</span></em>, <em class="sig-param"><span class="n">q</span></em>, <em class="sig-param"><span class="n">m</span></em>, <em class="sig-param"><span class="n">sig_r</span></em>, <em class="sig-param"><span class="n">sig_z</span></em>, <em class="sig-param"><span class="n">n_emit</span></em>, <em class="sig-param"><span class="n">gamma0</span></em>, <em class="sig-param"><span class="n">sig_gamma</span></em>, <em class="sig-param"><span class="n">n_physical_particles</span></em>, <em class="sig-param"><span class="n">n_macroparticles</span></em>, <em class="sig-param"><span class="n">tf</span><span class="o">=</span><span class="default_value">0.0</span></em>, <em class="sig-param"><span class="n">zf</span><span class="o">=</span><span class="default_value">0.0</span></em>, <em class="sig-param"><span class="n">boost</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">save_beam</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">z_injection_plane</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">initialize_self_field</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fbpic/lpa_utils/bunch.html#add_particle_bunch_gaussian"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.bunch.add_particle_bunch_gaussian" title="Permalink to this definition">¶</a></dt>
 <dd><p>Introduce a relativistic Gaussian particle bunch in the simulation,
 along with its space charge field.</p>
 <p>The bunch is initialized with a normalized emittance <cite>n_emit</cite>,
@@ -259,9 +262,9 @@ and add these fields to the fields on the grid (Default: True)</p></li>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="fbpic.lpa_utils.bunch.add_particle_bunch_from_arrays">
-<code class="sig-prename descclassname">fbpic.lpa_utils.bunch.</code><code class="sig-name descname">add_particle_bunch_from_arrays</code><span class="sig-paren">(</span><em class="sig-param">sim</em>, <em class="sig-param">q</em>, <em class="sig-param">m</em>, <em class="sig-param">x</em>, <em class="sig-param">y</em>, <em class="sig-param">z</em>, <em class="sig-param">ux</em>, <em class="sig-param">uy</em>, <em class="sig-param">uz</em>, <em class="sig-param">w</em>, <em class="sig-param">boost=None</em>, <em class="sig-param">direction='forward'</em>, <em class="sig-param">z_injection_plane=None</em>, <em class="sig-param">initialize_self_field=True</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fbpic/lpa_utils/bunch.html#add_particle_bunch_from_arrays"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.bunch.add_particle_bunch_from_arrays" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">fbpic.lpa_utils.bunch.</code><code class="sig-name descname">add_particle_bunch_from_arrays</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sim</span></em>, <em class="sig-param"><span class="n">q</span></em>, <em class="sig-param"><span class="n">m</span></em>, <em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">z</span></em>, <em class="sig-param"><span class="n">ux</span></em>, <em class="sig-param"><span class="n">uy</span></em>, <em class="sig-param"><span class="n">uz</span></em>, <em class="sig-param"><span class="n">w</span></em>, <em class="sig-param"><span class="n">boost</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">direction</span><span class="o">=</span><span class="default_value">'forward'</span></em>, <em class="sig-param"><span class="n">z_injection_plane</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">initialize_self_field</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fbpic/lpa_utils/bunch.html#add_particle_bunch_from_arrays"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.bunch.add_particle_bunch_from_arrays" title="Permalink to this definition">¶</a></dt>
 <dd><p>Introduce a relativistic particle bunch in the simulation,
 along with its space charge field, loading particles from numpy arrays.</p>
 <dl class="field-list simple">
@@ -289,9 +292,9 @@ and add these fields to the fields on the grid (Default: True)</p></li>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="fbpic.lpa_utils.bunch.add_particle_bunch_openPMD">
-<code class="sig-prename descclassname">fbpic.lpa_utils.bunch.</code><code class="sig-name descname">add_particle_bunch_openPMD</code><span class="sig-paren">(</span><em class="sig-param">sim</em>, <em class="sig-param">q</em>, <em class="sig-param">m</em>, <em class="sig-param">ts_path</em>, <em class="sig-param">z_off=0.0</em>, <em class="sig-param">species=None</em>, <em class="sig-param">select=None</em>, <em class="sig-param">iteration=None</em>, <em class="sig-param">boost=None</em>, <em class="sig-param">z_injection_plane=None</em>, <em class="sig-param">initialize_self_field=True</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fbpic/lpa_utils/bunch.html#add_particle_bunch_openPMD"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.bunch.add_particle_bunch_openPMD" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">fbpic.lpa_utils.bunch.</code><code class="sig-name descname">add_particle_bunch_openPMD</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sim</span></em>, <em class="sig-param"><span class="n">q</span></em>, <em class="sig-param"><span class="n">m</span></em>, <em class="sig-param"><span class="n">ts_path</span></em>, <em class="sig-param"><span class="n">z_off</span><span class="o">=</span><span class="default_value">0.0</span></em>, <em class="sig-param"><span class="n">species</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">select</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">iteration</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">boost</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">z_injection_plane</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">initialize_self_field</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fbpic/lpa_utils/bunch.html#add_particle_bunch_openPMD"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.bunch.add_particle_bunch_openPMD" title="Permalink to this definition">¶</a></dt>
 <dd><p>Introduce a relativistic particle bunch in the simulation,
 along with its space charge field, loading particles from an openPMD
 timeseries.</p>
@@ -329,9 +332,9 @@ and add these fields to the fields on the grid (Default: True)</p></li>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="fbpic.lpa_utils.bunch.add_particle_bunch_file">
-<code class="sig-prename descclassname">fbpic.lpa_utils.bunch.</code><code class="sig-name descname">add_particle_bunch_file</code><span class="sig-paren">(</span><em class="sig-param">sim</em>, <em class="sig-param">q</em>, <em class="sig-param">m</em>, <em class="sig-param">filename</em>, <em class="sig-param">n_physical_particles</em>, <em class="sig-param">z_off=0.0</em>, <em class="sig-param">boost=None</em>, <em class="sig-param">direction='forward'</em>, <em class="sig-param">z_injection_plane=None</em>, <em class="sig-param">initialize_self_field=True</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fbpic/lpa_utils/bunch.html#add_particle_bunch_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.bunch.add_particle_bunch_file" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">fbpic.lpa_utils.bunch.</code><code class="sig-name descname">add_particle_bunch_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sim</span></em>, <em class="sig-param"><span class="n">q</span></em>, <em class="sig-param"><span class="n">m</span></em>, <em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">n_physical_particles</span></em>, <em class="sig-param"><span class="n">z_off</span><span class="o">=</span><span class="default_value">0.0</span></em>, <em class="sig-param"><span class="n">boost</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">direction</span><span class="o">=</span><span class="default_value">'forward'</span></em>, <em class="sig-param"><span class="n">z_injection_plane</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">initialize_self_field</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fbpic/lpa_utils/bunch.html#add_particle_bunch_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.bunch.add_particle_bunch_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Introduce a relativistic particle bunch in the simulation,
 along with its space charge field, loading particles from text file.</p>
 <dl class="field-list simple">
@@ -391,11 +394,19 @@ the new more flexible methods instead.</p>
 
   <div role="contentinfo">
     <p>
+        
         &copy; Copyright 2016, FBPIC contributors
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -406,7 +417,6 @@ the new more flexible methods instead.</p>
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {

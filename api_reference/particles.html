@@ -1,39 +1,40 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>The Particles class &mdash; FBPIC 0.16.0 documentation</title>
+  <title>The Particles class &mdash; FBPIC 0.17.0 documentation</title>
   
-
-  
-  
-  
-  
-
-  
-  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-
-    
 
   
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="The openPMD diagnostics" href="diagnostics.html" />
@@ -51,7 +52,7 @@
           
 
           
-            <a href="../index.html" class="icon icon-home"> FBPIC
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> FBPIC
           
 
           
@@ -61,7 +62,7 @@
             
             
               <div class="version">
-                0.16.0
+                0.17.0
               </div>
             
           
@@ -78,6 +79,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -105,6 +107,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -143,7 +146,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../index.html">Docs</a> &raquo;</li>
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
           <li><a href="api_reference.html">API reference</a> &raquo;</li>
         
@@ -179,7 +182,7 @@ append a new instance of <a class="reference internal" href="#fbpic.particles.Pa
 This new instance will also be directly returned by the function, so
 that you can use its methods below.</p>
 </div>
-<dl class="class">
+<dl class="py class">
 <dt id="fbpic.particles.Particles">
 <em class="property">class </em><code class="sig-prename descclassname">fbpic.particles.</code><code class="sig-name descname">Particles</code><a class="headerlink" href="#fbpic.particles.Particles" title="Permalink to this definition">¶</a></dt>
 <dd><blockquote>
@@ -188,9 +191,9 @@ same charge and mass. (Note that for ionizable species, ions in different
 states of ionization - i.e. different levels - are stored in
 the same <cite>Particles</cite> object.)</p>
 </div></blockquote>
-<dl class="method">
+<dl class="py method">
 <dt id="fbpic.particles.fbpic.particles.Particles.Particles.track">
-<code class="sig-prename descclassname">Particles.</code><code class="sig-name descname">track</code><span class="sig-paren">(</span><em class="sig-param">comm</em><span class="sig-paren">)</span><a class="headerlink" href="#fbpic.particles.fbpic.particles.Particles.Particles.track" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">Particles.</code><code class="sig-name descname">track</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">comm</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fbpic.particles.fbpic.particles.Particles.Particles.track" title="Permalink to this definition">¶</a></dt>
 <dd><p>Activate particle tracking for the current species
 (i.e. allocates an array of unique IDs for each macroparticle;
 these IDs are written in the openPMD file)</p>
@@ -201,9 +204,9 @@ these IDs are written in the openPMD file)</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="fbpic.particles.fbpic.particles.Particles.Particles.make_ionizable">
-<code class="sig-prename descclassname">Particles.</code><code class="sig-name descname">make_ionizable</code><span class="sig-paren">(</span><em class="sig-param">element</em>, <em class="sig-param">target_species</em>, <em class="sig-param">level_start=0</em>, <em class="sig-param">level_max=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fbpic.particles.fbpic.particles.Particles.Particles.make_ionizable" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">Particles.</code><code class="sig-name descname">make_ionizable</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">element</span></em>, <em class="sig-param"><span class="n">target_species</span></em>, <em class="sig-param"><span class="n">level_start</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">level_max</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fbpic.particles.fbpic.particles.Particles.Particles.make_ionizable" title="Permalink to this definition">¶</a></dt>
 <dd><p>Make this species ionizable.</p>
 <p>The implemented ionization model is the <strong>ADK model</strong>
 (using the <strong>instantaneous</strong> electric field, i.e. <strong>without</strong> averaging
@@ -261,11 +264,19 @@ limit for the chosen element.</p></li>
 
   <div role="contentinfo">
     <p>
+        
         &copy; Copyright 2016, FBPIC contributors
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -276,7 +287,6 @@ limit for the chosen element.</p></li>
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {

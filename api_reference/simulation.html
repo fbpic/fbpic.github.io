@@ -1,39 +1,40 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>The Simulation class &mdash; FBPIC 0.16.0 documentation</title>
+  <title>The Simulation class &mdash; FBPIC 0.17.0 documentation</title>
   
-
-  
-  
-  
-  
-
-  
-  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-
-    
 
   
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="The Particles class" href="particles.html" />
@@ -51,7 +52,7 @@
           
 
           
-            <a href="../index.html" class="icon icon-home"> FBPIC
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> FBPIC
           
 
           
@@ -61,7 +62,7 @@
             
             
               <div class="version">
-                0.16.0
+                0.17.0
               </div>
             
           
@@ -78,6 +79,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -105,6 +107,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -143,7 +146,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../index.html">Docs</a> &raquo;</li>
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
           <li><a href="api_reference.html">API reference</a> &raquo;</li>
         
@@ -173,9 +176,9 @@ the simulation data, and has the high-level method <a class="reference internal"
 that performs the PIC cycle.</p>
 <p>In addition, its method <a class="reference internal" href="#fbpic.main.Simulation.add_new_species" title="fbpic.main.Simulation.add_new_species"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">add_new_species</span></code></a> allows to create new particle
 species, and its method <a class="reference internal" href="#fbpic.main.Simulation.set_moving_window" title="fbpic.main.Simulation.set_moving_window"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">set_moving_window</span></code></a> activates the moving window.</p>
-<dl class="class">
+<dl class="py class">
 <dt id="fbpic.main.Simulation">
-<em class="property">class </em><code class="sig-prename descclassname">fbpic.main.</code><code class="sig-name descname">Simulation</code><span class="sig-paren">(</span><em class="sig-param">Nz</em>, <em class="sig-param">zmax</em>, <em class="sig-param">Nr</em>, <em class="sig-param">rmax</em>, <em class="sig-param">Nm</em>, <em class="sig-param">dt</em>, <em class="sig-param">p_zmin=-inf</em>, <em class="sig-param">p_zmax=inf</em>, <em class="sig-param">p_rmin=0</em>, <em class="sig-param">p_rmax=inf</em>, <em class="sig-param">p_nz=None</em>, <em class="sig-param">p_nr=None</em>, <em class="sig-param">p_nt=None</em>, <em class="sig-param">n_e=None</em>, <em class="sig-param">zmin=0.0</em>, <em class="sig-param">n_order=-1</em>, <em class="sig-param">dens_func=None</em>, <em class="sig-param">filter_currents=True</em>, <em class="sig-param">v_comoving=None</em>, <em class="sig-param">use_galilean=True</em>, <em class="sig-param">initialize_ions=False</em>, <em class="sig-param">use_cuda=False</em>, <em class="sig-param">n_guard=None</em>, <em class="sig-param">n_damp={'r': 32</em>, <em class="sig-param">'z': 64}</em>, <em class="sig-param">exchange_period=None</em>, <em class="sig-param">current_correction='curl-free'</em>, <em class="sig-param">boundaries={'r': 'reflective'</em>, <em class="sig-param">'z': 'periodic'}</em>, <em class="sig-param">gamma_boost=None</em>, <em class="sig-param">use_all_mpi_ranks=True</em>, <em class="sig-param">particle_shape='linear'</em>, <em class="sig-param">verbose_level=1</em>, <em class="sig-param">smoother=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/main.html#Simulation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.main.Simulation" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">fbpic.main.</code><code class="sig-name descname">Simulation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Nz</span></em>, <em class="sig-param"><span class="n">zmax</span></em>, <em class="sig-param"><span class="n">Nr</span></em>, <em class="sig-param"><span class="n">rmax</span></em>, <em class="sig-param"><span class="n">Nm</span></em>, <em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">p_zmin</span><span class="o">=</span><span class="default_value">- inf</span></em>, <em class="sig-param"><span class="n">p_zmax</span><span class="o">=</span><span class="default_value">inf</span></em>, <em class="sig-param"><span class="n">p_rmin</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">p_rmax</span><span class="o">=</span><span class="default_value">inf</span></em>, <em class="sig-param"><span class="n">p_nz</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">p_nr</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">p_nt</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">n_e</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">zmin</span><span class="o">=</span><span class="default_value">0.0</span></em>, <em class="sig-param"><span class="n">n_order</span><span class="o">=</span><span class="default_value">- 1</span></em>, <em class="sig-param"><span class="n">dens_func</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">filter_currents</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">v_comoving</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">use_galilean</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">initialize_ions</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">use_cuda</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">n_guard</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">n_damp</span><span class="o">=</span><span class="default_value">{'r': 32, 'z': 64}</span></em>, <em class="sig-param"><span class="n">exchange_period</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">current_correction</span><span class="o">=</span><span class="default_value">'curl-free'</span></em>, <em class="sig-param"><span class="n">boundaries</span><span class="o">=</span><span class="default_value">{'r': 'reflective', 'z': 'periodic'}</span></em>, <em class="sig-param"><span class="n">gamma_boost</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">use_all_mpi_ranks</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">particle_shape</span><span class="o">=</span><span class="default_value">'linear'</span></em>, <em class="sig-param"><span class="n">verbose_level</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">smoother</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">use_ruyten_shapes</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">use_modified_volume</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/main.html#Simulation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.main.Simulation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initializes a simulation.</p>
 <p>By default, this will not create any particle species. You can
 then add particles species to the simulation by using e.g. the method
@@ -294,12 +297,20 @@ initialization of the Simulation class.
 2 - Print detailed information</p></li>
 <li><p><strong>smoother</strong> (an instance of <a class="reference internal" href="smoothing.html#fbpic.fields.smoothing.BinomialSmoother" title="fbpic.fields.smoothing.BinomialSmoother"><code class="xref any py py-class docutils literal notranslate"><span class="pre">BinomialSmoother</span></code></a>, optional) – Determines how the charge and currents are smoothed.
 (Default: one-pass binomial filter and no compensator.)</p></li>
+<li><p><strong>use_ruyten_shapes</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to use Ruyten shape factors for the particle deposition.
+(Ruyten JCP 105 (1993) <a class="reference external" href="https://doi.org/10.1006/jcph.1993.1070">https://doi.org/10.1006/jcph.1993.1070</a>)
+This ensures that a uniform distribution of macroparticles
+leads to a uniform charge density deposited on the grid,
+even close to the axis (in the limit of many particles in r).</p></li>
+<li><p><strong>use_modified_volume</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to use a slightly-modified, effective cell volume, that
+ensures that the charge deposited near the axis is correctly
+taken into account by the spectral cylindrical Maxwell solver.</p></li>
 </ul>
 </dd>
 </dl>
-<dl class="method">
+<dl class="py method">
 <dt id="fbpic.main.Simulation.add_new_species">
-<code class="sig-name descname">add_new_species</code><span class="sig-paren">(</span><em class="sig-param">q</em>, <em class="sig-param">m</em>, <em class="sig-param">n=None</em>, <em class="sig-param">dens_func=None</em>, <em class="sig-param">p_nz=None</em>, <em class="sig-param">p_nr=None</em>, <em class="sig-param">p_nt=None</em>, <em class="sig-param">p_zmin=-inf</em>, <em class="sig-param">p_zmax=inf</em>, <em class="sig-param">p_rmin=0</em>, <em class="sig-param">p_rmax=inf</em>, <em class="sig-param">uz_m=0.0</em>, <em class="sig-param">ux_m=0.0</em>, <em class="sig-param">uy_m=0.0</em>, <em class="sig-param">uz_th=0.0</em>, <em class="sig-param">ux_th=0.0</em>, <em class="sig-param">uy_th=0.0</em>, <em class="sig-param">continuous_injection=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/main.html#Simulation.add_new_species"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.main.Simulation.add_new_species" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">add_new_species</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">q</span></em>, <em class="sig-param"><span class="n">m</span></em>, <em class="sig-param"><span class="n">n</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dens_func</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">p_nz</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">p_nr</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">p_nt</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">p_zmin</span><span class="o">=</span><span class="default_value">- inf</span></em>, <em class="sig-param"><span class="n">p_zmax</span><span class="o">=</span><span class="default_value">inf</span></em>, <em class="sig-param"><span class="n">p_rmin</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">p_rmax</span><span class="o">=</span><span class="default_value">inf</span></em>, <em class="sig-param"><span class="n">uz_m</span><span class="o">=</span><span class="default_value">0.0</span></em>, <em class="sig-param"><span class="n">ux_m</span><span class="o">=</span><span class="default_value">0.0</span></em>, <em class="sig-param"><span class="n">uy_m</span><span class="o">=</span><span class="default_value">0.0</span></em>, <em class="sig-param"><span class="n">uz_th</span><span class="o">=</span><span class="default_value">0.0</span></em>, <em class="sig-param"><span class="n">ux_th</span><span class="o">=</span><span class="default_value">0.0</span></em>, <em class="sig-param"><span class="n">uy_th</span><span class="o">=</span><span class="default_value">0.0</span></em>, <em class="sig-param"><span class="n">continuous_injection</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/main.html#Simulation.add_new_species"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.main.Simulation.add_new_species" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a new species (i.e. an instance of <cite>Particles</cite>) with
 charge <cite>q</cite> and mass <cite>m</cite>. Add it to the simulation (i.e. to the list
 <cite>Simulation.ptcl</cite>), and return it, so that the methods of the
@@ -359,9 +370,9 @@ in the case of a moving window</p></li>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="fbpic.main.Simulation.set_moving_window">
-<code class="sig-name descname">set_moving_window</code><span class="sig-paren">(</span><em class="sig-param">v=299792458.0</em>, <em class="sig-param">ux_m=None</em>, <em class="sig-param">uy_m=None</em>, <em class="sig-param">uz_m=None</em>, <em class="sig-param">ux_th=None</em>, <em class="sig-param">uy_th=None</em>, <em class="sig-param">uz_th=None</em>, <em class="sig-param">gamma_boost=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/main.html#Simulation.set_moving_window"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.main.Simulation.set_moving_window" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">set_moving_window</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">v</span><span class="o">=</span><span class="default_value">299792458.0</span></em>, <em class="sig-param"><span class="n">ux_m</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">uy_m</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">uz_m</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ux_th</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">uy_th</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">uz_th</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">gamma_boost</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/main.html#Simulation.set_moving_window"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.main.Simulation.set_moving_window" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initializes a moving window for the simulation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -375,9 +386,9 @@ in the case of a moving window</p></li>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="fbpic.main.Simulation.step">
-<code class="sig-name descname">step</code><span class="sig-paren">(</span><em class="sig-param">N=1</em>, <em class="sig-param">correct_currents=True</em>, <em class="sig-param">correct_divE=False</em>, <em class="sig-param">use_true_rho=False</em>, <em class="sig-param">move_positions=True</em>, <em class="sig-param">move_momenta=True</em>, <em class="sig-param">show_progress=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/main.html#Simulation.step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.main.Simulation.step" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">step</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">N</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">correct_currents</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">correct_divE</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">use_true_rho</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">move_positions</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">move_momenta</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">show_progress</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/main.html#Simulation.step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.main.Simulation.step" title="Permalink to this definition">¶</a></dt>
 <dd><p>Perform N PIC cycles.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -420,11 +431,19 @@ field push or not. (requires initialize_ions = True)</p></li>
 
   <div role="contentinfo">
     <p>
+        
         &copy; Copyright 2016, FBPIC contributors
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -435,7 +454,6 @@ field push or not. (requires initialize_ions = True)</p></li>
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {

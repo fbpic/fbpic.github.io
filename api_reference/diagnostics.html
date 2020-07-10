@@ -1,39 +1,40 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>The openPMD diagnostics &mdash; FBPIC 0.16.0 documentation</title>
+  <title>The openPMD diagnostics &mdash; FBPIC 0.17.0 documentation</title>
   
-
-  
-  
-  
-  
-
-  
-  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-
-    
 
   
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Checkpoints and restarts" href="checkpoint_restart.html" />
@@ -51,7 +52,7 @@
           
 
           
-            <a href="../index.html" class="icon icon-home"> FBPIC
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> FBPIC
           
 
           
@@ -61,7 +62,7 @@
             
             
               <div class="version">
-                0.16.0
+                0.17.0
               </div>
             
           
@@ -78,6 +79,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -118,6 +120,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -156,7 +159,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../index.html">Docs</a> &raquo;</li>
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
           <li><a href="api_reference.html">API reference</a> &raquo;</li>
         
@@ -192,9 +195,9 @@ adding or removing a corresponding diagnostic object in the list of diagnostics 
 <h2>Regular diagnostics<a class="headerlink" href="#regular-diagnostics" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="field-diagnostic">
 <h3>Field diagnostic<a class="headerlink" href="#field-diagnostic" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
+<dl class="py class">
 <dt id="fbpic.openpmd_diag.FieldDiagnostic">
-<em class="property">class </em><code class="sig-prename descclassname">fbpic.openpmd_diag.</code><code class="sig-name descname">FieldDiagnostic</code><span class="sig-paren">(</span><em class="sig-param">period=None, fldobject=None, comm=None, fieldtypes=['rho', 'E', 'B', 'J'], write_dir=None, iteration_min=0, iteration_max=inf, dt_period=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/openpmd_diag/field_diag.html#FieldDiagnostic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.openpmd_diag.FieldDiagnostic" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">fbpic.openpmd_diag.</code><code class="sig-name descname">FieldDiagnostic</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">period</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">fldobject</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">comm</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">fieldtypes</span><span class="o">=</span><span class="default_value">['rho', 'E', 'B', 'J']</span></em>, <em class="sig-param"><span class="n">write_dir</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">iteration_min</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">iteration_max</span><span class="o">=</span><span class="default_value">inf</span></em>, <em class="sig-param"><span class="n">dt_period</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/openpmd_diag/field_diag.html#FieldDiagnostic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.openpmd_diag.FieldDiagnostic" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize the field diagnostic.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -226,9 +229,9 @@ of the current working directory.</p></li>
 </div>
 <div class="section" id="particle-diagnostic">
 <h3>Particle diagnostic<a class="headerlink" href="#particle-diagnostic" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
+<dl class="py class">
 <dt id="fbpic.openpmd_diag.ParticleDiagnostic">
-<em class="property">class </em><code class="sig-prename descclassname">fbpic.openpmd_diag.</code><code class="sig-name descname">ParticleDiagnostic</code><span class="sig-paren">(</span><em class="sig-param">period=None, species={}, comm=None, particle_data=['position', 'momentum', 'weighting'], select=None, write_dir=None, iteration_min=0, iteration_max=inf, subsampling_fraction=None, dt_period=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/openpmd_diag/particle_diag.html#ParticleDiagnostic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.openpmd_diag.ParticleDiagnostic" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">fbpic.openpmd_diag.</code><code class="sig-name descname">ParticleDiagnostic</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">period</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">species</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">comm</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">particle_data</span><span class="o">=</span><span class="default_value">['position', 'momentum', 'weighting']</span></em>, <em class="sig-param"><span class="n">select</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">write_dir</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">iteration_min</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">iteration_max</span><span class="o">=</span><span class="default_value">inf</span></em>, <em class="sig-param"><span class="n">subsampling_fraction</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dt_period</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/openpmd_diag/particle_diag.html#ParticleDiagnostic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.openpmd_diag.ParticleDiagnostic" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize the particle diagnostics.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -272,9 +275,9 @@ subsampling_fraction probability</p></li>
 </div>
 <div class="section" id="particle-density-diagnostic">
 <h3>Particle density diagnostic<a class="headerlink" href="#particle-density-diagnostic" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
+<dl class="py class">
 <dt id="fbpic.openpmd_diag.ParticleChargeDensityDiagnostic">
-<em class="property">class </em><code class="sig-prename descclassname">fbpic.openpmd_diag.</code><code class="sig-name descname">ParticleChargeDensityDiagnostic</code><span class="sig-paren">(</span><em class="sig-param">period=None</em>, <em class="sig-param">sim=None</em>, <em class="sig-param">species={}</em>, <em class="sig-param">write_dir=None</em>, <em class="sig-param">iteration_min=0</em>, <em class="sig-param">iteration_max=inf</em>, <em class="sig-param">dt_period=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/openpmd_diag/particle_density_diag.html#ParticleChargeDensityDiagnostic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.openpmd_diag.ParticleChargeDensityDiagnostic" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">fbpic.openpmd_diag.</code><code class="sig-name descname">ParticleChargeDensityDiagnostic</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">period</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">sim</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">species</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">write_dir</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">iteration_min</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">iteration_max</span><span class="o">=</span><span class="default_value">inf</span></em>, <em class="sig-param"><span class="n">dt_period</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/openpmd_diag/particle_density_diag.html#ParticleChargeDensityDiagnostic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.openpmd_diag.ParticleChargeDensityDiagnostic" title="Permalink to this definition">¶</a></dt>
 <dd><p>Writes the charge density of the specified species in the
 openPMD file (one dataset per species)</p>
 <dl class="field-list simple">
@@ -307,9 +310,9 @@ of the current working directory.</p></li>
 during a boosted-frame simulation.</p>
 <div class="section" id="id1">
 <h3>Field diagnostic<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
+<dl class="py class">
 <dt id="fbpic.openpmd_diag.BackTransformedFieldDiagnostic">
-<em class="property">class </em><code class="sig-prename descclassname">fbpic.openpmd_diag.</code><code class="sig-name descname">BackTransformedFieldDiagnostic</code><span class="sig-paren">(</span><em class="sig-param">zmin_lab, zmax_lab, v_lab, dt_snapshots_lab, Ntot_snapshots_lab, gamma_boost, period, fldobject, comm=None, fieldtypes=['E', 'B'], write_dir=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/openpmd_diag/boosted_field_diag.html#BackTransformedFieldDiagnostic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.openpmd_diag.BackTransformedFieldDiagnostic" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">fbpic.openpmd_diag.</code><code class="sig-name descname">BackTransformedFieldDiagnostic</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">zmin_lab</span></em>, <em class="sig-param"><span class="n">zmax_lab</span></em>, <em class="sig-param"><span class="n">v_lab</span></em>, <em class="sig-param"><span class="n">dt_snapshots_lab</span></em>, <em class="sig-param"><span class="n">Ntot_snapshots_lab</span></em>, <em class="sig-param"><span class="n">gamma_boost</span></em>, <em class="sig-param"><span class="n">period</span></em>, <em class="sig-param"><span class="n">fldobject</span></em>, <em class="sig-param"><span class="n">comm</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">fieldtypes</span><span class="o">=</span><span class="default_value">['E', 'B']</span></em>, <em class="sig-param"><span class="n">write_dir</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/openpmd_diag/boosted_field_diag.html#BackTransformedFieldDiagnostic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.openpmd_diag.BackTransformedFieldDiagnostic" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize diagnostics that retrieve the data in the lab frame,
 as a series of snapshot (one file per snapshot),
 within a virtual moving window defined by zmin_lab, zmax_lab, v_lab.</p>
@@ -353,9 +356,9 @@ are then brought from spectral to real space, at each iteration.</p></li>
 </div>
 <div class="section" id="id2">
 <h3>Particle diagnostic<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
+<dl class="py class">
 <dt id="fbpic.openpmd_diag.BackTransformedParticleDiagnostic">
-<em class="property">class </em><code class="sig-prename descclassname">fbpic.openpmd_diag.</code><code class="sig-name descname">BackTransformedParticleDiagnostic</code><span class="sig-paren">(</span><em class="sig-param">zmin_lab, zmax_lab, v_lab, dt_snapshots_lab, Ntot_snapshots_lab, gamma_boost, period, fldobject, particle_data=['position', 'momentum', 'weighting'], select=None, write_dir=None, species={'electrons': None}, comm=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/openpmd_diag/boosted_particle_diag.html#BackTransformedParticleDiagnostic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.openpmd_diag.BackTransformedParticleDiagnostic" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">fbpic.openpmd_diag.</code><code class="sig-name descname">BackTransformedParticleDiagnostic</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">zmin_lab</span></em>, <em class="sig-param"><span class="n">zmax_lab</span></em>, <em class="sig-param"><span class="n">v_lab</span></em>, <em class="sig-param"><span class="n">dt_snapshots_lab</span></em>, <em class="sig-param"><span class="n">Ntot_snapshots_lab</span></em>, <em class="sig-param"><span class="n">gamma_boost</span></em>, <em class="sig-param"><span class="n">period</span></em>, <em class="sig-param"><span class="n">fldobject</span></em>, <em class="sig-param"><span class="n">particle_data</span><span class="o">=</span><span class="default_value">['position', 'momentum', 'weighting']</span></em>, <em class="sig-param"><span class="n">select</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">write_dir</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">species</span><span class="o">=</span><span class="default_value">{'electrons': None}</span></em>, <em class="sig-param"><span class="n">comm</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/openpmd_diag/boosted_particle_diag.html#BackTransformedParticleDiagnostic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.openpmd_diag.BackTransformedParticleDiagnostic" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize diagnostics that retrieve the data in the lab frame,
 as a series of snapshot (one file per snapshot),
 within a virtual moving window defined by zmin_lab, zmax_lab, v_lab.</p>
@@ -420,11 +423,19 @@ extract some information about the grid</p></li>
 
   <div role="contentinfo">
     <p>
+        
         &copy; Copyright 2016, FBPIC contributors
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -435,7 +446,6 @@ extract some information about the grid</p></li>
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {
