@@ -230,7 +230,8 @@ source activate $SCRATCH/fbpic_env
 <h3>Installation of FBPIC and its dependencies<a class="headerlink" href="#installation-of-fbpic-and-its-dependencies" title="Permalink to this headline">¶</a></h3>
 <ul>
 <li><p>Install the dependencies of <code class="docutils literal notranslate"><span class="pre">fbpic</span></code></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">numba</span> <span class="n">scipy</span> <span class="n">h5py</span> <span class="n">mkl</span> <span class="n">cudatoolkit</span><span class="o">=</span><span class="mf">10.0</span> <span class="n">mpi4py</span><span class="o">=*=*</span><span class="n">mpich</span><span class="o">*</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">numba</span> <span class="n">scipy</span> <span class="n">h5py</span> <span class="n">mkl</span> <span class="n">cudatoolkit</span><span class="o">=</span><span class="mf">10.0</span>
+<span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">mpi4py</span><span class="o">=*=*</span><span class="n">mpich</span><span class="o">*</span>
 <span class="n">pip</span> <span class="n">install</span> <span class="n">cupy</span><span class="o">-</span><span class="n">cuda100</span>
 </pre></div>
 </div>
@@ -294,7 +295,7 @@ mpirun -np &lt;requestedRanks&gt; python fbpic_script.py
 <p>where <code class="docutils literal notranslate"><span class="pre">&lt;gpuConstraint&gt;</span></code> and <code class="docutils literal notranslate"><span class="pre">&lt;gpuPerNode&gt;</span></code> should be:</p>
 <blockquote>
 <div><ul class="simple">
-<li><p>For the nodes with four GTX 1080Ti GPUs, <code class="docutils literal notranslate"><span class="pre">gpuConstraint=es1_1080ti</span></code>, <code class="docutils literal notranslate"><span class="pre">gpuPerNode=4</span></code> and <code class="docutils literal notranslate"><span class="pre">cpuPerTask=2</span></code></p></li>
+<li><p>For the nodes with four GTX 1080Ti GPUs, <code class="docutils literal notranslate"><span class="pre">gpuConstraint=es1_1080ti</span></code>, <code class="docutils literal notranslate"><span class="pre">gpuPerNode=4</span></code> and <code class="docutils literal notranslate"><span class="pre">cpuPerTask=8</span></code></p></li>
 <li><p>For the nodes with two V100 GPUs, <code class="docutils literal notranslate"><span class="pre">gpuConstraint=es1_v100</span></code>, <code class="docutils literal notranslate"><span class="pre">gpuPerNode=2</span></code> and <code class="docutils literal notranslate"><span class="pre">cpuPerTask=4</span></code></p></li>
 </ul>
 </div></blockquote>
