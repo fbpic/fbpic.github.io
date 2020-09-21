@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Installation on Summit (OLCF) &mdash; FBPIC 0.17.1 documentation</title>
+  <title>Installation on Summit (OLCF) &mdash; FBPIC 0.18.0 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.17.1
+                0.18.0
               </div>
             
           
@@ -188,14 +188,13 @@ is a GPU cluster at the <a class="reference external" href="https://www.olcf.orn
 <h3>Preparing the Anaconda environment<a class="headerlink" href="#preparing-the-anaconda-environment" title="Permalink to this headline">¶</a></h3>
 <p>First load the relevant modules:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">module</span> <span class="n">purge</span>
-<span class="n">module</span> <span class="n">load</span> <span class="n">gcc</span><span class="o">/</span><span class="mf">4.8</span><span class="o">.</span><span class="mi">5</span>
-<span class="n">module</span> <span class="n">load</span> <span class="n">spectrum</span><span class="o">-</span><span class="n">mpi</span><span class="o">/</span><span class="mf">10.3</span><span class="o">.</span><span class="mf">1.2</span><span class="o">-</span><span class="mi">20200121</span>
-<span class="n">module</span> <span class="n">load</span> <span class="n">fftw</span><span class="o">/</span><span class="mf">3.3</span><span class="o">.</span><span class="mi">8</span>
+<span class="n">module</span> <span class="n">load</span> <span class="n">gcc</span>
+<span class="n">module</span> <span class="n">load</span> <span class="n">fftw</span>
 <span class="n">module</span> <span class="n">load</span> <span class="n">python</span><span class="o">/</span><span class="mf">3.7</span><span class="o">.</span><span class="mi">0</span><span class="o">-</span><span class="n">anaconda3</span><span class="o">-</span><span class="mf">5.3</span><span class="o">.</span><span class="mi">0</span>
 </pre></div>
 </div>
 <p>Then create a new <cite>conda</cite> environment</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">create</span> <span class="o">-</span><span class="n">n</span> <span class="n">fbpic</span> <span class="n">python</span><span class="o">=</span><span class="mi">3</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">create</span> <span class="o">-</span><span class="n">n</span> <span class="n">fbpic</span> <span class="o">--</span><span class="n">clone</span> <span class="n">base</span>
 <span class="n">source</span> <span class="n">activate</span> <span class="n">fbpic</span>
 </pre></div>
 </div>
@@ -205,16 +204,7 @@ is a GPU cluster at the <a class="reference external" href="https://www.olcf.orn
 <ul>
 <li><p>Install the dependencies of <code class="docutils literal notranslate"><span class="pre">fbpic</span></code></p>
 <blockquote>
-<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">numba</span> <span class="n">scipy</span> <span class="n">h5py</span> <span class="n">cython</span> <span class="n">cudatoolkit</span><span class="o">=</span><span class="mf">9.0</span>
-</pre></div>
-</div>
-</div></blockquote>
-</li>
-<li><p>Install <code class="docutils literal notranslate"><span class="pre">cupy</span></code> (This step can take a few minutes.)</p>
-<blockquote>
-<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">module</span> <span class="n">load</span> <span class="n">cuda</span><span class="o">/</span><span class="mf">9.1</span><span class="o">.</span><span class="mi">85</span>
-<span class="n">pip</span> <span class="n">install</span> <span class="n">cupy</span>
-<span class="n">module</span> <span class="n">unload</span> <span class="n">cuda</span>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">cython</span> <span class="n">numba</span><span class="o">=</span><span class="mf">0.49</span> <span class="n">cudatoolkit</span><span class="o">=</span><span class="mf">9.0</span>
 </pre></div>
 </div>
 </div></blockquote>
@@ -222,13 +212,6 @@ is a GPU cluster at the <a class="reference external" href="https://www.olcf.orn
 <li><p>Install <code class="docutils literal notranslate"><span class="pre">pyfftw</span></code></p>
 <blockquote>
 <div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">pyfftw</span>
-</pre></div>
-</div>
-</div></blockquote>
-</li>
-<li><p>Install <code class="docutils literal notranslate"><span class="pre">mpi4py</span></code></p>
-<blockquote>
-<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>env MPICC=$(which mpicc) pip install mpi4py
 </pre></div>
 </div>
 </div></blockquote>
@@ -264,17 +247,16 @@ environment <code class="docutils literal notranslate"><span class="pre">fbpic</
 </div>
 <p>Then <code class="docutils literal notranslate"><span class="pre">cd</span></code> to the directory where you prepared your input script and type</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>module purge
-module load gcc/4.8.5
+module load gcc
 module load cuda/9.1.85
-module load spectrum-mpi/10.3.1.2-20200121
-module load fftw/3.3.8
+module load fftw
 module load python/3.7.0-anaconda3-5.3.0
 source activate fbpic
-export CUPY_CACHE_DIR=$MEMBERWORK/&lt;project_id&gt;/.cupy/kernel_cache
 
-export NUMBA_NUM_THREADS=7
-export OMP_NUM_THREADS=7
+export CUPY_CACHE_DIR=$MEMBERWORK/&lt;project_id&gt;/.cupy/kernel_cache
 export FBPIC_DISABLE_CACHING=1
+export NUMBA_NUM_THREADS=1
+export OMP_NUM_THREADS=1
 
 jsrun -n 1 -a 1 -c 1 -g 1 python &lt;fbpic_script.py&gt;
 </pre></div>
@@ -289,27 +271,28 @@ following text (and replace the bracketed text by the proper values).</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>#!/bin/bash
 #BSUB -J my_job
 #BSUB -W &lt;requestedTime&gt;
-#BSUB -nnodes &lt;requestedNode&gt;
+#BSUB -nnodes &lt;requestedNodes&gt;
 #BSUB -P &lt;accountNumber&gt;
 
 module purge
-module load gcc/4.8.5
+module load gcc
 module load cuda/9.1.85
-module load spectrum-mpi/10.3.1.2-20200121
-module load fftw/3.3.8
+module load fftw
 module load python/3.7.0-anaconda3-5.3.0
 source activate fbpic
-export CUPY_CACHE_DIR=$MEMBERWORK/&lt;project_id&gt;/.cupy/kernel_cache
 
-export NUMBA_NUM_THREADS=7
-export OMP_NUM_THREADS=7
+export CUPY_CACHE_DIR=$MEMBERWORK/&lt;project_id&gt;/.cupy/kernel_cache
 export FBPIC_ENABLE_GPUDIRECT=0
 export FBPIC_DISABLE_CACHING=1
+export NUMBA_NUM_THREADS=1
+export OMP_NUM_THREADS=1
 
-jsrun -n &lt;requestedNode&gt; -a 6 -c 42 -g 6 --smpiargs=&quot;-gpu&quot; python fbpic_script.py &gt; cpu.log
+jsrun -n &lt;requestedMPIRanks&gt; -a 1 -c 1 -g 1 --smpiargs=&quot;-gpu&quot; python fbpic_script.py &gt; cpu.log
 </pre></div>
 </div>
-<p>where <code class="docutils literal notranslate"><span class="pre">&lt;project_id&gt;</span></code> should be replaced by your project account number.</p>
+<p>where <code class="docutils literal notranslate"><span class="pre">&lt;project_id&gt;</span></code> should be replaced by your project account number, and
+<code class="docutils literal notranslate"><span class="pre">&lt;requestedNodes</span></code> and <code class="docutils literal notranslate"><span class="pre">&lt;requestedMPIRanks&gt;</span></code> should be replaced by the
+number of nodes and MPI ranks (use 6 MPI ranks per Summit node).</p>
 <p>Then run:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">bsub</span> <span class="n">submission_script</span>
 </pre></div>

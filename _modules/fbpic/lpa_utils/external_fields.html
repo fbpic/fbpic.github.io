@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fbpic.lpa_utils.external_fields &mdash; FBPIC 0.17.1 documentation</title>
+  <title>fbpic.lpa_utils.external_fields &mdash; FBPIC 0.18.0 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.17.1
+                0.18.0
               </div>
             
           
@@ -155,12 +155,15 @@
 <span></span><span class="c1"># Copyright 2016, FBPIC contributors</span>
 <span class="c1"># Authors: Remi Lehe, Manuel Kirchen</span>
 <span class="c1"># License: 3-Clause-BSD-LBNL</span>
-<span class="kn">from</span> <span class="nn">numba</span> <span class="kn">import</span> <span class="n">vectorize</span><span class="p">,</span> <span class="n">float64</span><span class="p">,</span> <span class="n">njit</span>
+<span class="kn">from</span> <span class="nn">numba</span> <span class="kn">import</span> <span class="n">vectorize</span><span class="p">,</span> <span class="n">float64</span><span class="p">,</span> <span class="n">void</span><span class="p">,</span> <span class="n">njit</span>
 <span class="kn">from</span> <span class="nn">scipy.constants</span> <span class="kn">import</span> <span class="n">c</span>
 <span class="n">inv_c</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="n">c</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="c1"># Check if CUDA is available, then import CUDA functions</span>
 <span class="kn">from</span> <span class="nn">fbpic.utils.cuda</span> <span class="kn">import</span> <span class="n">cuda_installed</span>
+<span class="k">if</span> <span class="n">cuda_installed</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">fbpic.utils.cuda</span> <span class="kn">import</span> <span class="n">compile_cupy</span><span class="p">,</span> <span class="n">cuda_tpb_bpg_1d</span>
+    <span class="kn">from</span> <span class="nn">numba</span> <span class="kn">import</span> <span class="n">cuda</span>
 
 <div class="viewcode-block" id="ExternalField"><a class="viewcode-back" href="../../../api_reference/lpa_utilities/external_fields.html#fbpic.lpa_utils.external_fields.ExternalField">[docs]</a><span class="k">class</span> <span class="nc">ExternalField</span><span class="p">(</span> <span class="nb">object</span> <span class="p">):</span>
 
@@ -284,8 +287,21 @@
         <span class="n">cpu_compiler</span> <span class="o">=</span> <span class="n">vectorize</span><span class="p">(</span> <span class="n">signature</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="s1">&#39;cpu&#39;</span><span class="p">,</span> <span class="n">nopython</span><span class="o">=</span><span class="kc">True</span> <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cpu_func</span> <span class="o">=</span> <span class="n">cpu_compiler</span><span class="p">(</span> <span class="n">func</span> <span class="p">)</span>
         <span class="k">if</span> <span class="n">cuda_installed</span><span class="p">:</span>
-            <span class="n">gpu_compiler</span> <span class="o">=</span> <span class="n">vectorize</span><span class="p">(</span> <span class="n">signature</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="s1">&#39;cuda&#39;</span> <span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">gpu_func</span> <span class="o">=</span> <span class="n">gpu_compiler</span><span class="p">(</span> <span class="n">func</span> <span class="p">)</span>
+            <span class="c1"># First create a device inline function</span>
+            <span class="n">inline_func</span> <span class="o">=</span> <span class="n">cuda</span><span class="o">.</span><span class="n">jit</span><span class="p">(</span> <span class="n">func</span><span class="p">,</span> <span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="kc">True</span> <span class="p">)</span>
+            <span class="c1"># Then create a CUDA kernel and compile it the usual way</span>
+            <span class="k">def</span> <span class="nf">external_field_kernel</span><span class="p">(</span> <span class="n">F</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">amplitude</span><span class="p">,</span> <span class="n">length_scale</span> <span class="p">):</span>
+                <span class="n">i</span> <span class="o">=</span> <span class="n">cuda</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    
+                <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">F</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                    <span class="n">F</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">inline_func</span><span class="p">(</span> <span class="n">F</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">z</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">t</span><span class="p">,</span> <span class="n">amplitude</span><span class="p">,</span> <span class="n">length_scale</span> <span class="p">)</span>
+
+            <span class="c1"># To ensure that the kernel is compiled immediately and prevent scoping issues,</span>
+            <span class="c1"># it is specialized using an explicit signature</span>
+            <span class="n">gpu_signature</span> <span class="o">=</span> <span class="n">void</span><span class="p">(</span> <span class="n">float64</span><span class="p">[:],</span> <span class="n">float64</span><span class="p">[:],</span> <span class="n">float64</span><span class="p">[:],</span>
+                               <span class="n">float64</span><span class="p">[:],</span> <span class="n">float64</span><span class="p">,</span> <span class="n">float64</span><span class="p">,</span> <span class="n">float64</span> <span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">gpu_func</span> <span class="o">=</span> <span class="n">compile_cupy</span><span class="p">(</span> <span class="n">external_field_kernel</span> <span class="p">)</span><span class="o">.</span><span class="n">specialize</span><span class="p">(</span> <span class="n">gpu_signature</span> <span class="p">)</span>
 
         <span class="c1"># Convert the field back to the boosted frame</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">gamma_boost</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">gamma_boost</span> <span class="o">!=</span> <span class="mf">1.</span><span class="p">):</span>
@@ -345,9 +361,12 @@
                         <span class="bp">self</span><span class="o">.</span><span class="n">cpu_func</span><span class="p">(</span> <span class="n">field</span><span class="p">,</span> <span class="n">species</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">species</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">species</span><span class="o">.</span><span class="n">z</span><span class="p">,</span>
                               <span class="n">t</span><span class="p">,</span> <span class="n">amplitude</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">length_scale</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">field</span> <span class="p">)</span>
                     <span class="k">else</span><span class="p">:</span>
-                        <span class="c1"># Call the GPU function</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">gpu_func</span><span class="p">(</span> <span class="n">field</span><span class="p">,</span> <span class="n">species</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">species</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">species</span><span class="o">.</span><span class="n">z</span><span class="p">,</span>
-                              <span class="n">t</span><span class="p">,</span> <span class="n">amplitude</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">length_scale</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">field</span> <span class="p">)</span></div>
+                        <span class="c1"># Get the threads per block and the blocks per grid</span>
+                        <span class="n">dim_grid_1d</span><span class="p">,</span> <span class="n">dim_block_1d</span> <span class="o">=</span> <span class="n">cuda_tpb_bpg_1d</span><span class="p">(</span> <span class="n">species</span><span class="o">.</span><span class="n">Ntot</span> <span class="p">)</span>
+                        <span class="c1"># Call the GPU kernel</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">gpu_func</span><span class="p">[</span><span class="n">dim_grid_1d</span><span class="p">,</span> <span class="n">dim_block_1d</span><span class="p">](</span>
+                            <span class="n">field</span><span class="p">,</span> <span class="n">species</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">species</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">species</span><span class="o">.</span><span class="n">z</span><span class="p">,</span>
+                            <span class="n">t</span><span class="p">,</span> <span class="n">amplitude</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">length_scale</span> <span class="p">)</span></div>
 </pre></div>
 
            </div>
