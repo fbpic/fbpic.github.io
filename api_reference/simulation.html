@@ -1,15 +1,18 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>The Simulation class &mdash; FBPIC 0.18.0 documentation</title>
+  <title>The Simulation class &mdash; FBPIC 0.19.0 documentation</title>
   
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
 
   
   
@@ -17,7 +20,9 @@
   
 
   
-  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -30,10 +35,6 @@
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="The Particles class" href="particles.html" />
@@ -51,7 +52,7 @@
           
 
           
-            <a href="../index.html" class="icon icon-home"> FBPIC
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> FBPIC
           
 
           
@@ -61,7 +62,7 @@
             
             
               <div class="version">
-                0.18.0
+                0.19.0
               </div>
             
           
@@ -78,6 +79,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -105,6 +107,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -143,7 +146,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../index.html">Docs</a> &raquo;</li>
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
           <li><a href="api_reference.html">API reference</a> &raquo;</li>
         
@@ -350,9 +353,17 @@ a 1d array containing the density <em>relative to n</em>
 (in the lab frame). Default: 0</p></li>
 <li><p><strong>p_rmax</strong> (<em>floats</em><em> (</em><em>in meters</em><em>)</em><em>, </em><em>optional</em>) – The maximal r position below which the particles are initialized
 (in the lab frame). Default: upper edge of the simulation box.</p></li>
-<li><p><strong>ux_m</strong><strong>, </strong><strong>uy_m</strong> (<em>uz_m</em><em>,</em>) – Normalized mean momenta (in the lab frame)
+<li><p><strong>uz_m</strong> (<em>floats</em><em> (</em><em>dimensionless</em><em>)</em><em>, </em><em>optional</em>) – Normalized mean momenta (in the lab frame)
 of the injected particles in each direction</p></li>
-<li><p><strong>ux_th</strong><strong>, </strong><strong>uy_th</strong> (<em>uz_th</em><em>,</em>) – Normalized thermal momenta (in the lab frame)
+<li><p><strong>ux_m</strong> (<em>floats</em><em> (</em><em>dimensionless</em><em>)</em><em>, </em><em>optional</em>) – Normalized mean momenta (in the lab frame)
+of the injected particles in each direction</p></li>
+<li><p><strong>uy_m</strong> (<em>floats</em><em> (</em><em>dimensionless</em><em>)</em><em>, </em><em>optional</em>) – Normalized mean momenta (in the lab frame)
+of the injected particles in each direction</p></li>
+<li><p><strong>uz_th</strong> (<em>floats</em><em> (</em><em>dimensionless</em><em>)</em><em>, </em><em>optional</em>) – Normalized thermal momenta (in the lab frame)
+in each direction</p></li>
+<li><p><strong>ux_th</strong> (<em>floats</em><em> (</em><em>dimensionless</em><em>)</em><em>, </em><em>optional</em>) – Normalized thermal momenta (in the lab frame)
+in each direction</p></li>
+<li><p><strong>uy_th</strong> (<em>floats</em><em> (</em><em>dimensionless</em><em>)</em><em>, </em><em>optional</em>) – Normalized thermal momenta (in the lab frame)
 in each direction</p></li>
 <li><p><strong>continuous_injection</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to continuously inject the particles,
 in the case of a moving window</p></li>
@@ -375,8 +386,12 @@ in the case of a moving window</p></li>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>v</strong> (<em>float</em><em> (</em><em>in meters per seconds</em><em>)</em><em>, </em><em>optional</em>) – The speed of the moving window</p></li>
-<li><p><strong>uy_m</strong><strong>, </strong><strong>uz_m</strong> (<em>ux_m</em><em>,</em>) – Unused, kept for backward-compatibility</p></li>
-<li><p><strong>uy_th</strong><strong>, </strong><strong>uz_th</strong> (<em>ux_th</em><em>,</em>) – Unused, kept for backward-compatibility</p></li>
+<li><p><strong>ux_m</strong> (<em>float</em><em> (</em><em>dimensionless</em><em>)</em><em>, </em><em>optional</em>) – Unused, kept for backward-compatibility</p></li>
+<li><p><strong>uy_m</strong> (<em>float</em><em> (</em><em>dimensionless</em><em>)</em><em>, </em><em>optional</em>) – Unused, kept for backward-compatibility</p></li>
+<li><p><strong>uz_m</strong> (<em>float</em><em> (</em><em>dimensionless</em><em>)</em><em>, </em><em>optional</em>) – Unused, kept for backward-compatibility</p></li>
+<li><p><strong>ux_th</strong> (<em>float</em><em> (</em><em>dimensionless</em><em>)</em><em>, </em><em>optional</em>) – Unused, kept for backward-compatibility</p></li>
+<li><p><strong>uy_th</strong> (<em>float</em><em> (</em><em>dimensionless</em><em>)</em><em>, </em><em>optional</em>) – Unused, kept for backward-compatibility</p></li>
+<li><p><strong>uz_th</strong> (<em>float</em><em> (</em><em>dimensionless</em><em>)</em><em>, </em><em>optional</em>) – Unused, kept for backward-compatibility</p></li>
 <li><p><strong>gamma_boost</strong> (<em>float</em><em>, </em><em>optional</em>) – Unused; kept for backward compatibility</p></li>
 </ul>
 </dd>
@@ -428,11 +443,19 @@ field push or not. (requires initialize_ions = True)</p></li>
 
   <div role="contentinfo">
     <p>
+        
         &copy; Copyright 2016, FBPIC contributors
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -443,7 +466,6 @@ field push or not. (requires initialize_ions = True)</p></li>
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {

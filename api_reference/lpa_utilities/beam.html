@@ -1,15 +1,18 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Beam initialization &mdash; FBPIC 0.18.0 documentation</title>
+  <title>Beam initialization &mdash; FBPIC 0.19.0 documentation</title>
   
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
 
   
   
@@ -17,7 +20,9 @@
   
 
   
-  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -30,10 +35,6 @@
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="External fields" href="external_fields.html" />
@@ -51,7 +52,7 @@
           
 
           
-            <a href="../../index.html" class="icon icon-home"> FBPIC
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> FBPIC
           
 
           
@@ -61,7 +62,7 @@
             
             
               <div class="version">
-                0.18.0
+                0.19.0
               </div>
             
           
@@ -78,6 +79,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -110,6 +112,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -148,7 +151,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../../index.html">Docs</a> &raquo;</li>
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
         
           <li><a href="../api_reference.html">API reference</a> &raquo;</li>
         
@@ -270,8 +273,12 @@ along with its space charge field, loading particles from numpy arrays.</p>
 <li><p><strong>sim</strong> (<em>a Simulation object</em>) – The structure that contains the simulation.</p></li>
 <li><p><strong>q</strong> (<em>float</em>) – Charge of the particle species</p></li>
 <li><p><strong>m</strong> (<em>float</em>) – Mass of the particle species</p></li>
-<li><p><strong>y</strong><strong>, </strong><strong>z</strong> (<em>x</em><em>,</em>) – The positions of the particles in x, y, z in meters</p></li>
-<li><p><strong>uy</strong><strong>, </strong><strong>uz</strong> (<em>ux</em><em>,</em>) – The dimensionless momenta of the particles in each direction</p></li>
+<li><p><strong>x</strong> (<em>1d arrays of length</em><em> (</em><em>N_macroparticles</em><em>,</em><em>)</em>) – The positions of the particles in x, y, z in meters</p></li>
+<li><p><strong>y</strong> (<em>1d arrays of length</em><em> (</em><em>N_macroparticles</em><em>,</em><em>)</em>) – The positions of the particles in x, y, z in meters</p></li>
+<li><p><strong>z</strong> (<em>1d arrays of length</em><em> (</em><em>N_macroparticles</em><em>,</em><em>)</em>) – The positions of the particles in x, y, z in meters</p></li>
+<li><p><strong>ux</strong> (<em>1d arrays of length</em><em> (</em><em>N_macroparticles</em><em>,</em><em>)</em>) – The dimensionless momenta of the particles in each direction</p></li>
+<li><p><strong>uy</strong> (<em>1d arrays of length</em><em> (</em><em>N_macroparticles</em><em>,</em><em>)</em>) – The dimensionless momenta of the particles in each direction</p></li>
+<li><p><strong>uz</strong> (<em>1d arrays of length</em><em> (</em><em>N_macroparticles</em><em>,</em><em>)</em>) – The dimensionless momenta of the particles in each direction</p></li>
 <li><p><strong>w</strong> (<em>1d array of length</em><em> (</em><em>N_macroparticles</em><em>,</em><em>)</em>) – The weight of the particles, i.e. the number of physical particles
 that each macroparticle corresponds to.</p></li>
 <li><p><strong>boost</strong> (<em>a BoostConverter object</em><em>, </em><em>optional</em>) – A BoostConverter object defining the Lorentz boost of
@@ -391,11 +398,19 @@ the new more flexible methods instead.</p>
 
   <div role="contentinfo">
     <p>
+        
         &copy; Copyright 2016, FBPIC contributors
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -406,7 +421,6 @@ the new more flexible methods instead.</p>
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {
