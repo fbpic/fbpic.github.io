@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fbpic.main &mdash; FBPIC 0.19.0 documentation</title>
+  <title>fbpic.main &mdash; FBPIC 0.20.0 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.19.0
+                0.20.0
               </div>
             
           
@@ -165,10 +165,10 @@
 <span class="c1"># as it sets the cuda context)</span>
 <span class="kn">from</span> <span class="nn">fbpic.utils.mpi</span> <span class="kn">import</span> <span class="n">MPI</span>
 <span class="c1"># Check if threading is available</span>
-<span class="kn">from</span> <span class="nn">.utils.threading</span> <span class="kn">import</span> <span class="n">threading_enabled</span><span class="p">,</span> <span class="n">numba_minor_version</span>
+<span class="kn">from</span> <span class="nn">.utils.threading</span> <span class="kn">import</span> <span class="n">threading_enabled</span><span class="p">,</span> <span class="n">numba_version</span>
 <span class="c1"># Check if CUDA is available, then import CUDA functions</span>
 <span class="kn">from</span> <span class="nn">.utils.cuda</span> <span class="kn">import</span> <span class="n">cuda_installed</span><span class="p">,</span> \
-    <span class="n">cupy_installed</span><span class="p">,</span> <span class="n">cupy_major_version</span><span class="p">,</span> <span class="n">numba_cuda_installed</span>
+    <span class="n">cupy_installed</span><span class="p">,</span> <span class="n">cupy_version</span><span class="p">,</span> <span class="n">numba_cuda_installed</span>
 <span class="k">if</span> <span class="n">cuda_installed</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">.utils.cuda</span> <span class="kn">import</span> <span class="n">send_data_to_gpu</span><span class="p">,</span> \
                 <span class="n">receive_data_from_gpu</span><span class="p">,</span> <span class="n">mpi_select_gpus</span>
@@ -395,18 +395,18 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">use_cuda</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="c1"># Check that cupy, numba and Python have the right version</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_cuda</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">cupy_major_version</span> <span class="o">&lt;</span> <span class="mi">7</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">cupy_version</span> <span class="o">&lt;</span> <span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">0</span><span class="p">):</span>
                 <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-                    <span class="s1">&#39;In order to run on GPUs, FBPIC version 0.16 and later </span><span class="se">\n</span><span class="s1">&#39;</span>
-                    <span class="s1">&#39;requires `cupy` version 7 (or later).</span><span class="se">\n</span><span class="s1">(The `cupy` version&#39;</span>
-                    <span class="s1">&#39; on your current system is </span><span class="si">%d</span><span class="s1">.)</span><span class="se">\n</span><span class="s1">Please install the &#39;</span>
-                    <span class="s1">&#39;latest version of `cupy`.&#39;</span> <span class="o">%</span><span class="n">cupy_major_version</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="n">numba_minor_version</span> <span class="o">&lt;</span> <span class="mi">46</span><span class="p">:</span>
+                    <span class="s1">&#39;In order to run on GPUs, FBPIC version 0.20 and later </span><span class="se">\n</span><span class="s1">&#39;</span>
+                    <span class="s1">&#39;requires `cupy` version 7.0 (or later).</span><span class="se">\n</span><span class="s1">(The `cupy` &#39;</span>
+                    <span class="s1">&#39;version on your current system is </span><span class="si">%d</span><span class="s1">.</span><span class="si">%d</span><span class="s1">.)</span><span class="se">\n</span><span class="s1">Please &#39;</span>
+                    <span class="s1">&#39;install the latest version of `cupy`.&#39;</span> <span class="o">%</span><span class="n">cupy_version</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">numba_version</span> <span class="o">&lt;</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">46</span><span class="p">):</span>
                 <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
                     <span class="s1">&#39;In order to run on GPUs, FBPIC version 0.16 and later </span><span class="se">\n</span><span class="s1">&#39;</span>
                     <span class="s1">&#39;requires `numba` version 0.46 (or later).</span><span class="se">\n</span><span class="s1">(The `numba` &#39;</span>
-                    <span class="s1">&#39;version on your current system is 0.</span><span class="si">%d</span><span class="s1">.)</span><span class="se">\n</span><span class="s1">Please install&#39;</span>
-                    <span class="s1">&#39; the latest version of `numba`.&#39;</span> <span class="o">%</span><span class="n">numba_minor_version</span><span class="p">)</span>
+                    <span class="s1">&#39;version on your current system is </span><span class="si">%d</span><span class="s1">.</span><span class="si">%d</span><span class="s1">.)</span><span class="se">\n</span><span class="s1">Please install&#39;</span>
+                    <span class="s1">&#39; the latest version of `numba`.&#39;</span> <span class="o">%</span><span class="n">numba_version</span><span class="p">)</span>
             <span class="k">elif</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
                     <span class="s1">&#39;In order to run on GPUs, FBPIC version 0.16 and later </span><span class="se">\n</span><span class="s1">&#39;</span>
@@ -490,6 +490,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">checkpoints</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="c1"># Initialize an empty list of laser antennas</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">laser_antennas</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># Initialize an empty list of mirrors</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mirrors</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="c1"># Print simulation setup</span>
         <span class="n">print_simulation_setup</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">verbose_level</span><span class="o">=</span><span class="n">verbose_level</span> <span class="p">)</span>
@@ -702,6 +704,7 @@
             <span class="c1"># Handle boundaries for the E and B fields:</span>
             <span class="c1"># - MPI exchanges for guard cells</span>
             <span class="c1"># - Damp fields in damping cells</span>
+            <span class="c1"># - Set fields to 0 at the position of the mirrors</span>
             <span class="c1"># - Update the fields in interpolation space</span>
             <span class="c1">#  (needed for the field gathering at the next iteration)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">exchange_and_damp_EB</span><span class="p">()</span>
@@ -870,6 +873,7 @@
 <span class="sd">        Handle boundaries for the E and B fields:</span>
 <span class="sd">         - MPI exchanges for guard cells</span>
 <span class="sd">         - Damp fields in damping cells (in z, and in r if PML are used)</span>
+<span class="sd">         - Set fields to 0 at the position of the mirrors</span>
 <span class="sd">         - Update the fields in interpolation space</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Shortcut</span>
@@ -895,6 +899,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">damp_EB_open_boundary</span><span class="p">(</span> <span class="n">fld</span><span class="o">.</span><span class="n">interp</span> <span class="p">)</span> <span class="c1"># Damp along z</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_pml</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">damp_pml_EB</span><span class="p">(</span> <span class="n">fld</span><span class="o">.</span><span class="n">interp</span> <span class="p">)</span> <span class="c1"># Damp in radial PML</span>
+
+        <span class="c1"># - Set fields to 0 at the position of the mirrors</span>
+        <span class="k">for</span> <span class="n">mirror</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">mirrors</span><span class="p">:</span>
+            <span class="n">mirror</span><span class="o">.</span><span class="n">set_fields_to_zero</span><span class="p">(</span> <span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="p">)</span>
 
         <span class="c1"># - Update spectral space (and interpolation space if needed)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_pml</span><span class="p">:</span>
