@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Installation on Lawrencium (LBNL) &mdash; FBPIC 0.20.0 documentation</title>
+  <title>Installation on Lawrencium (LBNL) &mdash; FBPIC 0.20.2 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.20.0
+                0.20.2
               </div>
             
           
@@ -257,7 +257,7 @@ the above-mentioned directory, and copy your input script there.</p>
 <div class="section" id="interactive-jobs">
 <h3>Interactive jobs<a class="headerlink" href="#interactive-jobs" title="Permalink to this headline">¶</a></h3>
 <p>In order to request a node with a GPU:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">salloc</span> <span class="o">--</span><span class="n">time</span><span class="o">=</span><span class="mi">00</span><span class="p">:</span><span class="mi">30</span><span class="p">:</span><span class="mi">00</span> <span class="o">--</span><span class="n">nodes</span><span class="o">=</span><span class="mi">1</span> <span class="o">--</span><span class="n">partition</span> <span class="n">es1</span>  <span class="o">--</span><span class="n">constraint</span><span class="o">=</span><span class="n">es1_1080ti</span> <span class="o">--</span><span class="n">qos</span><span class="o">=</span><span class="n">es_normal</span> <span class="o">--</span><span class="n">gres</span><span class="o">=</span><span class="n">gpu</span><span class="p">:</span><span class="mi">4</span> <span class="o">--</span><span class="n">cpus</span><span class="o">-</span><span class="n">per</span><span class="o">-</span><span class="n">task</span><span class="o">=</span><span class="mi">2</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">salloc</span> <span class="o">--</span><span class="n">time</span><span class="o">=</span><span class="mi">00</span><span class="p">:</span><span class="mi">30</span><span class="p">:</span><span class="mi">00</span> <span class="o">--</span><span class="n">nodes</span><span class="o">=</span><span class="mi">1</span> <span class="o">--</span><span class="n">partition</span> <span class="n">es1</span>  <span class="o">--</span><span class="n">constraint</span><span class="o">=</span><span class="n">es1_1080ti</span> <span class="o">--</span><span class="n">qos</span><span class="o">=</span><span class="n">es_normal</span> <span class="o">--</span><span class="n">gres</span><span class="o">=</span><span class="n">gpu</span><span class="p">:</span><span class="mi">4</span> <span class="o">--</span><span class="n">cpus</span><span class="o">-</span><span class="n">per</span><span class="o">-</span><span class="n">task</span><span class="o">=</span><span class="mi">8</span>
 </pre></div>
 </div>
 <p>Once the job has started, type</p>

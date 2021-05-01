@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fbpic.main &mdash; FBPIC 0.20.0 documentation</title>
+  <title>fbpic.main &mdash; FBPIC 0.20.2 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.20.0
+                0.20.2
               </div>
             
           
@@ -984,10 +984,10 @@
 <span class="sd">           If `n` is not None, evenly-spaced macroparticles will be generated.</span>
 
 <span class="sd">        dens_func : callable, optional</span>
-<span class="sd">           A function of the form :</span>
-<span class="sd">           def dens_func( z, r ) ...</span>
-<span class="sd">           where z and r are 1d arrays, and which returns</span>
-<span class="sd">           a 1d array containing the density *relative to n*</span>
+<span class="sd">           A function of the form `dens_func( z, r )`</span>
+<span class="sd">           where `z` and `r` are 1d arrays, or `dens( x, y, z)`</span>
+<span class="sd">           where `x`, `y` and `z` are 1d arrays, and which returns</span>
+<span class="sd">           a 1d array containing the density *relative to `n`*</span>
 <span class="sd">           (i.e. a number between 0 and 1) at the given positions</span>
 
 <span class="sd">        p_nz: int, optional</span>

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Beam initialization &mdash; FBPIC 0.20.0 documentation</title>
+  <title>Beam initialization &mdash; FBPIC 0.20.2 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.20.0
+                0.20.2
               </div>
             
           
@@ -200,10 +200,10 @@ along with its space charge field.</p>
 <li><p><strong>p_nz</strong> (<em>int</em>) – Number of macroparticles per cell along the z directions</p></li>
 <li><p><strong>p_nr</strong> (<em>int</em>) – Number of macroparticles per cell along the r directions</p></li>
 <li><p><strong>p_nt</strong> (<em>int</em>) – Number of macroparticles along the theta direction</p></li>
-<li><p><strong>dens_func</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function of the form :
-<cite>def dens_func( z, r ) …</cite>
-where <cite>z</cite> and <cite>r</cite> are 1d arrays, and which returns
-a 1d array containing the density <em>relative to n</em>
+<li><p><strong>dens_func</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function of the form <cite>dens_func( z, r )</cite>
+where <cite>z</cite> and <cite>r</cite> are 1d arrays, or <cite>dens( x, y, z)</cite>
+where <cite>x</cite>, <cite>y</cite> and <cite>z</cite> are 1d arrays, and which returns
+a 1d array containing the density <em>relative to `n`</em>
 (i.e. a number between 0 and 1) at the given positions.</p></li>
 <li><p><strong>boost</strong> (<em>a BoostConverter object</em><em>, </em><em>optional</em>) – A BoostConverter object defining the Lorentz boost of
 the simulation.</p></li>
