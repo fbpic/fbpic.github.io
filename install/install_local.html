@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Installation on a local computer &mdash; FBPIC 0.20.3 documentation</title>
+  <title>Installation on a local computer &mdash; FBPIC 0.20.4 documentation</title>
   
 
   
@@ -21,11 +21,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -34,6 +33,8 @@
   
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Installation on JUWELS (JSC)" href="install_juwels.html" />
@@ -61,7 +62,7 @@
             
             
               <div class="version">
-                0.20.3
+                0.20.4
               </div>
             
           
@@ -98,6 +99,7 @@
 <li class="toctree-l2"><a class="reference internal" href="install_lawrencium.html">Installation on Lawrencium (LBNL)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="install_comet.html">Installation on Comet (SDSC)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="install_cori.html">Installation on Cori (NERSC)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install_perlmutter.html">Installation on Perlmutter (NERSC)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="install_summit.html">Installation on Summit (OLCF)</a></li>
 </ul>
 </li>
@@ -180,8 +182,7 @@ Python. If Anaconda is not your default Python distribution, download and instal
 <p><strong>Installation steps</strong>:</p>
 <ul>
 <li><p>Install the dependencies of FBPIC. This can be done in two lines:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">numba</span> <span class="n">scipy</span> <span class="n">h5py</span> <span class="n">mkl</span>
-<span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">mpi4py</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">numba</span> <span class="n">scipy</span> <span class="n">h5py</span> <span class="n">mkl</span> <span class="n">mpi4py</span>
 </pre></div>
 </div>
 </li>
@@ -195,9 +196,9 @@ from the souces, by cloning the <a class="reference external" href="https://gith
 </li>
 <li><p><strong>Optional:</strong> In order to be able to run the code on a GPU,
 install the additional package <code class="docutils literal notranslate"><span class="pre">cudatoolkit</span></code> and <code class="docutils literal notranslate"><span class="pre">cupy</span></code> –
-e.g. using CUDA version 10.0:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">cudatoolkit</span><span class="o">=</span><span class="mf">10.0</span>
-<span class="n">pip</span> <span class="n">install</span> <span class="n">cupy</span><span class="o">-</span><span class="n">cuda100</span>
+e.g. using CUDA version 11.5:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">cudatoolkit</span><span class="o">=</span><span class="mf">11.5</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="n">cupy</span><span class="o">-</span><span class="n">cuda115</span>
 </pre></div>
 </div>
 <div class="admonition warning">
@@ -205,7 +206,7 @@ e.g. using CUDA version 10.0:</p>
 <p>In the above command, you should choose a CUDA version that is <strong>compatible
 with your GPU driver</strong>. You can see the version of your GPU driver by typing
 the command <code class="docutils literal notranslate"><span class="pre">nvidia-smi</span></code>. You can then find the compatible CUDA
-versions using <a class="reference external" href="https://docs.nvidia.com/deploy/cuda-compatibility/index.html#binary-compatibility__table-toolkit-driver">this table</a>.</p>
+versions using <a class="reference external" href="https://docs.nvidia.com/deploy/cuda-compatibility/index.html#use-the-right-compat-package">this table</a>.</p>
 </div>
 </li>
 <li><p><strong>Optional:</strong> In order to run on a CPU which is <strong>not</strong> an Intel model, you need to install <cite>pyfftw</cite>, in order to replace the MKL FFT:</p>

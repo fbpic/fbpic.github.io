@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Laser initialization &mdash; FBPIC 0.20.3 documentation</title>
+  <title>Laser initialization &mdash; FBPIC 0.20.4 documentation</title>
   
 
   
@@ -21,11 +21,11 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/doctools.js"></script>
-        <script src="../../_static/language_data.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
@@ -34,6 +34,8 @@
   
   <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Gaussian profile" href="laser_profiles/gaussian.html" />
@@ -61,7 +63,7 @@
             
             
               <div class="version">
-                0.20.3
+                0.20.4
               </div>
             
           
@@ -225,8 +227,8 @@ the simulation box.</p>
 <div class="section" id="generic-function-for-arbitrary-laser-profile">
 <h2>Generic function for arbitrary laser profile<a class="headerlink" href="#generic-function-for-arbitrary-laser-profile" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
-<dt id="fbpic.lpa_utils.laser.add_laser_pulse">
-<code class="sig-prename descclassname">fbpic.lpa_utils.laser.</code><code class="sig-name descname">add_laser_pulse</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sim</span></em>, <em class="sig-param"><span class="n">laser_profile</span></em>, <em class="sig-param"><span class="n">gamma_boost</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'direct'</span></em>, <em class="sig-param"><span class="n">z0_antenna</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">v_antenna</span><span class="o">=</span><span class="default_value">0.0</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fbpic/lpa_utils/laser/laser.html#add_laser_pulse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.laser.add_laser_pulse" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fbpic.lpa_utils.laser.add_laser_pulse">
+<span class="sig-prename descclassname"><span class="pre">fbpic.lpa_utils.laser.</span></span><span class="sig-name descname"><span class="pre">add_laser_pulse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">laser_profile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma_boost</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'direct'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z0_antenna</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_antenna</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fbpic/lpa_utils/laser/laser.html#add_laser_pulse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fbpic.lpa_utils.laser.add_laser_pulse" title="Permalink to this definition">¶</a></dt>
 <dd><p>Introduce a laser pulse in the simulation.</p>
 <p>The laser is either added directly to the interpolation grid initially
 (method= <code class="docutils literal notranslate"><span class="pre">direct</span></code>) or it is progressively emitted by an antenna
@@ -316,8 +318,8 @@ look at how the existing laser profiles that are implemented <a class="reference
 <p>Using this function is equivalent to using the more generic <code class="docutils literal notranslate"><span class="pre">add_laser_pulse</span></code>
 function, with a <code class="docutils literal notranslate"><span class="pre">GaussianLaser</span></code> profile.</p>
 <dl class="py function">
-<dt id="fbpic.lpa_utils.laser.add_laser">
-<code class="sig-prename descclassname">fbpic.lpa_utils.laser.</code><code class="sig-name descname">add_laser</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sim</span></em>, <em class="sig-param"><span class="n">a0</span></em>, <em class="sig-param"><span class="n">w0</span></em>, <em class="sig-param"><span class="n">ctau</span></em>, <em class="sig-param"><span class="n">z0</span></em>, <em class="sig-param"><span class="n">zf</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">lambda0</span><span class="o">=</span><span class="default_value">8e-07</span></em>, <em class="sig-param"><span class="n">cep_phase</span><span class="o">=</span><span class="default_value">0.0</span></em>, <em class="sig-param"><span class="n">phi2_chirp</span><span class="o">=</span><span class="default_value">0.0</span></em>, <em class="sig-param"><span class="n">theta_pol</span><span class="o">=</span><span class="default_value">0.0</span></em>, <em class="sig-param"><span class="n">gamma_boost</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'direct'</span></em>, <em class="sig-param"><span class="n">fw_propagating</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">update_spectral</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">z0_antenna</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">v_antenna</span><span class="o">=</span><span class="default_value">0.0</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fbpic/lpa_utils/laser/laser.html#add_laser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.laser.add_laser" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fbpic.lpa_utils.laser.add_laser">
+<span class="sig-prename descclassname"><span class="pre">fbpic.lpa_utils.laser.</span></span><span class="sig-name descname"><span class="pre">add_laser</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctau</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lambda0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8e-07</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cep_phase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi2_chirp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta_pol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma_boost</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'direct'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fw_propagating</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">update_spectral</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z0_antenna</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_antenna</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fbpic/lpa_utils/laser/laser.html#add_laser"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fbpic.lpa_utils.laser.add_laser" title="Permalink to this definition">¶</a></dt>
 <dd><p>Introduce a linearly-polarized, Gaussian laser in the simulation.</p>
 <p>More precisely, the electric field <strong>near the focal plane</strong>
 is given by:</p>

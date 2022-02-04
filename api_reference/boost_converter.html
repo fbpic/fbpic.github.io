@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Conversion to boosted-frame &mdash; FBPIC 0.20.3 documentation</title>
+  <title>Conversion to boosted-frame &mdash; FBPIC 0.20.4 documentation</title>
   
 
   
@@ -21,11 +21,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -34,6 +33,8 @@
   
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Field smoothing" href="smoothing.html" />
@@ -61,7 +62,7 @@
             
             
               <div class="version">
-                0.20.3
+                0.20.4
               </div>
             
           
@@ -169,8 +170,8 @@
   <div class="section" id="conversion-to-boosted-frame">
 <h1>Conversion to boosted-frame<a class="headerlink" href="#conversion-to-boosted-frame" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
-<dt id="fbpic.lpa_utils.boosted_frame.BoostConverter">
-<em class="property">class </em><code class="sig-prename descclassname">fbpic.lpa_utils.boosted_frame.</code><code class="sig-name descname">BoostConverter</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">gamma0</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/lpa_utils/boosted_frame.html#BoostConverter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.boosted_frame.BoostConverter" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fbpic.lpa_utils.boosted_frame.BoostConverter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fbpic.lpa_utils.boosted_frame.</span></span><span class="sig-name descname"><span class="pre">BoostConverter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gamma0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/lpa_utils/boosted_frame.html#BoostConverter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fbpic.lpa_utils.boosted_frame.BoostConverter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize the object by calculating the velocity of the
 boosted frame.</p>
 <dl class="field-list simple">
@@ -179,8 +180,8 @@ boosted frame.</p>
 </dd>
 </dl>
 <dl class="py method">
-<dt id="fbpic.lpa_utils.boosted_frame.BoostConverter.boost_particle_arrays">
-<code class="sig-name descname">boost_particle_arrays</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">z</span></em>, <em class="sig-param"><span class="n">ux</span></em>, <em class="sig-param"><span class="n">uy</span></em>, <em class="sig-param"><span class="n">uz</span></em>, <em class="sig-param"><span class="n">inv_gamma</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/lpa_utils/boosted_frame.html#BoostConverter.boost_particle_arrays"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.boosted_frame.BoostConverter.boost_particle_arrays" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fbpic.lpa_utils.boosted_frame.BoostConverter.boost_particle_arrays">
+<span class="sig-name descname"><span class="pre">boost_particle_arrays</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ux</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inv_gamma</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/lpa_utils/boosted_frame.html#BoostConverter.boost_particle_arrays"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fbpic.lpa_utils.boosted_frame.BoostConverter.boost_particle_arrays" title="Permalink to this definition">¶</a></dt>
 <dd><p>Transforms particles to the boosted frame and propagates
 them to a fixed time t_boost = 0. without taking any electromagnetic
 effects into account. (This is useful for the initialization
@@ -188,9 +189,17 @@ of a bunch distribution in the boosted frame.)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>y</strong><strong>, </strong><strong>z</strong> (<em>x</em><em>,</em>) – The position of the particles in the lab frame
+<li><p><strong>x</strong> (<em>1darray of float</em><em> (</em><em>in meter</em><em>)</em>) – The position of the particles in the lab frame
 (One element per macroparticle)</p></li>
-<li><p><strong>uy</strong><strong>, </strong><strong>uz</strong> (<em>ux</em><em>,</em>) – The momenta of the particles
+<li><p><strong>y</strong> (<em>1darray of float</em><em> (</em><em>in meter</em><em>)</em>) – The position of the particles in the lab frame
+(One element per macroparticle)</p></li>
+<li><p><strong>z</strong> (<em>1darray of float</em><em> (</em><em>in meter</em><em>)</em>) – The position of the particles in the lab frame
+(One element per macroparticle)</p></li>
+<li><p><strong>ux</strong> (<em>1darray of floats</em><em> (</em><em>dimensionless</em><em>)</em>) – The momenta of the particles
+(One element per macroparticle)</p></li>
+<li><p><strong>uy</strong> (<em>1darray of floats</em><em> (</em><em>dimensionless</em><em>)</em>) – The momenta of the particles
+(One element per macroparticle)</p></li>
+<li><p><strong>uz</strong> (<em>1darray of floats</em><em> (</em><em>dimensionless</em><em>)</em>) – The momenta of the particles
 (One element per macroparticle)</p></li>
 <li><p><strong>inv_gamma</strong> (<em>1darray of floats</em><em> (</em><em>dimensionless</em><em>)</em>) – The inverse of the Lorentz factor
 (One element per macroparticle)</p></li>
@@ -206,8 +215,8 @@ of a bunch distribution in the boosted frame.)</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="fbpic.lpa_utils.boosted_frame.BoostConverter.copropag_density">
-<code class="sig-name descname">copropag_density</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">lab_frame_vars</span></em>, <em class="sig-param"><span class="n">beta_object</span><span class="o">=</span><span class="default_value">1.0</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/lpa_utils/boosted_frame.html#BoostConverter.copropag_density"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.boosted_frame.BoostConverter.copropag_density" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fbpic.lpa_utils.boosted_frame.BoostConverter.copropag_density">
+<span class="sig-name descname"><span class="pre">copropag_density</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lab_frame_vars</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta_object</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/lpa_utils/boosted_frame.html#BoostConverter.copropag_density"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fbpic.lpa_utils.boosted_frame.BoostConverter.copropag_density" title="Permalink to this definition">¶</a></dt>
 <dd><p>Converts a list of densities that correspond to copropagating objects
 (e.g. an electron bunch) from the lab frame to the boosted frame, i.e:
 n’ = n * [ gamma0*(1 - beta_object*beta0) ]</p>
@@ -229,8 +238,8 @@ density is being converted</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt id="fbpic.lpa_utils.boosted_frame.BoostConverter.copropag_length">
-<code class="sig-name descname">copropag_length</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">lab_frame_vars</span></em>, <em class="sig-param"><span class="n">beta_object</span><span class="o">=</span><span class="default_value">1.0</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/lpa_utils/boosted_frame.html#BoostConverter.copropag_length"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.boosted_frame.BoostConverter.copropag_length" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fbpic.lpa_utils.boosted_frame.BoostConverter.copropag_length">
+<span class="sig-name descname"><span class="pre">copropag_length</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lab_frame_vars</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta_object</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/lpa_utils/boosted_frame.html#BoostConverter.copropag_length"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fbpic.lpa_utils.boosted_frame.BoostConverter.copropag_length" title="Permalink to this definition">¶</a></dt>
 <dd><p>Converts a list of lengths that correspond to copropagating objects
 (e.g. the laser) from the lab frame to the boosted frame, i.e:
 L’ = L / [ gamma0*(1 - beta_object*beta0) ]</p>
@@ -252,8 +261,8 @@ length is being converted</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt id="fbpic.lpa_utils.boosted_frame.BoostConverter.gamma">
-<code class="sig-name descname">gamma</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">lab_frame_vars</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/lpa_utils/boosted_frame.html#BoostConverter.gamma"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.boosted_frame.BoostConverter.gamma" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fbpic.lpa_utils.boosted_frame.BoostConverter.gamma">
+<span class="sig-name descname"><span class="pre">gamma</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lab_frame_vars</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/lpa_utils/boosted_frame.html#BoostConverter.gamma"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fbpic.lpa_utils.boosted_frame.BoostConverter.gamma" title="Permalink to this definition">¶</a></dt>
 <dd><p>Converts a list of Lorentz factors from the lab frame to the
 boosted frame:
 gamma’ = gamma0 * ( gamma - beta0 * sqrt( gamma**2 - 1 ) )</p>
@@ -273,8 +282,8 @@ particle has no transverse motion at all.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="fbpic.lpa_utils.boosted_frame.BoostConverter.interaction_time">
-<code class="sig-name descname">interaction_time</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">L_interact</span></em>, <em class="sig-param"><span class="n">l_window</span></em>, <em class="sig-param"><span class="n">v_window</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/lpa_utils/boosted_frame.html#BoostConverter.interaction_time"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.boosted_frame.BoostConverter.interaction_time" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fbpic.lpa_utils.boosted_frame.BoostConverter.interaction_time">
+<span class="sig-name descname"><span class="pre">interaction_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">L_interact</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">l_window</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_window</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/lpa_utils/boosted_frame.html#BoostConverter.interaction_time"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fbpic.lpa_utils.boosted_frame.BoostConverter.interaction_time" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates the interaction time in the boosted frame:
 (Time it takes for the moving window to slide once across the
 total interaction length, i.e. the plasma)</p>
@@ -302,8 +311,8 @@ in the lab frame.</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt id="fbpic.lpa_utils.boosted_frame.BoostConverter.longitudinal_momentum">
-<code class="sig-name descname">longitudinal_momentum</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">lab_frame_vars</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/lpa_utils/boosted_frame.html#BoostConverter.longitudinal_momentum"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.boosted_frame.BoostConverter.longitudinal_momentum" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fbpic.lpa_utils.boosted_frame.BoostConverter.longitudinal_momentum">
+<span class="sig-name descname"><span class="pre">longitudinal_momentum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lab_frame_vars</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/lpa_utils/boosted_frame.html#BoostConverter.longitudinal_momentum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fbpic.lpa_utils.boosted_frame.BoostConverter.longitudinal_momentum" title="Permalink to this definition">¶</a></dt>
 <dd><p>Converts a list of momenta from the lab frame to the boosted frame:
 u_z’ = gamma0 * ( u_z - sqrt(1 + u_z**2) * beta0 )</p>
 <p>Warning: The above formula assumes that the corresponding
@@ -322,8 +331,8 @@ particle has no transverse motion at all.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="fbpic.lpa_utils.boosted_frame.BoostConverter.static_density">
-<code class="sig-name descname">static_density</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">lab_frame_vars</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/lpa_utils/boosted_frame.html#BoostConverter.static_density"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.boosted_frame.BoostConverter.static_density" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fbpic.lpa_utils.boosted_frame.BoostConverter.static_density">
+<span class="sig-name descname"><span class="pre">static_density</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lab_frame_vars</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/lpa_utils/boosted_frame.html#BoostConverter.static_density"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fbpic.lpa_utils.boosted_frame.BoostConverter.static_density" title="Permalink to this definition">¶</a></dt>
 <dd><p>Converts a list of densities that correspond to static objects
 (e.g. the plasma) from the lab frame to the boosted frame, i.e:
 n’ = n * gamma0</p>
@@ -341,8 +350,8 @@ n’ = n * gamma0</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="fbpic.lpa_utils.boosted_frame.BoostConverter.static_length">
-<code class="sig-name descname">static_length</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">lab_frame_vars</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/lpa_utils/boosted_frame.html#BoostConverter.static_length"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.boosted_frame.BoostConverter.static_length" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fbpic.lpa_utils.boosted_frame.BoostConverter.static_length">
+<span class="sig-name descname"><span class="pre">static_length</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lab_frame_vars</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/lpa_utils/boosted_frame.html#BoostConverter.static_length"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fbpic.lpa_utils.boosted_frame.BoostConverter.static_length" title="Permalink to this definition">¶</a></dt>
 <dd><p>Converts a list of lengths that correspond to static objects
 (e.g. the plasma) from the lab frame to the boosted frame, i.e:
 L’ = L / gamma0</p>
@@ -360,8 +369,8 @@ L’ = L / gamma0</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="fbpic.lpa_utils.boosted_frame.BoostConverter.velocity">
-<code class="sig-name descname">velocity</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">lab_frame_vars</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/lpa_utils/boosted_frame.html#BoostConverter.velocity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.boosted_frame.BoostConverter.velocity" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fbpic.lpa_utils.boosted_frame.BoostConverter.velocity">
+<span class="sig-name descname"><span class="pre">velocity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lab_frame_vars</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/lpa_utils/boosted_frame.html#BoostConverter.velocity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fbpic.lpa_utils.boosted_frame.BoostConverter.velocity" title="Permalink to this definition">¶</a></dt>
 <dd><p>Converts a list of velocities from the lab frame to the boosted frame:
 v’ = ( v - c * beta0 )/( 1 - beta0*v/c )</p>
 <dl class="field-list simple">
@@ -378,8 +387,8 @@ v’ = ( v - c * beta0 )/( 1 - beta0*v/c )</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="fbpic.lpa_utils.boosted_frame.BoostConverter.wavenumber">
-<code class="sig-name descname">wavenumber</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">lab_frame_vars</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/lpa_utils/boosted_frame.html#BoostConverter.wavenumber"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.boosted_frame.BoostConverter.wavenumber" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fbpic.lpa_utils.boosted_frame.BoostConverter.wavenumber">
+<span class="sig-name descname"><span class="pre">wavenumber</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lab_frame_vars</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/lpa_utils/boosted_frame.html#BoostConverter.wavenumber"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fbpic.lpa_utils.boosted_frame.BoostConverter.wavenumber" title="Permalink to this definition">¶</a></dt>
 <dd><p>Converts a list of wavenumbers from the lab frame to the boosted frame:
 k’ = k / ( gamma0 ( 1 + beta0 ) )</p>
 <dl class="field-list simple">

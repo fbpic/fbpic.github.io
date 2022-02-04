@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Laguerre-Gauss profile &mdash; FBPIC 0.20.3 documentation</title>
+  <title>Laguerre-Gauss profile &mdash; FBPIC 0.20.4 documentation</title>
   
 
   
@@ -21,11 +21,11 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/language_data.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -34,6 +34,8 @@
   
   <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Donut-like Laguerre-Gauss profile" href="donut_laguerre.html" />
@@ -61,7 +63,7 @@
             
             
               <div class="version">
-                0.20.3
+                0.20.4
               </div>
             
           
@@ -183,8 +185,8 @@
   <div class="section" id="laguerre-gauss-profile">
 <h1>Laguerre-Gauss profile<a class="headerlink" href="#laguerre-gauss-profile" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
-<dt id="fbpic.lpa_utils.laser.LaguerreGaussLaser">
-<em class="property">class </em><code class="sig-prename descclassname">fbpic.lpa_utils.laser.</code><code class="sig-name descname">LaguerreGaussLaser</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">p</span></em>, <em class="sig-param"><span class="n">m</span></em>, <em class="sig-param"><span class="n">a0</span></em>, <em class="sig-param"><span class="n">waist</span></em>, <em class="sig-param"><span class="n">tau</span></em>, <em class="sig-param"><span class="n">z0</span></em>, <em class="sig-param"><span class="n">zf</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">theta_pol</span><span class="o">=</span><span class="default_value">0.0</span></em>, <em class="sig-param"><span class="n">lambda0</span><span class="o">=</span><span class="default_value">8e-07</span></em>, <em class="sig-param"><span class="n">cep_phase</span><span class="o">=</span><span class="default_value">0.0</span></em>, <em class="sig-param"><span class="n">theta0</span><span class="o">=</span><span class="default_value">0.0</span></em>, <em class="sig-param"><span class="n">propagation_direction</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/fbpic/lpa_utils/laser/laser_profiles.html#LaguerreGaussLaser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.laser.LaguerreGaussLaser" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fbpic.lpa_utils.laser.LaguerreGaussLaser">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fbpic.lpa_utils.laser.</span></span><span class="sig-name descname"><span class="pre">LaguerreGaussLaser</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">waist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta_pol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lambda0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8e-07</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cep_phase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">propagation_direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/fbpic/lpa_utils/laser/laser_profiles.html#LaguerreGaussLaser"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fbpic.lpa_utils.laser.LaguerreGaussLaser" title="Permalink to this definition">¶</a></dt>
 <dd><p>Define a linearly-polarized Laguerre-Gauss laser profile.</p>
 <p>Unlike the <a class="reference internal" href="donut_laguerre.html#fbpic.lpa_utils.laser.DonutLikeLaguerreGaussLaser" title="fbpic.lpa_utils.laser.DonutLikeLaguerreGaussLaser"><code class="xref any py py-class docutils literal notranslate"><span class="pre">DonutLikeLaguerreGaussLaser</span></code></a> profile, this
 profile has a phase which is independent of the azimuthal angle

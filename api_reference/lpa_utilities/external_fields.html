@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>External fields &mdash; FBPIC 0.20.3 documentation</title>
+  <title>External fields &mdash; FBPIC 0.20.4 documentation</title>
   
 
   
@@ -21,11 +21,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/doctools.js"></script>
-        <script src="../../_static/language_data.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
@@ -34,6 +33,8 @@
   
   <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Conversion to boosted-frame" href="../boost_converter.html" />
@@ -61,7 +62,7 @@
             
             
               <div class="version">
-                0.20.3
+                0.20.4
               </div>
             
           
@@ -179,8 +180,8 @@
 timestep and are <strong>specified by the user</strong>, instead of being self-consistently
 evolved by the simulation.</p>
 <dl class="py class">
-<dt id="fbpic.lpa_utils.external_fields.ExternalField">
-<em class="property">class </em><code class="sig-prename descclassname">fbpic.lpa_utils.external_fields.</code><code class="sig-name descname">ExternalField</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">field_func</span></em>, <em class="sig-param"><span class="n">fieldtype</span></em>, <em class="sig-param"><span class="n">amplitude</span></em>, <em class="sig-param"><span class="n">length_scale</span></em>, <em class="sig-param"><span class="n">species</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">gamma_boost</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fbpic/lpa_utils/external_fields.html#ExternalField"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fbpic.lpa_utils.external_fields.ExternalField" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fbpic.lpa_utils.external_fields.ExternalField">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fbpic.lpa_utils.external_fields.</span></span><span class="sig-name descname"><span class="pre">ExternalField</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">field_func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fieldtype</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amplitude</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length_scale</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">species</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma_boost</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fbpic/lpa_utils/external_fields.html#ExternalField"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fbpic.lpa_utils.external_fields.ExternalField" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize an ExternalField object, so that the function
 <cite>field_func</cite> is called at each time step on the field <cite>fieldtype</cite></p>
 <p>This object should be added to the list <cite>external_fields</cite>,

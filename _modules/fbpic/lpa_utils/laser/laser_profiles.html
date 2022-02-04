@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fbpic.lpa_utils.laser.laser_profiles &mdash; FBPIC 0.20.3 documentation</title>
+  <title>fbpic.lpa_utils.laser.laser_profiles &mdash; FBPIC 0.20.4 documentation</title>
   
 
   
@@ -21,11 +21,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
         <script src="../../../../_static/jquery.js"></script>
         <script src="../../../../_static/underscore.js"></script>
         <script src="../../../../_static/doctools.js"></script>
-        <script src="../../../../_static/language_data.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
 
@@ -34,6 +33,8 @@
   
   <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" /> 
 </head>
@@ -59,7 +60,7 @@
             
             
               <div class="version">
-                0.20.3
+                0.20.4
               </div>
             
           
@@ -160,8 +161,11 @@
 <span class="sd">It defines a set of common laser profiles.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">scipy.constants</span> <span class="kn">import</span> <span class="n">c</span><span class="p">,</span> <span class="n">m_e</span><span class="p">,</span> <span class="n">e</span>
-<span class="kn">from</span> <span class="nn">scipy.special</span> <span class="kn">import</span> <span class="n">factorial</span><span class="p">,</span> <span class="n">genlaguerre</span><span class="p">,</span> <span class="n">binom</span>
+<span class="kn">from</span> <span class="nn">scipy.constants</span> <span class="kn">import</span> <span class="n">c</span><span class="p">,</span> <span class="n">m_e</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">epsilon_0</span>
+<span class="kn">from</span> <span class="nn">.longitudinal_laser_profiles</span> <span class="kn">import</span> <span class="n">GaussianChirpedLongitudinalProfile</span>
+<span class="kn">from</span> <span class="nn">.transverse_laser_profiles</span> <span class="kn">import</span> <span class="n">GaussianTransverseProfile</span><span class="p">,</span> \
+    <span class="n">LaguerreGaussTransverseProfile</span><span class="p">,</span> <span class="n">DonutLikeLaguerreGaussTransverseProfile</span><span class="p">,</span> \
+    <span class="n">FlattenedGaussianTransverseProfile</span>
 
 <span class="c1"># Generic classes</span>
 <span class="c1"># ---------------</span>
@@ -251,6 +255,76 @@
         <span class="n">Ex2</span><span class="p">,</span> <span class="n">Ey2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">profile2</span><span class="o">.</span><span class="n">E_field</span><span class="p">(</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">t</span> <span class="p">)</span>
         <span class="k">return</span><span class="p">(</span> <span class="n">Ex1</span><span class="o">+</span><span class="n">Ex2</span><span class="p">,</span> <span class="n">Ey1</span><span class="o">+</span><span class="n">Ey2</span> <span class="p">)</span>
 
+<span class="k">class</span> <span class="nc">ParaxialApproximationLaser</span><span class="p">(</span> <span class="n">LaserProfile</span> <span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Class that defines a laser pulse by combining a longitudinal</span>
+<span class="sd">    and transverse profile under the paraxial approxiation.&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">longitudinal_profile</span><span class="p">,</span> <span class="n">transverse_profile</span><span class="p">,</span>
+                 <span class="n">E_laser</span><span class="p">,</span> <span class="n">theta_pol</span><span class="o">=</span><span class="mf">0.</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Construct a laser profile E(x,y,z,t) by combining a complex</span>
+<span class="sd">        longitudinal E(z,t) and transverse E(x,y,z) profile, which is valid</span>
+<span class="sd">        under the paraxial approximation. The combined profile is normalized</span>
+<span class="sd">        to a given pulse energy.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        longitudinal_profile: an instance of :any:`LaserLongitudinalProfile`</span>
+<span class="sd">            Defines the longitudinal profile E(z,t) of the laser pulse.</span>
+
+<span class="sd">        transverse_profile: an instance of :any:`LaserTransverseProfile`</span>
+<span class="sd">            Defines the transverse profile E(z,t) of the laser pulse.</span>
+
+<span class="sd">        E_laser: float (J)</span>
+<span class="sd">            The total energy of the pulse in Joule. The peak intensity</span>
+<span class="sd">            of the laser pulse depends on this energy and the specific</span>
+<span class="sd">            longitudinal and transverse profile used.</span>
+
+<span class="sd">        theta_pol: float (in radian), optional</span>
+<span class="sd">           The angle of polarization with respect to the x axis.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Initialize arbitrary propagation direction and GPU capability</span>
+        <span class="c1"># (will be overwritten below)</span>
+        <span class="n">LaserProfile</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># Initialize a longitudinal profile</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">longitudinal_profile</span> <span class="o">=</span> <span class="n">longitudinal_profile</span>
+        <span class="c1"># Initialize a transverse profile</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">transverse_profile</span> <span class="o">=</span> <span class="n">transverse_profile</span>
+        <span class="c1"># Inherit and check parameter consistency of the individual profiles</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">propag_direction</span> <span class="o">=</span> <span class="n">longitudinal_profile</span><span class="o">.</span><span class="n">propag_direction</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">propag_direction</span> <span class="o">==</span> <span class="n">transverse_profile</span><span class="o">.</span><span class="n">propag_direction</span>
+        <span class="n">k0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">longitudinal_profile</span><span class="o">.</span><span class="n">k0</span>
+        <span class="k">assert</span> <span class="n">k0</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">transverse_profile</span><span class="o">.</span><span class="n">k0</span>
+        <span class="c1"># Inherit GPU capability</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gpu_capable</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">longitudinal_profile</span><span class="o">.</span><span class="n">gpu_capable</span> <span class="ow">and</span> \
+                           <span class="bp">self</span><span class="o">.</span><span class="n">transverse_profile</span><span class="o">.</span><span class="n">gpu_capable</span>
+
+        <span class="c1"># Calculate and store a number of parameters for the laser</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">k0</span> <span class="o">=</span> <span class="n">k0</span>
+        <span class="n">long_int</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">longitudinal_profile</span><span class="o">.</span><span class="n">squared_profile_integral</span><span class="p">()</span>
+        <span class="n">trans_int</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transverse_profile</span><span class="o">.</span><span class="n">squared_profile_integral</span><span class="p">()</span>
+        <span class="c1"># Define a normalized peak electric field E0</span>
+        <span class="c1"># (Note that for a transform-limited Gaussian laser pulse, E0</span>
+        <span class="c1"># corresponds to the peak electric field at the focus. For any other</span>
+        <span class="c1"># profile, however, the actual peak electric field can be different.)</span>
+        <span class="n">E0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span> <span class="mi">2</span><span class="o">*</span><span class="n">E_laser</span> <span class="o">/</span> <span class="p">(</span><span class="n">epsilon_0</span> <span class="o">*</span> <span class="n">long_int</span> <span class="o">*</span> <span class="n">trans_int</span> <span class="p">)</span> <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">E0x</span> <span class="o">=</span> <span class="n">E0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta_pol</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">E0y</span> <span class="o">=</span> <span class="n">E0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta_pol</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">E_field</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">t</span> <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        See the docstring of LaserProfile.E_field</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># The laser profile is constructed by combining a complex</span>
+        <span class="c1"># longitudinal and transverse profile, which is valid under the</span>
+        <span class="c1"># paraxial approximation.</span>
+        <span class="n">profile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">longitudinal_profile</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span> <span class="o">*</span> \
+                  <span class="bp">self</span><span class="o">.</span><span class="n">transverse_profile</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+        <span class="c1"># Get the projection along x and y, with the correct polarization</span>
+        <span class="n">Ex</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">E0x</span> <span class="o">*</span> <span class="n">profile</span>
+        <span class="n">Ey</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">E0y</span> <span class="o">*</span> <span class="n">profile</span>
+
+        <span class="k">return</span><span class="p">(</span> <span class="n">Ex</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">Ey</span><span class="o">.</span><span class="n">real</span> <span class="p">)</span>
 
 <span class="c1"># Particular classes for each laser profile</span>
 <span class="c1"># -----------------------------------------</span>
@@ -334,63 +408,43 @@
 <span class="sd">            This should be either 1 (laser propagates towards positive z)</span>
 <span class="sd">            or -1 (laser propagates towards negative z).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># Initialize propagation direction and mark the profile as GPU capable</span>
-        <span class="n">LaserProfile</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">propagation_direction</span><span class="p">,</span> <span class="n">gpu_capable</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="c1"># Initialize propagation direction</span>
+        <span class="n">LaserProfile</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">propagation_direction</span><span class="p">)</span>
 
-        <span class="c1"># Set a number of parameters for the laser</span>
-        <span class="n">k0</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">lambda0</span>
-        <span class="n">E0</span> <span class="o">=</span> <span class="n">a0</span><span class="o">*</span><span class="n">m_e</span><span class="o">*</span><span class="n">c</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="n">k0</span><span class="o">/</span><span class="n">e</span>
-        <span class="n">zr</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">k0</span><span class="o">*</span><span class="n">waist</span><span class="o">**</span><span class="mi">2</span>
-
+        <span class="c1"># Calculate and store a number of parameters for the laser</span>
+        <span class="n">k0</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="n">lambda0</span>
+        <span class="n">E0</span> <span class="o">=</span> <span class="n">a0</span> <span class="o">*</span> <span class="n">m_e</span> <span class="o">*</span> <span class="n">c</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">k0</span> <span class="o">/</span> <span class="n">e</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">E0x</span> <span class="o">=</span> <span class="n">E0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta_pol</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">E0y</span> <span class="o">=</span> <span class="n">E0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta_pol</span><span class="p">)</span>
         <span class="c1"># If no focal plane position is given, use z0</span>
         <span class="k">if</span> <span class="n">zf</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">zf</span> <span class="o">=</span> <span class="n">z0</span>
-
-        <span class="c1"># Store the parameters</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">k0</span> <span class="o">=</span> <span class="n">k0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">inv_zr</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="n">zr</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">zf</span> <span class="o">=</span> <span class="n">zf</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">z0</span> <span class="o">=</span> <span class="n">z0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">E0x</span> <span class="o">=</span> <span class="n">E0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta_pol</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">E0y</span> <span class="o">=</span> <span class="n">E0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta_pol</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">w0</span> <span class="o">=</span> <span class="n">waist</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cep_phase</span> <span class="o">=</span> <span class="n">cep_phase</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">phi2_chirp</span> <span class="o">=</span> <span class="n">phi2_chirp</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">inv_ctau2</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="p">(</span><span class="n">c</span><span class="o">*</span><span class="n">tau</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+        <span class="c1"># Initialize a Gaussian longitudinal profile</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">longitudinal_profile</span> <span class="o">=</span> <span class="n">GaussianChirpedLongitudinalProfile</span><span class="p">(</span>
+            <span class="n">tau</span><span class="o">=</span><span class="n">tau</span><span class="p">,</span> <span class="n">z0</span><span class="o">=</span><span class="n">z0</span><span class="p">,</span> <span class="n">lambda0</span><span class="o">=</span><span class="n">lambda0</span><span class="p">,</span> <span class="n">cep_phase</span><span class="o">=</span><span class="n">cep_phase</span><span class="p">,</span>
+            <span class="n">phi2_chirp</span><span class="o">=</span><span class="n">phi2_chirp</span><span class="p">,</span> <span class="n">propagation_direction</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">propag_direction</span><span class="p">)</span>
+        <span class="c1"># Initialize a Gaussian transverse profile</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">transverse_profile</span> <span class="o">=</span> <span class="n">GaussianTransverseProfile</span><span class="p">(</span>
+            <span class="n">waist</span><span class="o">=</span><span class="n">waist</span><span class="p">,</span> <span class="n">zf</span><span class="o">=</span><span class="n">zf</span><span class="p">,</span> <span class="n">lambda0</span><span class="o">=</span><span class="n">lambda0</span><span class="p">,</span>
+            <span class="n">propagation_direction</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">propag_direction</span><span class="p">)</span>
+        <span class="c1"># Inherit GPU capability of the individual profiles</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gpu_capable</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">longitudinal_profile</span><span class="o">.</span><span class="n">gpu_capable</span> <span class="ow">and</span> \
+                           <span class="bp">self</span><span class="o">.</span><span class="n">transverse_profile</span><span class="o">.</span><span class="n">gpu_capable</span>
 
     <span class="k">def</span> <span class="nf">E_field</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">t</span> <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        See the docstring of LaserProfile.E_field</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># Note: this formula is expressed with complex numbers for compactness</span>
-        <span class="c1"># and simplicity, but only the real part is used in the end</span>
-        <span class="c1"># (see final return statement)</span>
-        <span class="c1"># The formula for the laser (in complex numbers) is obtained by</span>
-        <span class="c1"># multiplying the Fourier transform of the laser at focus</span>
-        <span class="c1"># E(k_x,k_y,\omega) = exp( -(\omega-\omega_0)^2(\tau^2/4 + \phi^(2)/2)</span>
-        <span class="c1"># - (k_x^2 + k_y^2)w_0^2/4 ) by the paraxial propagator</span>
-        <span class="c1"># e^(-i(\omega/c - (k_x^2 +k_y^2)/2k0)(z-z_foc))</span>
-        <span class="c1"># and then by taking the inverse Fourier transform in x, y, and t</span>
-
-        <span class="c1"># Diffraction and stretch_factor</span>
-        <span class="n">prop_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">propag_direction</span>
-        <span class="n">diffract_factor</span> <span class="o">=</span> <span class="mf">1.</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">prop_dir</span><span class="o">*</span><span class="p">(</span><span class="n">z</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">zf</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">inv_zr</span>
-        <span class="n">stretch_factor</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="mi">2</span><span class="n">j</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">phi2_chirp</span> <span class="o">*</span> <span class="n">c</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">inv_ctau2</span>
-        <span class="c1"># Calculate the argument of the complex exponential</span>
-        <span class="n">exp_argument</span> <span class="o">=</span> <span class="o">-</span> <span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">cep_phase</span> \
-            <span class="o">+</span> <span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">k0</span><span class="o">*</span><span class="p">(</span> <span class="n">prop_dir</span><span class="o">*</span><span class="p">(</span><span class="n">z</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">z0</span><span class="p">)</span> <span class="o">-</span> <span class="n">c</span><span class="o">*</span><span class="n">t</span> <span class="p">)</span> \
-            <span class="o">-</span> <span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">y</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">w0</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">diffract_factor</span><span class="p">)</span> \
-            <span class="o">-</span> <span class="mf">1.</span><span class="o">/</span><span class="n">stretch_factor</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">inv_ctau2</span> <span class="o">*</span> \
-                                    <span class="p">(</span> <span class="n">prop_dir</span><span class="o">*</span><span class="p">(</span><span class="n">z</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">z0</span><span class="p">)</span> <span class="o">-</span> <span class="n">c</span><span class="o">*</span><span class="n">t</span> <span class="p">)</span><span class="o">**</span><span class="mi">2</span>
-        <span class="c1"># Get the transverse profile</span>
-        <span class="n">profile</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">exp_argument</span><span class="p">)</span> <span class="o">/</span><span class="p">(</span><span class="n">diffract_factor</span> <span class="o">*</span> <span class="n">stretch_factor</span><span class="o">**</span><span class="mf">0.5</span><span class="p">)</span>
-
+        <span class="c1"># The laser profile is constructed by combining a complex</span>
+        <span class="c1"># longitudinal and transverse profile, which is valid under the</span>
+        <span class="c1"># paraxial approximation.</span>
+        <span class="n">profile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">longitudinal_profile</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span> <span class="o">*</span> \
+                  <span class="bp">self</span><span class="o">.</span><span class="n">transverse_profile</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
         <span class="c1"># Get the projection along x and y, with the correct polarization</span>
         <span class="n">Ex</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">E0x</span> <span class="o">*</span> <span class="n">profile</span>
         <span class="n">Ey</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">E0y</span> <span class="o">*</span> <span class="n">profile</span>
 
         <span class="k">return</span><span class="p">(</span> <span class="n">Ex</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">Ey</span><span class="o">.</span><span class="n">real</span> <span class="p">)</span></div>
-
 
 <div class="viewcode-block" id="LaguerreGaussLaser"><a class="viewcode-back" href="../../../../api_reference/lpa_utilities/laser_profiles/laguerre.html#fbpic.lpa_utils.laser.LaguerreGaussLaser">[docs]</a><span class="k">class</span> <span class="nc">LaguerreGaussLaser</span><span class="p">(</span> <span class="n">LaserProfile</span> <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Class that calculates a Laguerre-Gauss pulse.&quot;&quot;&quot;</span>
@@ -509,69 +563,40 @@
         <span class="c1"># Initialize propagation direction</span>
         <span class="n">LaserProfile</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">propagation_direction</span><span class="p">)</span>
 
-        <span class="c1"># Set a number of parameters for the laser</span>
-        <span class="n">k0</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">lambda0</span>
-        <span class="n">zr</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">k0</span><span class="o">*</span><span class="n">waist</span><span class="o">**</span><span class="mi">2</span>
-        <span class="c1"># Scaling factor, so that the pulse energy is independent of p and m.</span>
-        <span class="k">if</span> <span class="n">m</span> <span class="o">==</span><span class="mi">0</span><span class="p">:</span>
-            <span class="n">scaled_amplitude</span> <span class="o">=</span> <span class="mf">1.</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">scaled_amplitude</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span> <span class="n">factorial</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="o">/</span><span class="n">factorial</span><span class="p">(</span><span class="n">m</span><span class="o">+</span><span class="n">p</span><span class="p">)</span> <span class="p">)</span>
-        <span class="k">if</span> <span class="n">m</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">scaled_amplitude</span> <span class="o">*=</span> <span class="mi">2</span><span class="o">**</span><span class="mf">.5</span>
-        <span class="n">E0</span> <span class="o">=</span> <span class="n">scaled_amplitude</span> <span class="o">*</span> <span class="n">a0</span> <span class="o">*</span> <span class="n">m_e</span><span class="o">*</span><span class="n">c</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">k0</span><span class="o">/</span><span class="n">e</span>
-
+        <span class="c1"># Set and store a number of parameters for the laser</span>
+        <span class="n">k0</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="n">lambda0</span>
+        <span class="n">E0</span> <span class="o">=</span> <span class="n">a0</span> <span class="o">*</span> <span class="n">m_e</span> <span class="o">*</span> <span class="n">c</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">k0</span> <span class="o">/</span> <span class="n">e</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">E0x</span> <span class="o">=</span> <span class="n">E0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta_pol</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">E0y</span> <span class="o">=</span> <span class="n">E0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta_pol</span><span class="p">)</span>
         <span class="c1"># If no focal plane position is given, use z0</span>
         <span class="k">if</span> <span class="n">zf</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">zf</span> <span class="o">=</span> <span class="n">z0</span>
+        <span class="c1"># Initialize a Gaussian longitudinal profile with zero chirp</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">longitudinal_profile</span> <span class="o">=</span> <span class="n">GaussianChirpedLongitudinalProfile</span><span class="p">(</span>
+            <span class="n">tau</span><span class="o">=</span><span class="n">tau</span><span class="p">,</span> <span class="n">z0</span><span class="o">=</span><span class="n">z0</span><span class="p">,</span> <span class="n">lambda0</span><span class="o">=</span><span class="n">lambda0</span><span class="p">,</span> <span class="n">cep_phase</span><span class="o">=</span><span class="n">cep_phase</span><span class="p">,</span>
+            <span class="n">phi2_chirp</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">propagation_direction</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">propag_direction</span><span class="p">)</span>
+        <span class="c1"># Initialize a Laguerre-Gauss transverse profile</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">transverse_profile</span> <span class="o">=</span> <span class="n">LaguerreGaussTransverseProfile</span><span class="p">(</span>
+            <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="n">m</span><span class="p">,</span> <span class="n">waist</span><span class="o">=</span><span class="n">waist</span><span class="p">,</span> <span class="n">zf</span><span class="o">=</span><span class="n">zf</span><span class="p">,</span> <span class="n">lambda0</span><span class="o">=</span><span class="n">lambda0</span><span class="p">,</span> <span class="n">theta0</span><span class="o">=</span><span class="n">theta0</span><span class="p">,</span>
+            <span class="n">propagation_direction</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">propag_direction</span><span class="p">)</span>
+        <span class="c1"># Inherit GPU capability of the individual profiles</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gpu_capable</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">longitudinal_profile</span><span class="o">.</span><span class="n">gpu_capable</span> <span class="ow">and</span> \
+                           <span class="bp">self</span><span class="o">.</span><span class="n">transverse_profile</span><span class="o">.</span><span class="n">gpu_capable</span>
 
-        <span class="c1"># Store the parameters</span>
-        <span class="k">if</span> <span class="n">m</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="nb">type</span><span class="p">(</span><span class="n">m</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">int</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;m should be an integer positive number.&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">p</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">m</span> <span class="o">=</span> <span class="n">m</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">laguerre_pm</span> <span class="o">=</span> <span class="n">genlaguerre</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">)</span> <span class="c1"># Laguerre polynomial</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">theta0</span> <span class="o">=</span> <span class="n">theta0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">k0</span> <span class="o">=</span> <span class="n">k0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">inv_zr</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="n">zr</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">zf</span> <span class="o">=</span> <span class="n">zf</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">z0</span> <span class="o">=</span> <span class="n">z0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">E0x</span> <span class="o">=</span> <span class="n">E0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta_pol</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">E0y</span> <span class="o">=</span> <span class="n">E0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta_pol</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">w0</span> <span class="o">=</span> <span class="n">waist</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cep_phase</span> <span class="o">=</span> <span class="n">cep_phase</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">inv_ctau2</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="p">(</span><span class="n">c</span><span class="o">*</span><span class="n">tau</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
-
-    <span class="k">def</span> <span class="nf">E_field</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">t</span> <span class="p">):</span>
+    <span class="k">def</span> <span class="nf">E_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        See the docstring of LaserProfile.E_field</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># Diffraction factor, waist and Gouy phase</span>
-        <span class="n">prop_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">propag_direction</span>
-        <span class="n">diffract_factor</span> <span class="o">=</span> <span class="mf">1.</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">prop_dir</span> <span class="o">*</span> <span class="p">(</span><span class="n">z</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">zf</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">inv_zr</span>
-        <span class="n">w</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">w0</span> <span class="o">*</span> <span class="nb">abs</span><span class="p">(</span> <span class="n">diffract_factor</span> <span class="p">)</span>
-        <span class="n">psi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span> <span class="n">diffract_factor</span> <span class="p">)</span>
-        <span class="c1"># Calculate the scaled radius and azimuthal angle</span>
-        <span class="n">scaled_radius_squared</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="p">(</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">y</span><span class="o">**</span><span class="mi">2</span> <span class="p">)</span> <span class="o">/</span> <span class="n">w</span><span class="o">**</span><span class="mi">2</span>
-        <span class="n">scaled_radius</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span> <span class="n">scaled_radius_squared</span> <span class="p">)</span>
-        <span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span> <span class="n">x</span> <span class="o">+</span> <span class="mf">1.</span><span class="n">j</span><span class="o">*</span><span class="n">y</span> <span class="p">)</span>
-        <span class="c1"># Calculate the argument of the complex exponential</span>
-        <span class="n">exp_argument</span> <span class="o">=</span> <span class="o">-</span> <span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">cep_phase</span> \
-            <span class="o">+</span> <span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">k0</span><span class="o">*</span><span class="p">(</span> <span class="n">prop_dir</span><span class="o">*</span><span class="p">(</span><span class="n">z</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">z0</span><span class="p">)</span> <span class="o">-</span> <span class="n">c</span><span class="o">*</span><span class="n">t</span> <span class="p">)</span> \
-            <span class="o">-</span> <span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">y</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">w0</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">diffract_factor</span><span class="p">)</span> \
-            <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">inv_ctau2</span> <span class="o">*</span> <span class="p">(</span> <span class="n">prop_dir</span><span class="o">*</span><span class="p">(</span><span class="n">z</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">z0</span><span class="p">)</span> <span class="o">-</span> <span class="n">c</span><span class="o">*</span><span class="n">t</span> <span class="p">)</span><span class="o">**</span><span class="mi">2</span> \
-            <span class="o">-</span> <span class="mf">1.</span><span class="n">j</span><span class="o">*</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">)</span><span class="o">*</span><span class="n">psi</span> <span class="c1"># *Additional* Gouy phase</span>
-        <span class="c1"># Get the transverse profile</span>
-        <span class="n">profile</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">exp_argument</span><span class="p">)</span> <span class="o">/</span> <span class="n">diffract_factor</span> \
-            <span class="o">*</span> <span class="n">scaled_radius</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">laguerre_pm</span><span class="p">(</span><span class="n">scaled_radius_squared</span><span class="p">)</span> \
-            <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="o">*</span><span class="p">(</span><span class="n">theta</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">theta0</span><span class="p">)</span> <span class="p">)</span>
-
+        <span class="c1"># The laser profile is constructed by combining a complex</span>
+        <span class="c1"># longitudinal and transverse profile, which is valid under the</span>
+        <span class="c1"># paraxial approximation.</span>
+        <span class="n">profile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">longitudinal_profile</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span> <span class="o">*</span> \
+                  <span class="bp">self</span><span class="o">.</span><span class="n">transverse_profile</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
         <span class="c1"># Get the projection along x and y, with the correct polarization</span>
         <span class="n">Ex</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">E0x</span> <span class="o">*</span> <span class="n">profile</span>
         <span class="n">Ey</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">E0y</span> <span class="o">*</span> <span class="n">profile</span>
 
-        <span class="k">return</span><span class="p">(</span> <span class="n">Ex</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">Ey</span><span class="o">.</span><span class="n">real</span> <span class="p">)</span></div>
-
+        <span class="k">return</span> <span class="p">(</span><span class="n">Ex</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">Ey</span><span class="o">.</span><span class="n">real</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="DonutLikeLaguerreGaussLaser"><a class="viewcode-back" href="../../../../api_reference/lpa_utilities/laser_profiles/donut_laguerre.html#fbpic.lpa_utils.laser.DonutLikeLaguerreGaussLaser">[docs]</a><span class="k">class</span> <span class="nc">DonutLikeLaguerreGaussLaser</span><span class="p">(</span> <span class="n">LaserProfile</span> <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Class that calculates a donut-like Laguerre-Gauss pulse.&quot;&quot;&quot;</span>
@@ -677,61 +702,40 @@
         <span class="c1"># Initialize propagation direction</span>
         <span class="n">LaserProfile</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">propagation_direction</span><span class="p">)</span>
 
-        <span class="c1"># Set a number of parameters for the laser</span>
-        <span class="n">k0</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">lambda0</span>
-        <span class="n">zr</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">k0</span><span class="o">*</span><span class="n">waist</span><span class="o">**</span><span class="mi">2</span>
-        <span class="c1"># Scaling factor, so that the pulse energy is independent of p and m.</span>
-        <span class="n">scaled_amplitude</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span> <span class="n">factorial</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="o">/</span><span class="n">factorial</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">m</span><span class="p">)</span><span class="o">+</span><span class="n">p</span><span class="p">)</span> <span class="p">)</span>
-        <span class="n">E0</span> <span class="o">=</span> <span class="n">scaled_amplitude</span> <span class="o">*</span> <span class="n">a0</span> <span class="o">*</span> <span class="n">m_e</span><span class="o">*</span><span class="n">c</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">k0</span><span class="o">/</span><span class="n">e</span>
-
+        <span class="c1"># Set and store a number of parameters for the laser</span>
+        <span class="n">k0</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="n">lambda0</span>
+        <span class="n">E0</span> <span class="o">=</span> <span class="n">a0</span> <span class="o">*</span> <span class="n">m_e</span> <span class="o">*</span> <span class="n">c</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">k0</span> <span class="o">/</span> <span class="n">e</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">E0x</span> <span class="o">=</span> <span class="n">E0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta_pol</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">E0y</span> <span class="o">=</span> <span class="n">E0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta_pol</span><span class="p">)</span>
         <span class="c1"># If no focal plane position is given, use z0</span>
         <span class="k">if</span> <span class="n">zf</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">zf</span> <span class="o">=</span> <span class="n">z0</span>
+        <span class="c1"># Initialize a Gaussian longitudinal profile with zero chirp</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">longitudinal_profile</span> <span class="o">=</span> <span class="n">GaussianChirpedLongitudinalProfile</span><span class="p">(</span>
+            <span class="n">tau</span><span class="o">=</span><span class="n">tau</span><span class="p">,</span> <span class="n">z0</span><span class="o">=</span><span class="n">z0</span><span class="p">,</span> <span class="n">lambda0</span><span class="o">=</span><span class="n">lambda0</span><span class="p">,</span> <span class="n">cep_phase</span><span class="o">=</span><span class="n">cep_phase</span><span class="p">,</span>
+            <span class="n">phi2_chirp</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">propagation_direction</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">propag_direction</span><span class="p">)</span>
+        <span class="c1"># Initialize a donut-like Laguerre-Gauss transverse profile</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">transverse_profile</span> <span class="o">=</span> <span class="n">DonutLikeLaguerreGaussTransverseProfile</span><span class="p">(</span>
+            <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="n">m</span><span class="p">,</span> <span class="n">waist</span><span class="o">=</span><span class="n">waist</span><span class="p">,</span> <span class="n">zf</span><span class="o">=</span><span class="n">zf</span><span class="p">,</span> <span class="n">lambda0</span><span class="o">=</span><span class="n">lambda0</span><span class="p">,</span>
+            <span class="n">propagation_direction</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">propag_direction</span><span class="p">)</span>
+        <span class="c1"># Inherit GPU capability of the individual profiles</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gpu_capable</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">longitudinal_profile</span><span class="o">.</span><span class="n">gpu_capable</span> <span class="ow">and</span> \
+                           <span class="bp">self</span><span class="o">.</span><span class="n">transverse_profile</span><span class="o">.</span><span class="n">gpu_capable</span>
 
-        <span class="c1"># Store the parameters</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">p</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">m</span> <span class="o">=</span> <span class="n">m</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">laguerre_pm</span> <span class="o">=</span> <span class="n">genlaguerre</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">,</span> <span class="nb">abs</span><span class="p">(</span><span class="n">m</span><span class="p">))</span> <span class="c1"># Laguerre polynomial</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">k0</span> <span class="o">=</span> <span class="n">k0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">inv_zr</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="n">zr</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">zf</span> <span class="o">=</span> <span class="n">zf</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">z0</span> <span class="o">=</span> <span class="n">z0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">E0x</span> <span class="o">=</span> <span class="n">E0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta_pol</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">E0y</span> <span class="o">=</span> <span class="n">E0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta_pol</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">w0</span> <span class="o">=</span> <span class="n">waist</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cep_phase</span> <span class="o">=</span> <span class="n">cep_phase</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">inv_ctau2</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="p">(</span><span class="n">c</span><span class="o">*</span><span class="n">tau</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
-
-    <span class="k">def</span> <span class="nf">E_field</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">t</span> <span class="p">):</span>
+    <span class="k">def</span> <span class="nf">E_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        See the docstring of LaserProfile.E_field</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># Diffraction factor, waist and Gouy phase</span>
-        <span class="n">prop_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">propag_direction</span>
-        <span class="n">diffract_factor</span> <span class="o">=</span> <span class="mf">1.</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">prop_dir</span> <span class="o">*</span> <span class="p">(</span> <span class="n">z</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">zf</span> <span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">inv_zr</span>
-        <span class="n">w</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">w0</span> <span class="o">*</span> <span class="nb">abs</span><span class="p">(</span> <span class="n">diffract_factor</span> <span class="p">)</span>
-        <span class="n">psi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span> <span class="n">diffract_factor</span> <span class="p">)</span>
-        <span class="c1"># Calculate the scaled radius and azimuthal angle</span>
-        <span class="n">scaled_radius_squared</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="p">(</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">y</span><span class="o">**</span><span class="mi">2</span> <span class="p">)</span> <span class="o">/</span> <span class="n">w</span><span class="o">**</span><span class="mi">2</span>
-        <span class="n">scaled_radius</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span> <span class="n">scaled_radius_squared</span> <span class="p">)</span>
-        <span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span> <span class="n">x</span> <span class="o">+</span> <span class="mf">1.</span><span class="n">j</span><span class="o">*</span><span class="n">y</span> <span class="p">)</span>
-        <span class="c1"># Calculate the argument of the complex exponential</span>
-        <span class="n">exp_argument</span> <span class="o">=</span> <span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">k0</span><span class="o">*</span><span class="p">(</span> <span class="n">prop_dir</span><span class="o">*</span><span class="p">(</span><span class="n">z</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">z0</span><span class="p">)</span> <span class="o">-</span> <span class="n">c</span><span class="o">*</span><span class="n">t</span> <span class="p">)</span> \
-            <span class="o">-</span> <span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">cep_phase</span> <span class="o">-</span> <span class="mf">1.</span><span class="n">j</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="o">*</span><span class="n">theta</span> \
-            <span class="o">-</span> <span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">y</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">w0</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">diffract_factor</span><span class="p">)</span> \
-            <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">inv_ctau2</span> <span class="o">*</span> <span class="p">(</span> <span class="n">prop_dir</span><span class="o">*</span><span class="p">(</span><span class="n">z</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">z0</span><span class="p">)</span> <span class="o">-</span> <span class="n">c</span><span class="o">*</span><span class="n">t</span> <span class="p">)</span><span class="o">**</span><span class="mi">2</span> \
-            <span class="o">+</span> <span class="mf">1.</span><span class="n">j</span><span class="o">*</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">+</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">))</span><span class="o">*</span><span class="n">psi</span> <span class="c1"># *Additional* Gouy phase</span>
-        <span class="c1"># Get the transverse profile</span>
-        <span class="n">profile</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">exp_argument</span><span class="p">)</span> <span class="o">/</span> <span class="n">diffract_factor</span> \
-            <span class="o">*</span> <span class="n">scaled_radius</span><span class="o">**</span><span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">)</span> \
-            <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">laguerre_pm</span><span class="p">(</span><span class="n">scaled_radius_squared</span><span class="p">)</span>
-
+        <span class="c1"># The laser profile is constructed by combining a complex</span>
+        <span class="c1"># longitudinal and transverse profile, which is valid under the</span>
+        <span class="c1"># paraxial approximation.</span>
+        <span class="n">profile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">longitudinal_profile</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span> <span class="o">*</span> \
+                  <span class="bp">self</span><span class="o">.</span><span class="n">transverse_profile</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
         <span class="c1"># Get the projection along x and y, with the correct polarization</span>
         <span class="n">Ex</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">E0x</span> <span class="o">*</span> <span class="n">profile</span>
         <span class="n">Ey</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">E0y</span> <span class="o">*</span> <span class="n">profile</span>
 
-        <span class="k">return</span><span class="p">(</span> <span class="n">Ex</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">Ey</span><span class="o">.</span><span class="n">real</span> <span class="p">)</span></div>
-
+        <span class="k">return</span> <span class="p">(</span><span class="n">Ex</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">Ey</span><span class="o">.</span><span class="n">real</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="FlattenedGaussianLaser"><a class="viewcode-back" href="../../../../api_reference/lpa_utilities/laser_profiles/flattened.html#fbpic.lpa_utils.laser.FlattenedGaussianLaser">[docs]</a><span class="k">class</span> <span class="nc">FlattenedGaussianLaser</span><span class="p">(</span> <span class="n">LaserProfile</span> <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Class that calculates a focused flattened Gaussian&quot;&quot;&quot;</span>
@@ -779,6 +783,7 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+
 <span class="sd">        a0: float (dimensionless)</span>
 <span class="sd">            The peak normalized vector potential at the focal plane.</span>
 
@@ -822,84 +827,40 @@
         <span class="c1"># Initialize propagation direction</span>
         <span class="n">LaserProfile</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">propagation_direction</span><span class="p">)</span>
 
-        <span class="c1"># Ensure that N is an integer</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">N</span><span class="p">))</span>
-        <span class="c1"># Calculate effective waist of the Laguerre-Gauss modes, at focus</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">w_foc</span> <span class="o">=</span> <span class="n">w0</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="mf">.5</span>
-
-        <span class="n">k0</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="n">lambda0</span>
-        <span class="c1"># Rayleigh length</span>
-        <span class="n">zr</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">k0</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">w_foc</span><span class="o">**</span><span class="mi">2</span>
-
-        <span class="c1"># Peak field</span>
-        <span class="n">E0</span> <span class="o">=</span> <span class="n">a0</span> <span class="o">*</span> <span class="n">m_e</span> <span class="o">*</span> <span class="n">c</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">k0</span> <span class="o">/</span> <span class="n">e</span>
-
+        <span class="c1"># Set and store a number of parameters for the laser</span>
+        <span class="n">k0</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="n">lambda0</span>
+        <span class="n">E0</span> <span class="o">=</span> <span class="n">a0</span> <span class="o">*</span> <span class="n">m_e</span> <span class="o">*</span> <span class="n">c</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">k0</span> <span class="o">/</span> <span class="n">e</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">E0x</span> <span class="o">=</span> <span class="n">E0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta_pol</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">E0y</span> <span class="o">=</span> <span class="n">E0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta_pol</span><span class="p">)</span>
-
+        <span class="c1"># If no focal plane position is given, use z0</span>
         <span class="k">if</span> <span class="n">zf</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">zf</span> <span class="o">=</span> <span class="n">z0</span>
+        <span class="c1"># Initialize a Gaussian longitudinal profile with zero chirp</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">longitudinal_profile</span> <span class="o">=</span> <span class="n">GaussianChirpedLongitudinalProfile</span><span class="p">(</span>
+            <span class="n">tau</span><span class="o">=</span><span class="n">tau</span><span class="p">,</span> <span class="n">z0</span><span class="o">=</span><span class="n">z0</span><span class="p">,</span> <span class="n">lambda0</span><span class="o">=</span><span class="n">lambda0</span><span class="p">,</span> <span class="n">cep_phase</span><span class="o">=</span><span class="n">cep_phase</span><span class="p">,</span>
+            <span class="n">phi2_chirp</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">propagation_direction</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">propag_direction</span><span class="p">)</span>
+        <span class="c1"># Initialize a flattened Gaussian transverse profile</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">transverse_profile</span> <span class="o">=</span> <span class="n">FlattenedGaussianTransverseProfile</span><span class="p">(</span>
+            <span class="n">w0</span><span class="o">=</span><span class="n">w0</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="n">N</span><span class="p">,</span> <span class="n">zf</span><span class="o">=</span><span class="n">zf</span><span class="p">,</span> <span class="n">lambda0</span><span class="o">=</span><span class="n">lambda0</span><span class="p">,</span>
+            <span class="n">propagation_direction</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">propag_direction</span><span class="p">)</span>
+        <span class="c1"># Inherit GPU capability of the individual profiles</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gpu_capable</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">longitudinal_profile</span><span class="o">.</span><span class="n">gpu_capable</span> <span class="ow">and</span> \
+                           <span class="bp">self</span><span class="o">.</span><span class="n">transverse_profile</span><span class="o">.</span><span class="n">gpu_capable</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">k0</span> <span class="o">=</span> <span class="n">k0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">inv_zr</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="n">zr</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">zf</span> <span class="o">=</span> <span class="n">zf</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">z0</span> <span class="o">=</span> <span class="n">z0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cep_phase</span> <span class="o">=</span> <span class="n">cep_phase</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">inv_ctau2</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="p">(</span><span class="n">c</span><span class="o">*</span><span class="n">tau</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
-
-        <span class="c1"># Calculate the coefficients for the Laguerre-Gaussian modes</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
-            <span class="n">m_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">cn</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="mf">1.</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="n">m_values</span> <span class="o">*</span> <span class="n">binom</span><span class="p">(</span><span class="n">m_values</span><span class="p">,</span><span class="n">n</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
-
-
-    <span class="k">def</span> <span class="nf">E_field</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">t</span> <span class="p">):</span>
+    <span class="k">def</span> <span class="nf">E_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        See the docstring of LaserProfile.E_field</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># Diffraction factor, waist and Gouy phase</span>
-        <span class="n">prop_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">propag_direction</span>
-        <span class="n">diffract_factor</span> <span class="o">=</span> <span class="mf">1.</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">prop_dir</span> <span class="o">*</span> <span class="p">(</span><span class="n">z</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">zf</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">inv_zr</span>
-        <span class="n">w</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">w_foc</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span> <span class="n">diffract_factor</span> <span class="p">)</span>
-        <span class="n">psi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span> <span class="n">diffract_factor</span> <span class="p">)</span>
-
-        <span class="c1"># Argument for the Laguerre polynomials</span>
-        <span class="n">scaled_radius_squared</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="p">(</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">y</span><span class="o">**</span><span class="mi">2</span> <span class="p">)</span> <span class="o">/</span> <span class="n">w</span><span class="o">**</span><span class="mi">2</span>
-
-        <span class="c1"># Sum recursively over the Laguerre polynomials</span>
-        <span class="n">laguerre_sum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span> <span class="n">x</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">complex128</span> <span class="p">)</span>
-        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
-
-            <span class="c1"># Recursive calculation of the Laguerre polynomial</span>
-            <span class="c1"># - `L` represents $L_n$</span>
-            <span class="c1"># - `L1` represents $L_{n-1}$</span>
-            <span class="c1"># - `L2` represents $L_{n-2}$</span>
-            <span class="k">if</span> <span class="n">n</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
-                <span class="n">L</span> <span class="o">=</span> <span class="mf">1.</span>
-            <span class="k">elif</span> <span class="n">n</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
-                <span class="n">L1</span> <span class="o">=</span> <span class="n">L</span>
-                <span class="n">L</span> <span class="o">=</span> <span class="mf">1.</span> <span class="o">-</span> <span class="n">scaled_radius_squared</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">L2</span> <span class="o">=</span> <span class="n">L1</span>
-                <span class="n">L1</span> <span class="o">=</span> <span class="n">L</span>
-                <span class="n">L</span> <span class="o">=</span> <span class="p">(((</span><span class="mi">2</span><span class="o">*</span><span class="n">n</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">scaled_radius_squared</span><span class="p">)</span> <span class="o">*</span> <span class="n">L1</span> <span class="o">-</span> <span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">L2</span><span class="p">)</span> <span class="o">/</span> <span class="n">n</span>
-
-            <span class="c1"># Add to the sum, including the term for the additional Gouy phase</span>
-            <span class="n">laguerre_sum</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cn</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span> <span class="o">-</span> <span class="p">(</span><span class="mi">2</span><span class="n">j</span><span class="o">*</span> <span class="n">n</span><span class="p">)</span> <span class="o">*</span> <span class="n">psi</span> <span class="p">)</span> <span class="o">*</span> <span class="n">L</span>
-
-        <span class="c1"># Final profile: multiply by n-independent propagation factors</span>
-        <span class="n">exp_argument</span> <span class="o">=</span> <span class="o">-</span> <span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">cep_phase</span> \
-            <span class="o">+</span> <span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">k0</span><span class="o">*</span><span class="p">(</span> <span class="n">prop_dir</span><span class="o">*</span><span class="p">(</span><span class="n">z</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">z0</span><span class="p">)</span> <span class="o">-</span> <span class="n">c</span><span class="o">*</span><span class="n">t</span> <span class="p">)</span> \
-            <span class="o">-</span> <span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">y</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">w_foc</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">diffract_factor</span><span class="p">)</span> \
-            <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">inv_ctau2</span> <span class="o">*</span> <span class="p">(</span> <span class="n">prop_dir</span><span class="o">*</span><span class="p">(</span><span class="n">z</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">z0</span><span class="p">)</span> <span class="o">-</span> <span class="n">c</span><span class="o">*</span><span class="n">t</span> <span class="p">)</span><span class="o">**</span><span class="mi">2</span>
-        <span class="n">profile</span> <span class="o">=</span> <span class="n">laguerre_sum</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span> <span class="n">exp_argument</span> <span class="p">)</span> <span class="o">/</span> <span class="n">diffract_factor</span>
-
+        <span class="c1"># The laser profile is constructed by combining a complex</span>
+        <span class="c1"># longitudinal and transverse profile, which is valid under the</span>
+        <span class="c1"># paraxial approximation.</span>
+        <span class="n">profile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">longitudinal_profile</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span> <span class="o">*</span> \
+                  <span class="bp">self</span><span class="o">.</span><span class="n">transverse_profile</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
         <span class="c1"># Get the projection along x and y, with the correct polarization</span>
         <span class="n">Ex</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">E0x</span> <span class="o">*</span> <span class="n">profile</span>
         <span class="n">Ey</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">E0y</span> <span class="o">*</span> <span class="n">profile</span>
 
-        <span class="k">return</span><span class="p">(</span> <span class="n">Ex</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">Ey</span><span class="o">.</span><span class="n">real</span> <span class="p">)</span></div>
+        <span class="k">return</span> <span class="p">(</span><span class="n">Ex</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">Ey</span><span class="o">.</span><span class="n">real</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="FewCycleLaser"><a class="viewcode-back" href="../../../../api_reference/lpa_utilities/laser_profiles/few_cycle.html#fbpic.lpa_utils.laser.FewCycleLaser">[docs]</a><span class="k">class</span> <span class="nc">FewCycleLaser</span><span class="p">(</span> <span class="n">LaserProfile</span> <span class="p">):</span>
@@ -994,11 +955,9 @@
         <span class="n">k0</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">lambda0</span>
         <span class="n">E0</span> <span class="o">=</span> <span class="n">a0</span><span class="o">*</span><span class="n">m_e</span><span class="o">*</span><span class="n">c</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="n">k0</span><span class="o">/</span><span class="n">e</span>
         <span class="n">zr</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">k0</span><span class="o">*</span><span class="n">waist</span><span class="o">**</span><span class="mi">2</span>
-
         <span class="c1"># If no focal plane position is given, use z0</span>
         <span class="k">if</span> <span class="n">zf</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">zf</span> <span class="o">=</span> <span class="n">z0</span>
-
         <span class="c1"># Store the parameters</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">k0</span> <span class="o">=</span> <span class="n">k0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">zr</span> <span class="o">=</span> <span class="n">zr</span>
@@ -1008,7 +967,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">E0y</span> <span class="o">=</span> <span class="n">E0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta_pol</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">w0</span> <span class="o">=</span> <span class="n">waist</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cep_phase</span> <span class="o">=</span> <span class="n">cep_phase</span>
-
         <span class="c1"># Find the Poisson parameter s, by solving the non-linear equation</span>
         <span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">fsolve</span>
         <span class="n">w_tau</span> <span class="o">=</span> <span class="n">c</span><span class="o">*</span><span class="n">k0</span><span class="o">*</span><span class="n">tau_fwhm</span>
@@ -1024,11 +982,9 @@
         <span class="c1"># Calculate the argument inside the power function</span>
         <span class="n">argument</span> <span class="o">=</span> <span class="mf">1.</span> <span class="o">+</span> <span class="mf">1.</span><span class="n">j</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">k0</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">s</span><span class="o">*</span><span class="p">(</span>
             <span class="n">prop_dir</span><span class="o">*</span><span class="p">(</span><span class="n">z</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">z0</span><span class="p">)</span> <span class="o">-</span> <span class="n">c</span><span class="o">*</span><span class="n">t</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">y</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">inv_q</span> <span class="p">)</span>
-
         <span class="c1"># Get the transverse profile</span>
         <span class="n">profile</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mf">1.</span><span class="n">j</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">cep_phase</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1.</span><span class="n">j</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">zr</span><span class="o">*</span><span class="n">inv_q</span> <span class="o">*</span> \
                     <span class="n">argument</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">s</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-
         <span class="c1"># Get the projection along x and y, with the correct polarization</span>
         <span class="n">Ex</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">E0x</span> <span class="o">*</span> <span class="n">profile</span>
         <span class="n">Ey</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">E0y</span> <span class="o">*</span> <span class="n">profile</span>
