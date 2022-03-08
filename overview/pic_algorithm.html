@@ -1,74 +1,38 @@
-
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>FBPIC algorithm &amp; features &mdash; FBPIC 0.20.4 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
-
-  
-  
-  
-  
-
-  
-  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
         <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-
-    
-
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Parallelization of FBPIC" href="parallelisation.html" />
     <link rel="prev" title="Overview of the code" href="overview.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="../index.html" class="icon icon-home"> FBPIC
-          
-
-          
           </a>
-
-          
-            
-            
               <div class="version">
                 0.20.4
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -76,17 +40,7 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="overview.html">Overview of the code</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">FBPIC algorithm &amp; features</a><ul>
@@ -108,73 +62,34 @@
 <li class="toctree-l1"><a class="reference internal" href="../advanced/advanced.html">Advanced use</a></li>
 </ul>
 
-            
-          
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">FBPIC</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../index.html">Docs</a> &raquo;</li>
-        
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="overview.html">Overview of the code</a> &raquo;</li>
-        
       <li>FBPIC algorithm &amp; features</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="../_sources/overview/pic_algorithm.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="fbpic-algorithm-features">
+             
+  <section id="fbpic-algorithm-features">
 <h1>FBPIC algorithm &amp; features<a class="headerlink" href="#fbpic-algorithm-features" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="introduction-to-the-pic-cycle">
+<section id="introduction-to-the-pic-cycle">
 <h2>Introduction to the PIC cycle<a class="headerlink" href="#introduction-to-the-pic-cycle" title="Permalink to this headline">¶</a></h2>
 <p>Like any electromagnetic PIC code, FBPIC simulates the
 <strong>self-consistent interaction</strong> of <strong>charged particles</strong> and
@@ -192,10 +107,10 @@ time steps</strong>. At each timestep:</p>
 </ul>
 </div></blockquote>
 <img alt="../_images/pic_loop.png" src="../_images/pic_loop.png" />
-</div>
-<div class="section" id="the-distinctive-features-of-fbpic">
+</section>
+<section id="the-distinctive-features-of-fbpic">
 <h2>The distinctive features of FBPIC<a class="headerlink" href="#the-distinctive-features-of-fbpic" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="cylindrical-grid-with-azimuthal-decomposition">
+<section id="cylindrical-grid-with-azimuthal-decomposition">
 <h3>Cylindrical grid with azimuthal decomposition<a class="headerlink" href="#cylindrical-grid-with-azimuthal-decomposition" title="Permalink to this headline">¶</a></h3>
 <p>In the <em>standard</em> PIC algorithm, the fields are represented on a <strong>3D
 Cartesian grid</strong>. This is very generic, but also very computational
@@ -260,8 +175,8 @@ from the axis have a larger weight.</p>
 along with their weights (denoted as <cite>w</cite>) ; be sure to take them into account in
 your post-analysis.</p>
 </div>
-</div>
-<div class="section" id="analytical-integration-in-spectral-space">
+</section>
+<section id="analytical-integration-in-spectral-space">
 <span id="spectral-solver"></span><h3>Analytical integration in spectral space<a class="headerlink" href="#analytical-integration-in-spectral-space" title="Permalink to this headline">¶</a></h3>
 <p>In the <em>standard</em> PIC algorithm, for the field solver, the spatial and
 time derivatives in the Maxwell equations are discretized using <strong>finite-difference</strong>. However, this can lead to
@@ -293,8 +208,8 @@ and a <strong>Hankel transform</strong> along <span class="math notranslate nohi
 using a large number of gridpoints along <span class="math notranslate nohighlight">\(r\)</span> (<span class="math notranslate nohighlight">\(N_r\sim 1000\)</span>),
 the Hankel transforms may dominate the computational time.</p>
 </div>
-</div>
-<div class="section" id="centering-in-time-and-space">
+</section>
+<section id="centering-in-time-and-space">
 <h3>Centering in time and space<a class="headerlink" href="#centering-in-time-and-space" title="Permalink to this headline">¶</a></h3>
 <p>While, in the <em>standard</em> PIC algorithm, the fields are <strong>staggered in
 space and time</strong>, in FBPIC the fields are all defined at the <strong>same
@@ -304,57 +219,39 @@ notable exception of the currents, which are staggered in time).</p>
 produce for instance spurious forces for relativistic electrons
 copropagating with a laser (more details in the <a class="reference external" href="http://www.sciencedirect.com/science/article/pii/S0010465516300224">original article</a>
 of FBPIC).</p>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="parallelisation.html" class="btn btn-neutral float-right" title="Parallelization of FBPIC" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="overview.html" class="btn btn-neutral float-left" title="Overview of the code" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="overview.html" class="btn btn-neutral float-left" title="Overview of the code" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="parallelisation.html" class="btn btn-neutral float-right" title="Parallelization of FBPIC" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &copy; Copyright 2016, FBPIC contributors
-
-    </p>
+    <p>&#169; Copyright 2016, FBPIC contributors.</p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

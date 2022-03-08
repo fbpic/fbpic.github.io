@@ -1,73 +1,37 @@
-
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>The openPMD diagnostics &mdash; FBPIC 0.20.4 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
-
-  
-  
-  
-  
-
-  
-  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-    
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-
-    
-
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Checkpoints and restarts" href="checkpoint_restart.html" />
     <link rel="prev" title="The Particles class" href="particles.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="../index.html" class="icon icon-home"> FBPIC
-          
-
-          
           </a>
-
-          
-            
-            
               <div class="version">
                 0.20.4
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -75,17 +39,7 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../overview/overview.html">Overview of the code</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../install/installation.html">Installation</a></li>
@@ -116,71 +70,32 @@
 <li class="toctree-l1"><a class="reference internal" href="../advanced/advanced.html">Advanced use</a></li>
 </ul>
 
-            
-          
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">FBPIC</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../index.html">Docs</a> &raquo;</li>
-        
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="api_reference.html">API reference</a> &raquo;</li>
-        
       <li>The openPMD diagnostics</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="../_sources/api_reference/diagnostics.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="the-openpmd-diagnostics">
+             
+  <section id="the-openpmd-diagnostics">
 <h1>The openPMD diagnostics<a class="headerlink" href="#the-openpmd-diagnostics" title="Permalink to this headline">¶</a></h1>
 <p>During a simulation, FBPIC outputs diagnostics of fields and
 particles in the form of <a class="reference external" href="https://github.com/openPMD">openPMD files</a>.</p>
@@ -189,9 +104,9 @@ adding or removing a corresponding diagnostic object in the list of diagnostics 
 <p>Below are the different available diagnostics objects:</p>
 <div class="toctree-wrapper compound">
 </div>
-<div class="section" id="regular-diagnostics">
+<section id="regular-diagnostics">
 <h2>Regular diagnostics<a class="headerlink" href="#regular-diagnostics" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="field-diagnostic">
+<section id="field-diagnostic">
 <h3>Field diagnostic<a class="headerlink" href="#field-diagnostic" title="Permalink to this headline">¶</a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="fbpic.openpmd_diag.FieldDiagnostic">
@@ -226,8 +141,8 @@ of the current working directory.</p></li>
 </dl>
 </dd></dl>
 
-</div>
-<div class="section" id="particle-diagnostic">
+</section>
+<section id="particle-diagnostic">
 <h3>Particle diagnostic<a class="headerlink" href="#particle-diagnostic" title="Permalink to this headline">¶</a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="fbpic.openpmd_diag.ParticleDiagnostic">
@@ -274,8 +189,8 @@ subsampling_fraction probability</p></li>
 </dl>
 </dd></dl>
 
-</div>
-<div class="section" id="particle-density-diagnostic">
+</section>
+<section id="particle-density-diagnostic">
 <h3>Particle density diagnostic<a class="headerlink" href="#particle-density-diagnostic" title="Permalink to this headline">¶</a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="fbpic.openpmd_diag.ParticleChargeDensityDiagnostic">
@@ -306,13 +221,13 @@ of the current working directory.</p></li>
 </dl>
 </dd></dl>
 
-</div>
-</div>
-<div class="section" id="back-transformed-diagnostics-boosted-frame-simulations">
+</section>
+</section>
+<section id="back-transformed-diagnostics-boosted-frame-simulations">
 <h2>Back-transformed diagnostics (boosted-frame simulations)<a class="headerlink" href="#back-transformed-diagnostics-boosted-frame-simulations" title="Permalink to this headline">¶</a></h2>
 <p>These diagnostics recontruct and output the lab-frame quantities on the fly,
 during a boosted-frame simulation.</p>
-<div class="section" id="id1">
+<section id="id1">
 <h3>Field diagnostic<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="fbpic.openpmd_diag.BackTransformedFieldDiagnostic">
@@ -357,8 +272,8 @@ are then brought from spectral to real space, at each iteration.</p></li>
 (for backward compatibility), we recommend using
 <code class="docutils literal notranslate"><span class="pre">BackTransformedFieldDiagnostic</span></code> instead.</p>
 </div>
-</div>
-<div class="section" id="id2">
+</section>
+<section id="id2">
 <h3>Particle diagnostic<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="fbpic.openpmd_diag.BackTransformedParticleDiagnostic">
@@ -403,57 +318,39 @@ extract some information about the grid</p></li>
 (for backward compatibility), we recommend using
 <code class="docutils literal notranslate"><span class="pre">BackTransformedParticleDiagnostic</span></code> instead.</p>
 </div>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="checkpoint_restart.html" class="btn btn-neutral float-right" title="Checkpoints and restarts" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="particles.html" class="btn btn-neutral float-left" title="The Particles class" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="particles.html" class="btn btn-neutral float-left" title="The Particles class" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="checkpoint_restart.html" class="btn btn-neutral float-right" title="Checkpoints and restarts" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &copy; Copyright 2016, FBPIC contributors
-
-    </p>
+    <p>&#169; Copyright 2016, FBPIC contributors.</p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

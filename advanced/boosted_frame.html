@@ -1,74 +1,38 @@
-
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Running boosted-frame simulations &mdash; FBPIC 0.20.4 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
-
-  
-  
-  
-  
-
-  
-  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
         <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-
-    
-
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="3D visualization using PyVista" href="3d_visualization.html" />
     <link rel="prev" title="Performing parameter scans in parallel" href="parameter_scans.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="../index.html" class="icon icon-home"> FBPIC
-          
-
-          
           </a>
-
-          
-            
-            
               <div class="version">
                 0.20.4
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -76,17 +40,7 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../overview/overview.html">Overview of the code</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../install/installation.html">Installation</a></li>
@@ -109,71 +63,32 @@
 </li>
 </ul>
 
-            
-          
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">FBPIC</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../index.html">Docs</a> &raquo;</li>
-        
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="advanced.html">Advanced use</a> &raquo;</li>
-        
       <li>Running boosted-frame simulations</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="../_sources/advanced/boosted_frame.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="running-boosted-frame-simulations">
+             
+  <section id="running-boosted-frame-simulations">
 <h1>Running boosted-frame simulations<a class="headerlink" href="#running-boosted-frame-simulations" title="Permalink to this headline">¶</a></h1>
 <p>This page gives a quick overview of <strong>boosted-frame simulations</strong>, a technique
 which can speed up certain types of PIC simulations by orders of magnitude.</p>
@@ -189,7 +104,7 @@ how to handle the most important aspects of boosted-frame simulations with FBPIC
 <li><p>Understanding the transformation and resolution of physical objects in the boosted frame</p></li>
 </ul>
 </div></blockquote>
-<div class="section" id="principle-of-the-boosted-frame-technique-for-lwfa">
+<section id="principle-of-the-boosted-frame-technique-for-lwfa">
 <h2>Principle of the boosted-frame technique (for LWFA)<a class="headerlink" href="#principle-of-the-boosted-frame-technique-for-lwfa" title="Permalink to this headline">¶</a></h2>
 <p>Instead of running the simulation in the <strong>reference frame of the laboratory</strong>
 (or <em>lab frame</em> for short), this technique
@@ -269,8 +184,8 @@ simulations, the ions are required</strong>. Make sure to include them, either
 by setting the flag <code class="docutils literal notranslate"><span class="pre">initialize_ions=True</span></code> in the <a class="reference internal" href="../api_reference/simulation.html#fbpic.main.Simulation" title="fbpic.main.Simulation"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Simulation</span></code></a>
 object, or by adding them separately with <a class="reference internal" href="../api_reference/simulation.html#fbpic.main.Simulation.add_new_species" title="fbpic.main.Simulation.add_new_species"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">add_new_species</span></code></a>.</p>
 </div>
-</div>
-<div class="section" id="converting-input-parameters-from-the-lab-frame-to-the-boosted-frame">
+</section>
+<section id="converting-input-parameters-from-the-lab-frame-to-the-boosted-frame">
 <h2>Converting input parameters from the lab frame to the boosted frame<a class="headerlink" href="#converting-input-parameters-from-the-lab-frame-to-the-boosted-frame" title="Permalink to this headline">¶</a></h2>
 <p>When running a simulation in the boosted frame, all the parameters (e.g.
 laser wavelength, plasma density, etc.) <strong>needed to be converted</strong> from their known
@@ -288,8 +203,8 @@ formulas for the most common physical quantities. Additionally, a function is pr
 to automatically estimate the required PIC iterations in the boosted frame (see <a class="reference internal" href="#boosted-frame-speedup"><span class="std std-ref">Estimating the number of PIC iterations for boosted frame simulations</span></a>).</p>
 <p>You can see an example of these different methods for parameter conversion
 in the boosted-frame example script of the section <a class="reference internal" href="../how_to_run.html"><span class="doc">How to run the code</span></a>.</p>
-</div>
-<div class="section" id="converting-simulation-results-from-the-boosted-frame-to-the-lab-frame">
+</section>
+<section id="converting-simulation-results-from-the-boosted-frame-to-the-lab-frame">
 <span id="boosted-frame-lab-diagnostics"></span><h2>Converting simulation results from the boosted frame to the lab frame<a class="headerlink" href="#converting-simulation-results-from-the-boosted-frame-to-the-lab-frame" title="Permalink to this headline">¶</a></h2>
 <p>Although the simulation runs in the boosted frame, it is desirable to have
 the results in the lab frame, since this is usually easier to interpret.</p>
@@ -317,8 +232,8 @@ If the chosen number of PIC iterations is insufficient, then some of these
 files may be incomplete. (This typically shows up as the fields being zero
 in the left-hand side of the box.)</p>
 </div>
-</div>
-<div class="section" id="avoiding-the-numerical-cherenkov-instability-nci">
+</section>
+<section id="avoiding-the-numerical-cherenkov-instability-nci">
 <h2>Avoiding the Numerical Cherenkov Instability (NCI)<a class="headerlink" href="#avoiding-the-numerical-cherenkov-instability-nci" title="Permalink to this headline">¶</a></h2>
 <p>When running simulations in the boosted frame, a <strong>numerical instability</strong> (known
 as the Numerical Cherenkov Instability, or NCI) can potentially affect the simulation
@@ -345,8 +260,8 @@ knowledge, no existing solution to suppress the NCI. Note that FBPIC does
 not check whether the above condition is met in a given simulation ;
 instead the user is responsible for ensuring this.</p>
 </div>
-</div>
-<div class="section" id="estimating-the-number-of-pic-iterations-for-boosted-frame-simulations">
+</section>
+<section id="estimating-the-number-of-pic-iterations-for-boosted-frame-simulations">
 <span id="boosted-frame-speedup"></span><h2>Estimating the number of PIC iterations for boosted frame simulations<a class="headerlink" href="#estimating-the-number-of-pic-iterations-for-boosted-frame-simulations" title="Permalink to this headline">¶</a></h2>
 <p>In order to calculate the required number of timesteps in a boosted frame simulation
 in practice, we can calculate and compare the total interaction time of
@@ -409,8 +324,8 @@ In practice, it is often advisable to fulfil
 <span class="math notranslate nohighlight">\(\gamma_b &lt; \gamma_{wake}/2\)</span> to properly resolve the physical
 objects (see next section).</p>
 </div>
-</div>
-<div class="section" id="transformation-and-resolution-of-physical-objects-in-the-boosted-frame">
+</section>
+<section id="transformation-and-resolution-of-physical-objects-in-the-boosted-frame">
 <span id="boosted-frame-resolution"></span><h2>Transformation and resolution of physical objects in the boosted frame<a class="headerlink" href="#transformation-and-resolution-of-physical-objects-in-the-boosted-frame" title="Permalink to this headline">¶</a></h2>
 <p>Although the basic principles of boosted frame simulations have been covered
 already in the previous sections, understanding the transformation of
@@ -452,56 +367,38 @@ should always be much smaller than the plasma wake velocity.
 <span class="math notranslate nohighlight">\(\gamma_b &lt; \gamma_{wake}/2\)</span> should be satisfied at least
 for a typical laser-plasma acceleration simulation.</p>
 </div>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="3d_visualization.html" class="btn btn-neutral float-right" title="3D visualization using PyVista" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="parameter_scans.html" class="btn btn-neutral float-left" title="Performing parameter scans in parallel" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="parameter_scans.html" class="btn btn-neutral float-left" title="Performing parameter scans in parallel" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="3d_visualization.html" class="btn btn-neutral float-right" title="3D visualization using PyVista" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &copy; Copyright 2016, FBPIC contributors
-
-    </p>
+    <p>&#169; Copyright 2016, FBPIC contributors.</p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

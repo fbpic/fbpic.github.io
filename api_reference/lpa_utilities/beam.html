@@ -1,73 +1,37 @@
-
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Beam initialization &mdash; FBPIC 0.20.4 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
-
-  
-  
-  
-  
-
-  
-  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/doctools.js"></script>
-    
-    <script type="text/javascript" src="../../_static/js/theme.js"></script>
-
-    
-
-  
-  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+    <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="External fields" href="external_fields.html" />
     <link rel="prev" title="Few-cycle profile" href="laser_profiles/few_cycle.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="../../index.html" class="icon icon-home"> FBPIC
-          
-
-          
           </a>
-
-          
-            
-            
               <div class="version">
                 0.20.4
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -75,17 +39,7 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../overview/overview.html">Overview of the code</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../install/installation.html">Installation</a></li>
@@ -108,73 +62,33 @@
 <li class="toctree-l1"><a class="reference internal" href="../../advanced/advanced.html">Advanced use</a></li>
 </ul>
 
-            
-          
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../index.html">FBPIC</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../../index.html">Docs</a> &raquo;</li>
-        
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="../api_reference.html">API reference</a> &raquo;</li>
-        
           <li><a href="lpa_utilities.html">Laser-plasma utilities</a> &raquo;</li>
-        
       <li>Beam initialization</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="../../_sources/api_reference/lpa_utilities/beam.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="beam-initialization">
+             
+  <section id="beam-initialization">
 <h1>Beam initialization<a class="headerlink" href="#beam-initialization" title="Permalink to this headline">¶</a></h1>
 <p>The functions below allow to <strong>initialize a relativistic particle beam</strong>
 with various distributions in space (e.g. Gaussian, flat-top, from a file,
@@ -182,7 +96,7 @@ etc.). In each case, the <strong>self-consistent space-charge fields</strong> ar
 automatically calculated by the code, and added to the simulation.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="fbpic.lpa_utils.bunch.add_particle_bunch">
-<span class="sig-prename descclassname"><span class="pre">fbpic.lpa_utils.bunch.</span></span><span class="sig-name descname"><span class="pre">add_particle_bunch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_zmin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_zmax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_rmin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_rmax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_nr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_nz</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_nt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dens_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boost</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'forward'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z_injection_plane</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initialize_self_field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fbpic/lpa_utils/bunch.html#add_particle_bunch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fbpic.lpa_utils.bunch.add_particle_bunch" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">fbpic.lpa_utils.bunch.</span></span><span class="sig-name descname"><span class="pre">add_particle_bunch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_zmin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_zmax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_rmin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_rmax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_nr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_nz</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_nt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dens_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boost</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'forward'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z_injection_plane</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initialize_self_field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boost_positions_in_dens_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fbpic/lpa_utils/bunch.html#add_particle_bunch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fbpic.lpa_utils.bunch.add_particle_bunch" title="Permalink to this definition">¶</a></dt>
 <dd><p>Introduce a simple relativistic particle bunch in the simulation,
 along with its space charge field.</p>
 <p>Uniform particle distribution with weights according to density function.</p>
@@ -201,11 +115,19 @@ along with its space charge field.</p>
 <li><p><strong>p_nz</strong> (<em>int</em>) – Number of macroparticles per cell along the z directions</p></li>
 <li><p><strong>p_nr</strong> (<em>int</em>) – Number of macroparticles per cell along the r directions</p></li>
 <li><p><strong>p_nt</strong> (<em>int</em>) – Number of macroparticles along the theta direction</p></li>
-<li><p><strong>dens_func</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function of the form <cite>dens_func( z, r )</cite>
-where <cite>z</cite> and <cite>r</cite> are 1d arrays, or <cite>dens( x, y, z)</cite>
+<li><p><strong>dens_func</strong> (<em>callable</em><em>, </em><em>optional</em>) – <dl class="simple">
+<dt>A function of the form <cite>dens_func( z, r )</cite></dt><dd><p>where <cite>z</cite> and <cite>r</cite> are 1d arrays, or <cite>dens( x, y, z)</cite>
 where <cite>x</cite>, <cite>y</cite> and <cite>z</cite> are 1d arrays, and which returns
 a 1d array containing the density <em>relative to `n`</em>
-(i.e. a number between 0 and 1) at the given positions.</p></li>
+(i.e. a number between 0 and 1) at the given positions.</p>
+</dd>
+</dl>
+<p>For boosted-frame simulation: if you set
+<code class="docutils literal notranslate"><span class="pre">boost_positions_in_dens_func</span></code> to <code class="docutils literal notranslate"><span class="pre">True</span></code>, then <code class="docutils literal notranslate"><span class="pre">dens_func</span></code>
+can be expressed as a function of <code class="docutils literal notranslate"><span class="pre">z</span></code> taken <strong>in the lab frame</strong>.
+Otherwise, it has to be expressed as a function of <code class="docutils literal notranslate"><span class="pre">z</span></code> taken
+in the boosted frame.</p>
+</p></li>
 <li><p><strong>boost</strong> (<em>a BoostConverter object</em><em>, </em><em>optional</em>) – A BoostConverter object defining the Lorentz boost of
 the simulation.</p></li>
 <li><p><strong>direction</strong> (<em>string</em><em>, </em><em>optional</em>) – Can be either “forward” or “backward”.
@@ -216,6 +138,8 @@ boosted-frame simulations.
 <cite>z_injection_plane</cite> is always given in the lab frame.</p></li>
 <li><p><strong>initialize_self_field</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to calculate the initial space charge fields of the bunch
 and add these fields to the fields on the grid (Default: True)</p></li>
+<li><p><strong>boost_positions_in_dens_func</strong> (<em>bool</em><em>, </em><em>optional</em>) – For boosted-frame simulations: whether to automatically take into
+account the Lorentz transformation of the positions, in <cite>dens_func</cite></p></li>
 </ul>
 </dd>
 </dl>
@@ -374,55 +298,37 @@ the use of arbitrary particle beams.</p>
 (for backward compatibility), we recommend using
 the new more flexible methods instead.</p>
 </div>
-</div>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="external_fields.html" class="btn btn-neutral float-right" title="External fields" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="laser_profiles/few_cycle.html" class="btn btn-neutral float-left" title="Few-cycle profile" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="laser_profiles/few_cycle.html" class="btn btn-neutral float-left" title="Few-cycle profile" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="external_fields.html" class="btn btn-neutral float-right" title="External fields" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &copy; Copyright 2016, FBPIC contributors
-
-    </p>
+    <p>&#169; Copyright 2016, FBPIC contributors.</p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>
