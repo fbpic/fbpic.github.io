@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Installation on Perlmutter (NERSC) &mdash; FBPIC 0.20.4 documentation</title>
+  <title>Installation on Perlmutter (NERSC) &mdash; FBPIC 0.21.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -30,7 +30,7 @@
             <a href="../index.html" class="icon icon-home"> FBPIC
           </a>
               <div class="version">
-                0.20.4
+                0.21.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -106,7 +106,7 @@ is a high-performance cluster at <a class="reference external" href="http://www.
 <ul>
 <li><p>Type the following lines to prepare your environment.</p>
 <blockquote>
-<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">module</span> <span class="n">load</span> <span class="n">PrgEnv</span><span class="o">-</span><span class="n">gnu</span> <span class="n">cpe</span><span class="o">-</span><span class="n">cuda</span> <span class="n">cuda</span> <span class="n">python</span>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">module</span> <span class="n">load</span> <span class="n">PrgEnv</span><span class="o">-</span><span class="n">gnu</span> <span class="n">cpe</span><span class="o">-</span><span class="n">cuda</span> <span class="n">cudatookit</span> <span class="n">python</span>
 </pre></div>
 </div>
 </div></blockquote>
@@ -125,8 +125,8 @@ is a high-performance cluster at <a class="reference external" href="http://www.
 <h3>Installation of FBPIC and its dependencies<a class="headerlink" href="#installation-of-fbpic-and-its-dependencies" title="Permalink to this headline">¶</a></h3>
 <ul>
 <li><p>Install the dependencies of <code class="docutils literal notranslate"><span class="pre">fbpic</span></code></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">python</span> <span class="n">numba</span> <span class="n">scipy</span> <span class="n">h5py</span> <span class="n">mkl</span> <span class="n">cudatoolkit</span><span class="o">=</span><span class="mf">11.3</span>
-<span class="n">pip</span> <span class="n">install</span> <span class="n">cupy</span><span class="o">-</span><span class="n">cuda113</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">python</span> <span class="n">numba</span> <span class="n">scipy</span> <span class="n">h5py</span> <span class="n">mkl</span> <span class="n">cudatoolkit</span><span class="o">=</span><span class="mf">11.5</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="n">cupy</span><span class="o">-</span><span class="n">cuda115</span>
 <span class="n">MPICC</span><span class="o">=</span><span class="s2">&quot;cc -shared -target-accel=nvidia80&quot;</span> <span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">force</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">cache</span><span class="o">-</span><span class="nb">dir</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">binary</span><span class="o">=</span><span class="n">mpi4py</span> <span class="n">mpi4py</span>
 </pre></div>
 </div>
@@ -148,7 +148,8 @@ is a high-performance cluster at <a class="reference external" href="http://www.
 </pre></div>
 </div>
 <p>Then <code class="docutils literal notranslate"><span class="pre">cd</span></code> to the directory where you prepared your input script and type</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">source</span> <span class="n">activate</span> <span class="n">fbpic</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">module</span> <span class="n">load</span> <span class="n">python</span> <span class="n">cudatookit</span>
+<span class="n">source</span> <span class="n">activate</span> <span class="n">fbpic</span>
 <span class="n">python</span> <span class="o">&lt;</span><span class="n">fbpic_script</span><span class="o">.</span><span class="n">py</span><span class="o">&gt;</span>
 </pre></div>
 </div>
@@ -168,7 +169,7 @@ following text (and replace the bracketed text by the proper values).</p>
 <span class="c1">#SBATCH --ntasks-per-node=4</span>
 <span class="c1">#SBATCH --gpus-per-task=1</span>
 
-<span class="n">module</span> <span class="n">load</span> <span class="n">python</span>
+<span class="n">module</span> <span class="n">load</span> <span class="n">python</span> <span class="n">cudatookit</span>
 <span class="n">source</span> <span class="n">activate</span> <span class="n">fbpic</span>
 
 <span class="n">export</span> <span class="n">MPICH_GPU_SUPPORT_ENABLED</span><span class="o">=</span><span class="mi">1</span>
