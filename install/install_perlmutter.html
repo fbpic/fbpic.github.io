@@ -106,7 +106,7 @@ is a high-performance cluster at <a class="reference external" href="http://www.
 <ul>
 <li><p>Type the following lines to prepare your environment.</p>
 <blockquote>
-<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">module</span> <span class="n">load</span> <span class="n">PrgEnv</span><span class="o">-</span><span class="n">gnu</span> <span class="n">cpe</span><span class="o">-</span><span class="n">cuda</span> <span class="n">cudatookit</span> <span class="n">python</span>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">module</span> <span class="n">load</span> <span class="n">PrgEnv</span><span class="o">-</span><span class="n">gnu</span> <span class="n">cpe</span><span class="o">-</span><span class="n">cuda</span> <span class="n">cudatoolkit</span> <span class="n">python</span>
 </pre></div>
 </div>
 </div></blockquote>
@@ -148,7 +148,7 @@ is a high-performance cluster at <a class="reference external" href="http://www.
 </pre></div>
 </div>
 <p>Then <code class="docutils literal notranslate"><span class="pre">cd</span></code> to the directory where you prepared your input script and type</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">module</span> <span class="n">load</span> <span class="n">python</span> <span class="n">cudatookit</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">module</span> <span class="n">load</span> <span class="n">python</span> <span class="n">cudatoolkit</span>
 <span class="n">source</span> <span class="n">activate</span> <span class="n">fbpic</span>
 <span class="n">python</span> <span class="o">&lt;</span><span class="n">fbpic_script</span><span class="o">.</span><span class="n">py</span><span class="o">&gt;</span>
 </pre></div>
@@ -169,7 +169,7 @@ following text (and replace the bracketed text by the proper values).</p>
 <span class="c1">#SBATCH --ntasks-per-node=4</span>
 <span class="c1">#SBATCH --gpus-per-task=1</span>
 
-<span class="n">module</span> <span class="n">load</span> <span class="n">python</span> <span class="n">cudatookit</span>
+<span class="n">module</span> <span class="n">load</span> <span class="n">python</span> <span class="n">cudatoolkit</span>
 <span class="n">source</span> <span class="n">activate</span> <span class="n">fbpic</span>
 
 <span class="n">export</span> <span class="n">MPICH_GPU_SUPPORT_ENABLED</span><span class="o">=</span><span class="mi">1</span>
