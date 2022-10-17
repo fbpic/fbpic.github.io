@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Boosted-frame simulation of laser-wakefield acceleration &mdash; FBPIC 0.21.0 documentation</title>
+  <title>Boosted-frame simulation of laser-wakefield acceleration &mdash; FBPIC 0.22.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -30,7 +30,7 @@
             <a href="../index.html" class="icon icon-home"> FBPIC
           </a>
               <div class="version">
-                0.21.0
+                0.22.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -109,7 +109,8 @@
 <span class="kn">from</span> <span class="nn">scipy.constants</span> <span class="kn">import</span> <span class="n">c</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">m_e</span><span class="p">,</span> <span class="n">m_p</span>
 <span class="c1"># Import the relevant structures in FBPIC</span>
 <span class="kn">from</span> <span class="nn">fbpic.main</span> <span class="kn">import</span> <span class="n">Simulation</span>
-<span class="kn">from</span> <span class="nn">fbpic.lpa_utils.laser</span> <span class="kn">import</span> <span class="n">add_laser</span>
+<span class="kn">from</span> <span class="nn">fbpic.lpa_utils.laser</span> <span class="kn">import</span> <span class="n">add_laser_pulse</span>
+<span class="kn">from</span> <span class="nn">fbpic.lpa_utils.laser.laser_profiles</span> <span class="kn">import</span> <span class="n">GaussianLaser</span>
 <span class="kn">from</span> <span class="nn">fbpic.lpa_utils.bunch</span> <span class="kn">import</span> <span class="n">add_particle_bunch</span>
 <span class="kn">from</span> <span class="nn">fbpic.lpa_utils.boosted_frame</span> <span class="kn">import</span> <span class="n">BoostConverter</span>
 <span class="kn">from</span> <span class="nn">fbpic.openpmd_diag</span> <span class="kn">import</span> <span class="n">FieldDiagnostic</span><span class="p">,</span> <span class="n">ParticleDiagnostic</span><span class="p">,</span> \
@@ -151,7 +152,7 @@
 <span class="c1"># The laser (conversion to boosted frame is done inside &#39;add_laser&#39;)</span>
 <span class="n">a0</span> <span class="o">=</span> <span class="mf">2.</span>          <span class="c1"># Laser amplitude</span>
 <span class="n">w0</span> <span class="o">=</span> <span class="mf">50.e-6</span>      <span class="c1"># Laser waist</span>
-<span class="n">ctau</span> <span class="o">=</span> <span class="mf">5.e-6</span>     <span class="c1"># Laser duration</span>
+<span class="n">tau</span> <span class="o">=</span> <span class="mf">16.e-15</span>     <span class="c1"># Laser duration</span>
 <span class="n">z0</span> <span class="o">=</span> <span class="o">-</span><span class="mf">10.e-6</span>     <span class="c1"># Laser centroid</span>
 <span class="n">zfoc</span> <span class="o">=</span> <span class="mf">0.e-6</span>     <span class="c1"># Focal position</span>
 <span class="n">lambda0</span> <span class="o">=</span> <span class="mf">0.8e-6</span> <span class="c1"># Laser wavelength</span>
@@ -273,9 +274,11 @@
     <span class="k">if</span> <span class="n">track_bunch</span><span class="p">:</span>
         <span class="n">bunch</span><span class="o">.</span><span class="n">track</span><span class="p">(</span> <span class="n">sim</span><span class="o">.</span><span class="n">comm</span> <span class="p">)</span>
 
+    <span class="c1"># Create a Gaussian laser profile</span>
+    <span class="n">laser_profile</span> <span class="o">=</span> <span class="n">GaussianLaser</span><span class="p">(</span><span class="n">a0</span><span class="p">,</span> <span class="n">w0</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">z0</span><span class="p">,</span> <span class="n">lambda0</span><span class="o">=</span><span class="n">lambda0</span><span class="p">,</span> <span class="n">zf</span><span class="o">=</span><span class="n">zfoc</span><span class="p">)</span>
     <span class="c1"># Add a laser to the fields of the simulation</span>
-    <span class="n">add_laser</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">a0</span><span class="p">,</span> <span class="n">w0</span><span class="p">,</span> <span class="n">ctau</span><span class="p">,</span> <span class="n">z0</span><span class="p">,</span> <span class="n">lambda0</span><span class="o">=</span><span class="n">lambda0</span><span class="p">,</span>
-           <span class="n">zf</span><span class="o">=</span><span class="n">zfoc</span><span class="p">,</span> <span class="n">gamma_boost</span><span class="o">=</span><span class="n">boost</span><span class="o">.</span><span class="n">gamma0</span> <span class="p">)</span>
+    <span class="n">add_laser_pulse</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">laser_profile</span><span class="p">,</span> <span class="n">gamma_boost</span><span class="o">=</span><span class="n">boost</span><span class="o">.</span><span class="n">gamma0</span><span class="p">,</span>
+                     <span class="n">method</span><span class="o">=</span><span class="s1">&#39;antenna&#39;</span><span class="p">,</span> <span class="n">z0_antenna</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
     <span class="c1"># Convert parameter to boosted frame</span>
     <span class="n">v_window_boosted</span><span class="p">,</span> <span class="o">=</span> <span class="n">boost</span><span class="o">.</span><span class="n">velocity</span><span class="p">(</span> <span class="p">[</span> <span class="n">v_window</span> <span class="p">]</span> <span class="p">)</span>

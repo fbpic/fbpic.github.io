@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fbpic.openpmd_diag.boosted_field_diag &mdash; FBPIC 0.21.0 documentation</title>
+  <title>fbpic.openpmd_diag.boosted_field_diag &mdash; FBPIC 0.22.0 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -27,7 +27,7 @@
             <a href="../../../index.html" class="icon icon-home"> FBPIC
           </a>
               <div class="version">
-                0.21.0
+                0.22.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -101,8 +101,8 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">zmin_lab</span><span class="p">,</span> <span class="n">zmax_lab</span><span class="p">,</span> <span class="n">v_lab</span><span class="p">,</span> <span class="n">dt_snapshots_lab</span><span class="p">,</span>
                  <span class="n">Ntot_snapshots_lab</span><span class="p">,</span> <span class="n">gamma_boost</span><span class="p">,</span> <span class="n">period</span><span class="p">,</span> <span class="n">fldobject</span><span class="p">,</span>
-                 <span class="n">comm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fieldtypes</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;E&quot;</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">],</span>
-                 <span class="n">write_dir</span><span class="o">=</span><span class="kc">None</span> <span class="p">)</span> <span class="p">:</span>
+                 <span class="n">comm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fieldtypes</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;E&quot;</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">],</span> <span class="n">write_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">t_min_snapshots_lab</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">t_max_snapshots_lab</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize diagnostics that retrieve the data in the lab frame,</span>
 <span class="sd">        as a series of snapshot (one file per snapshot),</span>
@@ -144,6 +144,11 @@
 <span class="sd">            but has to be aware that there may errors in the backward transform.</span>
 <span class="sd">            Moreover, writing rho/J slows down the simulation, as these fields</span>
 <span class="sd">            are then brought from spectral to real space, at each iteration.</span>
+
+<span class="sd">        t_min_snapshots_lab, t_max_snapshots_lab: floats (seconds)</span>
+<span class="sd">            The time *in the lab frame* between which snapshots are created</span>
+<span class="sd">            (`t_min_snapshots_lab` is inclusive,</span>
+<span class="sd">             `t_max_snapshots_lab` is exclusive).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Do not leave write_dir as None, as this may conflict with</span>
         <span class="c1"># the default directory (&#39;./diags&#39;) in which diagnostics in the</span>
@@ -177,14 +182,17 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">snapshots</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span> <span class="n">Ntot_snapshots_lab</span> <span class="p">):</span>
             <span class="n">t_lab</span> <span class="o">=</span> <span class="n">i</span> <span class="o">*</span> <span class="n">dt_snapshots_lab</span>
-            <span class="n">snapshot</span> <span class="o">=</span> <span class="n">LabSnapshot</span><span class="p">(</span> <span class="n">t_lab</span><span class="p">,</span>
-                                    <span class="n">zmin_lab</span> <span class="o">+</span> <span class="n">v_lab</span><span class="o">*</span><span class="n">t_lab</span><span class="p">,</span>
-                                    <span class="n">zmax_lab</span> <span class="o">+</span> <span class="n">v_lab</span><span class="o">*</span><span class="n">t_lab</span><span class="p">,</span>
-                                    <span class="bp">self</span><span class="o">.</span><span class="n">write_dir</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fld</span><span class="p">,</span> <span class="n">Nr</span> <span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">snapshots</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">snapshot</span> <span class="p">)</span>
-            <span class="c1"># Initialize a corresponding empty file</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">create_file_empty_meshes</span><span class="p">(</span> <span class="n">snapshot</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span>
-                <span class="n">snapshot</span><span class="o">.</span><span class="n">t_lab</span><span class="p">,</span> <span class="n">Nr</span><span class="p">,</span> <span class="n">Nz</span><span class="p">,</span> <span class="n">snapshot</span><span class="o">.</span><span class="n">zmin_lab</span><span class="p">,</span> <span class="n">dz_lab</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">dt</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">t_lab</span> <span class="o">&gt;=</span> <span class="n">t_min_snapshots_lab</span> <span class="ow">and</span> <span class="n">t_lab</span> <span class="o">&lt;</span> <span class="n">t_max_snapshots_lab</span><span class="p">:</span>
+                <span class="n">snapshot</span> <span class="o">=</span> <span class="n">LabSnapshot</span><span class="p">(</span> <span class="n">t_lab</span><span class="p">,</span>
+                                        <span class="n">zmin_lab</span> <span class="o">+</span> <span class="n">v_lab</span><span class="o">*</span><span class="n">t_lab</span><span class="p">,</span>
+                                        <span class="n">zmax_lab</span> <span class="o">+</span> <span class="n">v_lab</span><span class="o">*</span><span class="n">t_lab</span><span class="p">,</span>
+                                        <span class="bp">self</span><span class="o">.</span><span class="n">write_dir</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fld</span><span class="p">,</span> <span class="n">Nr</span> <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">snapshots</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">snapshot</span> <span class="p">)</span>
+                <span class="c1"># Initialize a corresponding empty file</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">create_file_empty_meshes</span><span class="p">(</span> <span class="n">snapshot</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span>
+                                               <span class="n">snapshot</span><span class="o">.</span><span class="n">t_lab</span><span class="p">,</span> <span class="n">Nr</span><span class="p">,</span> <span class="n">Nz</span><span class="p">,</span>
+                                               <span class="n">snapshot</span><span class="o">.</span><span class="n">zmin_lab</span><span class="p">,</span> <span class="n">dz_lab</span><span class="p">,</span>
+                                               <span class="bp">self</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">dt</span><span class="p">)</span>
 
         <span class="c1"># Create a slice handler, which will do all the extraction, Lorentz</span>
         <span class="c1"># transformation, etc for each slice to be registered in a LabSnapshot</span>

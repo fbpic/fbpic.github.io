@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The openPMD diagnostics &mdash; FBPIC 0.21.0 documentation</title>
+  <title>The openPMD diagnostics &mdash; FBPIC 0.22.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -30,7 +30,7 @@
             <a href="../index.html" class="icon icon-home"> FBPIC
           </a>
               <div class="version">
-                0.21.0
+                0.22.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -231,7 +231,7 @@ during a boosted-frame simulation.</p>
 <h3>Field diagnostic<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="fbpic.openpmd_diag.BackTransformedFieldDiagnostic">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fbpic.openpmd_diag.</span></span><span class="sig-name descname"><span class="pre">BackTransformedFieldDiagnostic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">zmin_lab</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zmax_lab</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_lab</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt_snapshots_lab</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ntot_snapshots_lab</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma_boost</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fldobject</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fieldtypes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['E',</span> <span class="pre">'B']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">write_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/openpmd_diag/boosted_field_diag.html#BackTransformedFieldDiagnostic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fbpic.openpmd_diag.BackTransformedFieldDiagnostic" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fbpic.openpmd_diag.</span></span><span class="sig-name descname"><span class="pre">BackTransformedFieldDiagnostic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">zmin_lab</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zmax_lab</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_lab</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt_snapshots_lab</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ntot_snapshots_lab</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma_boost</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fldobject</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fieldtypes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['E',</span> <span class="pre">'B']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">write_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_min_snapshots_lab</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_max_snapshots_lab</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">inf</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/openpmd_diag/boosted_field_diag.html#BackTransformedFieldDiagnostic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fbpic.openpmd_diag.BackTransformedFieldDiagnostic" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize diagnostics that retrieve the data in the lab frame,
 as a series of snapshot (one file per snapshot),
 within a virtual moving window defined by zmin_lab, zmax_lab, v_lab.</p>
@@ -259,6 +259,18 @@ The user can still output “rho” and “J” by changing <cite>fieldtypes</ci
 but has to be aware that there may errors in the backward transform.
 Moreover, writing rho/J slows down the simulation, as these fields
 are then brought from spectral to real space, at each iteration.</p></li>
+<li><p><strong>t_min_snapshots_lab</strong> (<em>floats</em><em> (</em><em>seconds</em><em>)</em>) – <p>The time <em>in the lab frame</em> between which snapshots are created
+(<cite>t_min_snapshots_lab</cite> is inclusive,</p>
+<blockquote>
+<div><p><cite>t_max_snapshots_lab</cite> is exclusive).</p>
+</div></blockquote>
+</p></li>
+<li><p><strong>t_max_snapshots_lab</strong> (<em>floats</em><em> (</em><em>seconds</em><em>)</em>) – <p>The time <em>in the lab frame</em> between which snapshots are created
+(<cite>t_min_snapshots_lab</cite> is inclusive,</p>
+<blockquote>
+<div><p><cite>t_max_snapshots_lab</cite> is exclusive).</p>
+</div></blockquote>
+</p></li>
 </ul>
 </dd>
 </dl>
@@ -277,7 +289,7 @@ are then brought from spectral to real space, at each iteration.</p></li>
 <h3>Particle diagnostic<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="fbpic.openpmd_diag.BackTransformedParticleDiagnostic">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fbpic.openpmd_diag.</span></span><span class="sig-name descname"><span class="pre">BackTransformedParticleDiagnostic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">zmin_lab</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zmax_lab</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_lab</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt_snapshots_lab</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ntot_snapshots_lab</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma_boost</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fldobject</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">particle_data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['position',</span> <span class="pre">'momentum',</span> <span class="pre">'weighting']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">select</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">write_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">species</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{'electrons':</span> <span class="pre">None}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/openpmd_diag/boosted_particle_diag.html#BackTransformedParticleDiagnostic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fbpic.openpmd_diag.BackTransformedParticleDiagnostic" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fbpic.openpmd_diag.</span></span><span class="sig-name descname"><span class="pre">BackTransformedParticleDiagnostic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">zmin_lab</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zmax_lab</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_lab</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt_snapshots_lab</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ntot_snapshots_lab</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma_boost</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fldobject</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">particle_data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['position',</span> <span class="pre">'momentum',</span> <span class="pre">'weighting']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">select</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">write_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">species</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{'electrons':</span> <span class="pre">None}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_min_snapshots_lab</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_max_snapshots_lab</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">inf</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/openpmd_diag/boosted_particle_diag.html#BackTransformedParticleDiagnostic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fbpic.openpmd_diag.BackTransformedParticleDiagnostic" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize diagnostics that retrieve the data in the lab frame,
 as a series of snapshot (one file per snapshot),
 within a virtual moving window defined by zmin_lab, zmax_lab, v_lab.</p>
@@ -305,6 +317,18 @@ for <code class="docutils literal notranslate"><span class="pre">BackTransformed
 before finally writing it to the disk.</p></li>
 <li><p><strong>fldobject</strong> (<em>a Fields object</em><em>,</em>) – The Fields object of the simulation, that is needed to
 extract some information about the grid</p></li>
+<li><p><strong>t_min_snapshots_lab</strong> (<em>floats</em><em> (</em><em>seconds</em><em>)</em>) – <p>The time <em>in the lab frame</em> between which snapshots are created
+(<cite>t_min_snapshots_lab</cite> is inclusive,</p>
+<blockquote>
+<div><p><cite>t_max_snapshots_lab</cite> is exclusive).</p>
+</div></blockquote>
+</p></li>
+<li><p><strong>t_max_snapshots_lab</strong> (<em>floats</em><em> (</em><em>seconds</em><em>)</em>) – <p>The time <em>in the lab frame</em> between which snapshots are created
+(<cite>t_min_snapshots_lab</cite> is inclusive,</p>
+<blockquote>
+<div><p><cite>t_max_snapshots_lab</cite> is exclusive).</p>
+</div></blockquote>
+</p></li>
 </ul>
 </dd>
 </dl>
