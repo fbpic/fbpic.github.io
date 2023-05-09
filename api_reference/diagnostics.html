@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The openPMD diagnostics &mdash; FBPIC 0.22.0 documentation</title>
+  <title>The openPMD diagnostics &mdash; FBPIC 0.23.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -12,9 +12,8 @@
   <![endif]-->
   
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -27,14 +26,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../index.html" class="icon icon-home"> FBPIC
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            FBPIC
           </a>
               <div class="version">
-                0.22.0
+                0.23.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -83,9 +86,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="api_reference.html">API reference</a> &raquo;</li>
-      <li>The openPMD diagnostics</li>
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="api_reference.html">API reference</a></li>
+      <li class="breadcrumb-item active">The openPMD diagnostics</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/api_reference/diagnostics.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -96,7 +99,7 @@
            <div itemprop="articleBody">
              
   <section id="the-openpmd-diagnostics">
-<h1>The openPMD diagnostics<a class="headerlink" href="#the-openpmd-diagnostics" title="Permalink to this headline">¶</a></h1>
+<h1>The openPMD diagnostics<a class="headerlink" href="#the-openpmd-diagnostics" title="Permalink to this heading">¶</a></h1>
 <p>During a simulation, FBPIC outputs diagnostics of fields and
 particles in the form of <a class="reference external" href="https://github.com/openPMD">openPMD files</a>.</p>
 <p>A diagnostic can be directly added to simulation (or removed) by
@@ -105,15 +108,15 @@ adding or removing a corresponding diagnostic object in the list of diagnostics 
 <div class="toctree-wrapper compound">
 </div>
 <section id="regular-diagnostics">
-<h2>Regular diagnostics<a class="headerlink" href="#regular-diagnostics" title="Permalink to this headline">¶</a></h2>
+<h2>Regular diagnostics<a class="headerlink" href="#regular-diagnostics" title="Permalink to this heading">¶</a></h2>
 <section id="field-diagnostic">
-<h3>Field diagnostic<a class="headerlink" href="#field-diagnostic" title="Permalink to this headline">¶</a></h3>
+<h3>Field diagnostic<a class="headerlink" href="#field-diagnostic" title="Permalink to this heading">¶</a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="fbpic.openpmd_diag.FieldDiagnostic">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fbpic.openpmd_diag.</span></span><span class="sig-name descname"><span class="pre">FieldDiagnostic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">period</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fldobject</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fieldtypes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['rho',</span> <span class="pre">'E',</span> <span class="pre">'B',</span> <span class="pre">'J']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">write_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">inf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt_period</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/openpmd_diag/field_diag.html#FieldDiagnostic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fbpic.openpmd_diag.FieldDiagnostic" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize the field diagnostic.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>period</strong> (<em>int</em><em>, </em><em>optional</em>) – The period of the diagnostics, in number of timesteps.
 (i.e. the diagnostics are written whenever the number
@@ -126,7 +129,7 @@ Specify either this or <cite>period</cite></p></li>
 and the guard cells are removed from the output.
 Otherwise, each proc writes its own data, including guard cells.
 (Make sure to use different write_dir in this case.)</p></li>
-<li><p><strong>fieldtypes</strong> (<em>a list of strings</em><em>, </em><em>optional</em>) – The strings are either “rho”, “E”, “B” or “J”
+<li><p><strong>fieldtypes</strong> (<em>a list</em><em> of </em><em>strings</em><em>, </em><em>optional</em>) – The strings are either “rho”, “E”, “B” or “J”
 and indicate which field should be written.
 Default : all fields are written</p></li>
 <li><p><strong>write_dir</strong> (<em>string</em><em>, </em><em>optional</em>) – The POSIX path to the directory where the results are
@@ -143,13 +146,13 @@ of the current working directory.</p></li>
 
 </section>
 <section id="particle-diagnostic">
-<h3>Particle diagnostic<a class="headerlink" href="#particle-diagnostic" title="Permalink to this headline">¶</a></h3>
+<h3>Particle diagnostic<a class="headerlink" href="#particle-diagnostic" title="Permalink to this heading">¶</a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="fbpic.openpmd_diag.ParticleDiagnostic">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fbpic.openpmd_diag.</span></span><span class="sig-name descname"><span class="pre">ParticleDiagnostic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">period</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">species</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">particle_data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['position',</span> <span class="pre">'momentum',</span> <span class="pre">'weighting']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">select</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">write_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">inf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subsampling_fraction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt_period</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/openpmd_diag/particle_diag.html#ParticleDiagnostic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fbpic.openpmd_diag.ParticleDiagnostic" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize the particle diagnostics.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>period</strong> (<em>int</em><em>, </em><em>optional</em>) – The period of the diagnostics, in number of timesteps.
 (i.e. the diagnostics are written whenever the number
@@ -164,7 +167,7 @@ is assigned to the particle name of this species.
 guard cells are removed.
 Otherwise, each rank writes its own data, including guard cells.
 (Make sure to use different write_dir in this case.)</p></li>
-<li><p><strong>particle_data</strong> (<em>a list of strings</em><em>, </em><em>optional</em>) – Possible values are:
+<li><p><strong>particle_data</strong> (<em>a list</em><em> of </em><em>strings</em><em>, </em><em>optional</em>) – Possible values are:
 [“position”, “momentum”, “weighting”, “E” , “B”, “gamma”]
 “E” and “B” writes the E and B fields at the particles’ positions,
 respectively, but is turned off by default.
@@ -175,7 +178,7 @@ to select the particles, of the form
 ‘x’ : [-4., 10.]   (Particles having x between -4 and 10 microns)
 ‘ux’ : [-0.1, 0.1] (Particles having ux between -0.1 and 0.1 mc)
 ‘uz’ : [5., None]  (Particles with uz above 5 mc)</p></li>
-<li><p><strong>write_dir</strong> (<em>a list of strings</em><em>, </em><em>optional</em>) – The POSIX path to the directory where the results are
+<li><p><strong>write_dir</strong> (<em>a list</em><em> of </em><em>strings</em><em>, </em><em>optional</em>) – The POSIX path to the directory where the results are
 to be written. If none is provided, this will be the path
 of the current working directory.</p></li>
 <li><p><strong>iteration_min</strong> (<em>ints</em>) – The iterations between which data should be written
@@ -191,14 +194,14 @@ subsampling_fraction probability</p></li>
 
 </section>
 <section id="particle-density-diagnostic">
-<h3>Particle density diagnostic<a class="headerlink" href="#particle-density-diagnostic" title="Permalink to this headline">¶</a></h3>
+<h3>Particle density diagnostic<a class="headerlink" href="#particle-density-diagnostic" title="Permalink to this heading">¶</a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="fbpic.openpmd_diag.ParticleChargeDensityDiagnostic">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fbpic.openpmd_diag.</span></span><span class="sig-name descname"><span class="pre">ParticleChargeDensityDiagnostic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">period</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">species</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">write_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">inf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt_period</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/openpmd_diag/particle_density_diag.html#ParticleChargeDensityDiagnostic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fbpic.openpmd_diag.ParticleChargeDensityDiagnostic" title="Permalink to this definition">¶</a></dt>
 <dd><p>Writes the charge density of the specified species in the
 openPMD file (one dataset per species)</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>period</strong> (<em>int</em><em>, </em><em>optional</em>) – The period of the diagnostics, in number of timesteps.
 (i.e. the diagnostics are written whenever the number
@@ -224,11 +227,11 @@ of the current working directory.</p></li>
 </section>
 </section>
 <section id="back-transformed-diagnostics-boosted-frame-simulations">
-<h2>Back-transformed diagnostics (boosted-frame simulations)<a class="headerlink" href="#back-transformed-diagnostics-boosted-frame-simulations" title="Permalink to this headline">¶</a></h2>
+<h2>Back-transformed diagnostics (boosted-frame simulations)<a class="headerlink" href="#back-transformed-diagnostics-boosted-frame-simulations" title="Permalink to this heading">¶</a></h2>
 <p>These diagnostics recontruct and output the lab-frame quantities on the fly,
 during a boosted-frame simulation.</p>
 <section id="id1">
-<h3>Field diagnostic<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<h3>Field diagnostic<a class="headerlink" href="#id1" title="Permalink to this heading">¶</a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="fbpic.openpmd_diag.BackTransformedFieldDiagnostic">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fbpic.openpmd_diag.</span></span><span class="sig-name descname"><span class="pre">BackTransformedFieldDiagnostic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">zmin_lab</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zmax_lab</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_lab</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt_snapshots_lab</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ntot_snapshots_lab</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma_boost</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fldobject</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fieldtypes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['E',</span> <span class="pre">'B']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">write_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_min_snapshots_lab</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_max_snapshots_lab</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">inf</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/openpmd_diag/boosted_field_diag.html#BackTransformedFieldDiagnostic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fbpic.openpmd_diag.BackTransformedFieldDiagnostic" title="Permalink to this definition">¶</a></dt>
@@ -239,7 +242,7 @@ within a virtual moving window defined by zmin_lab, zmax_lab, v_lab.</p>
 diagnostics. See the documentation of <cite>FieldDiagnostic</cite> for
 the other parameters.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>zmin_lab</strong> (<em>float</em><em> (</em><em>in meters</em><em>)</em>) – The position of the left edge of the virtual moving window,
 <em>in the lab frame</em>, at t=0</p></li>
@@ -250,7 +253,7 @@ the other parameters.</p>
 <li><p><strong>Ntot_snapshots_lab</strong> (<em>int</em>) – Total number of snapshots that this diagnostic will produce</p></li>
 <li><p><strong>period</strong> (<em>int</em>) – Number of iterations for which the data is accumulated in memory,
 before finally writing it to the disk.</p></li>
-<li><p><strong>fieldtypes</strong> (<em>a list of strings</em><em>, </em><em>optional</em>) – The strings are either “rho”, “E”, “B” or “J”
+<li><p><strong>fieldtypes</strong> (<em>a list</em><em> of </em><em>strings</em><em>, </em><em>optional</em>) – The strings are either “rho”, “E”, “B” or “J”
 and indicate which field should be written.
 Default : only “E” and “B” are written. This is because the
 backward Lorentz transform is not as precise for “rho” and “J” as
@@ -286,7 +289,7 @@ are then brought from spectral to real space, at each iteration.</p></li>
 </div>
 </section>
 <section id="id2">
-<h3>Particle diagnostic<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<h3>Particle diagnostic<a class="headerlink" href="#id2" title="Permalink to this heading">¶</a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="fbpic.openpmd_diag.BackTransformedParticleDiagnostic">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fbpic.openpmd_diag.</span></span><span class="sig-name descname"><span class="pre">BackTransformedParticleDiagnostic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">zmin_lab</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zmax_lab</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_lab</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt_snapshots_lab</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ntot_snapshots_lab</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma_boost</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fldobject</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">particle_data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['position',</span> <span class="pre">'momentum',</span> <span class="pre">'weighting']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">select</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">write_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">species</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{'electrons':</span> <span class="pre">None}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_min_snapshots_lab</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_max_snapshots_lab</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">inf</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/openpmd_diag/boosted_particle_diag.html#BackTransformedParticleDiagnostic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fbpic.openpmd_diag.BackTransformedParticleDiagnostic" title="Permalink to this definition">¶</a></dt>
@@ -304,7 +307,7 @@ the other parameters.</p>
 for <code class="docutils literal notranslate"><span class="pre">BackTransformedParticleDiagnostic</span></code>.</p>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>zmin_lab</strong> (<em>float</em><em> (</em><em>in meters</em><em>)</em>) – The position of the left edge of the virtual moving window,
 <em>in the lab frame</em>, at t=0</p></li>

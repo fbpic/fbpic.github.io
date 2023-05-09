@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Laser initialization &mdash; FBPIC 0.22.0 documentation</title>
+  <title>Laser initialization &mdash; FBPIC 0.23.0 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -12,9 +12,8 @@
   <![endif]-->
   
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
         <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
         <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -28,14 +27,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> FBPIC
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            FBPIC
           </a>
               <div class="version">
-                0.22.0
+                0.23.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -81,10 +84,10 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../api_reference.html">API reference</a> &raquo;</li>
-          <li><a href="lpa_utilities.html">Laser-plasma utilities</a> &raquo;</li>
-      <li>Laser initialization</li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../api_reference.html">API reference</a></li>
+          <li class="breadcrumb-item"><a href="lpa_utilities.html">Laser-plasma utilities</a></li>
+      <li class="breadcrumb-item active">Laser initialization</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../_sources/api_reference/lpa_utilities/laser.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -95,7 +98,7 @@
            <div itemprop="articleBody">
              
   <section id="laser-initialization">
-<h1>Laser initialization<a class="headerlink" href="#laser-initialization" title="Permalink to this headline">¶</a></h1>
+<h1>Laser initialization<a class="headerlink" href="#laser-initialization" title="Permalink to this heading">¶</a></h1>
 <p>There are two functions that allow to introduce a laser pulse in an FBPIC simulation:</p>
 <ul class="simple">
 <li><p>The generic function <code class="docutils literal notranslate"><span class="pre">add_laser_pulse</span></code>, which can introduce an arbitrary laser profile.</p></li>
@@ -139,7 +142,7 @@ the simulation box.</p>
 </li>
 </ul>
 <section id="generic-function-for-arbitrary-laser-profile">
-<h2>Generic function for arbitrary laser profile<a class="headerlink" href="#generic-function-for-arbitrary-laser-profile" title="Permalink to this headline">¶</a></h2>
+<h2>Generic function for arbitrary laser profile<a class="headerlink" href="#generic-function-for-arbitrary-laser-profile" title="Permalink to this heading">¶</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="fbpic.lpa_utils.laser.add_laser_pulse">
 <span class="sig-prename descclassname"><span class="pre">fbpic.lpa_utils.laser.</span></span><span class="sig-name descname"><span class="pre">add_laser_pulse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">laser_profile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma_boost</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'direct'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z0_antenna</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_antenna</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fbpic/lpa_utils/laser/laser.html#add_laser_pulse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fbpic.lpa_utils.laser.add_laser_pulse" title="Permalink to this definition">¶</a></dt>
@@ -148,7 +151,7 @@ the simulation box.</p>
 (method= <code class="docutils literal notranslate"><span class="pre">direct</span></code>) or it is progressively emitted by an antenna
 (method= <code class="docutils literal notranslate"><span class="pre">antenna</span></code>).</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>sim</strong> (<em>a Simulation object</em>) – The structure that contains the simulation.</p></li>
 <li><p><strong>laser_profile</strong> (<em>a valid laser profile object</em>) – Laser profiles can be imported from <code class="docutils literal notranslate"><span class="pre">fbpic.lpa_utils.laser</span></code></p></li>
@@ -183,7 +186,7 @@ microns initially:</p>
 
 </section>
 <section id="laser-profiles">
-<h2>Laser profiles<a class="headerlink" href="#laser-profiles" title="Permalink to this headline">¶</a></h2>
+<h2>Laser profiles<a class="headerlink" href="#laser-profiles" title="Permalink to this heading">¶</a></h2>
 <p>This section lists the available laser profiles in FBPIC. Note that you can
 also combine these laser profiles (by summing them), or even create your
 own custom laser profiles.</p>
@@ -197,7 +200,7 @@ own custom laser profiles.</p>
 </ul>
 </div>
 <section id="combining-summing-laser-profiles">
-<h3>Combining (summing) laser profiles<a class="headerlink" href="#combining-summing-laser-profiles" title="Permalink to this headline">¶</a></h3>
+<h3>Combining (summing) laser profiles<a class="headerlink" href="#combining-summing-laser-profiles" title="Permalink to this heading">¶</a></h3>
 <p>Laser profiles can be combined by <strong>summing them together</strong>, so as to create
 new laser profiles.</p>
 <p>For instance, one might want to use a <strong>circularly-polarized
@@ -221,14 +224,14 @@ way:</p>
 </div>
 </section>
 <section id="creating-your-own-custom-laser-profile">
-<h3>Creating your own custom laser profile<a class="headerlink" href="#creating-your-own-custom-laser-profile" title="Permalink to this headline">¶</a></h3>
+<h3>Creating your own custom laser profile<a class="headerlink" href="#creating-your-own-custom-laser-profile" title="Permalink to this heading">¶</a></h3>
 <p>If you have some experience with Python programming, you can also define
 your own laser profile, inside your input script. To do so, you can have a
 look at how the existing laser profiles that are implemented <a class="reference external" href="https://github.com/fbpic/fbpic/blob/dev/fbpic/lpa_utils/laser/laser_profiles.py">here</a>.</p>
 </section>
 </section>
 <section id="compact-function-for-a-gaussian-pulse">
-<h2>Compact function for a Gaussian pulse<a class="headerlink" href="#compact-function-for-a-gaussian-pulse" title="Permalink to this headline">¶</a></h2>
+<h2>Compact function for a Gaussian pulse<a class="headerlink" href="#compact-function-for-a-gaussian-pulse" title="Permalink to this heading">¶</a></h2>
 <p>Using this function is equivalent to using the more generic <code class="docutils literal notranslate"><span class="pre">add_laser_pulse</span></code>
 function, with a <code class="docutils literal notranslate"><span class="pre">GaussianLaser</span></code> profile.</p>
 <dl class="py function">
@@ -254,7 +257,7 @@ the code, when initializing the laser pulse away from the focal plane.</p>
 (method= <code class="docutils literal notranslate"><span class="pre">direct</span></code>) or it is progressively emitted by an antenna
 (method= <code class="docutils literal notranslate"><span class="pre">antenna</span></code>).</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>sim</strong> (<em>a Simulation object</em>) – The structure that contains the simulation.</p></li>
 <li><p><strong>a0</strong> (<em>float</em><em> (</em><em>dimensionless</em><em>)</em>) – The peak normalized vector potential at the focal plane, defined

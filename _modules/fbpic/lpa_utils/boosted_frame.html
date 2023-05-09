@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fbpic.lpa_utils.boosted_frame &mdash; FBPIC 0.22.0 documentation</title>
+  <title>fbpic.lpa_utils.boosted_frame &mdash; FBPIC 0.23.0 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -11,9 +11,8 @@
   <![endif]-->
   
         <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -24,14 +23,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../../index.html" class="icon icon-home"> FBPIC
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            FBPIC
           </a>
               <div class="version">
-                0.22.0
+                0.23.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -58,9 +61,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../../index.html">Module code</a> &raquo;</li>
-      <li>fbpic.lpa_utils.boosted_frame</li>
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">fbpic.lpa_utils.boosted_frame</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -81,13 +84,13 @@
 <span class="kn">from</span> <span class="nn">scipy.constants</span> <span class="kn">import</span> <span class="n">c</span>
 
 <div class="viewcode-block" id="BoostConverter"><a class="viewcode-back" href="../../../api_reference/boost_converter.html#fbpic.lpa_utils.boosted_frame.BoostConverter">[docs]</a><span class="k">class</span> <span class="nc">BoostConverter</span><span class="p">(</span> <span class="nb">object</span> <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Class that converts the parameters of a simulation</span>
 <span class="sd">    from the lab frame to the boosted frame.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gamma0</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize the object by calculating the velocity of the</span>
 <span class="sd">        boosted frame.</span>
 
@@ -103,7 +106,7 @@
     <span class="c1"># ------------------</span>
 
 <div class="viewcode-block" id="BoostConverter.static_length"><a class="viewcode-back" href="../../../api_reference/boost_converter.html#fbpic.lpa_utils.boosted_frame.BoostConverter.static_length">[docs]</a>    <span class="k">def</span> <span class="nf">static_length</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">lab_frame_vars</span> <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Converts a list of lengths that correspond to static objects</span>
 <span class="sd">        (e.g. the plasma) from the lab frame to the boosted frame, i.e:</span>
 <span class="sd">        L&#39; = L / gamma0</span>
@@ -124,7 +127,7 @@
         <span class="k">return</span><span class="p">(</span> <span class="n">boosted_frame_vars</span> <span class="p">)</span></div>
 
 <div class="viewcode-block" id="BoostConverter.copropag_length"><a class="viewcode-back" href="../../../api_reference/boost_converter.html#fbpic.lpa_utils.boosted_frame.BoostConverter.copropag_length">[docs]</a>    <span class="k">def</span> <span class="nf">copropag_length</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">lab_frame_vars</span><span class="p">,</span> <span class="n">beta_object</span><span class="o">=</span><span class="mf">1.</span> <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Converts a list of lengths that correspond to copropagating objects</span>
 <span class="sd">        (e.g. the laser) from the lab frame to the boosted frame, i.e:</span>
 <span class="sd">        L&#39; = L / [ gamma0*(1 - beta_object*beta0) ]</span>
@@ -150,7 +153,7 @@
         <span class="k">return</span><span class="p">(</span> <span class="n">boosted_frame_vars</span> <span class="p">)</span></div>
 
 <div class="viewcode-block" id="BoostConverter.static_density"><a class="viewcode-back" href="../../../api_reference/boost_converter.html#fbpic.lpa_utils.boosted_frame.BoostConverter.static_density">[docs]</a>    <span class="k">def</span> <span class="nf">static_density</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">lab_frame_vars</span> <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Converts a list of densities that correspond to static objects</span>
 <span class="sd">        (e.g. the plasma) from the lab frame to the boosted frame, i.e:</span>
 <span class="sd">        n&#39; = n * gamma0</span>
@@ -171,7 +174,7 @@
         <span class="k">return</span><span class="p">(</span> <span class="n">boosted_frame_vars</span> <span class="p">)</span></div>
 
 <div class="viewcode-block" id="BoostConverter.copropag_density"><a class="viewcode-back" href="../../../api_reference/boost_converter.html#fbpic.lpa_utils.boosted_frame.BoostConverter.copropag_density">[docs]</a>    <span class="k">def</span> <span class="nf">copropag_density</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">lab_frame_vars</span><span class="p">,</span> <span class="n">beta_object</span><span class="o">=</span><span class="mf">1.</span> <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Converts a list of densities that correspond to copropagating objects</span>
 <span class="sd">        (e.g. an electron bunch) from the lab frame to the boosted frame, i.e:</span>
 <span class="sd">        n&#39; = n * [ gamma0*(1 - beta_object*beta0) ]</span>
@@ -200,7 +203,7 @@
     <span class="c1"># ---------------------</span>
 
 <div class="viewcode-block" id="BoostConverter.velocity"><a class="viewcode-back" href="../../../api_reference/boost_converter.html#fbpic.lpa_utils.boosted_frame.BoostConverter.velocity">[docs]</a>    <span class="k">def</span> <span class="nf">velocity</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">lab_frame_vars</span> <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Converts a list of velocities from the lab frame to the boosted frame:</span>
 <span class="sd">        v&#39; = ( v - c * beta0 )/( 1 - beta0*v/c )</span>
 
@@ -220,7 +223,7 @@
         <span class="k">return</span><span class="p">(</span> <span class="n">boosted_frame_vars</span> <span class="p">)</span></div>
 
 <div class="viewcode-block" id="BoostConverter.longitudinal_momentum"><a class="viewcode-back" href="../../../api_reference/boost_converter.html#fbpic.lpa_utils.boosted_frame.BoostConverter.longitudinal_momentum">[docs]</a>    <span class="k">def</span> <span class="nf">longitudinal_momentum</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">lab_frame_vars</span> <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Converts a list of momenta from the lab frame to the boosted frame:</span>
 <span class="sd">        u_z&#39; = gamma0 * ( u_z - sqrt(1 + u_z**2) * beta0 )</span>
 
@@ -244,7 +247,7 @@
         <span class="k">return</span><span class="p">(</span> <span class="n">boosted_frame_vars</span> <span class="p">)</span></div>
 
 <div class="viewcode-block" id="BoostConverter.gamma"><a class="viewcode-back" href="../../../api_reference/boost_converter.html#fbpic.lpa_utils.boosted_frame.BoostConverter.gamma">[docs]</a>    <span class="k">def</span> <span class="nf">gamma</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">lab_frame_vars</span> <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Converts a list of Lorentz factors from the lab frame to the</span>
 <span class="sd">        boosted frame:</span>
 <span class="sd">        gamma&#39; = gamma0 * ( gamma - beta0 * sqrt( gamma**2 - 1 ) )</span>
@@ -272,7 +275,7 @@
     <span class="c1"># ----------------</span>
 
 <div class="viewcode-block" id="BoostConverter.wavenumber"><a class="viewcode-back" href="../../../api_reference/boost_converter.html#fbpic.lpa_utils.boosted_frame.BoostConverter.wavenumber">[docs]</a>    <span class="k">def</span> <span class="nf">wavenumber</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">lab_frame_vars</span> <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Converts a list of wavenumbers from the lab frame to the boosted frame:</span>
 <span class="sd">        k&#39; = k / ( gamma0 ( 1 + beta0 ) )</span>
 
@@ -292,7 +295,7 @@
         <span class="k">return</span><span class="p">(</span> <span class="n">boosted_frame_vars</span> <span class="p">)</span></div>
 
 <div class="viewcode-block" id="BoostConverter.boost_particle_arrays"><a class="viewcode-back" href="../../../api_reference/boost_converter.html#fbpic.lpa_utils.boosted_frame.BoostConverter.boost_particle_arrays">[docs]</a>    <span class="k">def</span> <span class="nf">boost_particle_arrays</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">ux</span><span class="p">,</span> <span class="n">uy</span><span class="p">,</span> <span class="n">uz</span><span class="p">,</span> <span class="n">inv_gamma</span> <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Transforms particles to the boosted frame and propagates</span>
 <span class="sd">        them to a fixed time t_boost = 0. without taking any electromagnetic</span>
 <span class="sd">        effects into account. (This is useful for the initialization</span>
@@ -350,7 +353,7 @@
     <span class="c1"># -------------</span>
 
 <div class="viewcode-block" id="BoostConverter.interaction_time"><a class="viewcode-back" href="../../../api_reference/boost_converter.html#fbpic.lpa_utils.boosted_frame.BoostConverter.interaction_time">[docs]</a>    <span class="k">def</span> <span class="nf">interaction_time</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">L_interact</span><span class="p">,</span> <span class="n">l_window</span><span class="p">,</span> <span class="n">v_window</span> <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Calculates the interaction time in the boosted frame:</span>
 <span class="sd">        (Time it takes for the moving window to slide once across the</span>
 <span class="sd">        total interaction length, i.e. the plasma)</span>

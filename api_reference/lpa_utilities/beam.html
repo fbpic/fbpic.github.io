@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Beam initialization &mdash; FBPIC 0.22.0 documentation</title>
+  <title>Beam initialization &mdash; FBPIC 0.23.0 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -12,9 +12,8 @@
   <![endif]-->
   
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
         <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -27,14 +26,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> FBPIC
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            FBPIC
           </a>
               <div class="version">
-                0.22.0
+                0.23.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -51,7 +54,14 @@
 <li class="toctree-l2"><a class="reference internal" href="../checkpoint_restart.html">Checkpoints and restarts</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="lpa_utilities.html">Laser-plasma utilities</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="laser.html">Laser initialization</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Beam initialization</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Beam initialization</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#fbpic.lpa_utils.bunch.add_particle_bunch"><code class="docutils literal notranslate"><span class="pre">add_particle_bunch()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fbpic.lpa_utils.bunch.add_particle_bunch_gaussian"><code class="docutils literal notranslate"><span class="pre">add_particle_bunch_gaussian()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fbpic.lpa_utils.bunch.add_particle_bunch_from_arrays"><code class="docutils literal notranslate"><span class="pre">add_particle_bunch_from_arrays()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fbpic.lpa_utils.bunch.add_particle_bunch_openPMD"><code class="docutils literal notranslate"><span class="pre">add_particle_bunch_openPMD()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fbpic.lpa_utils.bunch.add_particle_bunch_file"><code class="docutils literal notranslate"><span class="pre">add_particle_bunch_file()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="external_fields.html">External fields</a></li>
 </ul>
 </li>
@@ -75,10 +85,10 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../api_reference.html">API reference</a> &raquo;</li>
-          <li><a href="lpa_utilities.html">Laser-plasma utilities</a> &raquo;</li>
-      <li>Beam initialization</li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../api_reference.html">API reference</a></li>
+          <li class="breadcrumb-item"><a href="lpa_utilities.html">Laser-plasma utilities</a></li>
+      <li class="breadcrumb-item active">Beam initialization</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../_sources/api_reference/lpa_utilities/beam.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -89,7 +99,7 @@
            <div itemprop="articleBody">
              
   <section id="beam-initialization">
-<h1>Beam initialization<a class="headerlink" href="#beam-initialization" title="Permalink to this headline">¶</a></h1>
+<h1>Beam initialization<a class="headerlink" href="#beam-initialization" title="Permalink to this heading">¶</a></h1>
 <p>The functions below allow to <strong>initialize a relativistic particle beam</strong>
 with various distributions in space (e.g. Gaussian, flat-top, from a file,
 etc.). In each case, the <strong>self-consistent space-charge fields</strong> are
@@ -101,7 +111,7 @@ automatically calculated by the code, and added to the simulation.</p>
 along with its space charge field.</p>
 <p>Uniform particle distribution with weights according to density function.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>sim</strong> (<em>a Simulation object</em>) – The structure that contains the simulation.</p></li>
 <li><p><strong>q</strong> (<em>float</em><em> (</em><em>in Coulomb</em><em>)</em>) – Charge of the particle species</p></li>
@@ -155,7 +165,7 @@ in such a way that it will be focused at time <cite>tf</cite>, at the position <
 Thus if <cite>tf</cite> is not 0, the bunch will be initially out of focus.
 (This does not take space charge effects into account.)</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>sim</strong> (<em>a Simulation object</em>) – The structure that contains the simulation.</p></li>
 <li><p><strong>q</strong> (<em>float</em><em> (</em><em>in Coulomb</em><em>)</em>) – Charge of the particle species</p></li>
@@ -190,18 +200,18 @@ and add these fields to the fields on the grid (Default: True)</p></li>
 <dd><p>Introduce a relativistic particle bunch in the simulation,
 along with its space charge field, loading particles from numpy arrays.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>sim</strong> (<em>a Simulation object</em>) – The structure that contains the simulation.</p></li>
 <li><p><strong>q</strong> (<em>float</em>) – Charge of the particle species</p></li>
 <li><p><strong>m</strong> (<em>float</em>) – Mass of the particle species</p></li>
-<li><p><strong>x</strong> (<em>1d arrays of length</em><em> (</em><em>N_macroparticles</em><em>,</em><em>)</em>) – The positions of the particles in x, y, z in meters</p></li>
-<li><p><strong>y</strong> (<em>1d arrays of length</em><em> (</em><em>N_macroparticles</em><em>,</em><em>)</em>) – The positions of the particles in x, y, z in meters</p></li>
-<li><p><strong>z</strong> (<em>1d arrays of length</em><em> (</em><em>N_macroparticles</em><em>,</em><em>)</em>) – The positions of the particles in x, y, z in meters</p></li>
-<li><p><strong>ux</strong> (<em>1d arrays of length</em><em> (</em><em>N_macroparticles</em><em>,</em><em>)</em>) – The dimensionless momenta of the particles in each direction</p></li>
-<li><p><strong>uy</strong> (<em>1d arrays of length</em><em> (</em><em>N_macroparticles</em><em>,</em><em>)</em>) – The dimensionless momenta of the particles in each direction</p></li>
-<li><p><strong>uz</strong> (<em>1d arrays of length</em><em> (</em><em>N_macroparticles</em><em>,</em><em>)</em>) – The dimensionless momenta of the particles in each direction</p></li>
-<li><p><strong>w</strong> (<em>1d array of length</em><em> (</em><em>N_macroparticles</em><em>,</em><em>)</em>) – The weight of the particles, i.e. the number of physical particles
+<li><p><strong>x</strong> (<em>1d arrays</em><em> of </em><em>length</em><em> (</em><em>N_macroparticles</em><em>,</em><em>)</em>) – The positions of the particles in x, y, z in meters</p></li>
+<li><p><strong>y</strong> (<em>1d arrays</em><em> of </em><em>length</em><em> (</em><em>N_macroparticles</em><em>,</em><em>)</em>) – The positions of the particles in x, y, z in meters</p></li>
+<li><p><strong>z</strong> (<em>1d arrays</em><em> of </em><em>length</em><em> (</em><em>N_macroparticles</em><em>,</em><em>)</em>) – The positions of the particles in x, y, z in meters</p></li>
+<li><p><strong>ux</strong> (<em>1d arrays</em><em> of </em><em>length</em><em> (</em><em>N_macroparticles</em><em>,</em><em>)</em>) – The dimensionless momenta of the particles in each direction</p></li>
+<li><p><strong>uy</strong> (<em>1d arrays</em><em> of </em><em>length</em><em> (</em><em>N_macroparticles</em><em>,</em><em>)</em>) – The dimensionless momenta of the particles in each direction</p></li>
+<li><p><strong>uz</strong> (<em>1d arrays</em><em> of </em><em>length</em><em> (</em><em>N_macroparticles</em><em>,</em><em>)</em>) – The dimensionless momenta of the particles in each direction</p></li>
+<li><p><strong>w</strong> (<em>1d array</em><em> of </em><em>length</em><em> (</em><em>N_macroparticles</em><em>,</em><em>)</em>) – The weight of the particles, i.e. the number of physical particles
 that each macroparticle corresponds to.</p></li>
 <li><p><strong>boost</strong> (<em>a BoostConverter object</em><em>, </em><em>optional</em>) – A BoostConverter object defining the Lorentz boost of
 the simulation.</p></li>
@@ -225,7 +235,7 @@ and add these fields to the fields on the grid (Default: True)</p></li>
 along with its space charge field, loading particles from an openPMD
 timeseries.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>sim</strong> (<em>a Simulation object</em>) – The structure that contains the simulation.</p></li>
 <li><p><strong>q</strong> (<em>float</em><em> (</em><em>in Coulomb</em><em>)</em>) – Charge of the particle species</p></li>
@@ -264,7 +274,7 @@ and add these fields to the fields on the grid (Default: True)</p></li>
 <dd><p>Introduce a relativistic particle bunch in the simulation,
 along with its space charge field, loading particles from text file.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>sim</strong> (<em>a Simulation object</em>) – The structure that contains the simulation.</p></li>
 <li><p><strong>q</strong> (<em>float</em><em> (</em><em>in Coulomb</em><em>)</em>) – Charge of the particle species</p></li>

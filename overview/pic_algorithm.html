@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FBPIC algorithm &amp; features &mdash; FBPIC 0.22.0 documentation</title>
+  <title>FBPIC algorithm &amp; features &mdash; FBPIC 0.23.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -12,9 +12,8 @@
   <![endif]-->
   
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
         <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -28,14 +27,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../index.html" class="icon icon-home"> FBPIC
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            FBPIC
           </a>
               <div class="version">
-                0.22.0
+                0.23.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -75,9 +78,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="overview.html">Overview of the code</a> &raquo;</li>
-      <li>FBPIC algorithm &amp; features</li>
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="overview.html">Overview of the code</a></li>
+      <li class="breadcrumb-item active">FBPIC algorithm &amp; features</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/overview/pic_algorithm.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -88,9 +91,9 @@
            <div itemprop="articleBody">
              
   <section id="fbpic-algorithm-features">
-<h1>FBPIC algorithm &amp; features<a class="headerlink" href="#fbpic-algorithm-features" title="Permalink to this headline">¶</a></h1>
+<h1>FBPIC algorithm &amp; features<a class="headerlink" href="#fbpic-algorithm-features" title="Permalink to this heading">¶</a></h1>
 <section id="introduction-to-the-pic-cycle">
-<h2>Introduction to the PIC cycle<a class="headerlink" href="#introduction-to-the-pic-cycle" title="Permalink to this headline">¶</a></h2>
+<h2>Introduction to the PIC cycle<a class="headerlink" href="#introduction-to-the-pic-cycle" title="Permalink to this heading">¶</a></h2>
 <p>Like any electromagnetic PIC code, FBPIC simulates the
 <strong>self-consistent interaction</strong> of <strong>charged particles</strong> and
 <strong>electromagnetic fields</strong>.</p>
@@ -109,9 +112,9 @@ time steps</strong>. At each timestep:</p>
 <img alt="../_images/pic_loop.png" src="../_images/pic_loop.png" />
 </section>
 <section id="the-distinctive-features-of-fbpic">
-<h2>The distinctive features of FBPIC<a class="headerlink" href="#the-distinctive-features-of-fbpic" title="Permalink to this headline">¶</a></h2>
+<h2>The distinctive features of FBPIC<a class="headerlink" href="#the-distinctive-features-of-fbpic" title="Permalink to this heading">¶</a></h2>
 <section id="cylindrical-grid-with-azimuthal-decomposition">
-<h3>Cylindrical grid with azimuthal decomposition<a class="headerlink" href="#cylindrical-grid-with-azimuthal-decomposition" title="Permalink to this headline">¶</a></h3>
+<h3>Cylindrical grid with azimuthal decomposition<a class="headerlink" href="#cylindrical-grid-with-azimuthal-decomposition" title="Permalink to this heading">¶</a></h3>
 <p>In the <em>standard</em> PIC algorithm, the fields are represented on a <strong>3D
 Cartesian grid</strong>. This is very generic, but also very computational
 expensive. For physical situations that have
@@ -177,7 +180,7 @@ your post-analysis.</p>
 </div>
 </section>
 <section id="analytical-integration-in-spectral-space">
-<span id="spectral-solver"></span><h3>Analytical integration in spectral space<a class="headerlink" href="#analytical-integration-in-spectral-space" title="Permalink to this headline">¶</a></h3>
+<span id="spectral-solver"></span><h3>Analytical integration in spectral space<a class="headerlink" href="#analytical-integration-in-spectral-space" title="Permalink to this heading">¶</a></h3>
 <p>In the <em>standard</em> PIC algorithm, for the field solver, the spatial and
 time derivatives in the Maxwell equations are discretized using <strong>finite-difference</strong>. However, this can lead to
 several important numerical artifacts, including <strong>spurious numerical
@@ -210,7 +213,7 @@ the Hankel transforms may dominate the computational time.</p>
 </div>
 </section>
 <section id="centering-in-time-and-space">
-<h3>Centering in time and space<a class="headerlink" href="#centering-in-time-and-space" title="Permalink to this headline">¶</a></h3>
+<h3>Centering in time and space<a class="headerlink" href="#centering-in-time-and-space" title="Permalink to this heading">¶</a></h3>
 <p>While, in the <em>standard</em> PIC algorithm, the fields are <strong>staggered in
 space and time</strong>, in FBPIC the fields are all defined at the <strong>same
 points in space</strong> and the <strong>same time</strong> (with the

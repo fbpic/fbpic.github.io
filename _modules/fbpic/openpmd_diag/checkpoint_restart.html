@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fbpic.openpmd_diag.checkpoint_restart &mdash; FBPIC 0.22.0 documentation</title>
+  <title>fbpic.openpmd_diag.checkpoint_restart &mdash; FBPIC 0.23.0 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -11,9 +11,8 @@
   <![endif]-->
   
         <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -24,14 +23,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../../index.html" class="icon icon-home"> FBPIC
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            FBPIC
           </a>
               <div class="version">
-                0.22.0
+                0.23.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -58,9 +61,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../../index.html">Module code</a> &raquo;</li>
-      <li>fbpic.openpmd_diag.checkpoint_restart</li>
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">fbpic.openpmd_diag.checkpoint_restart</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -92,7 +95,7 @@
     <span class="kn">import</span> <span class="nn">cupy</span>
 
 <div class="viewcode-block" id="set_periodic_checkpoint"><a class="viewcode-back" href="../../../api_reference/checkpoint_restart.html#fbpic.openpmd_diag.set_periodic_checkpoint">[docs]</a><span class="k">def</span> <span class="nf">set_periodic_checkpoint</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">period</span><span class="p">,</span> <span class="n">checkpoint_dir</span><span class="o">=</span><span class="s1">&#39;./checkpoints&#39;</span> <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Set up periodic checkpoints of the simulation</span>
 
 <span class="sd">    The checkpoints are saved in openPMD format, in the specified</span>
@@ -148,7 +151,7 @@
 
 <div class="viewcode-block" id="restart_from_checkpoint"><a class="viewcode-back" href="../../../api_reference/checkpoint_restart.html#fbpic.openpmd_diag.restart_from_checkpoint">[docs]</a><span class="k">def</span> <span class="nf">restart_from_checkpoint</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                             <span class="n">checkpoint_dir</span><span class="o">=</span><span class="s1">&#39;./checkpoints&#39;</span> <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Fills the Simulation object `sim` with data saved in a checkpoint.</span>
 
 <span class="sd">    More precisely, the following data from `sim` is overwritten:</span>
@@ -261,7 +264,7 @@
     <span class="n">sim</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">shift_global_domain_positions</span><span class="p">(</span> <span class="n">zmin_new</span> <span class="o">-</span> <span class="n">zmin_old</span> <span class="p">)</span></div>
 
 <span class="k">def</span> <span class="nf">check_restart</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">iteration</span><span class="p">,</span> <span class="n">checkpoint_dir</span> <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Verify that the restart is valid.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Verify that the restart is valid.&quot;&quot;&quot;</span>
 
     <span class="c1"># Check that the checkpoint directory exists</span>
     <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">checkpoint_dir</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
@@ -287,7 +290,7 @@
 
 
 <span class="k">def</span> <span class="nf">load_fields</span><span class="p">(</span> <span class="n">grid</span><span class="p">,</span> <span class="n">fieldtype</span><span class="p">,</span> <span class="n">coord</span><span class="p">,</span> <span class="n">ts</span><span class="p">,</span> <span class="n">iteration</span> <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Load the field information from the checkpoint `ts` into</span>
 <span class="sd">    the InterpolationGrid `grid`.</span>
 
@@ -352,7 +355,7 @@
     <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span> <span class="n">length_old</span><span class="p">,</span> <span class="n">length_new</span> <span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">load_species</span><span class="p">(</span> <span class="n">species</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">ts</span><span class="p">,</span> <span class="n">iteration</span><span class="p">,</span> <span class="n">comm</span><span class="p">,</span> <span class="n">openpmd_viewer_version</span> <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Read the species data from the checkpoint `ts`</span>
 <span class="sd">    and load it into the Species object `species`</span>
 

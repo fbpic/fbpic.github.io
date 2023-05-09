@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Checkpoints and restarts &mdash; FBPIC 0.22.0 documentation</title>
+  <title>Checkpoints and restarts &mdash; FBPIC 0.23.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -12,9 +12,8 @@
   <![endif]-->
   
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -27,14 +26,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../index.html" class="icon icon-home"> FBPIC
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            FBPIC
           </a>
               <div class="version">
-                0.22.0
+                0.23.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -49,8 +52,14 @@
 <li class="toctree-l2"><a class="reference internal" href="particles.html">The Particles class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="diagnostics.html">The openPMD diagnostics</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Checkpoints and restarts</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#setting-checkpoints">Setting checkpoints</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#restarting-a-simulation">Restarting a simulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#setting-checkpoints">Setting checkpoints</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#fbpic.openpmd_diag.set_periodic_checkpoint"><code class="docutils literal notranslate"><span class="pre">set_periodic_checkpoint()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#restarting-a-simulation">Restarting a simulation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#fbpic.openpmd_diag.restart_from_checkpoint"><code class="docutils literal notranslate"><span class="pre">restart_from_checkpoint()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="lpa_utilities/lpa_utilities.html">Laser-plasma utilities</a></li>
@@ -74,9 +83,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="api_reference.html">API reference</a> &raquo;</li>
-      <li>Checkpoints and restarts</li>
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="api_reference.html">API reference</a></li>
+      <li class="breadcrumb-item active">Checkpoints and restarts</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/api_reference/checkpoint_restart.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -87,7 +96,7 @@
            <div itemprop="articleBody">
              
   <section id="checkpoints-and-restarts">
-<h1>Checkpoints and restarts<a class="headerlink" href="#checkpoints-and-restarts" title="Permalink to this headline">¶</a></h1>
+<h1>Checkpoints and restarts<a class="headerlink" href="#checkpoints-and-restarts" title="Permalink to this heading">¶</a></h1>
 <p>For very long simulations, it is good to set
 <strong>checkpoints</strong>. Checkpoints are files that contain all the simulation
 data at one given iteration, so that the simulation can be later
@@ -97,7 +106,7 @@ crashes before the end (e.g. because of the finite walltime on HPC
 clusters). In this case, thanks to checkpoints, the simulation can be restarted
 without having to run it again from the beginning.</p>
 <section id="setting-checkpoints">
-<h2>Setting checkpoints<a class="headerlink" href="#setting-checkpoints" title="Permalink to this headline">¶</a></h2>
+<h2>Setting checkpoints<a class="headerlink" href="#setting-checkpoints" title="Permalink to this heading">¶</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="fbpic.openpmd_diag.set_periodic_checkpoint">
 <span class="sig-prename descclassname"><span class="pre">fbpic.openpmd_diag.</span></span><span class="sig-name descname"><span class="pre">set_periodic_checkpoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkpoint_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'./checkpoints'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/openpmd_diag/checkpoint_restart.html#set_periodic_checkpoint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fbpic.openpmd_diag.set_periodic_checkpoint" title="Permalink to this definition">¶</a></dt>
@@ -109,7 +118,7 @@ The E and B fields and particle information of each processor is saved.</p>
 object <cite>sim</cite>, and written at the end of the PIC loop (whereas regular
 diagnostics are written at the beginning of the PIC loop).</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>sim</strong> (<em>a Simulation object</em>) – The simulation that is to be saved in checkpoints</p></li>
 <li><p><strong>period</strong> (<em>integer</em>) – The number of PIC iteration between each checkpoint.</p></li>
@@ -123,7 +132,7 @@ same path for all ranks.)</p></li>
 
 </section>
 <section id="restarting-a-simulation">
-<h2>Restarting a simulation<a class="headerlink" href="#restarting-a-simulation" title="Permalink to this headline">¶</a></h2>
+<h2>Restarting a simulation<a class="headerlink" href="#restarting-a-simulation" title="Permalink to this heading">¶</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="fbpic.openpmd_diag.restart_from_checkpoint">
 <span class="sig-prename descclassname"><span class="pre">fbpic.openpmd_diag.</span></span><span class="sig-name descname"><span class="pre">restart_from_checkpoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkpoint_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'./checkpoints'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/openpmd_diag/checkpoint_restart.html#restart_from_checkpoint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fbpic.openpmd_diag.restart_from_checkpoint" title="Permalink to this definition">¶</a></dt>
@@ -144,7 +153,7 @@ a new input script from scratch.</p>
 of the moving window, since the moving window infers the position of
 particle injection from the existing particle data.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>sim</strong> (<em>a Simulation object</em>) – The Simulation object into which the checkpoint should be loaded</p></li>
 <li><p><strong>iteration</strong> (<em>integer</em><em>, </em><em>optional</em>) – The iteration number of the checkpoint from which to restart

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fbpic.openpmd_diag.particle_diag &mdash; FBPIC 0.22.0 documentation</title>
+  <title>fbpic.openpmd_diag.particle_diag &mdash; FBPIC 0.23.0 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -11,9 +11,8 @@
   <![endif]-->
   
         <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -24,14 +23,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../../index.html" class="icon icon-home"> FBPIC
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            FBPIC
           </a>
               <div class="version">
-                0.22.0
+                0.23.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -58,9 +61,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../../index.html">Module code</a> &raquo;</li>
-      <li>fbpic.openpmd_diag.particle_diag</li>
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">fbpic.openpmd_diag.particle_diag</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -84,7 +87,7 @@
 <span class="kn">from</span> <span class="nn">.data_dict</span> <span class="kn">import</span> <span class="n">macro_weighted_dict</span><span class="p">,</span> <span class="n">weighting_power_dict</span>
 
 <div class="viewcode-block" id="ParticleDiagnostic"><a class="viewcode-back" href="../../../api_reference/diagnostics.html#fbpic.openpmd_diag.ParticleDiagnostic">[docs]</a><span class="k">class</span> <span class="nc">ParticleDiagnostic</span><span class="p">(</span><span class="n">OpenPMDDiagnostic</span><span class="p">)</span> <span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Class that defines the particle diagnostics to be performed.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -92,7 +95,7 @@
         <span class="n">particle_data</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;position&quot;</span><span class="p">,</span> <span class="s2">&quot;momentum&quot;</span><span class="p">,</span> <span class="s2">&quot;weighting&quot;</span><span class="p">],</span>
         <span class="n">select</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">write_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration_min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">iteration_max</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>
         <span class="n">subsampling_fraction</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dt_period</span><span class="o">=</span><span class="kc">None</span> <span class="p">)</span> <span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize the particle diagnostics.</span>
 
 <span class="sd">        Parameters</span>
@@ -200,7 +203,7 @@
 
 
     <span class="k">def</span> <span class="nf">setup_openpmd_species_group</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">grp</span><span class="p">,</span> <span class="n">species</span><span class="p">,</span> <span class="n">constant_quantities</span> <span class="p">)</span> <span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Set the attributes that are specific to the particle group</span>
 
 <span class="sd">        Parameter</span>
@@ -247,7 +250,7 @@
         <span class="n">grp</span><span class="p">[</span><span class="s2">&quot;positionOffset/z&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span>
 
     <span class="k">def</span> <span class="nf">setup_openpmd_species_record</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">grp</span><span class="p">,</span> <span class="n">quantity</span> <span class="p">)</span> <span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Set the attributes that are specific to a species record</span>
 
 <span class="sd">        Parameter</span>
@@ -268,7 +271,7 @@
         <span class="n">grp</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;weightingPower&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">weighting_power_dict</span><span class="p">[</span><span class="n">quantity</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">setup_openpmd_species_component</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">grp</span><span class="p">,</span> <span class="n">quantity</span> <span class="p">)</span> <span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Set the attributes that are specific to a species component</span>
 
 <span class="sd">        Parameter</span>
@@ -281,7 +284,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">setup_openpmd_component</span><span class="p">(</span> <span class="n">grp</span> <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">write_hdf5</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">iteration</span> <span class="p">)</span> <span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Write an HDF5 file that complies with the OpenPMD standard</span>
 
 <span class="sd">        Parameter</span>
@@ -357,7 +360,7 @@
 
     <span class="k">def</span> <span class="nf">write_particles</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">species_grp</span><span class="p">,</span> <span class="n">species</span><span class="p">,</span> <span class="n">n_rank</span><span class="p">,</span>
                          <span class="n">Ntot</span><span class="p">,</span> <span class="n">select_array</span><span class="p">,</span> <span class="n">particle_data</span> <span class="p">)</span> <span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Write all the particle data sets for one given species</span>
 
 <span class="sd">        species_grp : an h5py.Group</span>
@@ -436,7 +439,7 @@
 
 
     <span class="k">def</span> <span class="nf">apply_selection</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">species</span> <span class="p">)</span> <span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Apply the rules of self.select to determine which</span>
 <span class="sd">        particles should be written, Apply random subsampling using</span>
 <span class="sd">        the property subsampling_fraction.</span>
@@ -483,7 +486,7 @@
 
     <span class="k">def</span> <span class="nf">write_dataset</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">species_grp</span><span class="p">,</span> <span class="n">species</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">quantity</span><span class="p">,</span>
                        <span class="n">n_rank</span><span class="p">,</span> <span class="n">Ntot</span><span class="p">,</span> <span class="n">select_array</span> <span class="p">)</span> <span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Write a given dataset</span>
 
 <span class="sd">        Parameters</span>
@@ -535,7 +538,7 @@
             <span class="n">dset</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">quantity_array</span>
 
     <span class="k">def</span> <span class="nf">get_dataset</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">species</span><span class="p">,</span> <span class="n">quantity</span><span class="p">,</span> <span class="n">select_array</span><span class="p">,</span> <span class="n">n_rank</span><span class="p">,</span> <span class="n">Ntot</span> <span class="p">)</span> <span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Extract the array that satisfies select_array</span>
 
 <span class="sd">        species : a Particles object</span>

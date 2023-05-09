@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fbpic.main &mdash; FBPIC 0.22.0 documentation</title>
+  <title>fbpic.main &mdash; FBPIC 0.23.0 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -11,9 +11,8 @@
   <![endif]-->
   
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
         <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -24,14 +23,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> FBPIC
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            FBPIC
           </a>
               <div class="version">
-                0.22.0
+                0.23.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -58,9 +61,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../index.html">Module code</a> &raquo;</li>
-      <li>fbpic.main</li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">fbpic.main</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -108,7 +111,7 @@
 <span class="kn">from</span> <span class="nn">.boundaries</span> <span class="kn">import</span> <span class="n">BoundaryCommunicator</span><span class="p">,</span> <span class="n">MovingWindow</span>
 
 <div class="viewcode-block" id="Simulation"><a class="viewcode-back" href="../../api_reference/simulation.html#fbpic.main.Simulation">[docs]</a><span class="k">class</span> <span class="nc">Simulation</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Top-level simulation class that contains all the simulation</span>
 <span class="sd">    data, as well as the methods to perform the PIC cycle.</span>
 
@@ -134,7 +137,7 @@
                  <span class="n">particle_shape</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">verbose_level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                  <span class="n">smoother</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">use_ruyten_shapes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                  <span class="n">use_modified_volume</span><span class="o">=</span><span class="kc">True</span> <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initializes a simulation.</span>
 
 <span class="sd">        By default, this will not create any particle species. You can</span>
@@ -418,7 +421,7 @@
 <div class="viewcode-block" id="Simulation.step"><a class="viewcode-back" href="../../api_reference/simulation.html#fbpic.main.Simulation.step">[docs]</a>    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">correct_currents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
              <span class="n">correct_divE</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">use_true_rho</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
              <span class="n">move_positions</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">move_momenta</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">show_progress</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Perform N PIC cycles.</span>
 
 <span class="sd">        Parameters</span>
@@ -659,7 +662,7 @@
 
     <span class="k">def</span> <span class="nf">deposit</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">fieldtype</span><span class="p">,</span> <span class="n">exchange</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                 <span class="n">update_spectral</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">species_list</span><span class="o">=</span><span class="kc">None</span> <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Deposit the charge or the currents to the interpolation grid</span>
 <span class="sd">        and then to the spectral grid.</span>
 
@@ -686,9 +689,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Shortcut</span>
         <span class="n">fld</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fld</span>
-        <span class="c1"># If no species_list is provided, all species and antennas deposit</span>
+        <span class="c1"># If no species_list is provided, all non-zero-current species</span>
+        <span class="c1"># and antennas deposit</span>
         <span class="k">if</span> <span class="n">species_list</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">species_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ptcl</span>
+            <span class="n">species_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">species</span> <span class="k">for</span> <span class="n">species</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ptcl</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">species</span><span class="o">.</span><span class="n">is_tracer</span><span class="p">]</span>
             <span class="n">antennas_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">laser_antennas</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># Otherwise only the specified species deposit</span>
@@ -741,7 +745,7 @@
             <span class="n">fld</span><span class="o">.</span><span class="n">exchanged_source</span><span class="p">[</span> <span class="n">fieldtype</span> <span class="p">]</span> <span class="o">=</span> <span class="n">exchange</span>
 
     <span class="k">def</span> <span class="nf">cross_deposit</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">move_positions</span> <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Perform cross-deposition. This function should be called</span>
 <span class="sd">        when the particles are at time n+1/2.</span>
 
@@ -788,7 +792,7 @@
 
 
     <span class="k">def</span> <span class="nf">exchange_and_damp_EB</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Handle boundaries for the E and B fields:</span>
 <span class="sd">         - MPI exchanges for guard cells</span>
 <span class="sd">         - Damp fields in damping cells (in z, and in r if PML are used)</span>
@@ -841,7 +845,7 @@
 
 
     <span class="k">def</span> <span class="nf">shift_galilean_boundaries</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Shift the interpolation grids by v_comoving * dt.</span>
 <span class="sd">        (The field arrays are unchanged, only position attributes are changed.)</span>
 
@@ -867,8 +871,9 @@
                             <span class="n">uz_m</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">ux_m</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">uy_m</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
                             <span class="n">uz_th</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">ux_th</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">uy_th</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
                             <span class="n">continuous_injection</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                            <span class="n">boost_positions_in_dens_func</span><span class="o">=</span><span class="kc">False</span> <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+                            <span class="n">boost_positions_in_dens_func</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">is_tracer</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create a new species (i.e. an instance of `Particles`) with</span>
 <span class="sd">        charge `q` and mass `m`. Add it to the simulation (i.e. to the list</span>
 <span class="sd">        `Simulation.ptcl`), and return it, so that the methods of the</span>
@@ -951,6 +956,12 @@
 <span class="sd">        boost_positions_in_dens_func: bool, optional</span>
 <span class="sd">           For boosted-frame simulations: whether to automatically take into</span>
 <span class="sd">           account the Lorentz transformation of the positions, in `dens_func`</span>
+
+<span class="sd">        is_tracer: bool, optional</span>
+<span class="sd">            Setting this flag to True will allow this particle</span>
+<span class="sd">            to move as a normal particle with given mass and charge,</span>
+<span class="sd">            but will generate no current. This allows them to be passive</span>
+<span class="sd">            tracers inside the plasma.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -1060,7 +1071,7 @@
                         <span class="n">ux_m</span><span class="o">=</span><span class="n">ux_m</span><span class="p">,</span> <span class="n">uy_m</span><span class="o">=</span><span class="n">uy_m</span><span class="p">,</span> <span class="n">uz_m</span><span class="o">=</span><span class="n">uz_m</span><span class="p">,</span>
                         <span class="n">ux_th</span><span class="o">=</span><span class="n">ux_th</span><span class="p">,</span> <span class="n">uy_th</span><span class="o">=</span><span class="n">uy_th</span><span class="p">,</span> <span class="n">uz_th</span><span class="o">=</span><span class="n">uz_th</span><span class="p">,</span>
                         <span class="n">continuous_injection</span><span class="o">=</span><span class="n">continuous_injection</span><span class="p">,</span>
-                        <span class="n">dz_particles</span><span class="o">=</span><span class="n">dz_particles</span> <span class="p">)</span>
+                        <span class="n">dz_particles</span><span class="o">=</span><span class="n">dz_particles</span><span class="p">,</span> <span class="n">is_tracer</span><span class="o">=</span><span class="n">is_tracer</span> <span class="p">)</span>
 
         <span class="c1"># Add it to the list of species and return it to the user</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ptcl</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">new_species</span> <span class="p">)</span>
@@ -1069,7 +1080,7 @@
 
 <div class="viewcode-block" id="Simulation.set_moving_window"><a class="viewcode-back" href="../../api_reference/simulation.html#fbpic.main.Simulation.set_moving_window">[docs]</a>    <span class="k">def</span> <span class="nf">set_moving_window</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="o">=</span><span class="n">c</span><span class="p">,</span> <span class="n">ux_m</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">uy_m</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">uz_m</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                   <span class="n">ux_th</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">uy_th</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">uz_th</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">gamma_boost</span><span class="o">=</span><span class="kc">None</span> <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initializes a moving window for the simulation.</span>
 
 <span class="sd">        Parameters</span>
@@ -1098,7 +1109,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">moving_win</span> <span class="o">=</span> <span class="n">MovingWindow</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">reverse_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Convenience method to reverse the direction of electromagnetic waves</span>
 <span class="sd">        and particles propagation. Essentially this method inverses the signs of</span>
 <span class="sd">        magnetic fields and particles momenta.</span>
@@ -1120,7 +1131,7 @@
             <span class="n">species</span><span class="o">.</span><span class="n">uz</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span></div>
 
 <span class="k">def</span> <span class="nf">adapt_to_grid</span><span class="p">(</span> <span class="n">x</span><span class="p">,</span> <span class="n">p_xmin</span><span class="p">,</span> <span class="n">p_xmax</span><span class="p">,</span> <span class="n">p_nx</span><span class="p">,</span> <span class="n">ncells_empty</span><span class="o">=</span><span class="mi">0</span> <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Adapt p_xmin and p_xmax, so that they fall exactly on the grid x</span>
 <span class="sd">    Return the total number of particles, assuming p_nx particles</span>
 <span class="sd">    per gridpoint</span>

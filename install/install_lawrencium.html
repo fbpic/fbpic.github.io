@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Installation on Lawrencium (LBNL) &mdash; FBPIC 0.22.0 documentation</title>
+  <title>Installation on Lawrencium (LBNL) &mdash; FBPIC 0.23.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -12,9 +12,8 @@
   <![endif]-->
   
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -27,14 +26,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../index.html" class="icon icon-home"> FBPIC
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            FBPIC
           </a>
               <div class="version">
-                0.22.0
+                0.23.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -85,9 +88,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="installation.html">Installation</a> &raquo;</li>
-      <li>Installation on Lawrencium (LBNL)</li>
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="installation.html">Installation</a></li>
+      <li class="breadcrumb-item active">Installation on Lawrencium (LBNL)</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/install/install_lawrencium.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -98,7 +101,7 @@
            <div itemprop="articleBody">
              
   <section id="installation-on-lawrencium-lbnl">
-<h1>Installation on Lawrencium (LBNL)<a class="headerlink" href="#installation-on-lawrencium-lbnl" title="Permalink to this headline">¶</a></h1>
+<h1>Installation on Lawrencium (LBNL)<a class="headerlink" href="#installation-on-lawrencium-lbnl" title="Permalink to this heading">¶</a></h1>
 <p><a class="reference external" href="https://sites.google.com/a/lbl.gov/high-performance-computing-services-group/lbnl-supercluster/lawrencium">Lawrencium</a>
 is a local cluster at the <a class="reference external" href="http://www.lbl.gov/">Lawrence Berkeley National Lab</a>
 (LBNL).</p>
@@ -110,7 +113,7 @@ is a local cluster at the <a class="reference external" href="http://www.lbl.gov
 </ul>
 </div></blockquote>
 <section id="connecting-to-lawrencium">
-<h2>Connecting to Lawrencium<a class="headerlink" href="#connecting-to-lawrencium" title="Permalink to this headline">¶</a></h2>
+<h2>Connecting to Lawrencium<a class="headerlink" href="#connecting-to-lawrencium" title="Permalink to this heading">¶</a></h2>
 <p>Lawrencium uses a one-time password (OTP) system. Before being able to
 connect to Lawrencium via ssh, you need to configure an OTP Token, using
 <a class="reference external" href="https://sites.google.com/a/lbl.gov/high-performance-computing-services-group/getting-started/new-user-information">these
@@ -121,9 +124,9 @@ instructions</a>.</p>
 </div>
 </section>
 <section id="installation-of-fbpic">
-<h2>Installation of FBPIC<a class="headerlink" href="#installation-of-fbpic" title="Permalink to this headline">¶</a></h2>
+<h2>Installation of FBPIC<a class="headerlink" href="#installation-of-fbpic" title="Permalink to this heading">¶</a></h2>
 <section id="setting-up-anaconda">
-<h3>Setting up Anaconda<a class="headerlink" href="#setting-up-anaconda" title="Permalink to this headline">¶</a></h3>
+<h3>Setting up Anaconda<a class="headerlink" href="#setting-up-anaconda" title="Permalink to this heading">¶</a></h3>
 <ul>
 <li><p>Add the following lines in your <code class="docutils literal notranslate"><span class="pre">~/.bashrc</span></code></p>
 <blockquote>
@@ -144,7 +147,7 @@ source activate $SCRATCH/fbpic_env
 </ul>
 </section>
 <section id="installation-of-fbpic-and-its-dependencies">
-<h3>Installation of FBPIC and its dependencies<a class="headerlink" href="#installation-of-fbpic-and-its-dependencies" title="Permalink to this headline">¶</a></h3>
+<h3>Installation of FBPIC and its dependencies<a class="headerlink" href="#installation-of-fbpic-and-its-dependencies" title="Permalink to this heading">¶</a></h3>
 <ul>
 <li><p>Install the dependencies of <code class="docutils literal notranslate"><span class="pre">fbpic</span></code></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">numba</span> <span class="n">scipy</span> <span class="n">h5py</span> <span class="n">mkl</span> <span class="n">cudatoolkit</span><span class="o">=</span><span class="mf">10.0</span>
@@ -162,9 +165,9 @@ source activate $SCRATCH/fbpic_env
 </section>
 </section>
 <section id="running-simulations">
-<h2>Running simulations<a class="headerlink" href="#running-simulations" title="Permalink to this headline">¶</a></h2>
+<h2>Running simulations<a class="headerlink" href="#running-simulations" title="Permalink to this heading">¶</a></h2>
 <section id="preparing-a-new-simulation">
-<h3>Preparing a new simulation<a class="headerlink" href="#preparing-a-new-simulation" title="Permalink to this headline">¶</a></h3>
+<h3>Preparing a new simulation<a class="headerlink" href="#preparing-a-new-simulation" title="Permalink to this heading">¶</a></h3>
 <p>It is adviced to use the directory <code class="docutils literal notranslate"><span class="pre">/global/scratch/&lt;yourUsername&gt;</span></code>
 for faster I/O access, where <code class="docutils literal notranslate"><span class="pre">&lt;yourUsername&gt;</span></code> should be replaced by
 your username.</p>
@@ -172,7 +175,7 @@ your username.</p>
 the above-mentioned directory, and copy your input script there.</p>
 </section>
 <section id="interactive-jobs">
-<h3>Interactive jobs<a class="headerlink" href="#interactive-jobs" title="Permalink to this headline">¶</a></h3>
+<h3>Interactive jobs<a class="headerlink" href="#interactive-jobs" title="Permalink to this heading">¶</a></h3>
 <p>In order to request a node with a GPU:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">salloc</span> <span class="o">--</span><span class="n">time</span><span class="o">=</span><span class="mi">00</span><span class="p">:</span><span class="mi">30</span><span class="p">:</span><span class="mi">00</span> <span class="o">--</span><span class="n">nodes</span><span class="o">=</span><span class="mi">1</span> <span class="o">--</span><span class="n">partition</span> <span class="n">es1</span>  <span class="o">--</span><span class="n">constraint</span><span class="o">=</span><span class="n">es1_1080ti</span> <span class="o">--</span><span class="n">qos</span><span class="o">=</span><span class="n">es_normal</span> <span class="o">--</span><span class="n">gres</span><span class="o">=</span><span class="n">gpu</span><span class="p">:</span><span class="mi">4</span> <span class="o">--</span><span class="n">cpus</span><span class="o">-</span><span class="n">per</span><span class="o">-</span><span class="n">task</span><span class="o">=</span><span class="mi">8</span>
 </pre></div>
@@ -189,7 +192,7 @@ python &lt;fbpic_script.py&gt;
 </div>
 </section>
 <section id="batch-job">
-<h3>Batch job<a class="headerlink" href="#batch-job" title="Permalink to this headline">¶</a></h3>
+<h3>Batch job<a class="headerlink" href="#batch-job" title="Permalink to this heading">¶</a></h3>
 <p>Create a new file named <code class="docutils literal notranslate"><span class="pre">submission_file</span></code> in the same directory as
 your input script (typically this directory is a subdirectory of
 <code class="docutils literal notranslate"><span class="pre">/global/scratch/&lt;yourUsername&gt;</span></code>). Within this new file, copy the
@@ -228,7 +231,7 @@ mpirun -np &lt;requestedRanks&gt; python fbpic_script.py
 </div>
 </section>
 <section id="visualizing-the-results-through-jupyter">
-<h3>Visualizing the results through Jupyter<a class="headerlink" href="#visualizing-the-results-through-jupyter" title="Permalink to this headline">¶</a></h3>
+<h3>Visualizing the results through Jupyter<a class="headerlink" href="#visualizing-the-results-through-jupyter" title="Permalink to this heading">¶</a></h3>
 <p>Lawrencium provides access to the cluster via Jupyter <a class="reference external" href="https://lrc-ondemand.lbl.gov/pun/sys/dashboard/batch_connect/sys/lrc_jupyter/session_contexts/new">here</a>. Once you logged in and opened a Jupyter notebook, you can type in a cell:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>!pip install openPMD-viewer --user
 </pre></div>

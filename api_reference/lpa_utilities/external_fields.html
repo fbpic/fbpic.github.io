@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>External fields &mdash; FBPIC 0.22.0 documentation</title>
+  <title>External fields &mdash; FBPIC 0.23.0 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -12,9 +12,8 @@
   <![endif]-->
   
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
         <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -27,14 +26,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> FBPIC
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            FBPIC
           </a>
               <div class="version">
-                0.22.0
+                0.23.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -52,7 +55,10 @@
 <li class="toctree-l2 current"><a class="reference internal" href="lpa_utilities.html">Laser-plasma utilities</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="laser.html">Laser initialization</a></li>
 <li class="toctree-l3"><a class="reference internal" href="beam.html">Beam initialization</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">External fields</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">External fields</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#fbpic.lpa_utils.external_fields.ExternalField"><code class="docutils literal notranslate"><span class="pre">ExternalField</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../boost_converter.html">Conversion to boosted-frame</a></li>
@@ -75,10 +81,10 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../api_reference.html">API reference</a> &raquo;</li>
-          <li><a href="lpa_utilities.html">Laser-plasma utilities</a> &raquo;</li>
-      <li>External fields</li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../api_reference.html">API reference</a></li>
+          <li class="breadcrumb-item"><a href="lpa_utilities.html">Laser-plasma utilities</a></li>
+      <li class="breadcrumb-item active">External fields</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../_sources/api_reference/lpa_utilities/external_fields.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -89,7 +95,7 @@
            <div itemprop="articleBody">
              
   <section id="external-fields">
-<h1>External fields<a class="headerlink" href="#external-fields" title="Permalink to this headline">¶</a></h1>
+<h1>External fields<a class="headerlink" href="#external-fields" title="Permalink to this heading">¶</a></h1>
 <p><strong>External fields</strong> are fields which are applied to the particles at each
 timestep and are <strong>specified by the user</strong>, instead of being self-consistently
 evolved by the simulation.</p>
@@ -104,7 +110,7 @@ fields are applied at each timestep. (See the example below)</p>
 <p>The function <cite>field_func</cite> is automatically converted to a GPU
 function if needed, by using numba’s ufunc feature.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>field_func</strong> (<em>callable</em>) – <p>Function of the form <cite>field_func( F, x, y, z, t, amplitude,
 length_scale )</cite> and which returns the modified field F’

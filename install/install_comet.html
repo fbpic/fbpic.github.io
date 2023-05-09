@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Installation on Comet (SDSC) &mdash; FBPIC 0.22.0 documentation</title>
+  <title>Installation on Comet (SDSC) &mdash; FBPIC 0.23.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -12,9 +12,8 @@
   <![endif]-->
   
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -27,14 +26,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../index.html" class="icon icon-home"> FBPIC
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            FBPIC
           </a>
               <div class="version">
-                0.22.0
+                0.23.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -83,9 +86,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="installation.html">Installation</a> &raquo;</li>
-      <li>Installation on Comet (SDSC)</li>
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="installation.html">Installation</a></li>
+      <li class="breadcrumb-item active">Installation on Comet (SDSC)</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/install/install_comet.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -96,14 +99,14 @@
            <div itemprop="articleBody">
              
   <section id="installation-on-comet-sdsc">
-<h1>Installation on Comet (SDSC)<a class="headerlink" href="#installation-on-comet-sdsc" title="Permalink to this headline">¶</a></h1>
+<h1>Installation on Comet (SDSC)<a class="headerlink" href="#installation-on-comet-sdsc" title="Permalink to this heading">¶</a></h1>
 <p><a class="reference external" href="https://portal.xsede.org/sdsc-comet">Comet</a> is an HPC cluster at the
 <a class="reference external" href="http://www.sdsc.edu/">San Diego Supercomputer Center</a> (SDSC).</p>
 <p>It provides both NVIDIA K80 and P100 GPU-based resources.</p>
 <section id="installation-of-fbpic">
-<h2>Installation of FBPIC<a class="headerlink" href="#installation-of-fbpic" title="Permalink to this headline">¶</a></h2>
+<h2>Installation of FBPIC<a class="headerlink" href="#installation-of-fbpic" title="Permalink to this heading">¶</a></h2>
 <section id="installation-of-anaconda">
-<h3>Installation of Anaconda<a class="headerlink" href="#installation-of-anaconda" title="Permalink to this headline">¶</a></h3>
+<h3>Installation of Anaconda<a class="headerlink" href="#installation-of-anaconda" title="Permalink to this heading">¶</a></h3>
 <p>In order to download and install Anaconda and FBPIC, follow the steps
 below:</p>
 <ul>
@@ -122,7 +125,7 @@ to your <code class="docutils literal notranslate"><span class="pre">.bashrc</sp
 </ul>
 </section>
 <section id="installation-of-fbpic-and-its-dependencies">
-<h3>Installation of FBPIC and its dependencies<a class="headerlink" href="#installation-of-fbpic-and-its-dependencies" title="Permalink to this headline">¶</a></h3>
+<h3>Installation of FBPIC and its dependencies<a class="headerlink" href="#installation-of-fbpic-and-its-dependencies" title="Permalink to this heading">¶</a></h3>
 <ul>
 <li><p>Install the dependencies of <code class="docutils literal notranslate"><span class="pre">fbpic</span></code> (except <code class="docutils literal notranslate"><span class="pre">mpi4py</span></code> and <code class="docutils literal notranslate"><span class="pre">cupy</span></code>)</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">numba</span> <span class="n">scipy</span> <span class="n">h5py</span> <span class="n">mkl</span> <span class="n">cudatoolkit</span><span class="o">=</span><span class="mf">9.2</span>
@@ -147,16 +150,16 @@ to your <code class="docutils literal notranslate"><span class="pre">.bashrc</sp
 </section>
 </section>
 <section id="running-simulations">
-<h2>Running simulations<a class="headerlink" href="#running-simulations" title="Permalink to this headline">¶</a></h2>
+<h2>Running simulations<a class="headerlink" href="#running-simulations" title="Permalink to this heading">¶</a></h2>
 <p>This section briefly describes how to submit simulations. For more information,
 see <a class="reference external" href="http://www.sdsc.edu/support/user_guides/comet.html">Comet’s User Guide</a>.</p>
 <section id="preparing-a-new-simulation">
-<h3>Preparing a new simulation<a class="headerlink" href="#preparing-a-new-simulation" title="Permalink to this headline">¶</a></h3>
+<h3>Preparing a new simulation<a class="headerlink" href="#preparing-a-new-simulation" title="Permalink to this heading">¶</a></h3>
 <p>In order to prepare a new simulation, create a new subdirectory within
 the above-mentioned directory, and copy your input script there.</p>
 </section>
 <section id="interactive-jobs">
-<h3>Interactive jobs<a class="headerlink" href="#interactive-jobs" title="Permalink to this headline">¶</a></h3>
+<h3>Interactive jobs<a class="headerlink" href="#interactive-jobs" title="Permalink to this heading">¶</a></h3>
 <p>In order to request a node with 4 K80 GPUs:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">salloc</span> <span class="o">-</span><span class="n">p</span> <span class="n">gpu</span> <span class="o">--</span><span class="n">gres</span><span class="o">=</span><span class="n">gpu</span><span class="p">:</span><span class="n">k80</span><span class="p">:</span><span class="mi">4</span> <span class="o">-</span><span class="n">t</span> <span class="mi">00</span><span class="p">:</span><span class="mi">30</span><span class="p">:</span><span class="mi">00</span>
 </pre></div>
@@ -172,7 +175,7 @@ the directory where you prepared your input script and type</p>
 </div>
 </section>
 <section id="batch-job">
-<h3>Batch job<a class="headerlink" href="#batch-job" title="Permalink to this headline">¶</a></h3>
+<h3>Batch job<a class="headerlink" href="#batch-job" title="Permalink to this heading">¶</a></h3>
 <p>Create a new file named <code class="docutils literal notranslate"><span class="pre">submission_file</span></code> in the same directory as
 your input script. Within this new file, copy the
 following text (and replace the bracketed text by the proper values).</p>

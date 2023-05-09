@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Conversion to boosted-frame &mdash; FBPIC 0.22.0 documentation</title>
+  <title>Conversion to boosted-frame &mdash; FBPIC 0.23.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -12,9 +12,8 @@
   <![endif]-->
   
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -27,14 +26,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../index.html" class="icon icon-home"> FBPIC
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            FBPIC
           </a>
               <div class="version">
-                0.22.0
+                0.23.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -50,7 +53,22 @@
 <li class="toctree-l2"><a class="reference internal" href="diagnostics.html">The openPMD diagnostics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="checkpoint_restart.html">Checkpoints and restarts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lpa_utilities/lpa_utilities.html">Laser-plasma utilities</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Conversion to boosted-frame</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Conversion to boosted-frame</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#fbpic.lpa_utils.boosted_frame.BoostConverter"><code class="docutils literal notranslate"><span class="pre">BoostConverter</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#fbpic.lpa_utils.boosted_frame.BoostConverter.boost_particle_arrays"><code class="docutils literal notranslate"><span class="pre">BoostConverter.boost_particle_arrays()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fbpic.lpa_utils.boosted_frame.BoostConverter.copropag_density"><code class="docutils literal notranslate"><span class="pre">BoostConverter.copropag_density()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fbpic.lpa_utils.boosted_frame.BoostConverter.copropag_length"><code class="docutils literal notranslate"><span class="pre">BoostConverter.copropag_length()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fbpic.lpa_utils.boosted_frame.BoostConverter.gamma"><code class="docutils literal notranslate"><span class="pre">BoostConverter.gamma()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fbpic.lpa_utils.boosted_frame.BoostConverter.interaction_time"><code class="docutils literal notranslate"><span class="pre">BoostConverter.interaction_time()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fbpic.lpa_utils.boosted_frame.BoostConverter.longitudinal_momentum"><code class="docutils literal notranslate"><span class="pre">BoostConverter.longitudinal_momentum()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fbpic.lpa_utils.boosted_frame.BoostConverter.static_density"><code class="docutils literal notranslate"><span class="pre">BoostConverter.static_density()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fbpic.lpa_utils.boosted_frame.BoostConverter.static_length"><code class="docutils literal notranslate"><span class="pre">BoostConverter.static_length()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fbpic.lpa_utils.boosted_frame.BoostConverter.velocity"><code class="docutils literal notranslate"><span class="pre">BoostConverter.velocity()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fbpic.lpa_utils.boosted_frame.BoostConverter.wavenumber"><code class="docutils literal notranslate"><span class="pre">BoostConverter.wavenumber()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="smoothing.html">Field smoothing</a></li>
 </ul>
 </li>
@@ -70,9 +88,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="api_reference.html">API reference</a> &raquo;</li>
-      <li>Conversion to boosted-frame</li>
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="api_reference.html">API reference</a></li>
+      <li class="breadcrumb-item active">Conversion to boosted-frame</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/api_reference/boost_converter.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -83,14 +101,14 @@
            <div itemprop="articleBody">
              
   <section id="conversion-to-boosted-frame">
-<h1>Conversion to boosted-frame<a class="headerlink" href="#conversion-to-boosted-frame" title="Permalink to this headline">¶</a></h1>
+<h1>Conversion to boosted-frame<a class="headerlink" href="#conversion-to-boosted-frame" title="Permalink to this heading">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="fbpic.lpa_utils.boosted_frame.BoostConverter">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fbpic.lpa_utils.boosted_frame.</span></span><span class="sig-name descname"><span class="pre">BoostConverter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gamma0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/lpa_utils/boosted_frame.html#BoostConverter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fbpic.lpa_utils.boosted_frame.BoostConverter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize the object by calculating the velocity of the
 boosted frame.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>gamma0</strong> (<em>float</em>) – Lorentz factor of the boosted frame</p>
 </dd>
 </dl>
@@ -102,25 +120,25 @@ them to a fixed time t_boost = 0. without taking any electromagnetic
 effects into account. (This is useful for the initialization
 of a bunch distribution in the boosted frame.)</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>1darray of float</em><em> (</em><em>in meter</em><em>)</em>) – The position of the particles in the lab frame
+<li><p><strong>x</strong> (<em>1darray</em><em> of </em><em>float</em><em> (</em><em>in meter</em><em>)</em>) – The position of the particles in the lab frame
 (One element per macroparticle)</p></li>
-<li><p><strong>y</strong> (<em>1darray of float</em><em> (</em><em>in meter</em><em>)</em>) – The position of the particles in the lab frame
+<li><p><strong>y</strong> (<em>1darray</em><em> of </em><em>float</em><em> (</em><em>in meter</em><em>)</em>) – The position of the particles in the lab frame
 (One element per macroparticle)</p></li>
-<li><p><strong>z</strong> (<em>1darray of float</em><em> (</em><em>in meter</em><em>)</em>) – The position of the particles in the lab frame
+<li><p><strong>z</strong> (<em>1darray</em><em> of </em><em>float</em><em> (</em><em>in meter</em><em>)</em>) – The position of the particles in the lab frame
 (One element per macroparticle)</p></li>
-<li><p><strong>ux</strong> (<em>1darray of floats</em><em> (</em><em>dimensionless</em><em>)</em>) – The momenta of the particles
+<li><p><strong>ux</strong> (<em>1darray</em><em> of </em><em>floats</em><em> (</em><em>dimensionless</em><em>)</em>) – The momenta of the particles
 (One element per macroparticle)</p></li>
-<li><p><strong>uy</strong> (<em>1darray of floats</em><em> (</em><em>dimensionless</em><em>)</em>) – The momenta of the particles
+<li><p><strong>uy</strong> (<em>1darray</em><em> of </em><em>floats</em><em> (</em><em>dimensionless</em><em>)</em>) – The momenta of the particles
 (One element per macroparticle)</p></li>
-<li><p><strong>uz</strong> (<em>1darray of floats</em><em> (</em><em>dimensionless</em><em>)</em>) – The momenta of the particles
+<li><p><strong>uz</strong> (<em>1darray</em><em> of </em><em>floats</em><em> (</em><em>dimensionless</em><em>)</em>) – The momenta of the particles
 (One element per macroparticle)</p></li>
-<li><p><strong>inv_gamma</strong> (<em>1darray of floats</em><em> (</em><em>dimensionless</em><em>)</em>) – The inverse of the Lorentz factor
+<li><p><strong>inv_gamma</strong> (<em>1darray</em><em> of </em><em>floats</em><em> (</em><em>dimensionless</em><em>)</em>) – The inverse of the Lorentz factor
 (One element per macroparticle)</p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>The same arrays (in the same order) but in the boosted frame</p>
 </dd>
 </dl>
@@ -133,14 +151,14 @@ of a bunch distribution in the boosted frame.)</p>
 (e.g. an electron bunch) from the lab frame to the boosted frame, i.e:
 n’ = n * [ gamma0*(1 - beta_object*beta0) ]</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>lab_frame_vars</strong> (<em>list of floats</em>) – A list containing several densities to be converted</p></li>
+<li><p><strong>lab_frame_vars</strong> (<em>list</em><em> of </em><em>floats</em>) – A list containing several densities to be converted</p></li>
 <li><p><strong>beta_object</strong> (<em>float</em><em>, </em><em>optional</em>) – The normalized velocity of the object whose
 density is being converted</p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>A list with the same number of elements, with the converted quantities</p>
 </dd>
 </dl>
@@ -153,14 +171,14 @@ density is being converted</p></li>
 (e.g. the laser) from the lab frame to the boosted frame, i.e:
 L’ = L / [ gamma0*(1 - beta_object*beta0) ]</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>lab_frame_vars</strong> (<em>list of floats</em>) – A list containing several length to be converted</p></li>
+<li><p><strong>lab_frame_vars</strong> (<em>list</em><em> of </em><em>floats</em>) – A list containing several length to be converted</p></li>
 <li><p><strong>beta_object</strong> (<em>float</em><em>, </em><em>optional</em>) – The normalized velocity of the object whose
 length is being converted</p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>A list with the same number of elements, with the converted quantities</p>
 </dd>
 </dl>
@@ -175,10 +193,10 @@ gamma’ = gamma0 * ( gamma - beta0 * sqrt( gamma**2 - 1 ) )</p>
 <p>Warning: The above formula assumes that the corresponding
 particle has no transverse motion at all.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>lab_frame_vars</strong> (<em>list of floats</em>) – A list containing several Lorentz factors to be converted</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>lab_frame_vars</strong> (<em>list</em><em> of </em><em>floats</em>) – A list containing several Lorentz factors to be converted</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>A list with the same number of elements, with the converted quantities</p>
 </dd>
 </dl>
@@ -196,7 +214,7 @@ v_window’ = ( v_window - c * beta0 )/( 1 - beta0*v_window/c )
 v_plasma’ = -beta0 * c</p>
 <p>T_interact’ = L_interact’ + l_window’ / ( v_window’ - v_plasma’ )</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>L_interact</strong> (<em>float</em><em> (</em><em>in meter</em><em>)</em>) – The total interaction length (typically the length of the plasma)
 in the lab frame.</p></li>
@@ -204,10 +222,10 @@ in the lab frame.</p></li>
 <li><p><strong>v_window</strong> (<em>float</em><em> (</em><em>in meter/second</em><em>)</em>) – The velocity of the moving window in the lab frame.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>T_interact</strong> – The interaction time in the boosted frame.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float (in seconds)</p>
 </dd>
 </dl>
@@ -221,10 +239,10 @@ u_z’ = gamma0 * ( u_z - sqrt(1 + u_z**2) * beta0 )</p>
 <p>Warning: The above formula assumes that the corresponding
 particle has no transverse motion at all.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>lab_frame_vars</strong> (<em>list of floats</em>) – A list containing several momenta to be converted</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>lab_frame_vars</strong> (<em>list</em><em> of </em><em>floats</em>) – A list containing several momenta to be converted</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>A list with the same number of elements, with the converted quantities</p>
 </dd>
 </dl>
@@ -237,10 +255,10 @@ particle has no transverse motion at all.</p>
 (e.g. the plasma) from the lab frame to the boosted frame, i.e:
 n’ = n * gamma0</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>lab_frame_vars</strong> (<em>list of floats</em>) – A list containing several length to be converted</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>lab_frame_vars</strong> (<em>list</em><em> of </em><em>floats</em>) – A list containing several length to be converted</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>A list with the same number of elements, with the converted quantities</p>
 </dd>
 </dl>
@@ -253,10 +271,10 @@ n’ = n * gamma0</p>
 (e.g. the plasma) from the lab frame to the boosted frame, i.e:
 L’ = L / gamma0</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>lab_frame_vars</strong> (<em>list of floats</em>) – A list containing several length to be converted</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>lab_frame_vars</strong> (<em>list</em><em> of </em><em>floats</em>) – A list containing several length to be converted</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>A list with same number of elements, with the converted quantities</p>
 </dd>
 </dl>
@@ -268,10 +286,10 @@ L’ = L / gamma0</p>
 <dd><p>Converts a list of velocities from the lab frame to the boosted frame:
 v’ = ( v - c * beta0 )/( 1 - beta0*v/c )</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>lab_frame_vars</strong> (<em>list of floats</em>) – A list containing several velocities to be converted</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>lab_frame_vars</strong> (<em>list</em><em> of </em><em>floats</em>) – A list containing several velocities to be converted</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>A list with the same number of elements, with the converted quantities</p>
 </dd>
 </dl>
@@ -283,10 +301,10 @@ v’ = ( v - c * beta0 )/( 1 - beta0*v/c )</p>
 <dd><p>Converts a list of wavenumbers from the lab frame to the boosted frame:
 k’ = k / ( gamma0 ( 1 + beta0 ) )</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>lab_frame_vars</strong> (<em>list of floats</em>) – A list containing several wavenumbers to be converted</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>lab_frame_vars</strong> (<em>list</em><em> of </em><em>floats</em>) – A list containing several wavenumbers to be converted</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>A list with the same number of elements, with the converted quantities</p>
 </dd>
 </dl>

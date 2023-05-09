@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Laser-wakefield acceleration with ionization &mdash; FBPIC 0.22.0 documentation</title>
+  <title>Laser-wakefield acceleration with ionization &mdash; FBPIC 0.23.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -12,9 +12,8 @@
   <![endif]-->
   
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -27,14 +26,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../index.html" class="icon icon-home"> FBPIC
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            FBPIC
           </a>
               <div class="version">
-                0.22.0
+                0.23.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -71,9 +74,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../how_to_run.html">How to run the code</a> &raquo;</li>
-      <li>Laser-wakefield acceleration with ionization</li>
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../how_to_run.html">How to run the code</a></li>
+      <li class="breadcrumb-item active">Laser-wakefield acceleration with ionization</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/example_input/ionization_script.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -84,7 +87,7 @@
            <div itemprop="articleBody">
              
   <section id="laser-wakefield-acceleration-with-ionization">
-<h1>Laser-wakefield acceleration with ionization<a class="headerlink" href="#laser-wakefield-acceleration-with-ionization" title="Permalink to this headline">¶</a></h1>
+<h1>Laser-wakefield acceleration with ionization<a class="headerlink" href="#laser-wakefield-acceleration-with-ionization" title="Permalink to this heading">¶</a></h1>
 <p>You can download the script below by clicking on <a class="reference download internal" download="" href="../_downloads/b74a29d7fcbdd0c0e7cea633a89cf36a/ionization_script.py"><code class="xref download docutils literal notranslate"><span class="pre">this</span> <span class="pre">link</span></code></a>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">This is an input script that runs a simulation of</span>
@@ -176,7 +179,7 @@
 <span class="c1"># The density profile</span>
 <span class="n">ramp_length</span> <span class="o">=</span> <span class="mf">20.e-6</span>
 <span class="k">def</span> <span class="nf">dens_func</span><span class="p">(</span> <span class="n">z</span><span class="p">,</span> <span class="n">r</span> <span class="p">)</span> <span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Returns relative density at position z and r&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns relative density at position z and r&quot;&quot;&quot;</span>
     <span class="c1"># Allocate relative density</span>
     <span class="n">n</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
     <span class="c1"># Make sine-like ramp</span>

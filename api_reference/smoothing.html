@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Field smoothing &mdash; FBPIC 0.22.0 documentation</title>
+  <title>Field smoothing &mdash; FBPIC 0.23.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -12,9 +12,8 @@
   <![endif]-->
   
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -27,14 +26,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../index.html" class="icon icon-home"> FBPIC
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            FBPIC
           </a>
               <div class="version">
-                0.22.0
+                0.23.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -51,7 +54,10 @@
 <li class="toctree-l2"><a class="reference internal" href="checkpoint_restart.html">Checkpoints and restarts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lpa_utilities/lpa_utilities.html">Laser-plasma utilities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="boost_converter.html">Conversion to boosted-frame</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Field smoothing</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Field smoothing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#fbpic.fields.smoothing.BinomialSmoother"><code class="docutils literal notranslate"><span class="pre">BinomialSmoother</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../advanced/advanced.html">Advanced use</a></li>
@@ -70,9 +76,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="api_reference.html">API reference</a> &raquo;</li>
-      <li>Field smoothing</li>
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="api_reference.html">API reference</a></li>
+      <li class="breadcrumb-item active">Field smoothing</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/api_reference/smoothing.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -83,22 +89,22 @@
            <div itemprop="articleBody">
              
   <section id="field-smoothing">
-<h1>Field smoothing<a class="headerlink" href="#field-smoothing" title="Permalink to this headline">¶</a></h1>
+<h1>Field smoothing<a class="headerlink" href="#field-smoothing" title="Permalink to this heading">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="fbpic.fields.smoothing.BinomialSmoother">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fbpic.fields.smoothing.</span></span><span class="sig-name descname"><span class="pre">BinomialSmoother</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_passes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compensator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/fields/smoothing.html#BinomialSmoother"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fbpic.fields.smoothing.BinomialSmoother" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize a binomial smoother</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>n_passes</strong> (<em>int</em><em> or </em><em>dictionary of ints</em>) – Number of passes of binomial smoothing in r and z.
+<li><p><strong>n_passes</strong> (<em>int</em><em> or </em><em>dictionary</em><em> of </em><em>ints</em>) – Number of passes of binomial smoothing in r and z.
 (More passes results in smoother fields)
 If <cite>n_passes</cite> is an integer, than the same number of passes
 are applied in r and z.
 If <cite>n_passes</cite> is a dictionary, it should be of the form
 {‘z’: &lt;int&gt;, ‘r’: &lt;int&gt;} to indicate the number of passes
 in each direction.</p></li>
-<li><p><strong>compensator</strong> (<em>bool</em><em>, or </em><em>dictionary of bools</em>) – Whether to apply a compensator in r and z.
+<li><p><strong>compensator</strong> (<em>bool</em><em>, or </em><em>dictionary</em><em> of </em><em>bools</em>) – Whether to apply a compensator in r and z.
 (Applying a compensator mitigates the impact of the smoother
 on low and intermediate frequencies)
 If <cite>compensator</cite> is a boolean, than this applies to r and z.

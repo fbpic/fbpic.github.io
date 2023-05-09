@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>How to run the code &mdash; FBPIC 0.22.0 documentation</title>
+  <title>How to run the code &mdash; FBPIC 0.23.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -12,9 +12,8 @@
   <![endif]-->
   
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -27,14 +26,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> FBPIC
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            FBPIC
           </a>
               <div class="version">
-                0.22.0
+                0.23.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -71,8 +74,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>How to run the code</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">How to run the code</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/how_to_run.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -83,12 +86,12 @@
            <div itemprop="articleBody">
              
   <section id="how-to-run-the-code">
-<h1>How to run the code<a class="headerlink" href="#how-to-run-the-code" title="Permalink to this headline">¶</a></h1>
+<h1>How to run the code<a class="headerlink" href="#how-to-run-the-code" title="Permalink to this heading">¶</a></h1>
 <p>Once installed (see <a class="reference internal" href="install/installation.html"><span class="doc">Installation</span></a>), FBPIC is available as a <strong>Python
 module</strong> on your system. Thus, a simulation is setup by creating a
 <strong>Python script</strong> that imports and uses FBPIC’s functionalities.</p>
 <section id="script-examples">
-<h2>Script examples<a class="headerlink" href="#script-examples" title="Permalink to this headline">¶</a></h2>
+<h2>Script examples<a class="headerlink" href="#script-examples" title="Permalink to this heading">¶</a></h2>
 <p>You can download examples of FBPIC scripts below (which you can then modify
 to suit your needs):</p>
 <div class="toctree-wrapper compound">
@@ -104,7 +107,7 @@ and the section <a class="reference internal" href="advanced/boosted_frame.html"
 defined in the section <a class="reference internal" href="api_reference/api_reference.html"><span class="doc">API reference</span></a>.</p>
 </section>
 <section id="running-the-simulation">
-<h2>Running the simulation<a class="headerlink" href="#running-the-simulation" title="Permalink to this headline">¶</a></h2>
+<h2>Running the simulation<a class="headerlink" href="#running-the-simulation" title="Permalink to this heading">¶</a></h2>
 <p>The simulation is then run by typing</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">fbpic_script</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
@@ -201,7 +204,7 @@ environment variable:</p>
 </div>
 </section>
 <section id="visualizing-the-simulation-results">
-<h2>Visualizing the simulation results<a class="headerlink" href="#visualizing-the-simulation-results" title="Permalink to this headline">¶</a></h2>
+<h2>Visualizing the simulation results<a class="headerlink" href="#visualizing-the-simulation-results" title="Permalink to this heading">¶</a></h2>
 <p>The code outputs HDF5 files, that comply with the
 <a class="reference external" href="http://www.openpmd.org/#/start">openPMD standard</a>. As such, they
 can be visualized for instance with the <a class="reference external" href="https://github.com/openPMD/openPMD-viewer">openPMD-viewer</a>). To do so, first

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Profiling the code &mdash; FBPIC 0.22.0 documentation</title>
+  <title>Profiling the code &mdash; FBPIC 0.23.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -12,9 +12,8 @@
   <![endif]-->
   
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -27,14 +26,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../index.html" class="icon icon-home"> FBPIC
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            FBPIC
           </a>
               <div class="version">
-                0.22.0
+                0.23.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -84,9 +87,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="advanced.html">Advanced use</a> &raquo;</li>
-      <li>Profiling the code</li>
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="advanced.html">Advanced use</a></li>
+      <li class="breadcrumb-item active">Profiling the code</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/advanced/profiling.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -97,13 +100,13 @@
            <div itemprop="articleBody">
              
   <section id="profiling-the-code">
-<h1>Profiling the code<a class="headerlink" href="#profiling-the-code" title="Permalink to this headline">¶</a></h1>
+<h1>Profiling the code<a class="headerlink" href="#profiling-the-code" title="Permalink to this heading">¶</a></h1>
 <p>Profiling the code consists in finding which parts of the algorithm <strong>dominate
 the computational time</strong>, for your particular simulation setup.</p>
 <section id="profiling-the-code-executed-on-cpu">
-<h2>Profiling the code executed on CPU<a class="headerlink" href="#profiling-the-code-executed-on-cpu" title="Permalink to this headline">¶</a></h2>
+<h2>Profiling the code executed on CPU<a class="headerlink" href="#profiling-the-code-executed-on-cpu" title="Permalink to this heading">¶</a></h2>
 <section id="getting-the-results-in-a-simple-text-file">
-<h3>Getting the results in a simple text file<a class="headerlink" href="#getting-the-results-in-a-simple-text-file" title="Permalink to this headline">¶</a></h3>
+<h3>Getting the results in a simple text file<a class="headerlink" href="#getting-the-results-in-a-simple-text-file" title="Permalink to this heading">¶</a></h3>
 <p>Dumping the profiling results in a text file allows you
 to quickly profile the execution of a simulation.</p>
 <p>Run the code with
@@ -114,7 +117,7 @@ to quickly profile the execution of a simulation.</p>
 <p>and then open the file <code class="docutils literal notranslate"><span class="pre">cpu.log</span></code> with a text editor.</p>
 </section>
 <section id="using-a-visual-profiler">
-<h3>Using a visual profiler<a class="headerlink" href="#using-a-visual-profiler" title="Permalink to this headline">¶</a></h3>
+<h3>Using a visual profiler<a class="headerlink" href="#using-a-visual-profiler" title="Permalink to this heading">¶</a></h3>
 <p>For a more detailed analysis, you can use a visual profiler (i.e. profilers with
 a graphical user interface).</p>
 <p>Run the code with
@@ -129,7 +132,7 @@ a graphical user interface).</p>
 </section>
 </section>
 <section id="profiling-the-code-executed-on-gpu">
-<h2>Profiling the code executed on GPU<a class="headerlink" href="#profiling-the-code-executed-on-gpu" title="Permalink to this headline">¶</a></h2>
+<h2>Profiling the code executed on GPU<a class="headerlink" href="#profiling-the-code-executed-on-gpu" title="Permalink to this heading">¶</a></h2>
 <p>Two profiling tools exists for GPU:</p>
 <blockquote>
 <div><ul class="simple">
@@ -139,7 +142,7 @@ a graphical user interface).</p>
 </div></blockquote>
 <p>Instructions here are given for both tools.</p>
 <section id="id1">
-<h3>Getting the results in a simple text file<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<h3>Getting the results in a simple text file<a class="headerlink" href="#id1" title="Permalink to this heading">¶</a></h3>
 <ul>
 <li><p>For <strong>nvprof</strong>: First run the code with <code class="docutils literal notranslate"><span class="pre">nvprof</span></code></p>
 <blockquote>
@@ -168,7 +171,7 @@ and host-side (i.e. CPU-side) code, you can use:</p>
 </div>
 </section>
 <section id="id2">
-<h3>Using a visual profiler<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<h3>Using a visual profiler<a class="headerlink" href="#id2" title="Permalink to this heading">¶</a></h3>
 <ul>
 <li><p>For <strong>nvprof</strong>: First run the code with <code class="docutils literal notranslate"><span class="pre">nvprof</span></code></p>
 <blockquote>
@@ -217,12 +220,12 @@ on a small number of PIC iterations (&lt;1000).</p>
 </section>
 </section>
 <section id="profiling-mpi-simulations">
-<h2>Profiling MPI simulations<a class="headerlink" href="#profiling-mpi-simulations" title="Permalink to this headline">¶</a></h2>
+<h2>Profiling MPI simulations<a class="headerlink" href="#profiling-mpi-simulations" title="Permalink to this heading">¶</a></h2>
 <p>One way to profile MPI simulations is to write <strong>one file per MPI rank</strong>. In
 this case, each file will contain only the profiling data of the corresponding
 MPI process.</p>
 <section id="profiling-the-cpu-code">
-<h3>Profiling the CPU code<a class="headerlink" href="#profiling-the-cpu-code" title="Permalink to this headline">¶</a></h3>
+<h3>Profiling the CPU code<a class="headerlink" href="#profiling-the-cpu-code" title="Permalink to this heading">¶</a></h3>
 <p>One way to create one file per MPI rank is to <strong>modify your FBPIC script</strong>,
 in the following way:</p>
 <ul>
@@ -272,7 +275,7 @@ in the following way:</p>
 </div></blockquote>
 </section>
 <section id="profiling-the-gpu-code">
-<h3>Profiling the GPU code<a class="headerlink" href="#profiling-the-gpu-code" title="Permalink to this headline">¶</a></h3>
+<h3>Profiling the GPU code<a class="headerlink" href="#profiling-the-gpu-code" title="Permalink to this heading">¶</a></h3>
 <p>Use the following command:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mpirun</span> <span class="o">-</span><span class="n">np</span> <span class="mi">2</span> <span class="n">nvprof</span> <span class="o">-</span><span class="n">o</span> <span class="n">gpu_</span><span class="o">%</span><span class="n">q</span><span class="p">{</span><span class="o">&lt;</span><span class="n">RANK</span><span class="o">&gt;</span><span class="p">}</span><span class="o">.</span><span class="n">prof</span> <span class="n">python</span> <span class="n">fbpic_script</span><span class="o">.</span><span class="n">py</span>
 </pre></div>

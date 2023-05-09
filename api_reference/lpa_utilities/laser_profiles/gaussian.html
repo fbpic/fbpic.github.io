@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Gaussian profile &mdash; FBPIC 0.22.0 documentation</title>
+  <title>Gaussian profile &mdash; FBPIC 0.23.0 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -12,9 +12,8 @@
   <![endif]-->
   
         <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
         <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -28,14 +27,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../../index.html" class="icon icon-home"> FBPIC
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            FBPIC
           </a>
               <div class="version">
-                0.22.0
+                0.23.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -81,11 +84,11 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../../api_reference.html">API reference</a> &raquo;</li>
-          <li><a href="../lpa_utilities.html">Laser-plasma utilities</a> &raquo;</li>
-          <li><a href="../laser.html">Laser initialization</a> &raquo;</li>
-      <li>Gaussian profile</li>
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../api_reference.html">API reference</a></li>
+          <li class="breadcrumb-item"><a href="../lpa_utilities.html">Laser-plasma utilities</a></li>
+          <li class="breadcrumb-item"><a href="../laser.html">Laser initialization</a></li>
+      <li class="breadcrumb-item active">Gaussian profile</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../../_sources/api_reference/lpa_utilities/laser_profiles/gaussian.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -96,7 +99,7 @@
            <div itemprop="articleBody">
              
   <section id="gaussian-profile">
-<h1>Gaussian profile<a class="headerlink" href="#gaussian-profile" title="Permalink to this headline">¶</a></h1>
+<h1>Gaussian profile<a class="headerlink" href="#gaussian-profile" title="Permalink to this heading">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="fbpic.lpa_utils.laser.GaussianLaser">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fbpic.lpa_utils.laser.</span></span><span class="sig-name descname"><span class="pre">GaussianLaser</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">waist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta_pol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lambda0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8e-07</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cep_phase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi2_chirp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">propagation_direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/fbpic/lpa_utils/laser/laser_profiles.html#GaussianLaser"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fbpic.lpa_utils.laser.GaussianLaser" title="Permalink to this definition">¶</a></dt>
@@ -117,7 +120,7 @@ formula for simplicity, but are of course taken into account by
 the code, when initializing the laser pulse away from the focal plane.</p>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>a0</strong> (<em>float</em><em> (</em><em>dimensionless</em><em>)</em>) – The peak normalized vector potential at the focal plane, defined
 as <span class="math notranslate nohighlight">\(a_0\)</span> in the above formula.</p></li>
