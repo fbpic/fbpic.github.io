@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>3D visualization using PyVista &mdash; FBPIC 0.23.0 documentation</title>
+  <title>3D visualization using PyVista &mdash; FBPIC 0.24.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -32,7 +32,7 @@
             FBPIC
           </a>
               <div class="version">
-                0.23.0
+                0.24.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -111,7 +111,7 @@ as an example:</p>
 <span class="n">grid</span><span class="o">.</span><span class="n">dimensions</span> <span class="o">=</span> <span class="n">rho</span><span class="o">.</span><span class="n">shape</span>
 <span class="n">grid</span><span class="o">.</span><span class="n">origin</span> <span class="o">=</span> <span class="p">[</span><span class="n">meta</span><span class="o">.</span><span class="n">xmin</span> <span class="o">*</span> <span class="mf">1e6</span><span class="p">,</span> <span class="n">meta</span><span class="o">.</span><span class="n">ymin</span> <span class="o">*</span> <span class="mf">1e6</span><span class="p">,</span> <span class="n">meta</span><span class="o">.</span><span class="n">zmin</span> <span class="o">*</span> <span class="mf">1e6</span><span class="p">]</span>
 <span class="n">grid</span><span class="o">.</span><span class="n">spacing</span> <span class="o">=</span> <span class="p">[</span><span class="n">meta</span><span class="o">.</span><span class="n">dx</span> <span class="o">*</span> <span class="mf">1e6</span><span class="p">,</span> <span class="n">meta</span><span class="o">.</span><span class="n">dy</span> <span class="o">*</span> <span class="mf">1e6</span><span class="p">,</span> <span class="n">meta</span><span class="o">.</span><span class="n">dz</span> <span class="o">*</span> <span class="mf">1e6</span><span class="p">]</span>
-<span class="n">grid</span><span class="o">.</span><span class="n">point_arrays</span><span class="p">[</span><span class="s1">&#39;values&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">rho</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">order</span><span class="o">=</span><span class="s1">&#39;F&#39;</span><span class="p">)</span>
+<span class="n">grid</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s1">&#39;values&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">rho</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">order</span><span class="o">=</span><span class="s1">&#39;F&#39;</span><span class="p">)</span>
 
 <span class="c1"># Add the grid to the plotter</span>
 <span class="c1"># Use a cutoff for rho via the clim argument since otherwise it shows only a small density spike</span>

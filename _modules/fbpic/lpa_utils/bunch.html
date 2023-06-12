@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fbpic.lpa_utils.bunch &mdash; FBPIC 0.23.0 documentation</title>
+  <title>fbpic.lpa_utils.bunch &mdash; FBPIC 0.24.0 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -30,7 +30,7 @@
             FBPIC
           </a>
               <div class="version">
-                0.23.0
+                0.24.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -202,7 +202,8 @@
                                 <span class="n">sig_gamma</span><span class="p">,</span> <span class="n">n_physical_particles</span><span class="p">,</span>
                                 <span class="n">n_macroparticles</span><span class="p">,</span> <span class="n">tf</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">zf</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">boost</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                                 <span class="n">save_beam</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">z_injection_plane</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                                <span class="n">initialize_self_field</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+                                <span class="n">initialize_self_field</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                <span class="n">symmetrize</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Introduce a relativistic Gaussian particle bunch in the simulation,</span>
 <span class="sd">    along with its space charge field.</span>
@@ -267,7 +268,18 @@
 <span class="sd">    initialize_self_field: bool, optional</span>
 <span class="sd">       Whether to calculate the initial space charge fields of the bunch</span>
 <span class="sd">       and add these fields to the fields on the grid (Default: True)</span>
+
+<span class="sd">    symmetrize: bool, optional</span>
+<span class="sd">       Whether to symmetrize the beam with 4-fold rotational symmetry.</span>
+<span class="sd">       (Meaning that, for every macroparticle, 3 other macroparticles</span>
+<span class="sd">       that are rotated by +pi/2, +pi, -pi/2 in the transverse plane)</span>
+<span class="sd">       This ensures that the beam has exactly 0 initial offset in x and y</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">symmetrize</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="n">n_macroparticles</span><span class="o">%</span><span class="mi">4</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> \
+            <span class="s2">&quot;When using symmetrize, `n_macroparticles` must be a multiple of 4.&quot;</span>
+        <span class="n">n_macroparticles</span> <span class="o">=</span> <span class="n">n_macroparticles</span><span class="o">//</span><span class="mi">4</span>
+
     <span class="c1"># Generate Gaussian gamma distribution of the beam</span>
     <span class="k">if</span> <span class="n">sig_gamma</span> <span class="o">&gt;</span> <span class="mf">0.</span><span class="p">:</span>
         <span class="n">gamma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">gamma0</span><span class="p">,</span> <span class="n">sig_gamma</span><span class="p">,</span> <span class="n">n_macroparticles</span><span class="p">)</span>
@@ -325,6 +337,15 @@
         <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="n">ux</span> <span class="o">*</span> <span class="n">inv_gamma</span> <span class="o">*</span> <span class="n">c</span> <span class="o">*</span> <span class="n">tf</span>
         <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">-</span> <span class="n">uy</span> <span class="o">*</span> <span class="n">inv_gamma</span> <span class="o">*</span> <span class="n">c</span> <span class="o">*</span> <span class="n">tf</span>
         <span class="n">z</span> <span class="o">=</span> <span class="n">z</span> <span class="o">-</span> <span class="n">uz</span> <span class="o">*</span> <span class="n">inv_gamma</span> <span class="o">*</span> <span class="n">c</span> <span class="o">*</span> <span class="n">tf</span>
+
+    <span class="c1"># Add 4-fold copies of the beam by rotating particles by pi/2, pi and -pi/2</span>
+    <span class="k">if</span> <span class="n">symmetrize</span><span class="p">:</span>
+        <span class="n">w</span> <span class="o">*=</span> <span class="mf">0.25</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">ux</span><span class="p">,</span> <span class="n">uy</span><span class="p">,</span> <span class="n">uz</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">,</span> <span class="nb">zip</span><span class="p">(</span>
+                                    <span class="p">[</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">ux</span><span class="p">,</span> <span class="n">uy</span><span class="p">,</span> <span class="n">uz</span><span class="p">,</span> <span class="n">w</span><span class="p">],</span>
+                                    <span class="p">[</span><span class="o">-</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span><span class="o">-</span><span class="n">uy</span><span class="p">,</span> <span class="n">ux</span><span class="p">,</span> <span class="n">uz</span><span class="p">,</span> <span class="n">w</span><span class="p">],</span>
+                                    <span class="p">[</span><span class="o">-</span><span class="n">x</span><span class="p">,</span><span class="o">-</span><span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span><span class="o">-</span><span class="n">ux</span><span class="p">,</span><span class="o">-</span><span class="n">uy</span><span class="p">,</span> <span class="n">uz</span><span class="p">,</span> <span class="n">w</span><span class="p">],</span>
+                                    <span class="p">[</span> <span class="n">y</span><span class="p">,</span><span class="o">-</span><span class="n">x</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">uy</span><span class="p">,</span><span class="o">-</span><span class="n">ux</span><span class="p">,</span> <span class="n">uz</span><span class="p">,</span> <span class="n">w</span><span class="p">]</span> <span class="p">)</span> <span class="p">)</span>
 
     <span class="c1"># Save beam distribution to an .npz file</span>
     <span class="k">if</span> <span class="n">save_beam</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -672,7 +693,8 @@
 
 <span class="k">def</span> <span class="nf">add_elec_bunch_gaussian</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">sig_r</span><span class="p">,</span> <span class="n">sig_z</span><span class="p">,</span> <span class="n">n_emit</span><span class="p">,</span> <span class="n">gamma0</span><span class="p">,</span>
                         <span class="n">sig_gamma</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">tf</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">zf</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">boost</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                        <span class="n">save_beam</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">z_injection_plane</span><span class="o">=</span><span class="kc">None</span> <span class="p">):</span>
+                        <span class="n">save_beam</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">z_injection_plane</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                        <span class="n">symmetrize</span><span class="o">=</span><span class="kc">False</span> <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Introduce a relativistic Gaussian electron bunch in the simulation,</span>
 <span class="sd">    along with its space charge field.</span>
@@ -728,6 +750,12 @@
 <span class="sd">        motion for z&lt;z_injection_plane. This is sometimes useful in</span>
 <span class="sd">        boosted-frame simulations.</span>
 <span class="sd">        `z_injection_plane` is always given in the lab frame.</span>
+
+<span class="sd">    symmetrize: bool, optional</span>
+<span class="sd">       Whether to symmetrize the beam with 4-fold rotational symmetry.</span>
+<span class="sd">       (Meaning that, for every macroparticle, 3 other macroparticles</span>
+<span class="sd">       that are rotated by +pi/2, +pi, -pi/2 in the transverse plane)</span>
+<span class="sd">       This ensures that the beam has exactly 0 initial offset in x and y</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Generate Gaussian gamma distribution of the beam</span>
     <span class="n">n_physical_particles</span> <span class="o">=</span> <span class="n">Q</span><span class="o">/</span><span class="n">e</span>
@@ -735,7 +763,8 @@
                                 <span class="n">n_emit</span><span class="p">,</span> <span class="n">gamma0</span><span class="p">,</span> <span class="n">sig_gamma</span><span class="p">,</span>
                                 <span class="n">n_physical_particles</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">tf</span><span class="o">=</span><span class="n">tf</span><span class="p">,</span>
                                 <span class="n">zf</span><span class="o">=</span><span class="n">zf</span><span class="p">,</span> <span class="n">boost</span><span class="o">=</span><span class="n">boost</span><span class="p">,</span> <span class="n">save_beam</span><span class="o">=</span><span class="n">save_beam</span><span class="p">,</span>
-                                <span class="n">z_injection_plane</span><span class="o">=</span><span class="n">z_injection_plane</span><span class="p">)</span>
+                                <span class="n">z_injection_plane</span><span class="o">=</span><span class="n">z_injection_plane</span><span class="p">,</span>
+                                <span class="n">symmetrize</span><span class="o">=</span><span class="n">symmetrize</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">elec_bunch</span>
 
 

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Beam initialization &mdash; FBPIC 0.23.0 documentation</title>
+  <title>Beam initialization &mdash; FBPIC 0.24.0 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -33,7 +33,7 @@
             FBPIC
           </a>
               <div class="version">
-                0.23.0
+                0.24.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -157,7 +157,7 @@ account the Lorentz transformation of the positions, in <cite>dens_func</cite></
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fbpic.lpa_utils.bunch.add_particle_bunch_gaussian">
-<span class="sig-prename descclassname"><span class="pre">fbpic.lpa_utils.bunch.</span></span><span class="sig-name descname"><span class="pre">add_particle_bunch_gaussian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sig_r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sig_z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_emit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sig_gamma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_physical_particles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_macroparticles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boost</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_beam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z_injection_plane</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initialize_self_field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fbpic/lpa_utils/bunch.html#add_particle_bunch_gaussian"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fbpic.lpa_utils.bunch.add_particle_bunch_gaussian" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">fbpic.lpa_utils.bunch.</span></span><span class="sig-name descname"><span class="pre">add_particle_bunch_gaussian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sig_r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sig_z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_emit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sig_gamma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_physical_particles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_macroparticles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boost</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_beam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z_injection_plane</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initialize_self_field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">symmetrize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fbpic/lpa_utils/bunch.html#add_particle_bunch_gaussian"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fbpic.lpa_utils.bunch.add_particle_bunch_gaussian" title="Permalink to this definition">¶</a></dt>
 <dd><p>Introduce a relativistic Gaussian particle bunch in the simulation,
 along with its space charge field.</p>
 <p>The bunch is initialized with a normalized emittance <cite>n_emit</cite>,
@@ -189,6 +189,10 @@ boosted-frame simulations.
 <cite>z_injection_plane</cite> is always given in the lab frame.</p></li>
 <li><p><strong>initialize_self_field</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to calculate the initial space charge fields of the bunch
 and add these fields to the fields on the grid (Default: True)</p></li>
+<li><p><strong>symmetrize</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to symmetrize the beam with 4-fold rotational symmetry.
+(Meaning that, for every macroparticle, 3 other macroparticles
+that are rotated by +pi/2, +pi, -pi/2 in the transverse plane)
+This ensures that the beam has exactly 0 initial offset in x and y</p></li>
 </ul>
 </dd>
 </dl>
