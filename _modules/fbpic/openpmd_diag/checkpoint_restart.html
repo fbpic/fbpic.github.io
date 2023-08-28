@@ -10,9 +10,9 @@
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/sphinx_highlight.js"></script>
+        <script src="../../../_static/documentation_options.js?v=a9084e48"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -94,7 +94,9 @@
 <span class="k">if</span> <span class="n">cuda_installed</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">cupy</span>
 
-<div class="viewcode-block" id="set_periodic_checkpoint"><a class="viewcode-back" href="../../../api_reference/checkpoint_restart.html#fbpic.openpmd_diag.set_periodic_checkpoint">[docs]</a><span class="k">def</span> <span class="nf">set_periodic_checkpoint</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">period</span><span class="p">,</span> <span class="n">checkpoint_dir</span><span class="o">=</span><span class="s1">&#39;./checkpoints&#39;</span> <span class="p">):</span>
+<div class="viewcode-block" id="set_periodic_checkpoint">
+<a class="viewcode-back" href="../../../api_reference/checkpoint_restart.html#fbpic.openpmd_diag.set_periodic_checkpoint">[docs]</a>
+<span class="k">def</span> <span class="nf">set_periodic_checkpoint</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">period</span><span class="p">,</span> <span class="n">checkpoint_dir</span><span class="o">=</span><span class="s1">&#39;./checkpoints&#39;</span> <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Set up periodic checkpoints of the simulation</span>
 
@@ -149,7 +151,10 @@
         <span class="n">sim</span><span class="o">.</span><span class="n">checkpoints</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
             <span class="n">ParticleDiagnostic</span><span class="p">(</span> <span class="n">period</span><span class="p">,</span> <span class="n">particle_dict</span><span class="p">,</span> <span class="n">write_dir</span><span class="o">=</span><span class="n">write_dir</span> <span class="p">)</span> <span class="p">)</span></div>
 
-<div class="viewcode-block" id="restart_from_checkpoint"><a class="viewcode-back" href="../../../api_reference/checkpoint_restart.html#fbpic.openpmd_diag.restart_from_checkpoint">[docs]</a><span class="k">def</span> <span class="nf">restart_from_checkpoint</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+
+<div class="viewcode-block" id="restart_from_checkpoint">
+<a class="viewcode-back" href="../../../api_reference/checkpoint_restart.html#fbpic.openpmd_diag.restart_from_checkpoint">[docs]</a>
+<span class="k">def</span> <span class="nf">restart_from_checkpoint</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                             <span class="n">checkpoint_dir</span><span class="o">=</span><span class="s1">&#39;./checkpoints&#39;</span> <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Fills the Simulation object `sim` with data saved in a checkpoint.</span>
@@ -262,6 +267,7 @@
     <span class="c1"># and shift the global domain position in the BoundaryCommunicator</span>
     <span class="n">zmin_new</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">zmin</span>
     <span class="n">sim</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">shift_global_domain_positions</span><span class="p">(</span> <span class="n">zmin_new</span> <span class="o">-</span> <span class="n">zmin_old</span> <span class="p">)</span></div>
+
 
 <span class="k">def</span> <span class="nf">check_restart</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">iteration</span><span class="p">,</span> <span class="n">checkpoint_dir</span> <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Verify that the restart is valid.&quot;&quot;&quot;</span>

@@ -11,9 +11,9 @@
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script src="../_static/sphinx_highlight.js"></script>
+        <script src="../_static/documentation_options.js?v=a9084e48"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -56,7 +56,6 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="install_lawrencium.html">Installation on Lawrencium (LBNL)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="install_comet.html">Installation on Comet (SDSC)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="install_cori.html">Installation on Cori (NERSC)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="install_perlmutter.html">Installation on Perlmutter (NERSC)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="install_summit.html">Installation on Summit (OLCF)</a></li>
 </ul>
@@ -92,7 +91,7 @@
            <div itemprop="articleBody">
              
   <section id="installation-on-juwels-jsc">
-<h1>Installation on JUWELS (JSC)<a class="headerlink" href="#installation-on-juwels-jsc" title="Permalink to this heading">¶</a></h1>
+<h1>Installation on JUWELS (JSC)<a class="headerlink" href="#installation-on-juwels-jsc" title="Link to this heading">¶</a></h1>
 <p><a class="reference external" href="https://www.fz-juelich.de/ias/jsc/EN/Expertise/Supercomputers/JUWELS/JUWELS_node.html">JUWELS</a>
 is a supercomputer at the <a class="reference external" href="http://www.fz-juelich.de/ias/jsc/EN/Home/home_node.html">Juelich Supercomputing Centre</a> (JSC).</p>
 <p>Installation and usage of FBPIC requires the following steps:</p>
@@ -103,7 +102,7 @@ is a supercomputer at the <a class="reference external" href="http://www.fz-juel
 <li><p>Allocation of resources and running simulations</p></li>
 </ul>
 <section id="loading-the-cluster-modules">
-<h2>Loading the cluster modules<a class="headerlink" href="#loading-the-cluster-modules" title="Permalink to this heading">¶</a></h2>
+<h2>Loading the cluster modules<a class="headerlink" href="#loading-the-cluster-modules" title="Link to this heading">¶</a></h2>
 <p>To load the standard modules the <code class="docutils literal notranslate"><span class="pre">.bashrc</span></code> should contain the following:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">module</span> <span class="n">load</span> <span class="n">GCC</span><span class="o">/</span><span class="mf">8.3.0</span>
 <span class="n">module</span> <span class="n">load</span> <span class="n">MVAPICH2</span><span class="o">/</span><span class="mf">2.3.3</span><span class="o">-</span><span class="n">GDR</span>
@@ -111,7 +110,7 @@ is a supercomputer at the <a class="reference external" href="http://www.fz-juel
 </div>
 </section>
 <section id="installation-of-anaconda">
-<h2>Installation of Anaconda<a class="headerlink" href="#installation-of-anaconda" title="Permalink to this heading">¶</a></h2>
+<h2>Installation of Anaconda<a class="headerlink" href="#installation-of-anaconda" title="Link to this heading">¶</a></h2>
 <p>In order to download and install <a class="reference external" href="https://docs.anaconda.com/anaconda/">Anaconda</a>, type:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wget</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">repo</span><span class="o">.</span><span class="n">anaconda</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">archive</span><span class="o">/</span><span class="n">Anaconda3</span><span class="o">-</span><span class="mf">2019.03</span><span class="o">-</span><span class="n">Linux</span><span class="o">-</span><span class="n">x86_64</span><span class="o">.</span><span class="n">sh</span>
 <span class="n">bash</span> <span class="n">Anaconda3</span><span class="o">-</span><span class="mf">2019.03</span><span class="o">-</span><span class="n">Linux</span><span class="o">-</span><span class="n">x86_64</span><span class="o">.</span><span class="n">sh</span>
@@ -149,7 +148,7 @@ export PYTHONPATH=&quot;/p/home/jusers/USERNAME/juwels/anaconda3/lib/python3.7/s
 </div>
 </section>
 <section id="installation-of-fbpic">
-<h2>Installation of FBPIC<a class="headerlink" href="#installation-of-fbpic" title="Permalink to this heading">¶</a></h2>
+<h2>Installation of FBPIC<a class="headerlink" href="#installation-of-fbpic" title="Link to this heading">¶</a></h2>
 <p>Finally, clone FBPIC using <code class="docutils literal notranslate"><span class="pre">git</span></code>, <code class="docutils literal notranslate"><span class="pre">cd</span></code> into the folder <code class="docutils literal notranslate"><span class="pre">fbpic/</span></code>
 and type</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
@@ -157,7 +156,7 @@ and type</p>
 </div>
 </section>
 <section id="running-simulations">
-<h2>Running simulations<a class="headerlink" href="#running-simulations" title="Permalink to this heading">¶</a></h2>
+<h2>Running simulations<a class="headerlink" href="#running-simulations" title="Link to this heading">¶</a></h2>
 <p>In the following, it is explained how to allocate and use
 <strong>interactive</strong> jobs on JUWELS. For the usage of normal jobs, one can
 use the similar commands in a job script. More information can be found

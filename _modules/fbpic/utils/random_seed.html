@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>fbpic.utils.random_seed &mdash; FBPIC 0.21.0 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            FBPIC
+          </a>
+              <div class="version">
+                0.21.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../overview/overview.html">Overview of the code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../install/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../how_to_run.html">How to run the code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api_reference/api_reference.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../advanced/advanced.html">Advanced use</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">FBPIC</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">fbpic.utils.random_seed</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for fbpic.utils.random_seed</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2023, FBPIC contributors</span>
+<span class="c1"># Authors: Remi Lehe, Manuel Kirchen</span>
+<span class="c1"># License: 3-Clause-BSD-LBNL</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This file is part of the Fourier-Bessel Particle-In-Cell code (FB-PIC)</span>
+<span class="sd">It provides a function to fix the random seed in FBPIC runs.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">.cuda</span> <span class="kn">import</span> <span class="n">cupy_installed</span>
+<span class="kn">from</span> <span class="nn">.mpi</span> <span class="kn">import</span> <span class="n">MPI</span>
+
+<div class="viewcode-block" id="set_random_seed"><a class="viewcode-back" href="../../../api_reference/simulation.html#fbpic.utils.random_seed.set_random_seed">[docs]</a><span class="k">def</span> <span class="nf">set_random_seed</span><span class="p">(</span> <span class="n">random_seed</span> <span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Fix the seed of the random number generators.</span>
+
+<span class="sd">    Fixing a seed helps ensure that repeatedly running the</span>
+<span class="sd">    same simulation gives the same result (despite the Monte Carlo</span>
+<span class="sd">    parts of the code, e.g. ionization, gaussian beam generation, etc.)</span>
+
+<span class="sd">    random_seed: int</span>
+<span class="sd">        The seed of the random number generator.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Use a different seed for each MPI rank</span>
+    <span class="c1"># - Set seed for numpy</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span> <span class="n">random_seed</span> <span class="o">+</span> <span class="n">MPI</span><span class="o">.</span><span class="n">COMM_WORLD</span><span class="o">.</span><span class="n">rank</span> <span class="p">)</span>
+    <span class="k">if</span> <span class="n">cupy_installed</span><span class="p">:</span>
+        <span class="c1"># - Set seed for cupy</span>
+        <span class="n">cupy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span> <span class="n">random_seed</span> <span class="o">+</span> <span class="n">MPI</span><span class="o">.</span><span class="n">COMM_WORLD</span><span class="o">.</span><span class="n">rank</span> <span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2016, FBPIC contributors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

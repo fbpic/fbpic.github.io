@@ -11,9 +11,9 @@
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script src="../_static/sphinx_highlight.js"></script>
+        <script src="../_static/documentation_options.js?v=a9084e48"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -96,7 +96,7 @@
            <div itemprop="articleBody">
              
   <section id="checkpoints-and-restarts">
-<h1>Checkpoints and restarts<a class="headerlink" href="#checkpoints-and-restarts" title="Permalink to this heading">¶</a></h1>
+<h1>Checkpoints and restarts<a class="headerlink" href="#checkpoints-and-restarts" title="Link to this heading">¶</a></h1>
 <p>For very long simulations, it is good to set
 <strong>checkpoints</strong>. Checkpoints are files that contain all the simulation
 data at one given iteration, so that the simulation can be later
@@ -106,10 +106,10 @@ crashes before the end (e.g. because of the finite walltime on HPC
 clusters). In this case, thanks to checkpoints, the simulation can be restarted
 without having to run it again from the beginning.</p>
 <section id="setting-checkpoints">
-<h2>Setting checkpoints<a class="headerlink" href="#setting-checkpoints" title="Permalink to this heading">¶</a></h2>
+<h2>Setting checkpoints<a class="headerlink" href="#setting-checkpoints" title="Link to this heading">¶</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="fbpic.openpmd_diag.set_periodic_checkpoint">
-<span class="sig-prename descclassname"><span class="pre">fbpic.openpmd_diag.</span></span><span class="sig-name descname"><span class="pre">set_periodic_checkpoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkpoint_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'./checkpoints'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/openpmd_diag/checkpoint_restart.html#set_periodic_checkpoint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fbpic.openpmd_diag.set_periodic_checkpoint" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">fbpic.openpmd_diag.</span></span><span class="sig-name descname"><span class="pre">set_periodic_checkpoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkpoint_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'./checkpoints'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/openpmd_diag/checkpoint_restart.html#set_periodic_checkpoint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fbpic.openpmd_diag.set_periodic_checkpoint" title="Link to this definition">¶</a></dt>
 <dd><p>Set up periodic checkpoints of the simulation</p>
 <p>The checkpoints are saved in openPMD format, in the specified
 directory, with one subdirectory per process.
@@ -132,10 +132,10 @@ same path for all ranks.)</p></li>
 
 </section>
 <section id="restarting-a-simulation">
-<h2>Restarting a simulation<a class="headerlink" href="#restarting-a-simulation" title="Permalink to this heading">¶</a></h2>
+<h2>Restarting a simulation<a class="headerlink" href="#restarting-a-simulation" title="Link to this heading">¶</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="fbpic.openpmd_diag.restart_from_checkpoint">
-<span class="sig-prename descclassname"><span class="pre">fbpic.openpmd_diag.</span></span><span class="sig-name descname"><span class="pre">restart_from_checkpoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkpoint_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'./checkpoints'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/openpmd_diag/checkpoint_restart.html#restart_from_checkpoint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fbpic.openpmd_diag.restart_from_checkpoint" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">fbpic.openpmd_diag.</span></span><span class="sig-name descname"><span class="pre">restart_from_checkpoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkpoint_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'./checkpoints'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/openpmd_diag/checkpoint_restart.html#restart_from_checkpoint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fbpic.openpmd_diag.restart_from_checkpoint" title="Link to this definition">¶</a></dt>
 <dd><p>Fills the Simulation object <cite>sim</cite> with data saved in a checkpoint.</p>
 <p>More precisely, the following data from <cite>sim</cite> is overwritten:</p>
 <ul class="simple">

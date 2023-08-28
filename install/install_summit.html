@@ -11,9 +11,9 @@
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script src="../_static/sphinx_highlight.js"></script>
+        <script src="../_static/documentation_options.js?v=a9084e48"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -50,7 +50,6 @@
 <li class="toctree-l2"><a class="reference internal" href="install_juwels.html">Installation on JUWELS (JSC)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="install_lawrencium.html">Installation on Lawrencium (LBNL)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="install_comet.html">Installation on Comet (SDSC)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="install_cori.html">Installation on Cori (NERSC)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="install_perlmutter.html">Installation on Perlmutter (NERSC)</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Installation on Summit (OLCF)</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#installation-of-fbpic">Installation of FBPIC</a><ul>
@@ -98,14 +97,14 @@
            <div itemprop="articleBody">
              
   <section id="installation-on-summit-olcf">
-<h1>Installation on Summit (OLCF)<a class="headerlink" href="#installation-on-summit-olcf" title="Permalink to this heading">¶</a></h1>
+<h1>Installation on Summit (OLCF)<a class="headerlink" href="#installation-on-summit-olcf" title="Link to this heading">¶</a></h1>
 <p><a class="reference external" href="https://www.olcf.ornl.gov/olcf-resources/compute-systems/summit/">Summit</a>
 is a GPU cluster at the <a class="reference external" href="https://www.olcf.ornl.gov/">Oakridge Leadership Computing Facility</a> (OLCF).</p>
 <p>Each node has of 6 Nvidia V100 GPUs.</p>
 <section id="installation-of-fbpic">
-<h2>Installation of FBPIC<a class="headerlink" href="#installation-of-fbpic" title="Permalink to this heading">¶</a></h2>
+<h2>Installation of FBPIC<a class="headerlink" href="#installation-of-fbpic" title="Link to this heading">¶</a></h2>
 <section id="preparing-the-anaconda-environment">
-<h3>Preparing the Anaconda environment<a class="headerlink" href="#preparing-the-anaconda-environment" title="Permalink to this heading">¶</a></h3>
+<h3>Preparing the Anaconda environment<a class="headerlink" href="#preparing-the-anaconda-environment" title="Link to this heading">¶</a></h3>
 <p>First load the relevant modules:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">module</span> <span class="n">purge</span>
 <span class="n">module</span> <span class="n">load</span> <span class="n">gcc</span>
@@ -120,7 +119,7 @@ is a GPU cluster at the <a class="reference external" href="https://www.olcf.orn
 </div>
 </section>
 <section id="installation-of-fbpic-and-its-dependencies">
-<h3>Installation of FBPIC and its dependencies<a class="headerlink" href="#installation-of-fbpic-and-its-dependencies" title="Permalink to this heading">¶</a></h3>
+<h3>Installation of FBPIC and its dependencies<a class="headerlink" href="#installation-of-fbpic-and-its-dependencies" title="Link to this heading">¶</a></h3>
 <ul>
 <li><p>Install the dependencies of <code class="docutils literal notranslate"><span class="pre">fbpic</span></code></p>
 <blockquote>
@@ -147,7 +146,7 @@ is a GPU cluster at the <a class="reference external" href="https://www.olcf.orn
 </section>
 </section>
 <section id="running-simulations">
-<h2>Running simulations<a class="headerlink" href="#running-simulations" title="Permalink to this heading">¶</a></h2>
+<h2>Running simulations<a class="headerlink" href="#running-simulations" title="Link to this heading">¶</a></h2>
 <p>In order to create a new simulation, create a new directory in
 <code class="docutils literal notranslate"><span class="pre">$MEMBERWORK/</span></code> and copy your input script there:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>mkdir $MEMBERWORK/&lt;project_id&gt;/&lt;simulation name&gt;
@@ -160,7 +159,7 @@ environment <code class="docutils literal notranslate"><span class="pre">fbpic</
 </pre></div>
 </div>
 <section id="interactive-jobs">
-<h3>Interactive jobs<a class="headerlink" href="#interactive-jobs" title="Permalink to this heading">¶</a></h3>
+<h3>Interactive jobs<a class="headerlink" href="#interactive-jobs" title="Link to this heading">¶</a></h3>
 <p>In order to request one node for 20 minutes:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">bsub</span> <span class="o">-</span><span class="n">W</span> <span class="mi">00</span><span class="p">:</span><span class="mi">20</span> <span class="o">-</span><span class="n">nnodes</span> <span class="mi">1</span> <span class="o">-</span><span class="n">P</span> <span class="o">&lt;</span><span class="n">account_number</span><span class="o">&gt;</span> <span class="o">-</span><span class="n">Is</span> <span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">bash</span>
 </pre></div>
@@ -184,7 +183,7 @@ jsrun -n 1 -a 1 -c 1 -g 1 python &lt;fbpic_script.py&gt;
 <p>where <code class="docutils literal notranslate"><span class="pre">&lt;project_id&gt;</span></code> should be replaced by your project account number.</p>
 </section>
 <section id="batch-job">
-<h3>Batch job<a class="headerlink" href="#batch-job" title="Permalink to this heading">¶</a></h3>
+<h3>Batch job<a class="headerlink" href="#batch-job" title="Link to this heading">¶</a></h3>
 <p>Create a new file named <code class="docutils literal notranslate"><span class="pre">submission_script</span></code> in the same directory as
 your input script. Within this new file, copy the
 following text (and replace the bracketed text by the proper values).</p>

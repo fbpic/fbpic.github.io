@@ -11,9 +11,9 @@
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script src="../_static/sphinx_highlight.js"></script>
+        <script src="../_static/documentation_options.js?v=a9084e48"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -87,7 +87,7 @@
            <div itemprop="articleBody">
              
   <section id="laser-wakefield-acceleration-with-ionization">
-<h1>Laser-wakefield acceleration with ionization<a class="headerlink" href="#laser-wakefield-acceleration-with-ionization" title="Permalink to this heading">¶</a></h1>
+<h1>Laser-wakefield acceleration with ionization<a class="headerlink" href="#laser-wakefield-acceleration-with-ionization" title="Link to this heading">¶</a></h1>
 <p>You can download the script below by clicking on <a class="reference download internal" download="" href="../_downloads/b74a29d7fcbdd0c0e7cea633a89cf36a/ionization_script.py"><code class="xref download docutils literal notranslate"><span class="pre">this</span> <span class="pre">link</span></code></a>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">This is an input script that runs a simulation of</span>
@@ -116,6 +116,7 @@
 <span class="kn">from</span> <span class="nn">scipy.constants</span> <span class="kn">import</span> <span class="n">c</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">m_e</span><span class="p">,</span> <span class="n">m_p</span>
 <span class="c1"># Import the relevant structures from fbpic</span>
 <span class="kn">from</span> <span class="nn">fbpic.main</span> <span class="kn">import</span> <span class="n">Simulation</span>
+<span class="kn">from</span> <span class="nn">fbpic.utils.random_seed</span> <span class="kn">import</span> <span class="n">set_random_seed</span>
 <span class="kn">from</span> <span class="nn">fbpic.lpa_utils.laser</span> <span class="kn">import</span> <span class="n">add_laser_pulse</span>
 <span class="kn">from</span> <span class="nn">fbpic.lpa_utils.laser.laser_profiles</span> <span class="kn">import</span> <span class="n">GaussianLaser</span>
 <span class="kn">from</span> <span class="nn">fbpic.openpmd_diag</span> <span class="kn">import</span> <span class="n">FieldDiagnostic</span><span class="p">,</span> \
@@ -199,6 +200,9 @@
 <span class="c1"># ---------------------------</span>
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+
+    <span class="c1"># Set the random seed</span>
+    <span class="n">set_random_seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 
     <span class="c1"># Initialize the simulation object</span>
     <span class="n">sim</span> <span class="o">=</span> <span class="n">Simulation</span><span class="p">(</span> <span class="n">Nz</span><span class="p">,</span> <span class="n">zmax</span><span class="p">,</span> <span class="n">Nr</span><span class="p">,</span> <span class="n">rmax</span><span class="p">,</span> <span class="n">Nm</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">zmin</span><span class="o">=</span><span class="n">zmin</span><span class="p">,</span>

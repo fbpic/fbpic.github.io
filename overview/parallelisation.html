@@ -11,9 +11,9 @@
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script src="../_static/sphinx_highlight.js"></script>
+        <script src="../_static/documentation_options.js?v=a9084e48"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -89,9 +89,9 @@
            <div itemprop="articleBody">
              
   <section id="parallelization-of-fbpic">
-<h1>Parallelization of FBPIC<a class="headerlink" href="#parallelization-of-fbpic" title="Permalink to this heading">¶</a></h1>
+<h1>Parallelization of FBPIC<a class="headerlink" href="#parallelization-of-fbpic" title="Link to this heading">¶</a></h1>
 <section id="two-level-parallelization">
-<h2>Two-level parallelization<a class="headerlink" href="#two-level-parallelization" title="Permalink to this heading">¶</a></h2>
+<h2>Two-level parallelization<a class="headerlink" href="#two-level-parallelization" title="Link to this heading">¶</a></h2>
 <p>PIC simulations are computationally demanding in terms of arithmetic
 operations and memory consumption. Therefore, simulations are typically
 <strong>parallelized</strong> across many compute units that share the computational work.</p>
@@ -116,7 +116,7 @@ large amounts of information via the (fast) shared memory (RAM for CPU, or
 device memory for GPU). Between sub-domains, the computing devices exchange
 a smaller amount of information via the (relatively slower) local area network.</p>
 <section id="intra-device-parallelization">
-<h3>Intra-device parallelization<a class="headerlink" href="#intra-device-parallelization" title="Permalink to this heading">¶</a></h3>
+<h3>Intra-device parallelization<a class="headerlink" href="#intra-device-parallelization" title="Link to this heading">¶</a></h3>
 <p>A single computing device can consist of a multi-core CPU or a GPU. Within
 such a device, many computational cores can access the same memory.
 In this <strong>shared memory layout</strong>, the algorithmic PIC methods are executed
@@ -156,7 +156,7 @@ in parallel: see <a class="reference internal" href="../advanced/parameter_scans
 </div>
 </section>
 <section id="inter-device-parallelization">
-<h3>Inter-device parallelization<a class="headerlink" href="#inter-device-parallelization" title="Permalink to this heading">¶</a></h3>
+<h3>Inter-device parallelization<a class="headerlink" href="#inter-device-parallelization" title="Link to this heading">¶</a></h3>
 <p>As mentioned above, if the simulation is large enough, it can be advantageous
 to use <strong>multiple computing devices</strong> with <strong>inter-device parallelization</strong>.
 In this case, the simulation box is split into smaller chunks (sub-domains).
@@ -207,7 +207,7 @@ using a <strong>tunable finite-order spectral solver</strong> for which the requ
 </section>
 </section>
 <section id="finite-order-spectral-solver">
-<h2>Finite-order spectral solver<a class="headerlink" href="#finite-order-spectral-solver" title="Permalink to this heading">¶</a></h2>
+<h2>Finite-order spectral solver<a class="headerlink" href="#finite-order-spectral-solver" title="Link to this heading">¶</a></h2>
 <p>As described in <a class="reference internal" href="pic_algorithm.html#spectral-solver"><span class="std std-ref">this section</span></a>, the field solver of
 FBPIC integrates the Maxwell equations in the frequency domain as opposed
 to <em>standard</em> field solvers that use finite-differences

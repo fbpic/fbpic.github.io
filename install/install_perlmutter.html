@@ -11,14 +11,14 @@
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script src="../_static/sphinx_highlight.js"></script>
+        <script src="../_static/documentation_options.js?v=a9084e48"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Installation on Summit (OLCF)" href="install_summit.html" />
-    <link rel="prev" title="Installation on Cori (NERSC)" href="install_cori.html" /> 
+    <link rel="prev" title="Installation on Comet (SDSC)" href="install_comet.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -50,7 +50,6 @@
 <li class="toctree-l2"><a class="reference internal" href="install_juwels.html">Installation on JUWELS (JSC)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="install_lawrencium.html">Installation on Lawrencium (LBNL)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="install_comet.html">Installation on Comet (SDSC)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="install_cori.html">Installation on Cori (NERSC)</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Installation on Perlmutter (NERSC)</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#installation-of-fbpic">Installation of FBPIC</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#setting-up-anaconda">Setting up Anaconda</a></li>
@@ -98,14 +97,14 @@
            <div itemprop="articleBody">
              
   <section id="installation-on-perlmutter-nersc">
-<h1>Installation on Perlmutter (NERSC)<a class="headerlink" href="#installation-on-perlmutter-nersc" title="Permalink to this heading">¶</a></h1>
+<h1>Installation on Perlmutter (NERSC)<a class="headerlink" href="#installation-on-perlmutter-nersc" title="Link to this heading">¶</a></h1>
 <p><a class="reference external" href="https://docs.nersc.gov/systems/perlmutter/">Perlmutter</a>
 is a high-performance cluster at <a class="reference external" href="http://www.nersc.gov/">NERSC</a>.</p>
 <p>Its compute nodes are equipped with 4 A100 NVIDIA GPUs.</p>
 <section id="installation-of-fbpic">
-<h2>Installation of FBPIC<a class="headerlink" href="#installation-of-fbpic" title="Permalink to this heading">¶</a></h2>
+<h2>Installation of FBPIC<a class="headerlink" href="#installation-of-fbpic" title="Link to this heading">¶</a></h2>
 <section id="setting-up-anaconda">
-<h3>Setting up Anaconda<a class="headerlink" href="#setting-up-anaconda" title="Permalink to this heading">¶</a></h3>
+<h3>Setting up Anaconda<a class="headerlink" href="#setting-up-anaconda" title="Link to this heading">¶</a></h3>
 <ul>
 <li><p>Type the following lines to prepare your environment.</p>
 <blockquote>
@@ -125,7 +124,7 @@ is a high-performance cluster at <a class="reference external" href="http://www.
 </ul>
 </section>
 <section id="installation-of-fbpic-and-its-dependencies">
-<h3>Installation of FBPIC and its dependencies<a class="headerlink" href="#installation-of-fbpic-and-its-dependencies" title="Permalink to this heading">¶</a></h3>
+<h3>Installation of FBPIC and its dependencies<a class="headerlink" href="#installation-of-fbpic-and-its-dependencies" title="Link to this heading">¶</a></h3>
 <ul>
 <li><p>Install the dependencies of <code class="docutils literal notranslate"><span class="pre">fbpic</span></code></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">python</span> <span class="n">numba</span> <span class="n">scipy</span> <span class="n">h5py</span> <span class="n">mkl</span> <span class="n">cudatoolkit</span><span class="o">=</span><span class="mf">11.5</span>
@@ -143,9 +142,9 @@ is a high-performance cluster at <a class="reference external" href="http://www.
 </section>
 </section>
 <section id="running-simulations">
-<h2>Running simulations<a class="headerlink" href="#running-simulations" title="Permalink to this heading">¶</a></h2>
+<h2>Running simulations<a class="headerlink" href="#running-simulations" title="Link to this heading">¶</a></h2>
 <section id="interactive-jobs">
-<h3>Interactive jobs<a class="headerlink" href="#interactive-jobs" title="Permalink to this heading">¶</a></h3>
+<h3>Interactive jobs<a class="headerlink" href="#interactive-jobs" title="Link to this heading">¶</a></h3>
 <p>In order to request a node with a GPU:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">salloc</span> <span class="o">-</span><span class="n">t</span> <span class="mi">00</span><span class="p">:</span><span class="mi">30</span><span class="p">:</span><span class="mi">00</span> <span class="o">-</span><span class="n">N</span> <span class="mi">1</span> <span class="o">-</span><span class="n">C</span> <span class="n">gpu</span> <span class="o">--</span><span class="n">ntasks</span><span class="o">-</span><span class="n">per</span><span class="o">-</span><span class="n">node</span><span class="o">=</span><span class="mi">4</span> <span class="o">--</span><span class="n">gpus</span><span class="o">-</span><span class="n">per</span><span class="o">-</span><span class="n">task</span><span class="o">=</span><span class="mi">1</span> <span class="o">-</span><span class="n">A</span> <span class="o">&lt;</span><span class="n">account_number</span><span class="o">&gt;</span>
 </pre></div>
@@ -158,7 +157,7 @@ is a high-performance cluster at <a class="reference external" href="http://www.
 </div>
 </section>
 <section id="batch-job">
-<h3>Batch job<a class="headerlink" href="#batch-job" title="Permalink to this heading">¶</a></h3>
+<h3>Batch job<a class="headerlink" href="#batch-job" title="Link to this heading">¶</a></h3>
 <p>Create a new file named <code class="docutils literal notranslate"><span class="pre">submission_file</span></code> in the same directory as
 your input script (typically this directory is a subdirectory of
 <code class="docutils literal notranslate"><span class="pre">/global/scratch/&lt;yourUsername&gt;</span></code>). Within this new file, copy the
@@ -193,7 +192,7 @@ following text (and replace the bracketed text by the proper values).</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="install_cori.html" class="btn btn-neutral float-left" title="Installation on Cori (NERSC)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="install_comet.html" class="btn btn-neutral float-left" title="Installation on Comet (SDSC)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="install_summit.html" class="btn btn-neutral float-right" title="Installation on Summit (OLCF)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

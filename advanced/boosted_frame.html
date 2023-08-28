@@ -11,9 +11,9 @@
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script src="../_static/sphinx_highlight.js"></script>
+        <script src="../_static/documentation_options.js?v=a9084e48"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -92,7 +92,7 @@
            <div itemprop="articleBody">
              
   <section id="running-boosted-frame-simulations">
-<h1>Running boosted-frame simulations<a class="headerlink" href="#running-boosted-frame-simulations" title="Permalink to this heading">¶</a></h1>
+<h1>Running boosted-frame simulations<a class="headerlink" href="#running-boosted-frame-simulations" title="Link to this heading">¶</a></h1>
 <p>This page gives a quick overview of <strong>boosted-frame simulations</strong>, a technique
 which can speed up certain types of PIC simulations by orders of magnitude.</p>
 <p>After explaining the principle of this technique
@@ -108,7 +108,7 @@ how to handle the most important aspects of boosted-frame simulations with FBPIC
 </ul>
 </div></blockquote>
 <section id="principle-of-the-boosted-frame-technique-for-lwfa">
-<h2>Principle of the boosted-frame technique (for LWFA)<a class="headerlink" href="#principle-of-the-boosted-frame-technique-for-lwfa" title="Permalink to this heading">¶</a></h2>
+<h2>Principle of the boosted-frame technique (for LWFA)<a class="headerlink" href="#principle-of-the-boosted-frame-technique-for-lwfa" title="Link to this heading">¶</a></h2>
 <p>Instead of running the simulation in the <strong>reference frame of the laboratory</strong>
 (or <em>lab frame</em> for short), this technique
 consists in running the simulation in a <strong>different Lorentz frame</strong>, which moves
@@ -189,7 +189,7 @@ object, or by adding them separately with <a class="reference internal" href="..
 </div>
 </section>
 <section id="converting-input-parameters-from-the-lab-frame-to-the-boosted-frame">
-<h2>Converting input parameters from the lab frame to the boosted frame<a class="headerlink" href="#converting-input-parameters-from-the-lab-frame-to-the-boosted-frame" title="Permalink to this heading">¶</a></h2>
+<h2>Converting input parameters from the lab frame to the boosted frame<a class="headerlink" href="#converting-input-parameters-from-the-lab-frame-to-the-boosted-frame" title="Link to this heading">¶</a></h2>
 <p>When running a simulation in the boosted frame, all the parameters (e.g.
 laser wavelength, plasma density, etc.) <strong>needed to be converted</strong> from their known
 value in the lab frame to their corresponding value in the boosted frame.</p>
@@ -208,7 +208,7 @@ to automatically estimate the required PIC iterations in the boosted frame (see 
 in the boosted-frame example script of the section <a class="reference internal" href="../how_to_run.html"><span class="doc">How to run the code</span></a>.</p>
 </section>
 <section id="converting-simulation-results-from-the-boosted-frame-to-the-lab-frame">
-<span id="boosted-frame-lab-diagnostics"></span><h2>Converting simulation results from the boosted frame to the lab frame<a class="headerlink" href="#converting-simulation-results-from-the-boosted-frame-to-the-lab-frame" title="Permalink to this heading">¶</a></h2>
+<span id="boosted-frame-lab-diagnostics"></span><h2>Converting simulation results from the boosted frame to the lab frame<a class="headerlink" href="#converting-simulation-results-from-the-boosted-frame-to-the-lab-frame" title="Link to this heading">¶</a></h2>
 <p>Although the simulation runs in the boosted frame, it is desirable to have
 the results in the lab frame, since this is usually easier to interpret.</p>
 <p>FBPIC implements <strong>on-the-fly conversion</strong> of the results,
@@ -237,7 +237,7 @@ in the left-hand side of the box.)</p>
 </div>
 </section>
 <section id="avoiding-the-numerical-cherenkov-instability-nci">
-<h2>Avoiding the Numerical Cherenkov Instability (NCI)<a class="headerlink" href="#avoiding-the-numerical-cherenkov-instability-nci" title="Permalink to this heading">¶</a></h2>
+<h2>Avoiding the Numerical Cherenkov Instability (NCI)<a class="headerlink" href="#avoiding-the-numerical-cherenkov-instability-nci" title="Link to this heading">¶</a></h2>
 <p>When running simulations in the boosted frame, a <strong>numerical instability</strong> (known
 as the Numerical Cherenkov Instability, or NCI) can potentially affect the simulation
 and degrade its results.</p>
@@ -265,7 +265,7 @@ instead the user is responsible for ensuring this.</p>
 </div>
 </section>
 <section id="estimating-the-number-of-pic-iterations-for-boosted-frame-simulations">
-<span id="boosted-frame-speedup"></span><h2>Estimating the number of PIC iterations for boosted frame simulations<a class="headerlink" href="#estimating-the-number-of-pic-iterations-for-boosted-frame-simulations" title="Permalink to this heading">¶</a></h2>
+<span id="boosted-frame-speedup"></span><h2>Estimating the number of PIC iterations for boosted frame simulations<a class="headerlink" href="#estimating-the-number-of-pic-iterations-for-boosted-frame-simulations" title="Link to this heading">¶</a></h2>
 <p>In order to calculate the required number of timesteps in a boosted frame simulation
 in practice, we can calculate and compare the total interaction time of
 the physical objects in space. In a lab frame simulation, the total interaction time
@@ -329,7 +329,7 @@ objects (see next section).</p>
 </div>
 </section>
 <section id="transformation-and-resolution-of-physical-objects-in-the-boosted-frame">
-<span id="boosted-frame-resolution"></span><h2>Transformation and resolution of physical objects in the boosted frame<a class="headerlink" href="#transformation-and-resolution-of-physical-objects-in-the-boosted-frame" title="Permalink to this heading">¶</a></h2>
+<span id="boosted-frame-resolution"></span><h2>Transformation and resolution of physical objects in the boosted frame<a class="headerlink" href="#transformation-and-resolution-of-physical-objects-in-the-boosted-frame" title="Link to this heading">¶</a></h2>
 <p>Although the basic principles of boosted frame simulations have been covered
 already in the previous sections, understanding the transformation of
 physical quantities in the boosted frame can be more tricky and will be explained

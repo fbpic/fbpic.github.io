@@ -11,9 +11,9 @@
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script src="../_static/sphinx_highlight.js"></script>
+        <script src="../_static/documentation_options.js?v=a9084e48"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -91,7 +91,7 @@
            <div itemprop="articleBody">
              
   <section id="the-particles-class">
-<h1>The Particles class<a class="headerlink" href="#the-particles-class" title="Permalink to this heading">¶</a></h1>
+<h1>The Particles class<a class="headerlink" href="#the-particles-class" title="Link to this heading">¶</a></h1>
 <p>A <a class="reference internal" href="simulation.html#fbpic.main.Simulation" title="fbpic.main.Simulation"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Simulation</span></code></a> object may contain several particle species. Each species is
 represented by an instance of the <a class="reference internal" href="#fbpic.particles.Particles" title="fbpic.particles.Particles"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Particles</span></code></a> class, and is stored in
 the list <code class="docutils literal notranslate"><span class="pre">Simulation.ptcl</span></code>.</p>
@@ -105,7 +105,7 @@ that you can use its methods below.</p>
 </div>
 <dl class="py class">
 <dt class="sig sig-object py" id="fbpic.particles.Particles">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fbpic.particles.</span></span><span class="sig-name descname"><span class="pre">Particles</span></span><a class="headerlink" href="#fbpic.particles.Particles" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fbpic.particles.</span></span><span class="sig-name descname"><span class="pre">Particles</span></span><a class="headerlink" href="#fbpic.particles.Particles" title="Link to this definition">¶</a></dt>
 <dd><blockquote>
 <div><p>An instance of <cite>Particles</cite> stores a set of macroparticles that have the
 same charge and mass. (Note that for ionizable species, ions in different
@@ -114,7 +114,7 @@ the same <cite>Particles</cite> object.)</p>
 </div></blockquote>
 <dl class="py method">
 <dt class="sig sig-object py" id="fbpic.particles.fbpic.particles.Particles.Particles.track">
-<span class="sig-prename descclassname"><span class="pre">Particles.</span></span><span class="sig-name descname"><span class="pre">track</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">comm</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fbpic.particles.fbpic.particles.Particles.Particles.track" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">Particles.</span></span><span class="sig-name descname"><span class="pre">track</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">comm</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fbpic.particles.fbpic.particles.Particles.Particles.track" title="Link to this definition">¶</a></dt>
 <dd><p>Activate particle tracking for the current species
 (i.e. allocates an array of unique IDs for each macroparticle;
 these IDs are written in the openPMD file)</p>
@@ -127,7 +127,7 @@ these IDs are written in the openPMD file)</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fbpic.particles.fbpic.particles.Particles.Particles.make_ionizable">
-<span class="sig-prename descclassname"><span class="pre">Particles.</span></span><span class="sig-name descname"><span class="pre">make_ionizable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_species</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level_start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fbpic.particles.fbpic.particles.Particles.Particles.make_ionizable" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">Particles.</span></span><span class="sig-name descname"><span class="pre">make_ionizable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_species</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level_start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fbpic.particles.fbpic.particles.Particles.Particles.make_ionizable" title="Link to this definition">¶</a></dt>
 <dd><p>Make this species ionizable.</p>
 <p>The implemented ionization model is the <strong>ADK model</strong>
 (using the <strong>instantaneous</strong> electric field, i.e. <strong>without</strong> averaging
