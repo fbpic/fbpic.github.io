@@ -82,7 +82,7 @@
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">scipy.constants</span> <span class="kn">import</span> <span class="n">c</span>
 <span class="kn">from</span> <span class="nn">fbpic.lpa_utils.boosted_frame</span> <span class="kn">import</span> <span class="n">BoostConverter</span>
-<span class="kn">from</span> <span class="nn">.laser_profiles</span> <span class="kn">import</span> <span class="n">GaussianLaser</span>
+<span class="kn">from</span> <span class="nn">.laser_profiles</span> <span class="kn">import</span> <span class="n">GaussianLaser</span><span class="p">,</span> <span class="n">FromLasyFileLaser</span>
 <span class="kn">from</span> <span class="nn">.direct_injection</span> <span class="kn">import</span> <span class="n">add_laser_direct</span>
 <span class="kn">from</span> <span class="nn">.antenna_injection</span> <span class="kn">import</span> <span class="n">LaserAntenna</span>
 
@@ -152,6 +152,13 @@
 
     <span class="c1"># Handle the introduction method of the laser</span>
     <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;direct&#39;</span><span class="p">:</span>
+        <span class="c1"># Check that this is not a profile from lasy</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span> <span class="n">laser_profile</span><span class="p">,</span> <span class="n">FromLasyFileLaser</span> <span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                <span class="s2">&quot;A laser profile from a `lasy` file cannot &quot;</span>
+                <span class="s2">&quot;be emitted with the `direct` method.</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="s2">&quot;When using the function `add_laser_pulse`, &quot;</span>
+                <span class="s2">&quot;please pass `method=&#39;antenna&#39;` instead.&quot;</span><span class="p">)</span>
         <span class="c1"># Directly add the laser to the interpolation object</span>
         <span class="n">add_laser_direct</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">laser_profile</span><span class="p">,</span> <span class="n">boost</span> <span class="p">)</span>
 
@@ -162,6 +169,14 @@
         <span class="n">dr</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">dr</span>
         <span class="n">Nr</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">interp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">Nr</span>
         <span class="n">Nm</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">fld</span><span class="o">.</span><span class="n">Nm</span>
+        <span class="c1"># Check that the velocity is 0 for a profile from lasy</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span> <span class="n">laser_profile</span><span class="p">,</span> <span class="n">FromLasyFileLaser</span> <span class="p">)</span> \
+            <span class="ow">and</span> <span class="p">(</span><span class="n">v_antenna</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                    <span class="s2">&quot;A laser profile from a `lasy` file cannot &quot;</span>
+                    <span class="s2">&quot;be emitted with a moving antenna.</span><span class="se">\n</span><span class="s2">&quot;</span>
+                    <span class="s2">&quot;When using the function `add_laser_pulse`, &quot;</span>
+                    <span class="s2">&quot;please set `v_antenna` to 0.&quot;</span><span class="p">)</span>
         <span class="n">sim</span><span class="o">.</span><span class="n">laser_antennas</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
             <span class="n">LaserAntenna</span><span class="p">(</span> <span class="n">laser_profile</span><span class="p">,</span> <span class="n">z0_antenna</span><span class="p">,</span> <span class="n">v_antenna</span><span class="p">,</span>
                             <span class="n">dr</span><span class="p">,</span> <span class="n">Nr</span><span class="p">,</span> <span class="n">Nm</span><span class="p">,</span> <span class="n">boost</span><span class="p">,</span> <span class="n">use_cuda</span><span class="o">=</span><span class="n">sim</span><span class="o">.</span><span class="n">use_cuda</span> <span class="p">)</span> <span class="p">)</span>

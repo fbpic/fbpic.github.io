@@ -55,6 +55,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#fbpic.main.Simulation.step"><code class="docutils literal notranslate"><span class="pre">Simulation.step()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="#fbpic.utils.random_seed.set_random_seed"><code class="docutils literal notranslate"><span class="pre">set_random_seed()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="particles.html">The Particles class</a></li>
@@ -355,6 +356,19 @@ field push or not. (requires initialize_ions = True)</p></li>
 </dl>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fbpic.utils.random_seed.set_random_seed">
+<span class="sig-prename descclassname"><span class="pre">fbpic.utils.random_seed.</span></span><span class="sig-name descname"><span class="pre">set_random_seed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">random_seed</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fbpic/utils/random_seed.html#set_random_seed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fbpic.utils.random_seed.set_random_seed" title="Link to this definition">¶</a></dt>
+<dd><p>Fix the seed of the random number generators.</p>
+<p>Fixing a seed helps ensure that repeatedly running the
+same simulation gives the same result (despite the Monte Carlo
+parts of the code, e.g. ionization, gaussian beam generation, etc.)</p>
+<dl class="simple">
+<dt>random_seed: int</dt><dd><p>The seed of the random number generator.</p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
