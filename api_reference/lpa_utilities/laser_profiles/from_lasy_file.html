@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profile from a file produced by lasy &mdash; FBPIC 0.25.0 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/documentation_options.js?v=d8dd0411"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Beam initialization" href="../beam.html" />
+    <link rel="prev" title="Few-cycle profile" href="few_cycle.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            FBPIC
+          </a>
+              <div class="version">
+                0.25.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../overview/overview.html">Overview of the code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../install/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../how_to_run.html">How to run the code</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../api_reference.html">API reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../simulation.html">The Simulation class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../particles.html">The Particles class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../diagnostics.html">The openPMD diagnostics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../checkpoint_restart.html">Checkpoints and restarts</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../lpa_utilities.html">Laser-plasma utilities</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../laser.html">Laser initialization</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../laser.html#generic-function-for-arbitrary-laser-profile">Generic function for arbitrary laser profile</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="../laser.html#laser-profiles">Laser profiles</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../laser.html#compact-function-for-a-gaussian-pulse">Compact function for a Gaussian pulse</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../beam.html">Beam initialization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../external_fields.html">External fields</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../boost_converter.html">Conversion to boosted-frame</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../smoothing.html">Field smoothing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../advanced/advanced.html">Advanced use</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">FBPIC</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../api_reference.html">API reference</a></li>
+          <li class="breadcrumb-item"><a href="../lpa_utilities.html">Laser-plasma utilities</a></li>
+          <li class="breadcrumb-item"><a href="../laser.html">Laser initialization</a></li>
+      <li class="breadcrumb-item active">Profile from a file produced by <code class="docutils literal notranslate"><span class="pre">lasy</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/api_reference/lpa_utilities/laser_profiles/from_lasy_file.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="profile-from-a-file-produced-by-lasy">
+<h1>Profile from a file produced by <code class="docutils literal notranslate"><span class="pre">lasy</span></code><a class="headerlink" href="#profile-from-a-file-produced-by-lasy" title="Link to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="fbpic.lpa_utils.laser.FromLasyFileLaser">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fbpic.lpa_utils.laser.</span></span><span class="sig-name descname"><span class="pre">FromLasyFileLaser</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/fbpic/lpa_utils/laser/laser_profiles.html#FromLasyFileLaser"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fbpic.lpa_utils.laser.FromLasyFileLaser" title="Link to this definition">¶</a></dt>
+<dd><p>Define a laser whose profile is determined by a
+<a class="reference external" href="https://lasydoc.readthedocs.io/en/latest/">lasy</a> file.</p>
+<p>When the laser is initialized by this function, FBPIC forces the beginning of
+the time axis in the <code class="docutils literal notranslate"><span class="pre">lasy</span></code> file to be zero (irrespective of the metadata for
+<code class="docutils literal notranslate"><span class="pre">tmin</span></code> that is actually present in the <code class="docutils literal notranslate"><span class="pre">lasy</span></code> file). This convention was chosen
+for convenience, because <code class="docutils literal notranslate"><span class="pre">tmin</span></code> in <code class="docutils literal notranslate"><span class="pre">lasy</span></code> could otherwise result in large delays
+before emitting the laser, especially when using <code class="docutils literal notranslate"><span class="pre">lasy</span></code>’s <code class="docutils literal notranslate"><span class="pre">propagate</span></code> feature.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This laser profile can only be emitted with the <code class="docutils literal notranslate"><span class="pre">antenna</span></code> method
+(not with the <code class="docutils literal notranslate"><span class="pre">direct</span></code> method).</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<em>string</em>) – The path to the <code class="docutils literal notranslate"><span class="pre">lasy</span></code> file.</p></li>
+<li><p><strong>t_start</strong> (<em>float</em><em> (</em><em>in seconds</em><em>)</em><em>, </em><em>optional</em><em>, </em><em>default: 0</em>) – Physical time (in the simulation), at which the laser will start being
+emitted. This can be used in order to introduce a time delay that was
+not originally present in the <code class="docutils literal notranslate"><span class="pre">lasy</span></code> file. (As explained above, FBPIC ignores any
+initial time offset in the <code class="docutils literal notranslate"><span class="pre">lasy</span></code>. This offset is replaced by <cite>t_start</cite> (or zero if unspecified).</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Creating the lasy file</span>
+<span class="n">laser_profile</span> <span class="o">=</span> <span class="n">GaussianProfile</span><span class="p">(</span><span class="n">wavelength</span><span class="p">,</span><span class="n">polarization</span><span class="p">,</span>
+                        <span class="n">energy</span><span class="p">,</span><span class="n">spot_size</span><span class="p">,</span><span class="n">pulse_duration</span><span class="p">,</span><span class="n">t_peak</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">dimensions</span>     <span class="o">=</span> <span class="s1">&#39;rt&#39;</span>                              <span class="c1"># Use cylindrical geometry</span>
+<span class="n">lo</span>             <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mf">2.5</span><span class="o">*</span><span class="n">pulse_duration</span><span class="p">)</span>           <span class="c1"># Lower bounds of the simulation box</span>
+<span class="n">hi</span>             <span class="o">=</span> <span class="p">(</span><span class="mi">5</span><span class="o">*</span><span class="n">spot_size</span><span class="p">,</span><span class="mf">2.5</span><span class="o">*</span><span class="n">pulse_duration</span><span class="p">)</span>  <span class="c1"># Upper bounds of the simulation box</span>
+<span class="n">num_points</span>     <span class="o">=</span> <span class="p">(</span><span class="mi">300</span><span class="p">,</span><span class="mi">500</span><span class="p">)</span>                         <span class="c1"># Number of points in each dimension</span>
+<span class="n">laser</span> <span class="o">=</span> <span class="n">Laser</span><span class="p">(</span><span class="n">dimensions</span><span class="p">,</span><span class="n">lo</span><span class="p">,</span><span class="n">hi</span><span class="p">,</span><span class="n">num_points</span><span class="p">,</span><span class="n">laser_profile</span><span class="p">)</span>
+<span class="n">laser</span><span class="o">.</span><span class="n">propagate</span><span class="p">(</span><span class="o">-</span><span class="mf">1e-3</span><span class="p">)</span>  <span class="c1"># Propagate backwards by 1 mm</span>
+<span class="n">laser</span><span class="o">.</span><span class="n">write_to_file</span><span class="p">(</span><span class="s1">&#39;lasy_laser&#39;</span><span class="p">,</span> <span class="s1">&#39;h5&#39;</span><span class="p">)</span>
+<span class="c1"># Note that, in the lasy file, tmin is now a large, negative number.</span>
+<span class="c1"># (The peak of laser intensity still occurs 2.5*pulse_duration after tmin.)</span>
+<span class="c1"># FBPIC ignores tmin when reading the file, and sets the start of</span>
+<span class="c1"># the lasy time axis to zero instead. So, by default, the peak of</span>
+<span class="c1"># the laser intensity would occur at `t= 2.5*pulse_duration` in FBPIC.</span>
+<span class="n">laser_profile</span> <span class="o">=</span> <span class="n">FromLasyFileLaser</span><span class="p">(</span> <span class="s1">&#39;lasy_laser_00000.h5&#39;</span><span class="p">,</span> <span class="n">t_start</span><span class="o">=</span><span class="mf">0.5</span><span class="o">*</span><span class="n">pulse_duration</span> <span class="p">)</span>
+<span class="n">add_laser_pulse</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">laser_profile</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;antenna&#39;</span><span class="p">,</span> <span class="n">z0_antenna</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="c1"># Here, modify the `t_start`, which will result in the peak of intensity being</span>
+<span class="c1"># emitted at `(2.5+0.5)*pulse_duration` instead of `2.5*pulse_duration`.</span>
+<span class="c1"># Since the `z0_antenna` was set to `0` here, this is as if the centroid</span>
+<span class="c1"># of the laser would have been initialized at `z = -3*c*pulse_duration` at `t=0`</span>
+<span class="c1"># (with then ``direct`` method).</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="few_cycle.html" class="btn btn-neutral float-left" title="Few-cycle profile" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../beam.html" class="btn btn-neutral float-right" title="Beam initialization" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2016, FBPIC contributors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fbpic.lpa_utils.laser.laser_profiles &mdash; FBPIC 0.24.0 documentation</title>
+  <title>fbpic.lpa_utils.laser.laser_profiles &mdash; FBPIC 0.25.0 documentation</title>
       <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../../../../_static/documentation_options.js?v=a9084e48"></script>
+        <script src="../../../../_static/documentation_options.js?v=d8dd0411"></script>
         <script src="../../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/js/theme.js"></script>
@@ -30,7 +30,7 @@
             FBPIC
           </a>
               <div class="version">
-                0.24.0
+                0.25.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -928,6 +928,8 @@
         <span class="k">return</span><span class="p">(</span> <span class="n">Ex</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">Ey</span><span class="o">.</span><span class="n">real</span> <span class="p">)</span></div>
 
 
+<div class="viewcode-block" id="FromLasyFileLaser">
+<a class="viewcode-back" href="../../../../api_reference/lpa_utilities/laser_profiles/from_lasy_file.html#fbpic.lpa_utils.laser.FromLasyFileLaser">[docs]</a>
 <span class="k">class</span> <span class="nc">FromLasyFileLaser</span><span class="p">(</span> <span class="n">LaserProfile</span> <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Class that emits a laser from a lasy file&quot;&quot;&quot;</span>
 
@@ -935,54 +937,57 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Define a laser whose profile is determined by a</span>
 <span class="sd">        `lasy &lt;https://lasydoc.readthedocs.io/en/latest/&gt;`_ file.</span>
-<span class="sd">        </span>
-<span class="sd">        When the laser is initialized by this function, FBPIC forces the beginning of </span>
-<span class="sd">        the time axis in the ``lasy`` file to be zero (irrespective of the metadata for </span>
+
+<span class="sd">        When the laser is initialized by this function, FBPIC forces the beginning of</span>
+<span class="sd">        the time axis in the ``lasy`` file to be zero (irrespective of the metadata for</span>
 <span class="sd">        ``tmin`` that is actually present in the ``lasy`` file). This convention was chosen</span>
 <span class="sd">        for convenience, because ``tmin`` in ``lasy`` could otherwise result in large delays</span>
 <span class="sd">        before emitting the laser, especially when using ``lasy``&#39;s ``propagate`` feature.</span>
 
+<span class="sd">        .. warning::</span>
+
+<span class="sd">            This laser profile can only be emitted with the ``antenna`` method</span>
+<span class="sd">            (not with the ``direct`` method).</span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+
 <span class="sd">        filename: string</span>
 <span class="sd">            The path to the ``lasy`` file.</span>
 
 <span class="sd">        t_start: float (in seconds), optional, default: 0</span>
 <span class="sd">            Physical time (in the simulation), at which the laser will start being</span>
 <span class="sd">            emitted. This can be used in order to introduce a time delay that was</span>
-<span class="sd">            not originally present in the ``lasy`` file. (As explained above, FBPIC ignores any </span>
+<span class="sd">            not originally present in the ``lasy`` file. (As explained above, FBPIC ignores any</span>
 <span class="sd">            initial time offset in the ``lasy``. This offset is replaced by `t_start` (or zero if unspecified).</span>
 
-<span class="sd">        .. warning::</span>
+<span class="sd">        Example</span>
+<span class="sd">        -------</span>
 
-<span class="sd">            This laser profile can only be emitted with the ``antenna`` method</span>
-<span class="sd">            (not with the ``direct`` method).</span>
-<span class="sd">            </span>
-<span class="sd">    Example</span>
-<span class="sd">    ---------</span>
-<span class="sd">    .. code-block:: python</span>
-<span class="sd">        # Creating the lasy file</span>
-<span class="sd">        laser_profile = GaussianProfile(wavelength,polarization,</span>
-<span class="sd">                                   energy,spot_size,pulse_duration,t_peak=0)</span>
-<span class="sd">        dimensions     = &#39;rt&#39;                              # Use cylindrical geometry</span>
-<span class="sd">        lo             = (0,-2.5*pulse_duration)           # Lower bounds of the simulation box</span>
-<span class="sd">        hi             = (5*spot_size,2.5*pulse_duration)  # Upper bounds of the simulation box</span>
-<span class="sd">        num_points     = (300,500)                         # Number of points in each dimension</span>
-<span class="sd">        laser = Laser(dimensions,lo,hi,num_points,laser_profile)</span>
-<span class="sd">        laser.propagate(-1e-3)  # Propagate backwards by 1 mm</span>
-<span class="sd">        laser.write_to_file(&#39;lasy_laser&#39;, &#39;h5&#39;)</span>
-<span class="sd">        # Note that, in the lasy file, tmin is now a large, negative number.</span>
-<span class="sd">        # (The peak of laser intensity still occurs 2.5*pulse_duration after tmin.)</span>
-<span class="sd">        # FBPIC ignores tmin when reading the file, and sets the start of </span>
-<span class="sd">        # the lasy time axis to zero instead. So, by default, the peak of </span>
-<span class="sd">        # the laser intensity would occur at `t= 2.5*pulse_duration` in FBPIC.</span>
-<span class="sd">        laser_profile = FromLasyFileLaser( &#39;lasy_laser_00000.h5&#39;, t_start=0.5*pulse_duration )</span>
-<span class="sd">        add_laser_pulse(sim, laser_profile, method=&#39;antenna&#39;, z0_antenna=0)</span>
-<span class="sd">        # Here, modify the `t_start`, which will result in the peak of intensity being </span>
-<span class="sd">        # emitted at `(2.5+0.5)*pulse_duration` instead of `2.5*pulse_duration`.</span>
-<span class="sd">        # Since the `z0_antenna` was set to `0` here, this is as if the centroid </span>
-<span class="sd">        # of the laser would have been initialized at `z = -3*c*pulse_duration` at `t=0`</span>
-<span class="sd">        # (with then ``direct`` method).</span>
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            # Creating the lasy file</span>
+<span class="sd">            laser_profile = GaussianProfile(wavelength,polarization,</span>
+<span class="sd">                                    energy,spot_size,pulse_duration,t_peak=0)</span>
+<span class="sd">            dimensions     = &#39;rt&#39;                              # Use cylindrical geometry</span>
+<span class="sd">            lo             = (0,-2.5*pulse_duration)           # Lower bounds of the simulation box</span>
+<span class="sd">            hi             = (5*spot_size,2.5*pulse_duration)  # Upper bounds of the simulation box</span>
+<span class="sd">            num_points     = (300,500)                         # Number of points in each dimension</span>
+<span class="sd">            laser = Laser(dimensions,lo,hi,num_points,laser_profile)</span>
+<span class="sd">            laser.propagate(-1e-3)  # Propagate backwards by 1 mm</span>
+<span class="sd">            laser.write_to_file(&#39;lasy_laser&#39;, &#39;h5&#39;)</span>
+<span class="sd">            # Note that, in the lasy file, tmin is now a large, negative number.</span>
+<span class="sd">            # (The peak of laser intensity still occurs 2.5*pulse_duration after tmin.)</span>
+<span class="sd">            # FBPIC ignores tmin when reading the file, and sets the start of</span>
+<span class="sd">            # the lasy time axis to zero instead. So, by default, the peak of</span>
+<span class="sd">            # the laser intensity would occur at `t= 2.5*pulse_duration` in FBPIC.</span>
+<span class="sd">            laser_profile = FromLasyFileLaser( &#39;lasy_laser_00000.h5&#39;, t_start=0.5*pulse_duration )</span>
+<span class="sd">            add_laser_pulse(sim, laser_profile, method=&#39;antenna&#39;, z0_antenna=0)</span>
+<span class="sd">            # Here, modify the `t_start`, which will result in the peak of intensity being</span>
+<span class="sd">            # emitted at `(2.5+0.5)*pulse_duration` instead of `2.5*pulse_duration`.</span>
+<span class="sd">            # Since the `z0_antenna` was set to `0` here, this is as if the centroid</span>
+<span class="sd">            # of the laser would have been initialized at `z = -3*c*pulse_duration` at `t=0`</span>
+<span class="sd">            # (with then ``direct`` method).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Initialize propagation direction and mark as GPU capable</span>
         <span class="n">LaserProfile</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">propagation_direction</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">gpu_capable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -990,6 +995,21 @@
 
         <span class="c1"># Open and read the lasy file</span>
         <span class="n">f</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span> <span class="n">filename</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;r&quot;</span> <span class="p">)</span>
+
+        <span class="c1"># Check lasy version</span>
+        <span class="n">valid_version</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;softwareVersion&#39;</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">attrs</span><span class="p">):</span>
+            <span class="n">version_string</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;softwareVersion&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
+            <span class="n">version_list</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">number</span><span class="p">)</span> <span class="k">for</span> <span class="n">number</span> <span class="ow">in</span> <span class="n">version_string</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">version_list</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">):</span>
+                <span class="n">valid_version</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">valid_version</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                <span class="s2">&quot;The `lasy` version that was used to create the file </span><span class="si">%s</span><span class="s2"> &quot;</span>
+                <span class="s2">&quot;is obsolete and not supported by FBPIC. Please upgrade your lasy &quot;</span>
+                <span class="s2">&quot;version to at least 0.3.0 (e.g. with `pip install --upgrade lasy`) &quot;</span>
+                <span class="s2">&quot;and re-create the file </span><span class="si">%s</span><span class="s2">.&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span> <span class="p">)</span>
+
         <span class="n">dset</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;/data/0/meshes/laserEnvelope&#39;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">omega</span> <span class="o">=</span> <span class="n">dset</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;angularFrequency&#39;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pol</span> <span class="o">=</span> <span class="n">dset</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;polarization&#39;</span><span class="p">]</span>
@@ -1133,7 +1153,8 @@
             <span class="c1"># one that was meant when creating the lasy file</span>
         <span class="p">))</span>
 
-        <span class="k">return</span><span class="p">(</span> <span class="p">(</span><span class="n">E</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">pol</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="p">(</span><span class="n">E</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">pol</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">real</span> <span class="p">)</span>
+        <span class="k">return</span><span class="p">(</span> <span class="p">(</span><span class="n">E</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">pol</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="p">(</span><span class="n">E</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">pol</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">real</span> <span class="p">)</span></div>
+
 </pre></div>
 
            </div>
