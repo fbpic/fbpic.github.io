@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fbpic.openpmd_diag.particle_diag &mdash; FBPIC 0.25.0 documentation</title>
+  <title>fbpic.openpmd_diag.particle_diag &mdash; FBPIC 0.26.0 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../../../_static/documentation_options.js?v=d8dd0411"></script>
+        <script src="../../../_static/documentation_options.js?v=4aa2dafa"></script>
         <script src="../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
@@ -30,7 +30,7 @@
             FBPIC
           </a>
               <div class="version">
-                0.25.0
+                0.26.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -129,7 +129,9 @@
 <span class="sd">            &quot;E&quot; and &quot;B&quot; writes the E and B fields at the particles&#39; positions,</span>
 <span class="sd">            respectively, but is turned off by default.</span>
 <span class="sd">            &quot;gamma&quot; writes the particles&#39; Lorentz factor.</span>
-<span class="sd">            By default, if a particle is tracked, its id is always written.</span>
+<span class="sd">            By default, if a particle is tracked, its id is always written;</span>
+<span class="sd">            Also, if a particle has spin tracking enabled, the spin components</span>
+<span class="sd">            are written to file.</span>
 
 <span class="sd">        select : dict, optional</span>
 <span class="sd">            Either None or a dictionary of rules</span>
@@ -202,7 +204,9 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">array_quantities_dict</span><span class="p">[</span><span class="n">species_name</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;charge&quot;</span><span class="p">]</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">constant_quantities_dict</span><span class="p">[</span><span class="n">species_name</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;charge&quot;</span><span class="p">]</span>
-
+            <span class="c1"># If spin tracking is enabled, save the spin automatically</span>
+            <span class="k">if</span> <span class="n">species</span><span class="o">.</span><span class="n">spin_tracker</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">array_quantities_dict</span><span class="p">[</span><span class="n">species_name</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span><span class="s1">&#39;sx&#39;</span><span class="p">,</span> <span class="s1">&#39;sy&#39;</span><span class="p">,</span> <span class="s1">&#39;sz&#39;</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">setup_openpmd_species_group</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">grp</span><span class="p">,</span> <span class="n">species</span><span class="p">,</span> <span class="n">constant_quantities</span> <span class="p">)</span> <span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -399,6 +403,11 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">write_dataset</span><span class="p">(</span> <span class="n">species_grp</span><span class="p">,</span> <span class="n">species</span><span class="p">,</span> <span class="n">quantity_path</span><span class="p">,</span>
                         <span class="n">quantity</span><span class="p">,</span> <span class="n">n_rank</span><span class="p">,</span> <span class="n">Ntot</span><span class="p">,</span> <span class="n">select_array</span> <span class="p">)</span>
 
+            <span class="k">elif</span> <span class="n">quantity</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;sx&quot;</span><span class="p">,</span> <span class="s2">&quot;sy&quot;</span><span class="p">,</span> <span class="s2">&quot;sz&quot;</span><span class="p">]:</span>
+                <span class="n">quantity_path</span> <span class="o">=</span> <span class="s2">&quot;spin/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">quantity</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">write_dataset</span><span class="p">(</span><span class="n">species_grp</span><span class="p">,</span> <span class="n">species</span><span class="p">,</span> <span class="n">quantity_path</span><span class="p">,</span>
+                                   <span class="n">quantity</span><span class="p">,</span> <span class="n">n_rank</span><span class="p">,</span> <span class="n">Ntot</span><span class="p">,</span> <span class="n">select_array</span><span class="p">)</span>
+
             <span class="k">elif</span> <span class="n">quantity</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;Ex&quot;</span> <span class="p">,</span> <span class="s2">&quot;Ey&quot;</span> <span class="p">,</span> <span class="s2">&quot;Ez&quot;</span><span class="p">]:</span>
                 <span class="n">quantity_path</span> <span class="o">=</span> <span class="s2">&quot;E/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">quantity</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">write_dataset</span><span class="p">(</span> <span class="n">species_grp</span><span class="p">,</span> <span class="n">species</span><span class="p">,</span> <span class="n">quantity_path</span><span class="p">,</span>
@@ -420,7 +429,7 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">setup_openpmd_species_record</span><span class="p">(</span>
                         <span class="n">species_grp</span><span class="p">[</span><span class="n">quantity_path</span><span class="p">],</span> <span class="n">quantity_path</span> <span class="p">)</span>
 
-            <span class="k">else</span> <span class="p">:</span>
+            <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid string in </span><span class="si">%s</span><span class="s2"> of species&quot;</span>
                     				 <span class="o">%</span><span class="p">(</span><span class="n">quantity</span><span class="p">))</span>
 
@@ -432,13 +441,15 @@
             <span class="k">if</span> <span class="s2">&quot;ux&quot;</span> <span class="ow">in</span> <span class="n">particle_data</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">setup_openpmd_species_record</span><span class="p">(</span>
                     <span class="n">species_grp</span><span class="p">[</span><span class="s2">&quot;momentum&quot;</span><span class="p">],</span> <span class="s2">&quot;momentum&quot;</span> <span class="p">)</span>
+            <span class="k">if</span> <span class="s2">&quot;sx&quot;</span> <span class="ow">in</span> <span class="n">particle_data</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">setup_openpmd_species_record</span><span class="p">(</span>
+                    <span class="n">species_grp</span><span class="p">[</span><span class="s2">&quot;spin&quot;</span><span class="p">],</span> <span class="s2">&quot;spin&quot;</span><span class="p">)</span>
             <span class="k">if</span> <span class="s2">&quot;Ex&quot;</span> <span class="ow">in</span> <span class="n">particle_data</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">setup_openpmd_species_record</span><span class="p">(</span>
                     <span class="n">species_grp</span><span class="p">[</span><span class="s2">&quot;E&quot;</span><span class="p">],</span> <span class="s2">&quot;E&quot;</span> <span class="p">)</span>
             <span class="k">if</span> <span class="s2">&quot;Bx&quot;</span> <span class="ow">in</span> <span class="n">particle_data</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">setup_openpmd_species_record</span><span class="p">(</span>
                     <span class="n">species_grp</span><span class="p">[</span><span class="s2">&quot;B&quot;</span><span class="p">],</span> <span class="s2">&quot;B&quot;</span> <span class="p">)</span>
-
 
     <span class="k">def</span> <span class="nf">apply_selection</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">species</span> <span class="p">)</span> <span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -485,7 +496,6 @@
 
         <span class="k">return</span><span class="p">(</span> <span class="n">select_array</span> <span class="p">)</span>
 
-
     <span class="k">def</span> <span class="nf">write_dataset</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">species_grp</span><span class="p">,</span> <span class="n">species</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">quantity</span><span class="p">,</span>
                        <span class="n">n_rank</span><span class="p">,</span> <span class="n">Ntot</span><span class="p">,</span> <span class="n">select_array</span> <span class="p">)</span> <span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -497,7 +507,7 @@
 <span class="sd">            The group where to write the species considered</span>
 
 <span class="sd">        species : a warp Species object</span>
-<span class="sd">        	The species object to get the particle data from</span>
+<span class="sd">            The species object to get the particle data from</span>
 
 <span class="sd">        path : string</span>
 <span class="sd">            The relative path where to write the dataset,</span>
@@ -511,7 +521,7 @@
 <span class="sd">            A list containing the number of particles to send on each proc</span>
 
 <span class="sd">        Ntot : int</span>
-<span class="sd">        	Contains the global number of particles</span>
+<span class="sd">            Contains the global number of particles</span>
 
 <span class="sd">        select_array : 1darray of bool</span>
 <span class="sd">            An array of the same shape as that particle array</span>
@@ -536,7 +546,7 @@
         <span class="c1"># Fill the dataset with the quantity</span>
         <span class="n">quantity_array</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_dataset</span><span class="p">(</span> <span class="n">species</span><span class="p">,</span> <span class="n">quantity</span><span class="p">,</span> <span class="n">select_array</span><span class="p">,</span>
                                            <span class="n">n_rank</span><span class="p">,</span> <span class="n">Ntot</span> <span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rank</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rank</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">dset</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">quantity_array</span>
 
     <span class="k">def</span> <span class="nf">get_dataset</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">species</span><span class="p">,</span> <span class="n">quantity</span><span class="p">,</span> <span class="n">select_array</span><span class="p">,</span> <span class="n">n_rank</span><span class="p">,</span> <span class="n">Ntot</span> <span class="p">)</span> <span class="p">:</span>
@@ -544,7 +554,7 @@
 <span class="sd">        Extract the array that satisfies select_array</span>
 
 <span class="sd">        species : a Particles object</span>
-<span class="sd">        	The species object to get the particle data from</span>
+<span class="sd">            The species object to get the particle data from</span>
 
 <span class="sd">        quantity : string</span>
 <span class="sd">            The quantity to be extracted (e.g. &#39;x&#39;, &#39;uz&#39;, &#39;w&#39;)</span>
@@ -555,7 +565,7 @@
 <span class="sd">            the rules of self.select</span>
 
 <span class="sd">        n_rank: list of ints</span>
-<span class="sd">        	A list containing the number of particles to send on each proc</span>
+<span class="sd">            A list containing the number of particles to send on each proc</span>
 
 <span class="sd">        Ntot : int</span>
 <span class="sd">            Length of the final array (selected + gathered from all proc)</span>
@@ -569,6 +579,8 @@
             <span class="n">quantity_one_proc</span> <span class="o">=</span> <span class="n">species</span><span class="o">.</span><span class="n">w</span>
         <span class="k">elif</span> <span class="n">quantity</span> <span class="o">==</span> <span class="s2">&quot;gamma&quot;</span><span class="p">:</span>
             <span class="n">quantity_one_proc</span> <span class="o">=</span> <span class="mf">1.0</span><span class="o">/</span><span class="nb">getattr</span><span class="p">(</span> <span class="n">species</span><span class="p">,</span> <span class="s2">&quot;inv_gamma&quot;</span> <span class="p">)</span>
+        <span class="k">elif</span> <span class="n">quantity</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;sx&#39;</span><span class="p">,</span> <span class="s1">&#39;sy&#39;</span><span class="p">,</span> <span class="s1">&#39;sz&#39;</span><span class="p">]:</span>
+            <span class="n">quantity_one_proc</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">species</span><span class="o">.</span><span class="n">spin_tracker</span><span class="p">,</span> <span class="n">quantity</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">quantity_one_proc</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span> <span class="n">species</span><span class="p">,</span> <span class="n">quantity</span> <span class="p">)</span>
 

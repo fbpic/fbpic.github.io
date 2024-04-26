@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fbpic.lpa_utils.laser.laser_profiles &mdash; FBPIC 0.25.0 documentation</title>
+  <title>fbpic.lpa_utils.laser.laser_profiles &mdash; FBPIC 0.26.0 documentation</title>
       <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../../../../_static/documentation_options.js?v=d8dd0411"></script>
+        <script src="../../../../_static/documentation_options.js?v=4aa2dafa"></script>
         <script src="../../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/js/theme.js"></script>
@@ -30,7 +30,7 @@
             FBPIC
           </a>
               <div class="version">
-                0.25.0
+                0.26.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -998,15 +998,16 @@
 
         <span class="c1"># Check lasy version</span>
         <span class="n">valid_version</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;softwareVersion&#39;</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">attrs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;software&#39;</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">attrs</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="s1">&#39;softwareVersion&#39;</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">attrs</span><span class="p">):</span>
+            <span class="n">software</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;software&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
             <span class="n">version_string</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;softwareVersion&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
             <span class="n">version_list</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">number</span><span class="p">)</span> <span class="k">for</span> <span class="n">number</span> <span class="ow">in</span> <span class="n">version_string</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">))</span>
-            <span class="k">if</span> <span class="n">version_list</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">):</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">software</span> <span class="o">==</span> <span class="s2">&quot;lasy&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">version_list</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">)):</span>
                 <span class="n">valid_version</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">valid_version</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
                 <span class="s2">&quot;The `lasy` version that was used to create the file </span><span class="si">%s</span><span class="s2"> &quot;</span>
-                <span class="s2">&quot;is obsolete and not supported by FBPIC. Please upgrade your lasy &quot;</span>
+                <span class="s2">&quot;is obsolete and not supported by FBPIC.</span><span class="se">\n</span><span class="s2">Please upgrade your lasy &quot;</span>
                 <span class="s2">&quot;version to at least 0.3.0 (e.g. with `pip install --upgrade lasy`) &quot;</span>
                 <span class="s2">&quot;and re-create the file </span><span class="si">%s</span><span class="s2">.&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span> <span class="p">)</span>
 

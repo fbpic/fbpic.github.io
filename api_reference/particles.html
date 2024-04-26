@@ -4,16 +4,17 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The Particles class &mdash; FBPIC 0.25.0 documentation</title>
+  <title>The Particles class &mdash; FBPIC 0.26.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../_static/documentation_options.js?v=d8dd0411"></script>
+        <script src="../_static/documentation_options.js?v=4aa2dafa"></script>
         <script src="../_static/doctools.js?v=888ff710"></script>
         <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -33,7 +34,7 @@
             FBPIC
           </a>
               <div class="version">
-                0.25.0
+                0.26.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -53,6 +54,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#fbpic.particles.Particles"><code class="docutils literal notranslate"><span class="pre">fbpic.particles.Particles</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fbpic.particles.fbpic.particles.Particles.Particles.track"><code class="docutils literal notranslate"><span class="pre">fbpic.particles.Particles.Particles.track()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fbpic.particles.fbpic.particles.Particles.Particles.make_ionizable"><code class="docutils literal notranslate"><span class="pre">fbpic.particles.Particles.Particles.make_ionizable()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fbpic.particles.fbpic.particles.Particles.Particles.activate_spin_tracking"><code class="docutils literal notranslate"><span class="pre">fbpic.particles.Particles.Particles.activate_spin_tracking()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="diagnostics.html">The openPMD diagnostics</a></li>
@@ -156,6 +158,57 @@ separate objects will typically require longer computing time.</p></li>
 <li><p><strong>level_max</strong> (<em>int</em><em>, </em><em>optional</em>) – If not None, defines the maximum ionization level that
 macroparticles can reach. Should not exceed the physical
 limit for the chosen element.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fbpic.particles.fbpic.particles.Particles.Particles.activate_spin_tracking">
+<span class="sig-prename descclassname"><span class="pre">Particles.</span></span><span class="sig-name descname"><span class="pre">activate_spin_tracking</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sx_m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sy_m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sz_m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anom</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.00115965218128</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spin_distr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'fixed'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fbpic.particles.fbpic.particles.Particles.Particles.activate_spin_tracking" title="Link to this definition">¶</a></dt>
+<dd><p>Activate spin tracking for this particle. This will
+enable calculating the evolution of particle spin
+vector throughout the simulation.</p>
+<div class="math notranslate nohighlight">
+\[\frac{d\boldsymbol{s}}{dt} = (\boldsymbol{\Omega}_T +
+ \boldsymbol{\Omega}_a) \times \boldsymbol{s}\]</div>
+<p>where</p>
+<div class="math notranslate nohighlight">
+\[\boldsymbol{\Omega}_T = \frac{q}{m}\left(
+     \frac{\boldsymbol{B}}{\gamma} -
+     \frac{\boldsymbol{B}}{1+\gamma}
+     \times \frac{\boldsymbol{E}}{c} \right)\]</div>
+<p>and</p>
+<div class="math notranslate nohighlight">
+\[\boldsymbol{\Omega}_a = a_e \frac{q}{m}\left(
+     \boldsymbol{B} -
+     \frac{\gamma}{1+\gamma}\boldsymbol{\beta}
+     (\boldsymbol{\beta}\cdot\boldsymbol{B}) -
+     \boldsymbol{\beta} \times \frac{\boldsymbol{E}}{c} \right)\]</div>
+<p>Here, <span class="math notranslate nohighlight">\(a_e\)</span> is the anomalous magnetic moment of the particle,
+<span class="math notranslate nohighlight">\(\gamma\)</span> is the Lorentz factor of the particle,
+<span class="math notranslate nohighlight">\(\boldsymbol{\beta}=\boldsymbol{v}/c\)</span> is the normalised velocity</p>
+<p>The implementation of the push algorithm is detailed in
+<a class="reference external" href="https://arxiv.org/abs/2303.16966">https://arxiv.org/abs/2303.16966</a>.</p>
+<p>Note: spin tracking must be activated _before_ making
+a species ionizable, otherwise an error will be raised.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sx_m</strong> (<em>float</em><em> (</em><em>dimensionless</em><em>)</em><em>, </em><em>optional</em>) – The species-averaged average projection onto the x-axis</p></li>
+<li><p><strong>sy_m</strong> (<em>float</em><em> (</em><em>dimensionless</em><em>)</em><em>, </em><em>optional</em>) – The species-averaged average projection onto the y-axis</p></li>
+<li><p><strong>sz_m</strong> (<em>float</em><em> (</em><em>dimensionless</em><em>)</em><em>, </em><em>optional</em>) – The species-averaged average projection onto the z-axis</p></li>
+<li><p><strong>anom</strong> (<em>float</em>) – The anomalous magnetic moment of the particle.
+Default value is that of an electron.</p></li>
+<li><p><strong>spin_distr</strong> (<em>str</em><em>, </em><em>optional</em>) – If ‘fixed’, all particles will have a fixed spin value
+equal to s{x,y,z}_m.
+If ‘rand’, the spin vectors will be random, but with an
+ensemble average defined by one of the values of
+s{x,y,z}_m. The first non-zero mean component will be
+used, with order of preference being x,y,z, ie if sx_m!=0,
+the generated spins will have an ensemble averages of
+&lt;sx&gt;=sx_m, &lt;sy&gt;=0, &lt;sz&gt;=0, or if sz_m!=0, &lt;sx&gt;=0, &lt;sy&gt;=0
+and &lt;sz&gt;=sz_m.</p></li>
 </ul>
 </dd>
 </dl>
