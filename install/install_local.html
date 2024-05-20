@@ -125,13 +125,18 @@ A shortcut for this is: <code class="docutils literal notranslate"><span class="
 </div>
 </li>
 <li><p><strong>Optional:</strong> In order to be able to run the code on a GPU,
-install the additional package <code class="docutils literal notranslate"><span class="pre">cupy</span></code>.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">cupy</span>
+install the additional package <code class="docutils literal notranslate"><span class="pre">cupy</span></code> as well as dependencies needed to enable GPU support in <code class="docutils literal notranslate"><span class="pre">numba</span></code>.</p>
+<p>For CUDA versions below 12, install <code class="docutils literal notranslate"><span class="pre">cupy</span></code> and <code class="docutils literal notranslate"><span class="pre">cuda-version</span></code> (which will automatically install <code class="docutils literal notranslate"><span class="pre">cudatoolkit</span></code>), for example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">cupy</span> <span class="n">cuda</span><span class="o">-</span><span class="n">version</span><span class="o">=</span><span class="mf">11.8</span>
+</pre></div>
+</div>
+<p>For CUDA 12+ which no longer provides the <code class="docutils literal notranslate"><span class="pre">cudatoolkit</span></code> package, explicit installation of <code class="docutils literal notranslate"><span class="pre">cuda-nvcc</span></code> and <code class="docutils literal notranslate"><span class="pre">cuda-nvrtc</span></code> is required</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">cupy</span> <span class="n">cuda</span><span class="o">-</span><span class="n">version</span><span class="o">=</span><span class="mf">12.0</span> <span class="n">cuda</span><span class="o">-</span><span class="n">nvcc</span> <span class="n">cuda</span><span class="o">-</span><span class="n">nvrtc</span>
 </pre></div>
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>In the above command, you should choose a CUDA version that is <strong>compatible
+<p>In the above commands, you should choose a CUDA version that is <strong>compatible
 with your GPU driver</strong>. You can see the version of your GPU driver by typing
 the command <code class="docutils literal notranslate"><span class="pre">nvidia-smi</span></code>. You can then find the compatible CUDA
 versions using <a class="reference external" href="https://docs.nvidia.com/deploy/cuda-compatibility/index.html#use-the-right-compat-package">this table</a>.</p>
