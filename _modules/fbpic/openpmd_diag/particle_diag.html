@@ -1,18 +1,18 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fbpic.openpmd_diag.particle_diag &mdash; FBPIC 0.26.0 documentation</title>
-      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <title>fbpic.openpmd_diag.particle_diag &mdash; FBPIC 0.26.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
   
-        <script src="../../../_static/documentation_options.js?v=4aa2dafa"></script>
-        <script src="../../../_static/doctools.js?v=888ff710"></script>
-        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/documentation_options.js?v=eeda5ee3"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -29,9 +29,6 @@
           <a href="../../../index.html" class="icon icon-home">
             FBPIC
           </a>
-              <div class="version">
-                0.26.0
-              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
@@ -79,21 +76,21 @@
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">This file defines the class ParticleDiagnostic</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">h5py</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">constants</span>
-<span class="kn">from</span> <span class="nn">.generic_diag</span> <span class="kn">import</span> <span class="n">OpenPMDDiagnostic</span>
-<span class="kn">from</span> <span class="nn">.data_dict</span> <span class="kn">import</span> <span class="n">macro_weighted_dict</span><span class="p">,</span> <span class="n">weighting_power_dict</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">h5py</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy</span><span class="w"> </span><span class="kn">import</span> <span class="n">constants</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.generic_diag</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenPMDDiagnostic</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.data_dict</span><span class="w"> </span><span class="kn">import</span> <span class="n">macro_weighted_dict</span><span class="p">,</span> <span class="n">weighting_power_dict</span>
 
 <div class="viewcode-block" id="ParticleDiagnostic">
 <a class="viewcode-back" href="../../../api_reference/diagnostics.html#fbpic.openpmd_diag.ParticleDiagnostic">[docs]</a>
-<span class="k">class</span> <span class="nc">ParticleDiagnostic</span><span class="p">(</span><span class="n">OpenPMDDiagnostic</span><span class="p">)</span> <span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ParticleDiagnostic</span><span class="p">(</span><span class="n">OpenPMDDiagnostic</span><span class="p">)</span> <span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Class that defines the particle diagnostics to be performed.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">period</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">species</span><span class="o">=</span><span class="p">{},</span> <span class="n">comm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">period</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">species</span><span class="o">=</span><span class="p">{},</span> <span class="n">comm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">particle_data</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;position&quot;</span><span class="p">,</span> <span class="s2">&quot;momentum&quot;</span><span class="p">,</span> <span class="s2">&quot;weighting&quot;</span><span class="p">],</span>
         <span class="n">select</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">write_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration_min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">iteration_max</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>
         <span class="n">subsampling_fraction</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dt_period</span><span class="o">=</span><span class="kc">None</span> <span class="p">)</span> <span class="p">:</span>
@@ -208,7 +205,7 @@
             <span class="k">if</span> <span class="n">species</span><span class="o">.</span><span class="n">spin_tracker</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">array_quantities_dict</span><span class="p">[</span><span class="n">species_name</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span><span class="s1">&#39;sx&#39;</span><span class="p">,</span> <span class="s1">&#39;sy&#39;</span><span class="p">,</span> <span class="s1">&#39;sz&#39;</span><span class="p">]</span>
 
-    <span class="k">def</span> <span class="nf">setup_openpmd_species_group</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">grp</span><span class="p">,</span> <span class="n">species</span><span class="p">,</span> <span class="n">constant_quantities</span> <span class="p">)</span> <span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setup_openpmd_species_group</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">grp</span><span class="p">,</span> <span class="n">species</span><span class="p">,</span> <span class="n">constant_quantities</span> <span class="p">)</span> <span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Set the attributes that are specific to the particle group</span>
 
@@ -224,10 +221,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Generic attributes</span>
         <span class="n">grp</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;particleShape&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.</span>
-        <span class="n">grp</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;currentDeposition&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">string_</span><span class="p">(</span><span class="s2">&quot;directMorseNielson&quot;</span><span class="p">)</span>
-        <span class="n">grp</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;particleSmoothing&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">string_</span><span class="p">(</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
-        <span class="n">grp</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;particlePush&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">string_</span><span class="p">(</span><span class="s2">&quot;Vay&quot;</span><span class="p">)</span>
-        <span class="n">grp</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;particleInterpolation&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">string_</span><span class="p">(</span><span class="s2">&quot;uniform&quot;</span><span class="p">)</span>
+        <span class="n">grp</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;currentDeposition&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">bytes_</span><span class="p">(</span><span class="s2">&quot;directMorseNielson&quot;</span><span class="p">)</span>
+        <span class="n">grp</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;particleSmoothing&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">bytes_</span><span class="p">(</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
+        <span class="n">grp</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;particlePush&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">bytes_</span><span class="p">(</span><span class="s2">&quot;Vay&quot;</span><span class="p">)</span>
+        <span class="n">grp</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;particleInterpolation&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">bytes_</span><span class="p">(</span><span class="s2">&quot;uniform&quot;</span><span class="p">)</span>
 
         <span class="c1"># Setup constant datasets (e.g. charge, mass)</span>
         <span class="k">for</span> <span class="n">quantity</span> <span class="ow">in</span> <span class="n">constant_quantities</span><span class="p">:</span>
@@ -255,7 +252,7 @@
         <span class="n">grp</span><span class="p">[</span><span class="s2">&quot;positionOffset/y&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span>
         <span class="n">grp</span><span class="p">[</span><span class="s2">&quot;positionOffset/z&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span>
 
-    <span class="k">def</span> <span class="nf">setup_openpmd_species_record</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">grp</span><span class="p">,</span> <span class="n">quantity</span> <span class="p">)</span> <span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setup_openpmd_species_record</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">grp</span><span class="p">,</span> <span class="n">quantity</span> <span class="p">)</span> <span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Set the attributes that are specific to a species record</span>
 
@@ -276,7 +273,7 @@
         <span class="n">grp</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;macroWeighted&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">macro_weighted_dict</span><span class="p">[</span><span class="n">quantity</span><span class="p">]</span>
         <span class="n">grp</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;weightingPower&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">weighting_power_dict</span><span class="p">[</span><span class="n">quantity</span><span class="p">]</span>
 
-    <span class="k">def</span> <span class="nf">setup_openpmd_species_component</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">grp</span><span class="p">,</span> <span class="n">quantity</span> <span class="p">)</span> <span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setup_openpmd_species_component</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">grp</span><span class="p">,</span> <span class="n">quantity</span> <span class="p">)</span> <span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Set the attributes that are specific to a species component</span>
 
@@ -289,7 +286,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">setup_openpmd_component</span><span class="p">(</span> <span class="n">grp</span> <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">write_hdf5</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">iteration</span> <span class="p">)</span> <span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">write_hdf5</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">iteration</span> <span class="p">)</span> <span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Write an HDF5 file that complies with the OpenPMD standard</span>
 
@@ -364,7 +361,7 @@
             <span class="k">if</span> <span class="n">species</span><span class="o">.</span><span class="n">use_cuda</span> <span class="p">:</span>
                 <span class="n">species</span><span class="o">.</span><span class="n">send_particles_to_gpu</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">write_particles</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">species_grp</span><span class="p">,</span> <span class="n">species</span><span class="p">,</span> <span class="n">n_rank</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">write_particles</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">species_grp</span><span class="p">,</span> <span class="n">species</span><span class="p">,</span> <span class="n">n_rank</span><span class="p">,</span>
                          <span class="n">Ntot</span><span class="p">,</span> <span class="n">select_array</span><span class="p">,</span> <span class="n">particle_data</span> <span class="p">)</span> <span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Write all the particle data sets for one given species</span>
@@ -451,7 +448,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">setup_openpmd_species_record</span><span class="p">(</span>
                     <span class="n">species_grp</span><span class="p">[</span><span class="s2">&quot;B&quot;</span><span class="p">],</span> <span class="s2">&quot;B&quot;</span> <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">apply_selection</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">species</span> <span class="p">)</span> <span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">apply_selection</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">species</span> <span class="p">)</span> <span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Apply the rules of self.select to determine which</span>
 <span class="sd">        particles should be written, Apply random subsampling using</span>
@@ -496,7 +493,7 @@
 
         <span class="k">return</span><span class="p">(</span> <span class="n">select_array</span> <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">write_dataset</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">species_grp</span><span class="p">,</span> <span class="n">species</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">quantity</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">write_dataset</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">species_grp</span><span class="p">,</span> <span class="n">species</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">quantity</span><span class="p">,</span>
                        <span class="n">n_rank</span><span class="p">,</span> <span class="n">Ntot</span><span class="p">,</span> <span class="n">select_array</span> <span class="p">)</span> <span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Write a given dataset</span>
@@ -549,7 +546,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rank</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">dset</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">quantity_array</span>
 
-    <span class="k">def</span> <span class="nf">get_dataset</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">species</span><span class="p">,</span> <span class="n">quantity</span><span class="p">,</span> <span class="n">select_array</span><span class="p">,</span> <span class="n">n_rank</span><span class="p">,</span> <span class="n">Ntot</span> <span class="p">)</span> <span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_dataset</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">species</span><span class="p">,</span> <span class="n">quantity</span><span class="p">,</span> <span class="n">select_array</span><span class="p">,</span> <span class="n">n_rank</span><span class="p">,</span> <span class="n">Ntot</span> <span class="p">)</span> <span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Extract the array that satisfies select_array</span>
 

@@ -1,19 +1,19 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>External fields &mdash; FBPIC 0.26.0 documentation</title>
-      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <title>External fields &mdash; FBPIC 0.26.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
   
-        <script src="../../_static/documentation_options.js?v=4aa2dafa"></script>
-        <script src="../../_static/doctools.js?v=888ff710"></script>
-        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/documentation_options.js?v=eeda5ee3"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -32,9 +32,6 @@
           <a href="../../index.html" class="icon icon-home">
             FBPIC
           </a>
-              <div class="version">
-                0.26.0
-              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
@@ -130,7 +127,7 @@ the function expression</p></li>
 <p>In the PIC loop, this function is called after
 the field gathering. Thus this function can potentially
 overwrite the fields that were gathered on the grid. To avoid
-this, use “return(F + external_field) ” inside the definition
+this, use “return(F + external_field) “ inside the definition
 of <cite>field_func</cite> instead of “return(external_field)”</p>
 </div>
 <div class="admonition warning">
@@ -155,7 +152,7 @@ boosted frame.</p></li>
 <p class="rubric">Example</p>
 <p>In order to define a magnetic undulator, polarized along y, with
 a field of 1 Tesla and a period of 1 cm :</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">field_func</span><span class="p">(</span> <span class="n">F</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">t</span> <span class="p">,</span> <span class="n">amplitude</span><span class="p">,</span> <span class="n">length_scale</span> <span class="p">):</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">field_func</span><span class="p">(</span> <span class="n">F</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">t</span> <span class="p">,</span> <span class="n">amplitude</span><span class="p">,</span> <span class="n">length_scale</span> <span class="p">):</span>
     <span class="k">return</span><span class="p">(</span> <span class="n">F</span> <span class="o">+</span> <span class="n">amplitude</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">z</span><span class="o">/</span><span class="n">length_scale</span> <span class="p">)</span> <span class="p">)</span>
 
 <span class="n">sim</span><span class="o">.</span><span class="n">external_fields</span> <span class="o">=</span> <span class="p">[</span> <span class="n">ExternalField</span><span class="p">(</span> <span class="n">field_func</span><span class="p">,</span> <span class="s1">&#39;By&#39;</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">1.e-2</span> <span class="p">)</span> <span class="p">]</span>
@@ -166,7 +163,7 @@ a field of 1 Tesla and a period of 1 cm :</p>
 <p>Note that, in principle, <code class="docutils literal notranslate"><span class="pre">field_func</span></code> does not necessarily need
 to use the arguments <code class="docutils literal notranslate"><span class="pre">amplitude</span></code> and <code class="docutils literal notranslate"><span class="pre">length_scale</span></code>.
 For instance, in the above example, we could have used</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">field_func</span><span class="p">(</span> <span class="n">F</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">t</span> <span class="p">,</span> <span class="n">amplitude</span><span class="p">,</span> <span class="n">length_scale</span> <span class="p">):</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">field_func</span><span class="p">(</span> <span class="n">F</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">t</span> <span class="p">,</span> <span class="n">amplitude</span><span class="p">,</span> <span class="n">length_scale</span> <span class="p">):</span>
     <span class="k">return</span><span class="p">(</span> <span class="n">F</span> <span class="o">+</span> <span class="mf">1.</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">z</span><span class="o">/</span><span class="mf">1.e-2</span> <span class="p">)</span> <span class="p">)</span>
 </pre></div>
 </div>

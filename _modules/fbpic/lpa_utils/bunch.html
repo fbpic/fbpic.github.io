@@ -1,18 +1,18 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fbpic.lpa_utils.bunch &mdash; FBPIC 0.26.0 documentation</title>
-      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <title>fbpic.lpa_utils.bunch &mdash; FBPIC 0.26.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
   
-        <script src="../../../_static/documentation_options.js?v=4aa2dafa"></script>
-        <script src="../../../_static/doctools.js?v=888ff710"></script>
-        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/documentation_options.js?v=eeda5ee3"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -29,9 +29,6 @@
           <a href="../../../index.html" class="icon icon-home">
             FBPIC
           </a>
-              <div class="version">
-                0.26.0
-              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
@@ -80,19 +77,19 @@
 <span class="sd">This file is part of the Fourier-Bessel Particle-In-Cell code (FB-PIC)</span>
 <span class="sd">It defines a set of utilities for the initialization of an electron bunch.</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">scipy.constants</span> <span class="kn">import</span> <span class="n">m_e</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">epsilon_0</span><span class="p">,</span> <span class="n">mu_0</span>
-<span class="kn">from</span> <span class="nn">fbpic.fields</span> <span class="kn">import</span> <span class="n">Fields</span>
-<span class="kn">from</span> <span class="nn">fbpic.particles.elementary_process.cuda_numba_utils</span> <span class="kn">import</span> \
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">m_e</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">epsilon_0</span><span class="p">,</span> <span class="n">mu_0</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">fbpic.fields</span><span class="w"> </span><span class="kn">import</span> <span class="n">Fields</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">fbpic.particles.elementary_process.cuda_numba_utils</span><span class="w"> </span><span class="kn">import</span> \
     <span class="n">reallocate_and_copy_old</span>
-<span class="kn">from</span> <span class="nn">fbpic.particles.injection</span> <span class="kn">import</span> <span class="n">BallisticBeforePlane</span>
-<span class="kn">from</span> <span class="nn">fbpic.utils.cuda</span> <span class="kn">import</span> <span class="n">GpuMemoryManager</span>
-<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">fbpic.particles.injection</span><span class="w"> </span><span class="kn">import</span> <span class="n">BallisticBeforePlane</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">fbpic.utils.cuda</span><span class="w"> </span><span class="kn">import</span> <span class="n">GpuMemoryManager</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 
 
 <div class="viewcode-block" id="add_particle_bunch">
 <a class="viewcode-back" href="../../../api_reference/lpa_utilities/beam.html#fbpic.lpa_utils.bunch.add_particle_bunch">[docs]</a>
-<span class="k">def</span> <span class="nf">add_particle_bunch</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">gamma0</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">p_zmin</span><span class="p">,</span> <span class="n">p_zmax</span><span class="p">,</span> <span class="n">p_rmin</span><span class="p">,</span> <span class="n">p_rmax</span><span class="p">,</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">add_particle_bunch</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">gamma0</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">p_zmin</span><span class="p">,</span> <span class="n">p_zmax</span><span class="p">,</span> <span class="n">p_rmin</span><span class="p">,</span> <span class="n">p_rmax</span><span class="p">,</span>
                        <span class="n">p_nr</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">p_nz</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">p_nt</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">dens_func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">boost</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                        <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;forward&#39;</span><span class="p">,</span> <span class="n">z_injection_plane</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                        <span class="n">initialize_self_field</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -203,7 +200,7 @@
 
 <div class="viewcode-block" id="add_particle_bunch_gaussian">
 <a class="viewcode-back" href="../../../api_reference/lpa_utilities/beam.html#fbpic.lpa_utils.bunch.add_particle_bunch_gaussian">[docs]</a>
-<span class="k">def</span> <span class="nf">add_particle_bunch_gaussian</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">sig_r</span><span class="p">,</span> <span class="n">sig_z</span><span class="p">,</span> <span class="n">n_emit</span><span class="p">,</span> <span class="n">gamma0</span><span class="p">,</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">add_particle_bunch_gaussian</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">sig_r</span><span class="p">,</span> <span class="n">sig_z</span><span class="p">,</span> <span class="n">n_emit</span><span class="p">,</span> <span class="n">gamma0</span><span class="p">,</span>
                                 <span class="n">sig_gamma</span><span class="p">,</span> <span class="n">n_physical_particles</span><span class="p">,</span>
                                 <span class="n">n_macroparticles</span><span class="p">,</span> <span class="n">tf</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">zf</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">boost</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                                 <span class="n">save_beam</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">z_injection_plane</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -367,7 +364,7 @@
 
 <div class="viewcode-block" id="add_particle_bunch_file">
 <a class="viewcode-back" href="../../../api_reference/lpa_utilities/beam.html#fbpic.lpa_utils.bunch.add_particle_bunch_file">[docs]</a>
-<span class="k">def</span> <span class="nf">add_particle_bunch_file</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">n_physical_particles</span><span class="p">,</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">add_particle_bunch_file</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">n_physical_particles</span><span class="p">,</span>
                             <span class="n">z_off</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">boost</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;forward&#39;</span><span class="p">,</span>
                             <span class="n">z_injection_plane</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                             <span class="n">initialize_self_field</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
@@ -442,7 +439,7 @@
 
 <div class="viewcode-block" id="add_particle_bunch_openPMD">
 <a class="viewcode-back" href="../../../api_reference/lpa_utilities/beam.html#fbpic.lpa_utils.bunch.add_particle_bunch_openPMD">[docs]</a>
-<span class="k">def</span> <span class="nf">add_particle_bunch_openPMD</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">ts_path</span><span class="p">,</span> <span class="n">z_off</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">species</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">add_particle_bunch_openPMD</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">ts_path</span><span class="p">,</span> <span class="n">z_off</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">species</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                                 <span class="n">select</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">boost</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                                 <span class="n">z_injection_plane</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                                 <span class="n">initialize_self_field</span><span class="o">=</span><span class="kc">True</span> <span class="p">):</span>
@@ -503,12 +500,12 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Try to import openPMD-viewer, version 1</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="kn">from</span> <span class="nn">openpmd_viewer</span> <span class="kn">import</span> <span class="n">OpenPMDTimeSeries</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">openpmd_viewer</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenPMDTimeSeries</span>
         <span class="n">openpmd_viewer_version</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
         <span class="c1"># If not available, try to import openPMD-viewer, version 0</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="kn">from</span> <span class="nn">opmd_viewer</span> <span class="kn">import</span> <span class="n">OpenPMDTimeSeries</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">opmd_viewer</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenPMDTimeSeries</span>
             <span class="n">openpmd_viewer_version</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
             <span class="n">openpmd_viewer_version</span> <span class="o">=</span> <span class="kc">None</span>
@@ -542,7 +539,7 @@
 
 <div class="viewcode-block" id="add_particle_bunch_from_arrays">
 <a class="viewcode-back" href="../../../api_reference/lpa_utilities/beam.html#fbpic.lpa_utils.bunch.add_particle_bunch_from_arrays">[docs]</a>
-<span class="k">def</span> <span class="nf">add_particle_bunch_from_arrays</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">ux</span><span class="p">,</span> <span class="n">uy</span><span class="p">,</span> <span class="n">uz</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">add_particle_bunch_from_arrays</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">ux</span><span class="p">,</span> <span class="n">uy</span><span class="p">,</span> <span class="n">uz</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span>
                                    <span class="n">boost</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;forward&#39;</span><span class="p">,</span>
                                    <span class="n">z_injection_plane</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                                    <span class="n">initialize_self_field</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
@@ -637,7 +634,7 @@
 
 
 
-<span class="k">def</span> <span class="nf">add_elec_bunch</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">gamma0</span><span class="p">,</span> <span class="n">n_e</span><span class="p">,</span> <span class="n">p_zmin</span><span class="p">,</span> <span class="n">p_zmax</span><span class="p">,</span> <span class="n">p_rmin</span><span class="p">,</span> <span class="n">p_rmax</span><span class="p">,</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">add_elec_bunch</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">gamma0</span><span class="p">,</span> <span class="n">n_e</span><span class="p">,</span> <span class="n">p_zmin</span><span class="p">,</span> <span class="n">p_zmax</span><span class="p">,</span> <span class="n">p_rmin</span><span class="p">,</span> <span class="n">p_rmax</span><span class="p">,</span>
                 <span class="n">p_nr</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">p_nz</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">p_nt</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">dens_func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">boost</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                 <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;forward&#39;</span><span class="p">,</span> <span class="n">z_injection_plane</span><span class="o">=</span><span class="kc">None</span> <span class="p">)</span> <span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -706,7 +703,7 @@
     <span class="k">return</span> <span class="n">elec_bunch</span>
 
 
-<span class="k">def</span> <span class="nf">add_elec_bunch_gaussian</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">sig_r</span><span class="p">,</span> <span class="n">sig_z</span><span class="p">,</span> <span class="n">n_emit</span><span class="p">,</span> <span class="n">gamma0</span><span class="p">,</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">add_elec_bunch_gaussian</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">sig_r</span><span class="p">,</span> <span class="n">sig_z</span><span class="p">,</span> <span class="n">n_emit</span><span class="p">,</span> <span class="n">gamma0</span><span class="p">,</span>
                         <span class="n">sig_gamma</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">tf</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">zf</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">boost</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                         <span class="n">save_beam</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">z_injection_plane</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                         <span class="n">symmetrize</span><span class="o">=</span><span class="kc">False</span> <span class="p">):</span>
@@ -783,7 +780,7 @@
     <span class="k">return</span> <span class="n">elec_bunch</span>
 
 
-<span class="k">def</span> <span class="nf">add_elec_bunch_file</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">Q_tot</span><span class="p">,</span> <span class="n">z_off</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">boost</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">add_elec_bunch_file</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">Q_tot</span><span class="p">,</span> <span class="n">z_off</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">boost</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                         <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;forward&#39;</span><span class="p">,</span> <span class="n">z_injection_plane</span><span class="o">=</span><span class="kc">None</span> <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Introduce a relativistic electron bunch in the simulation,</span>
@@ -829,7 +826,7 @@
     <span class="k">return</span> <span class="n">elec_bunch</span>
 
 
-<span class="k">def</span> <span class="nf">add_elec_bunch_openPMD</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">ts_path</span><span class="p">,</span> <span class="n">z_off</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">species</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">add_elec_bunch_openPMD</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">ts_path</span><span class="p">,</span> <span class="n">z_off</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">species</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                         <span class="n">iteration</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">boost</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">z_injection_plane</span><span class="o">=</span><span class="kc">None</span> <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Introduce a relativistic electron bunch in the simulation,</span>
@@ -883,7 +880,7 @@
     <span class="k">return</span> <span class="n">elec_bunch</span>
 
 
-<span class="k">def</span> <span class="nf">add_elec_bunch_from_arrays</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">ux</span><span class="p">,</span> <span class="n">uy</span><span class="p">,</span> <span class="n">uz</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">add_elec_bunch_from_arrays</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">ux</span><span class="p">,</span> <span class="n">uy</span><span class="p">,</span> <span class="n">uz</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span>
                     <span class="n">boost</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;forward&#39;</span><span class="p">,</span> <span class="n">z_injection_plane</span><span class="o">=</span><span class="kc">None</span> <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Introduce a relativistic electron bunch in the simulation,</span>
@@ -925,7 +922,7 @@
     <span class="k">return</span> <span class="n">elec_bunch</span>
 
 
-<span class="k">def</span> <span class="nf">get_space_charge_fields</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">ptcl</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;forward&#39;</span> <span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_space_charge_fields</span><span class="p">(</span> <span class="n">sim</span><span class="p">,</span> <span class="n">ptcl</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;forward&#39;</span> <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Add the space charge field from `ptcl` the interpolation grid</span>
 
@@ -1033,7 +1030,7 @@
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Done.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">get_space_charge_spect</span><span class="p">(</span> <span class="n">spect</span><span class="p">,</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;forward&#39;</span><span class="p">,</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_space_charge_spect</span><span class="p">(</span> <span class="n">spect</span><span class="p">,</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;forward&#39;</span><span class="p">,</span>
                              <span class="n">neglect_transverse_currents</span><span class="o">=</span><span class="kc">True</span> <span class="p">)</span> <span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Determine the space charge field in spectral space</span>

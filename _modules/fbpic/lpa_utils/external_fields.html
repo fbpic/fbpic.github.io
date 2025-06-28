@@ -1,18 +1,18 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fbpic.lpa_utils.external_fields &mdash; FBPIC 0.26.0 documentation</title>
-      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <title>fbpic.lpa_utils.external_fields &mdash; FBPIC 0.26.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
   
-        <script src="../../../_static/documentation_options.js?v=4aa2dafa"></script>
-        <script src="../../../_static/doctools.js?v=888ff710"></script>
-        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/documentation_options.js?v=eeda5ee3"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -29,9 +29,6 @@
           <a href="../../../index.html" class="icon icon-home">
             FBPIC
           </a>
-              <div class="version">
-                0.26.0
-              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
@@ -76,21 +73,21 @@
 <span></span><span class="c1"># Copyright 2016, FBPIC contributors</span>
 <span class="c1"># Authors: Remi Lehe, Manuel Kirchen</span>
 <span class="c1"># License: 3-Clause-BSD-LBNL</span>
-<span class="kn">from</span> <span class="nn">numba</span> <span class="kn">import</span> <span class="n">vectorize</span><span class="p">,</span> <span class="n">float64</span><span class="p">,</span> <span class="n">void</span><span class="p">,</span> <span class="n">njit</span>
-<span class="kn">from</span> <span class="nn">scipy.constants</span> <span class="kn">import</span> <span class="n">c</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numba</span><span class="w"> </span><span class="kn">import</span> <span class="n">vectorize</span><span class="p">,</span> <span class="n">float64</span><span class="p">,</span> <span class="n">void</span><span class="p">,</span> <span class="n">njit</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">c</span>
 <span class="n">inv_c</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="n">c</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="c1"># Check if CUDA is available, then import CUDA functions</span>
-<span class="kn">from</span> <span class="nn">fbpic.utils.cuda</span> <span class="kn">import</span> <span class="n">cuda_installed</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">fbpic.utils.cuda</span><span class="w"> </span><span class="kn">import</span> <span class="n">cuda_installed</span>
 <span class="k">if</span> <span class="n">cuda_installed</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">fbpic.utils.cuda</span> <span class="kn">import</span> <span class="n">compile_cupy</span><span class="p">,</span> <span class="n">cuda_tpb_bpg_1d</span>
-    <span class="kn">from</span> <span class="nn">numba</span> <span class="kn">import</span> <span class="n">cuda</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">fbpic.utils.cuda</span><span class="w"> </span><span class="kn">import</span> <span class="n">compile_cupy</span><span class="p">,</span> <span class="n">cuda_tpb_bpg_1d</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">numba</span><span class="w"> </span><span class="kn">import</span> <span class="n">cuda</span>
 
 <div class="viewcode-block" id="ExternalField">
 <a class="viewcode-back" href="../../../api_reference/lpa_utilities/external_fields.html#fbpic.lpa_utils.external_fields.ExternalField">[docs]</a>
-<span class="k">class</span> <span class="nc">ExternalField</span><span class="p">(</span> <span class="nb">object</span> <span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ExternalField</span><span class="p">(</span> <span class="nb">object</span> <span class="p">):</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field_func</span><span class="p">,</span> <span class="n">fieldtype</span><span class="p">,</span> <span class="n">amplitude</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field_func</span><span class="p">,</span> <span class="n">fieldtype</span><span class="p">,</span> <span class="n">amplitude</span><span class="p">,</span>
                  <span class="n">length_scale</span><span class="p">,</span> <span class="n">species</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">gamma_boost</span><span class="o">=</span><span class="kc">None</span> <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize an ExternalField object, so that the function</span>
@@ -197,7 +194,7 @@
         <span class="k">if</span> <span class="p">(</span><span class="n">gamma_boost</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">gamma_boost</span> <span class="o">!=</span> <span class="mf">1.</span><span class="p">):</span>
             <span class="n">beta_boost</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">1.</span> <span class="o">-</span> <span class="mf">1.</span><span class="o">/</span><span class="n">gamma_boost</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
             <span class="n">field_func</span> <span class="o">=</span> <span class="n">njit</span><span class="p">(</span><span class="n">field_func</span><span class="p">)</span>
-            <span class="k">def</span> <span class="nf">func</span><span class="p">(</span> <span class="n">F</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">amplitude</span><span class="p">,</span> <span class="n">length_scale</span> <span class="p">):</span>
+            <span class="k">def</span><span class="w"> </span><span class="nf">func</span><span class="p">(</span> <span class="n">F</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">amplitude</span><span class="p">,</span> <span class="n">length_scale</span> <span class="p">):</span>
                 <span class="n">zlab</span> <span class="o">=</span> <span class="n">gamma_boost</span><span class="o">*</span><span class="p">(</span><span class="n">z</span> <span class="o">+</span> <span class="n">beta_boost</span><span class="o">*</span><span class="n">c</span><span class="o">*</span><span class="n">t</span><span class="p">)</span>
                 <span class="n">tlab</span> <span class="o">=</span> <span class="n">gamma_boost</span><span class="o">*</span><span class="p">(</span><span class="n">t</span> <span class="o">+</span> <span class="n">beta_boost</span><span class="o">*</span><span class="n">inv_c</span><span class="o">*</span><span class="n">z</span><span class="p">)</span>
                 <span class="k">return</span> <span class="n">field_func</span><span class="p">(</span><span class="n">F</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">zlab</span><span class="p">,</span> <span class="n">tlab</span><span class="p">,</span> <span class="n">amplitude</span><span class="p">,</span> <span class="n">length_scale</span><span class="p">)</span>
@@ -213,7 +210,7 @@
             <span class="c1"># First create a device inline function</span>
             <span class="n">inline_func</span> <span class="o">=</span> <span class="n">cuda</span><span class="o">.</span><span class="n">jit</span><span class="p">(</span> <span class="n">func</span><span class="p">,</span> <span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="kc">True</span> <span class="p">)</span>
             <span class="c1"># Then create a CUDA kernel and compile it the usual way</span>
-            <span class="k">def</span> <span class="nf">external_field_kernel</span><span class="p">(</span> <span class="n">F</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">amplitude</span><span class="p">,</span> <span class="n">length_scale</span> <span class="p">):</span>
+            <span class="k">def</span><span class="w"> </span><span class="nf">external_field_kernel</span><span class="p">(</span> <span class="n">F</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">amplitude</span><span class="p">,</span> <span class="n">length_scale</span> <span class="p">):</span>
                 <span class="n">i</span> <span class="o">=</span> <span class="n">cuda</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
     
                 <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">F</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
@@ -248,7 +245,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">fieldtypes_and_amplitudes</span> <span class="o">=</span> <span class="p">((</span><span class="n">fieldtype</span><span class="p">,</span> <span class="n">amplitude</span><span class="p">),)</span>
 
 
-    <span class="k">def</span> <span class="nf">apply_expression</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">ptcl</span><span class="p">,</span> <span class="n">t</span> <span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">apply_expression</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">ptcl</span><span class="p">,</span> <span class="n">t</span> <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Apply the external field function to the particles</span>
 

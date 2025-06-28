@@ -1,18 +1,18 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fbpic.lpa_utils.laser.laser_profiles &mdash; FBPIC 0.26.0 documentation</title>
-      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="../../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <title>fbpic.lpa_utils.laser.laser_profiles &mdash; FBPIC 0.26.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
+
   
-        <script src="../../../../_static/documentation_options.js?v=4aa2dafa"></script>
-        <script src="../../../../_static/doctools.js?v=888ff710"></script>
-        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../_static/documentation_options.js?v=eeda5ee3"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" /> 
@@ -29,9 +29,6 @@
           <a href="../../../../index.html" class="icon icon-home">
             FBPIC
           </a>
-              <div class="version">
-                0.26.0
-              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
@@ -80,19 +77,19 @@
 <span class="sd">This file is part of the Fourier-Bessel Particle-In-Cell code (FB-PIC)</span>
 <span class="sd">It defines a set of common laser profiles.</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">scipy.constants</span> <span class="kn">import</span> <span class="n">c</span><span class="p">,</span> <span class="n">m_e</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">epsilon_0</span>
-<span class="kn">import</span> <span class="nn">h5py</span>
-<span class="kn">import</span> <span class="nn">numba</span>
-<span class="kn">from</span> <span class="nn">.longitudinal_laser_profiles</span> <span class="kn">import</span> <span class="n">GaussianChirpedLongitudinalProfile</span>
-<span class="kn">from</span> <span class="nn">.transverse_laser_profiles</span> <span class="kn">import</span> <span class="n">GaussianTransverseProfile</span><span class="p">,</span> \
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">c</span><span class="p">,</span> <span class="n">m_e</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">epsilon_0</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">h5py</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numba</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.longitudinal_laser_profiles</span><span class="w"> </span><span class="kn">import</span> <span class="n">GaussianChirpedLongitudinalProfile</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.transverse_laser_profiles</span><span class="w"> </span><span class="kn">import</span> <span class="n">GaussianTransverseProfile</span><span class="p">,</span> \
     <span class="n">LaguerreGaussTransverseProfile</span><span class="p">,</span> <span class="n">DonutLikeLaguerreGaussTransverseProfile</span><span class="p">,</span> \
     <span class="n">FlattenedGaussianTransverseProfile</span>
 
 <span class="c1"># Generic classes</span>
 <span class="c1"># ---------------</span>
 
-<span class="k">class</span> <span class="nc">LaserProfile</span><span class="p">(</span> <span class="nb">object</span> <span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">LaserProfile</span><span class="p">(</span> <span class="nb">object</span> <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Base class for all laser profiles.</span>
 
@@ -102,7 +99,7 @@
 <span class="sd">    Profiles that inherit from this base class can be summed,</span>
 <span class="sd">    using the overloaded + operator.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">propagation_direction</span><span class="p">,</span> <span class="n">gpu_capable</span><span class="o">=</span><span class="kc">False</span> <span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">propagation_direction</span><span class="p">,</span> <span class="n">gpu_capable</span><span class="o">=</span><span class="kc">False</span> <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize the propagation direction of the laser.</span>
 <span class="sd">        (Each subclass should call this method at initialization.)</span>
@@ -122,7 +119,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">propag_direction</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">propagation_direction</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gpu_capable</span> <span class="o">=</span> <span class="n">gpu_capable</span>
 
-    <span class="k">def</span> <span class="nf">E_field</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">t</span> <span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">E_field</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">t</span> <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return the electric field of the laser</span>
 
@@ -142,18 +139,18 @@
         <span class="c1"># (This should be replaced by any class that inherits from this one.)</span>
         <span class="k">return</span><span class="p">(</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__add__</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">other</span> <span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__add__</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">other</span> <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Overload the + operations for laser profiles</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span><span class="p">(</span> <span class="n">SummedLaserProfile</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">other</span> <span class="p">)</span> <span class="p">)</span>
 
 
-<span class="k">class</span> <span class="nc">SummedLaserProfile</span><span class="p">(</span> <span class="n">LaserProfile</span> <span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">SummedLaserProfile</span><span class="p">(</span> <span class="n">LaserProfile</span> <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Class that represents the sum of two instances of LaserProfile</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">profile1</span><span class="p">,</span> <span class="n">profile2</span> <span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">profile1</span><span class="p">,</span> <span class="n">profile2</span> <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize the sum of two instances of LaserProfile</span>
 
@@ -169,7 +166,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">profile1</span> <span class="o">=</span> <span class="n">profile1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">profile2</span> <span class="o">=</span> <span class="n">profile2</span>
 
-    <span class="k">def</span> <span class="nf">E_field</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">t</span> <span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">E_field</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">t</span> <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        See the docstring of LaserProfile.E_field</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -177,10 +174,10 @@
         <span class="n">Ex2</span><span class="p">,</span> <span class="n">Ey2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">profile2</span><span class="o">.</span><span class="n">E_field</span><span class="p">(</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">t</span> <span class="p">)</span>
         <span class="k">return</span><span class="p">(</span> <span class="n">Ex1</span><span class="o">+</span><span class="n">Ex2</span><span class="p">,</span> <span class="n">Ey1</span><span class="o">+</span><span class="n">Ey2</span> <span class="p">)</span>
 
-<span class="k">class</span> <span class="nc">ParaxialApproximationLaser</span><span class="p">(</span> <span class="n">LaserProfile</span> <span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ParaxialApproximationLaser</span><span class="p">(</span> <span class="n">LaserProfile</span> <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Class that defines a laser pulse by combining a longitudinal</span>
 <span class="sd">    and transverse profile under the paraxial approxiation.&quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">longitudinal_profile</span><span class="p">,</span> <span class="n">transverse_profile</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">longitudinal_profile</span><span class="p">,</span> <span class="n">transverse_profile</span><span class="p">,</span>
                  <span class="n">E_laser</span><span class="p">,</span> <span class="n">theta_pol</span><span class="o">=</span><span class="mf">0.</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Construct a laser profile E(x,y,z,t) by combining a complex</span>
@@ -233,7 +230,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">E0x</span> <span class="o">=</span> <span class="n">E0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta_pol</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">E0y</span> <span class="o">=</span> <span class="n">E0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta_pol</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">E_field</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">t</span> <span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">E_field</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">t</span> <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        See the docstring of LaserProfile.E_field</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -253,10 +250,10 @@
 
 <div class="viewcode-block" id="GaussianLaser">
 <a class="viewcode-back" href="../../../../api_reference/lpa_utilities/laser_profiles/gaussian.html#fbpic.lpa_utils.laser.GaussianLaser">[docs]</a>
-<span class="k">class</span> <span class="nc">GaussianLaser</span><span class="p">(</span> <span class="n">LaserProfile</span> <span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">GaussianLaser</span><span class="p">(</span> <span class="n">LaserProfile</span> <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Class that calculates a Gaussian laser pulse.&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">a0</span><span class="p">,</span> <span class="n">waist</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">z0</span><span class="p">,</span> <span class="n">zf</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">theta_pol</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">a0</span><span class="p">,</span> <span class="n">waist</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">z0</span><span class="p">,</span> <span class="n">zf</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">theta_pol</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
                     <span class="n">lambda0</span><span class="o">=</span><span class="mf">0.8e-6</span><span class="p">,</span> <span class="n">cep_phase</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">phi2_chirp</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
                     <span class="n">propagation_direction</span><span class="o">=</span><span class="mi">1</span> <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -355,7 +352,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">gpu_capable</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">longitudinal_profile</span><span class="o">.</span><span class="n">gpu_capable</span> <span class="ow">and</span> \
                            <span class="bp">self</span><span class="o">.</span><span class="n">transverse_profile</span><span class="o">.</span><span class="n">gpu_capable</span>
 
-    <span class="k">def</span> <span class="nf">E_field</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">t</span> <span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">E_field</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">t</span> <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        See the docstring of LaserProfile.E_field</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -373,10 +370,10 @@
 
 <div class="viewcode-block" id="LaguerreGaussLaser">
 <a class="viewcode-back" href="../../../../api_reference/lpa_utilities/laser_profiles/laguerre.html#fbpic.lpa_utils.laser.LaguerreGaussLaser">[docs]</a>
-<span class="k">class</span> <span class="nc">LaguerreGaussLaser</span><span class="p">(</span> <span class="n">LaserProfile</span> <span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">LaguerreGaussLaser</span><span class="p">(</span> <span class="n">LaserProfile</span> <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Class that calculates a Laguerre-Gauss pulse.&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">a0</span><span class="p">,</span> <span class="n">waist</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">z0</span><span class="p">,</span> <span class="n">zf</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">theta_pol</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">a0</span><span class="p">,</span> <span class="n">waist</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">z0</span><span class="p">,</span> <span class="n">zf</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">theta_pol</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
                     <span class="n">lambda0</span><span class="o">=</span><span class="mf">0.8e-6</span><span class="p">,</span> <span class="n">cep_phase</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">theta0</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
                     <span class="n">propagation_direction</span><span class="o">=</span><span class="mi">1</span> <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -510,7 +507,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">gpu_capable</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">longitudinal_profile</span><span class="o">.</span><span class="n">gpu_capable</span> <span class="ow">and</span> \
                            <span class="bp">self</span><span class="o">.</span><span class="n">transverse_profile</span><span class="o">.</span><span class="n">gpu_capable</span>
 
-    <span class="k">def</span> <span class="nf">E_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">E_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        See the docstring of LaserProfile.E_field</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -528,10 +525,10 @@
 
 <div class="viewcode-block" id="DonutLikeLaguerreGaussLaser">
 <a class="viewcode-back" href="../../../../api_reference/lpa_utilities/laser_profiles/donut_laguerre.html#fbpic.lpa_utils.laser.DonutLikeLaguerreGaussLaser">[docs]</a>
-<span class="k">class</span> <span class="nc">DonutLikeLaguerreGaussLaser</span><span class="p">(</span> <span class="n">LaserProfile</span> <span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">DonutLikeLaguerreGaussLaser</span><span class="p">(</span> <span class="n">LaserProfile</span> <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Class that calculates a donut-like Laguerre-Gauss pulse.&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">a0</span><span class="p">,</span> <span class="n">waist</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">z0</span><span class="p">,</span> <span class="n">zf</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">theta_pol</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">a0</span><span class="p">,</span> <span class="n">waist</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">z0</span><span class="p">,</span> <span class="n">zf</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">theta_pol</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
                     <span class="n">lambda0</span><span class="o">=</span><span class="mf">0.8e-6</span><span class="p">,</span> <span class="n">cep_phase</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">propagation_direction</span><span class="o">=</span><span class="mi">1</span> <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Define a linearly-polarized donut-like Laguerre-Gauss laser profile.</span>
@@ -652,7 +649,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">gpu_capable</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">longitudinal_profile</span><span class="o">.</span><span class="n">gpu_capable</span> <span class="ow">and</span> \
                            <span class="bp">self</span><span class="o">.</span><span class="n">transverse_profile</span><span class="o">.</span><span class="n">gpu_capable</span>
 
-    <span class="k">def</span> <span class="nf">E_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">E_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        See the docstring of LaserProfile.E_field</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -670,10 +667,10 @@
 
 <div class="viewcode-block" id="FlattenedGaussianLaser">
 <a class="viewcode-back" href="../../../../api_reference/lpa_utilities/laser_profiles/flattened.html#fbpic.lpa_utils.laser.FlattenedGaussianLaser">[docs]</a>
-<span class="k">class</span> <span class="nc">FlattenedGaussianLaser</span><span class="p">(</span> <span class="n">LaserProfile</span> <span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">FlattenedGaussianLaser</span><span class="p">(</span> <span class="n">LaserProfile</span> <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Class that calculates a focused flattened Gaussian&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">a0</span><span class="p">,</span> <span class="n">w0</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">z0</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">zf</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">theta_pol</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">a0</span><span class="p">,</span> <span class="n">w0</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">z0</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">zf</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">theta_pol</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
                     <span class="n">lambda0</span><span class="o">=</span><span class="mf">0.8e-6</span><span class="p">,</span> <span class="n">cep_phase</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">propagation_direction</span><span class="o">=</span><span class="mi">1</span> <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Define a linearly-polarized laser such that the transverse intensity</span>
@@ -780,7 +777,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">gpu_capable</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">longitudinal_profile</span><span class="o">.</span><span class="n">gpu_capable</span> <span class="ow">and</span> \
                            <span class="bp">self</span><span class="o">.</span><span class="n">transverse_profile</span><span class="o">.</span><span class="n">gpu_capable</span>
 
-    <span class="k">def</span> <span class="nf">E_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">E_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        See the docstring of LaserProfile.E_field</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -799,10 +796,10 @@
 
 <div class="viewcode-block" id="FewCycleLaser">
 <a class="viewcode-back" href="../../../../api_reference/lpa_utilities/laser_profiles/few_cycle.html#fbpic.lpa_utils.laser.FewCycleLaser">[docs]</a>
-<span class="k">class</span> <span class="nc">FewCycleLaser</span><span class="p">(</span> <span class="n">LaserProfile</span> <span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">FewCycleLaser</span><span class="p">(</span> <span class="n">LaserProfile</span> <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Class that calculates an ultra-short, tightly focussed laser&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">a0</span><span class="p">,</span> <span class="n">waist</span><span class="p">,</span> <span class="n">tau_fwhm</span><span class="p">,</span> <span class="n">z0</span><span class="p">,</span> <span class="n">zf</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">theta_pol</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">a0</span><span class="p">,</span> <span class="n">waist</span><span class="p">,</span> <span class="n">tau_fwhm</span><span class="p">,</span> <span class="n">z0</span><span class="p">,</span> <span class="n">zf</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">theta_pol</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
                     <span class="n">lambda0</span><span class="o">=</span><span class="mf">0.8e-6</span><span class="p">,</span> <span class="n">cep_phase</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">propagation_direction</span><span class="o">=</span><span class="mi">1</span> <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        When a laser pulse is so short that it contains **only a few laser cycles**,</span>
@@ -904,12 +901,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">w0</span> <span class="o">=</span> <span class="n">waist</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cep_phase</span> <span class="o">=</span> <span class="n">cep_phase</span>
         <span class="c1"># Find the Poisson parameter s, by solving the non-linear equation</span>
-        <span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">fsolve</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">scipy.optimize</span><span class="w"> </span><span class="kn">import</span> <span class="n">fsolve</span>
         <span class="n">w_tau</span> <span class="o">=</span> <span class="n">c</span><span class="o">*</span><span class="n">k0</span><span class="o">*</span><span class="n">tau_fwhm</span>
         <span class="n">sol</span> <span class="o">=</span> <span class="n">fsolve</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="n">s</span><span class="o">*</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="mi">4</span><span class="o">**</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="n">s</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">**</span><span class="mf">.5</span> <span class="o">-</span> <span class="n">w_tau</span><span class="p">,</span> <span class="mf">1.</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">s</span> <span class="o">=</span> <span class="n">sol</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
-    <span class="k">def</span> <span class="nf">E_field</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">t</span> <span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">E_field</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">t</span> <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        See the docstring of LaserProfile.E_field</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -930,10 +927,10 @@
 
 <div class="viewcode-block" id="FromLasyFileLaser">
 <a class="viewcode-back" href="../../../../api_reference/lpa_utilities/laser_profiles/from_lasy_file.html#fbpic.lpa_utils.laser.FromLasyFileLaser">[docs]</a>
-<span class="k">class</span> <span class="nc">FromLasyFileLaser</span><span class="p">(</span> <span class="n">LaserProfile</span> <span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">FromLasyFileLaser</span><span class="p">(</span> <span class="n">LaserProfile</span> <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Class that emits a laser from a lasy file&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">t_start</span><span class="o">=</span><span class="mf">0.</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">t_start</span><span class="o">=</span><span class="mf">0.</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Define a laser whose profile is determined by a</span>
 <span class="sd">        `lasy &lt;https://lasydoc.readthedocs.io/en/latest/&gt;`_ file.</span>
@@ -1028,7 +1025,7 @@
             <span class="p">)</span>
 
 
-    <span class="k">def</span> <span class="nf">define_thetaMode_interp_function</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dset</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">define_thetaMode_interp_function</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dset</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Set the attribute `interp_function`, in the case case</span>
 <span class="sd">        where the lasy file has `thetaMode` geometry</span>
@@ -1046,7 +1043,7 @@
         <span class="n">n_modes</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">env_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
 
         <span class="nd">@numba</span><span class="o">.</span><span class="n">vectorize</span>
-        <span class="k">def</span> <span class="nf">interp_function</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">interp_function</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
             <span class="n">ir_interp</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">y</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="mf">.5</span> <span class="o">*</span> <span class="n">inv_dr_data</span>
             <span class="n">ir</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">ir_interp</span><span class="p">))</span>
 
@@ -1086,7 +1083,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">interp_function</span> <span class="o">=</span> <span class="n">interp_function</span>
 
 
-    <span class="k">def</span> <span class="nf">define_cartesian_interp_function</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dset</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">define_cartesian_interp_function</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dset</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Set the attribute `interp_function`, in the case case</span>
 <span class="sd">        where the lasy file has Cartesian geometry</span>
@@ -1105,7 +1102,7 @@
         <span class="n">nt</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">nx</span> <span class="o">=</span> <span class="n">env_data</span><span class="o">.</span><span class="n">shape</span>
 
         <span class="nd">@numba</span><span class="o">.</span><span class="n">vectorize</span>
-        <span class="k">def</span> <span class="nf">interp_function</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">interp_function</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
             <span class="n">ix_interp</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="n">x_min_data</span><span class="p">)</span><span class="o">*</span> <span class="n">inv_dx_data</span>
             <span class="n">ix</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">ix_interp</span><span class="p">))</span>
 
@@ -1141,7 +1138,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">interp_function</span> <span class="o">=</span> <span class="n">interp_function</span>
 
 
-    <span class="k">def</span> <span class="nf">E_field</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">t</span> <span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">E_field</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">t</span> <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        See the docstring of LaserProfile.E_field</span>
 <span class="sd">        &quot;&quot;&quot;</span>

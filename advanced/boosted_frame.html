@@ -1,20 +1,20 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Running boosted-frame simulations &mdash; FBPIC 0.26.0 documentation</title>
-      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <title>Running boosted-frame simulations &mdash; FBPIC 0.26.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
   
-        <script src="../_static/documentation_options.js?v=4aa2dafa"></script>
-        <script src="../_static/doctools.js?v=888ff710"></script>
-        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
-        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      <script src="../_static/documentation_options.js?v=eeda5ee3"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -33,9 +33,6 @@
           <a href="../index.html" class="icon icon-home">
             FBPIC
           </a>
-              <div class="version">
-                0.26.0
-              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
@@ -184,8 +181,9 @@ in order to save computational time. (And in fact, the argument
 in this case the ions move with relativistic speed and do produce a
 non-negligible current <span class="math notranslate nohighlight">\(\boldsymbol{j}\)</span>. Therefore, <strong>in boosted-frame
 simulations, the ions are required</strong>. Make sure to include them, either
-by setting the flag <code class="docutils literal notranslate"><span class="pre">initialize_ions=True</span></code> in the <a class="reference internal" href="../api_reference/simulation.html#fbpic.main.Simulation" title="fbpic.main.Simulation"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Simulation</span></code></a>
-object, or by adding them separately with <a class="reference internal" href="../api_reference/simulation.html#fbpic.main.Simulation.add_new_species" title="fbpic.main.Simulation.add_new_species"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">add_new_species</span></code></a>.</p>
+by setting the flag <code class="docutils literal notranslate"><span class="pre">initialize_ions=True</span></code> and specifying the ion plasma density in the <a class="reference internal" href="../api_reference/simulation.html#fbpic.main.Simulation" title="fbpic.main.Simulation"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Simulation</span></code></a>
+object, or by adding them separately with <a class="reference internal" href="../api_reference/simulation.html#fbpic.main.Simulation.add_new_species" title="fbpic.main.Simulation.add_new_species"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">add_new_species</span></code></a>. We recommend the latter approach, using
+<a class="reference internal" href="../api_reference/simulation.html#fbpic.main.Simulation.add_new_species" title="fbpic.main.Simulation.add_new_species"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">add_new_species</span></code></a> function.</p>
 </div>
 </section>
 <section id="converting-input-parameters-from-the-lab-frame-to-the-boosted-frame">
@@ -310,7 +308,8 @@ of a typical laser-plasma acceleration case. Lets assume a simulation box
 plasma of length <span class="math notranslate nohighlight">\(L_{plasma} = 12 \, mm\)</span>. Assuming a plasma density of
 <span class="math notranslate nohighlight">\(n_{e}=10^{24} \, m^{-3}\)</span>, we set the velocity of the moving window to match
 the plasma wake phase velocity, i.e. <span class="math notranslate nohighlight">\(\gamma_{wake} \approx 42\)</span>.</p>
-<img alt="../_images/boosted_frame_speedup_example.svg" src="../_images/boosted_frame_speedup_example.svg" /><p>This simple example highlights two important aspects of choosing the right
+<img alt="../_images/boosted_frame_speedup_example.svg" src="../_images/boosted_frame_speedup_example.svg" />
+<p>This simple example highlights two important aspects of choosing the right
 <span class="math notranslate nohighlight">\(\gamma_b\)</span> in practice. First, it can be seen that the speedup does
 only follow the simple scaling law <span class="math notranslate nohighlight">\((1+\beta_b)^2\gamma_b^2\)</span>
 for <span class="math notranslate nohighlight">\(\gamma_b \ll \gamma_{wake}\)</span>, and second, that the optimum speedup
@@ -343,7 +342,8 @@ the laser and the plasma wavelength, <span class="math notranslate nohighlight">
 of the plasma itself (<span class="math notranslate nohighlight">\(L_{p}\)</span>). The following figure shows the normalized
 transformation of these quantities for different values of
 <span class="math notranslate nohighlight">\(\gamma_b\)</span> normalized to <span class="math notranslate nohighlight">\(\gamma_{wake}\)</span>.</p>
-<img alt="../_images/boosted_frame_transformation_of_physical_objects.svg" src="../_images/boosted_frame_transformation_of_physical_objects.svg" /><p>For low boosting factors <span class="math notranslate nohighlight">\(\gamma_b \ll \gamma_{wake}\)</span>,
+<img alt="../_images/boosted_frame_transformation_of_physical_objects.svg" src="../_images/boosted_frame_transformation_of_physical_objects.svg" />
+<p>For low boosting factors <span class="math notranslate nohighlight">\(\gamma_b \ll \gamma_{wake}\)</span>,
 the spatial and temporal scales of the laser and the plasma will equally increase
 <span class="math notranslate nohighlight">\(\propto  \gamma_b (1+\beta_b)\)</span> and the plasma will contract
 as <span class="math notranslate nohighlight">\(L_{p} \gamma^{-1}\)</span>.</p>
@@ -361,7 +361,8 @@ longitudinal resolution is transformed by default as
 As shown in the next figure, this will cause a decrease in
 spatial resolution of the plasma wave, as well as a decrease in temporal
 resolution of the laser oscillations, for <span class="math notranslate nohighlight">\(\gamma_b \gtrsim \gamma_{wake}/2\)</span>.</p>
-<img alt="../_images/boosted_frame_resolution_of_physical_objects_in_fbpic.svg" src="../_images/boosted_frame_resolution_of_physical_objects_in_fbpic.svg" /><div class="admonition warning">
+<img alt="../_images/boosted_frame_resolution_of_physical_objects_in_fbpic.svg" src="../_images/boosted_frame_resolution_of_physical_objects_in_fbpic.svg" />
+<div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>As explained in the section above, the spatial and temporal scales of
 the physical objects in the simulation transform differently in the
